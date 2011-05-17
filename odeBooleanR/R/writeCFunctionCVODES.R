@@ -1,7 +1,8 @@
 writeCFunctionCVODES <-
 function(inputs,outputs,strODE,numOutputs,parVecForPrint)
 {   
-   startString=readChar("startStringForFile.txt",nchar=10000);
+   headerDir=paste(.find.package("odeBooleanR"),"/textHeaders/startStringForFile.txt",sep="");
+   startString=readChar(headerDir,nchar=10000);
    outputsStr=paste(outputs,sep=",",collapse=",");
    outputsStr=paste("double ",outputsStr,";",sep="");
    
@@ -27,13 +28,14 @@ function(inputs,outputs,strODE,numOutputs,parVecForPrint)
    {
      parVecForPrint[i]=paste(parVecForPrint[i],"=ptr[",i-1,"];",sep=""); 
    }
-    
-   write(startString,file="myODE.c",sep="",append=FALSE)
-   write(outputsStr,file="myODE.c",sep="",append=TRUE);
-   write(declareParVecForPrint,file="myODE.c",sep="",append=TRUE);
-   write(parVecForPrint,file="myODE.c",sep="",append=TRUE);
-   write(outputAttr,file="myODE.c",sep="",append=TRUE);
-   write(strODE, file="myODE.c", sep="", append = TRUE);  
-   write("return(0);\n}",file="myODE.c", sep="", append = TRUE); 
+   
+   cFileDir=paste(.find.package("odeBooleanR"),"/models/myODE.c",sep="");  
+   write(startString,file=cFileDir,sep="",append=FALSE)
+   write(outputsStr,file=cFileDir,sep="",append=TRUE);
+   write(declareParVecForPrint,file=cFileDir,sep="",append=TRUE);
+   write(parVecForPrint,file=cFileDir,sep="",append=TRUE);
+   write(outputAttr,file=cFileDir,sep="",append=TRUE);
+   write(strODE, file=cFileDir, sep="", append = TRUE);  
+   write("return(0);\n}",file=cFileDir, sep="", append = TRUE); 
 }
 

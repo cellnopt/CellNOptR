@@ -71,7 +71,7 @@ function(model)
    paramInfo=list(parNames=parNames,paramValues=paramValues,index_k=index_k,index_n=index_n,index_tau=index_tau,index_inh=index_inh,index_inputs=index_inputs,
    numOutputs=numOutputs,outputs=outputs,numInputs=countInputs,inputs=inputs);
         
-   writeCFuntionDeSolve(inputs,outputs,strODE,numOutputs,parVecForPrint)
+   #writeCFuntionDeSolve(inputs,outputs,strODE,numOutputs,parVecForPrint)
    writeCFunctionCVODES(inputs,outputs,strODE,numOutputs,parVecForPrint);
    
    return(paramInfo)
