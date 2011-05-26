@@ -7,7 +7,7 @@ function(paramInfo,y0,times,cFileName)
    }
    else if(cFileName=="myODE")
    {
-      out<-cvodes(y0,times,"myODE","rhs",fndata=paramInfo$paramValues,verbose =FALSE);
+     out<-cvodes(y0,times,"myODE","rhs",fndata=paramInfo$paramValues,verbose =FALSE,maxstep=0.1);
    }
    else
    {       
