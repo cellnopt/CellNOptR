@@ -1,0 +1,3 @@
+PKG_CFLAGS=-w
+
+PKG_LIBS=-L. -lsundials_cvodes -lsundials_ida -lsundials_fida -lsundials_nvecserial

@@ -1,0 +1,5 @@
+cvodes                  SUNDIALS CVODES Solver for Differential
+                        Equation Systems
+ida                     SUNDIALS IDA Solver for Differential-Algebraic
+                        Equation Systems
+gseq                    Geometric Sequence Creator

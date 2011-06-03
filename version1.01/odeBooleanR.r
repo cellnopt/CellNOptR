@@ -493,7 +493,7 @@ simulateData<-function(CNOlist,indexes,odePars)
       CNOlist$valueStimuli[i,indexes$CNOindexStimuli];
     odePars$paramValues[odePars$index_inh[indexes$ODEindexInhibitors]]=
       CNOlist$valueInhibitors[i,indexes$CNOindexInhibitors];
-      y0=matrix(0,1,length(odePars$outputs));
+    y0=matrix(0,1,length(odePars$outputs));
     y0[indexes$ODEindexSignals]=CNOlist$valueSignals[[1]][i,indexes$CNOindexSignals]
       CNOlist$valueInhibitors[i,indexes$CNOindexInhibitors];
     tempRes=createInSilicoData(odePars,y0,times,"myODE");
@@ -816,21 +816,57 @@ createODEModel<-function(CNOlist,CNOModel)
   return(paramInfo);
 }
 
-#library(CNelephanteR);
+sensitivityMatrix<-function(odePars,CNOlist)
+{
+  indexes=indexCNO2ODE(CNOlist,odePars);
+  y0=matrix(0,1,length(odePars$outputs));
+  y0[indexes$ODEindexSignals]=CNOlist$valueSignals[[1]][1,indexes$CNOindexSignals]
+  times=seq(0,10);
+  numParameters=length(odePars$index_k)+length(odePars$index_n)+
+    length(odePars$index_k);
+  numStates=length(odePars$outputs);
+  numExperiments=length(CNOlist$valueStimuli[,1]);
+  res=pertubeExperiments(odePars,CNOlist,y0,times,numStates,numParameters);
+}
+   
+pertubeExperiments<-function(odePars,CNOlist,y0,times,numStates,numParameters)
+{
+  res=list();
+  count=0;
+  for(i in 1:numStates)
+  {
+    for(j in 1:numParameters)
+    {
+      count=count+1;
+      temp=odePars$paramValues[j];
+      odePars$paramValues[j]=odePars$paramValues*1.05;
+      simData=createInSilicoData(odePars,y0,times,"myODE")
+      odePars$paramValues[j]=temp;
+      res[[count]]=createInSilicoData(odePars,y0,times,"myODE"); 
+    } 
+  }
+  return(res); 
+}
 
-#setwd("C:/Users/davidh/Desktop/rLink/CNOR_analysis");
 
-#load("CNOlistSilico")
 
-#CNOlist=CNOlistSilico;
 
-#model=readSif(sifFile = "modNet2.sif")
+library(CNelephanteR);
+library(odeBooleanR)
+setwd("C:/Users/davidh/Desktop/rLink/CNOR_analysis");
 
-#odePars=createODEModel(CNOlist,model);
+load("CNOlistSilico")
 
-#indexes=indexCNO2ODE(CNOlist,odePars)
+CNOlist=CNOlistSilico;
+
+model=readSif(sifFile = "modNet2.sif")
+
+odePars=createODEModel(CNOlist,model);
+
+indexes=indexCNO2ODE(CNOlist,odePars)
 
 #simulateODEAndPlotFitness(CNOlist,CNOModel,odePars)
 
 #res=odeSensitivityAnalisys(CNOlist,model,odePars,times);
+res=sensitivityMatrix(odePars,CNOlist)
 
