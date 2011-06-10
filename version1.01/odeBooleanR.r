@@ -816,44 +816,52 @@ createODEModel<-function(CNOlist,CNOModel)
   return(paramInfo);
 }
 
-sensitivityMatrix<-function(odePars,CNOlist)
+sensitivityMatrix<-function(odePars,CNOlist,delta=0.05)
 {
   indexes=indexCNO2ODE(CNOlist,odePars);
   y0=matrix(0,1,length(odePars$outputs));
   y0[indexes$ODEindexSignals]=CNOlist$valueSignals[[1]][1,indexes$CNOindexSignals]
+  numStates=length(odePars$outputs);
   times=seq(0,10);
   numParameters=length(odePars$index_k)+length(odePars$index_n)+
-    length(odePars$index_k);
+    length(odePars$index_tau);
   numStates=length(odePars$outputs);
   numExperiments=length(CNOlist$valueStimuli[,1]);
-  res=pertubeExperiments(odePars,CNOlist,y0,times,numStates,numParameters);
+  
+  simData=createInSilicoData(odePars,y0,times,"myODE")
+  pertData=pertubeExperiments(odePars,CNOlist,y0,times,numStates,numParameters,delta);
+  count=0;
+  res=matrix(0,numParameters,numStates*length(times))
+  for(i in 1:length(times))
+  {  
+    count=count+1;
+    for(j in 1:numParameters)
+    {   
+                   
+        res[count,]=(pertData[[j]][i,]-simData[i,])/delta
+    }
+  }
+  return(res)
 }
    
-pertubeExperiments<-function(odePars,CNOlist,y0,times,numStates,numParameters)
+pertubeExperiments<-function(odePars,CNOlist,y0,times,numStates,numParameters,delta=0.05)
 {
   res=list();
   count=0;
-  for(i in 1:numStates)
+  for(j in 1:numParameters)
   {
-    for(j in 1:numParameters)
-    {
-      count=count+1;
-      temp=odePars$paramValues[j];
-      odePars$paramValues[j]=odePars$paramValues*1.05;
-      simData=createInSilicoData(odePars,y0,times,"myODE")
-      odePars$paramValues[j]=temp;
-      res[[count]]=createInSilicoData(odePars,y0,times,"myODE"); 
-    } 
+    count=count+1;
+    temp=odePars$paramValues[j];
+    odePars$paramValues[j]=odePars$paramValues[j]*(1+delta);
+    res[[count]]=createInSilicoData(odePars,y0,times,"myODE");  
+    odePars$paramValues[j]=temp;  
   }
   return(res); 
 }
 
-
-
-
-library(CNelephanteR);
+library(CellNOptR);
 library(odeBooleanR)
-setwd("C:/Users/davidh/Desktop/rLink/CNOR_analysis");
+setwd("C:/Users/David/Desktop/testR/");
 
 load("CNOlistSilico")
 
