@@ -838,7 +838,7 @@ sensitivityMatrix<-function(odePars,CNOlist,delta=0.05)
     for(j in 1:numParameters)
     {   
                    
-        res[count,]=(pertData[[j]][i,]-simData[i,])/delta
+       # res[count,]=(pertData[[j]][i,]-simData[i,])/(delta
     }
   }
   return(res)
@@ -861,7 +861,7 @@ pertubeExperiments<-function(odePars,CNOlist,y0,times,numStates,numParameters,de
 
 library(CellNOptR);
 library(odeBooleanR)
-setwd("C:/Users/David/Desktop/testR/");
+setwd("C:/Users/davidh/Desktop/testR/");
 
 load("CNOlistSilico")
 
