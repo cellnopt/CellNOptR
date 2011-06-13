@@ -600,9 +600,9 @@ getODEModelExpressions<-function(model)
    strODE=odefy4Expressions(model);
    
    expressions=c();
-   for(i in 1:length(strODE))
+   for(i in 1:length(strODE))   
    {
-      expressions[i]=parse(text=strODE[i]);
+    expressions[i]=parse(text=strODE[i]);
    }
    
    parVecForPrint=append(parKvec,append(parNvec,append(parTauVec,parInhVec)));
@@ -713,9 +713,10 @@ getPartialDerivs<-function(mathModel)
   listPDeriv=list();
   count=0;
   indexNonZeroPDeriv=c();
-  tag=c();
+  tag=c(); 
+  
   for(i in 1:numStates)
-  {
+  { 
     for(j in 1:numParameters)
     {
       count=count+1;
@@ -727,6 +728,8 @@ getPartialDerivs<-function(mathModel)
   res=list(listPDeriv=listPDeriv,tag=tag,indexNonZeroPDeriv=indexNonZeroPDeriv);
   return(res)
 }
+
+
 
 computeSensitivities<-function(mathModel,pDerivsInfo,CNOlist,indexes,times)
 {
@@ -783,7 +786,7 @@ computeSensitivities<-function(mathModel,pDerivsInfo,CNOlist,indexes,times)
 
 odeSensitivityAnalisys<-function(CNOlist,CNOModel,odePars,times)
 { 
-  compileResult=compileAndLoad("myODE");
+  #compileResult=compileAndLoad("myODE");
   
   indexes=indexCNO2ODE(CNOlist,odePars);
   
@@ -793,7 +796,22 @@ odeSensitivityAnalisys<-function(CNOlist,CNOModel,odePars,times)
   
   pderivs=getPartialDerivs(expressionsInfo)
   
-  res=computeSensitivities(expressionsInfo,pderivs,CNOlist,indexes,times)
+  res=writeSensitivityCode(expressionsInfo, pderivs)
+  
+  return(res)
+  #res=computeSensitivities(expressionsInfo,pderivs,CNOlist,indexes,times)
+}
+
+writeSensitivityCode<-function(expressionsInfo, pderivs)
+{
+  exps=expressionsInfo$expressions;
+  numExps=length(exps);
+  res=c();
+  for(i in 1:numExps)
+  {
+    res[i]=deparse(exps[i])
+  } 
+  return(res);
 }
 
 simulateODEAndPlotFitness<-function(CNOlist,CNOModel,odePars)
@@ -811,7 +829,7 @@ createODEModel<-function(CNOlist,CNOModel)
                                     
   paramInfo=writeCfunction(TTModel);
   
-  compileResult=compileAndLoad("myODE");
+  #compileResult=compileAndLoad("myODE");
   
   return(paramInfo);
 }
@@ -875,6 +893,6 @@ indexes=indexCNO2ODE(CNOlist,odePars)
 
 #simulateODEAndPlotFitness(CNOlist,CNOModel,odePars)
 
-#res=odeSensitivityAnalisys(CNOlist,model,odePars,times);
-res=sensitivityMatrix(odePars,CNOlist)
+res=odeSensitivityAnalisys(CNOlist,model,odePars,times);
+#es=sensitivityMatrix(odePars,CNOlist)
 
