@@ -729,61 +729,6 @@ getPartialDerivs<-function(mathModel)
   return(res)
 }
 
-
-
-computeSensitivities<-function(mathModel,pDerivsInfo,CNOlist,indexes,times)
-{
-  pderivs=pDerivsInfo$listPDeriv;
-  numParameters=length(mathModel$index_k)+length(mathModel$index_n)+
-      length(mathModel$index_k);
-  numStates=length(mathModel$expressions);
-  numExperiments=length(CNOlist$valueStimuli[,1]);
-  simData=simulateModel(CNOlist,indexes,mathModel,times);
-  numInputs=length(mathModel$inputs);
-  numPderivs=numParameters*numStates;
-  res=list();
-  
-  for(i in 1:length(mathModel$index_inh))assign(mathModel$parNames[mathModel$index_inh[i]],0);
-  for(i in 1:numParameters)assign(mathModel$parNames[i],mathModel$paramValues[i]);  
-  for(i in 1:numExperiments)
-  { 
-    expRes=vector('list',numPderivs); 
-    for(j in 1:numInputs)
-    {
-      assign(mathModel$inputs[j],CNOlist$valueStimuli[i,j]); 
-    }
-    
-    for(j in indexes$CNOindexInhibitors)
-    {
-      print(j) 
-    }
-    index[i]=1;
-    
-    for(j in 1:length(times))
-    {
-      for(k in 1:numStates)
-      {
-        assign(mathModel$outputs[k],simData[[i]][j,k]); 
-      }
-      count=0;
-      for(k in 1:numStates)
-      {
-        for(r in 1:numParameters)
-        {
-          count=count+1;
-          if(pderivs[[count]]!=0)
-          {
-            expRes[[count]]=c(expRes[[count]],eval(pderivs[[count]]))
-          }
-          else{expRes[[count]]=0;}
-        }
-      }
-    }
-    res[[i]]=expRes
-  }
-  return(res)
-}
-
 odeSensitivityAnalisys<-function(CNOlist,CNOModel,odePars,times)
 { 
   #compileResult=compileAndLoad("myODE");
@@ -806,12 +751,34 @@ writeSensitivityCode<-function(expressionsInfo, pderivs)
 {
   exps=expressionsInfo$expressions;
   numExps=length(exps);
-  res=c();
-  for(i in 1:numExps)
-  {
-    res[i]=deparse(exps[i])
-  } 
+  res=c();                         
+  ode=c();
+  for(i in 1:numExps){ode[i]=parseExpression(exps[i]);}
+  loc=regexpr.simple2('\\w+\\^\\w+',str)
+  expr=ode[1];
+  while(loc!=-1)
+  {   
+     tempSub=substring(expr,loc$from,loc$to);
+     tempSub=strsplit(tempSub,"\\^");
+     insertSub=paste("pow(",tempSub[[1]][1],",",tempSub[[1]][2],")",sep="",collapse="")
+     print(insertSub)
+     print(tempSub)
+     exp1=substr(expr,1,loc$from-1)
+     exp2=substr(expr,loc$to+1,nchar(expr));
+     expr=paste(exp1,exp2,sep="");
+     loc=regexpr.simple2('\\w+\\^\\w+',expr);
+     
+     
+  }
   return(res);
+}
+
+parseExpression<-function(expr)
+{
+    expr=paste(deparse(expr,width.cutoff=100000),collapse="",sep="");
+    expr=sub('expression\\(\\(', '', expr, perl = TRUE); ## Perl-style white space
+    expr=sub('\\)$', '',expr, perl = TRUE);
+    expr=gsub(' ','',expr,perl=TRUE);  
 }
 
 simulateODEAndPlotFitness<-function(CNOlist,CNOModel,odePars)
@@ -831,55 +798,30 @@ createODEModel<-function(CNOlist,CNOModel)
   
   #compileResult=compileAndLoad("myODE");
   
+  
   return(paramInfo);
 }
 
-sensitivityMatrix<-function(odePars,CNOlist,delta=0.05)
+regexpr.simple2<-function(a,x)
 {
-  indexes=indexCNO2ODE(CNOlist,odePars);
-  y0=matrix(0,1,length(odePars$outputs));
-  y0[indexes$ODEindexSignals]=CNOlist$valueSignals[[1]][1,indexes$CNOindexSignals]
-  numStates=length(odePars$outputs);
-  times=seq(0,10);
-  numParameters=length(odePars$index_k)+length(odePars$index_n)+
-    length(odePars$index_tau);
-  numStates=length(odePars$outputs);
-  numExperiments=length(CNOlist$valueStimuli[,1]);
-  
-  simData=createInSilicoData(odePars,y0,times,"myODE")
-  pertData=pertubeExperiments(odePars,CNOlist,y0,times,numStates,numParameters,delta);
-  count=0;
-  res=matrix(0,numParameters,numStates*length(times))
-  for(i in 1:length(times))
-  {  
-    count=count+1;
-    for(j in 1:numParameters)
-    {   
-                   
-       # res[count,]=(pertData[[j]][i,]-simData[i,])/(delta
-    }
-  }
-  return(res)
-}
-   
-pertubeExperiments<-function(odePars,CNOlist,y0,times,numStates,numParameters,delta=0.05)
-{
-  res=list();
-  count=0;
-  for(j in 1:numParameters)
+	# Use as follows: >regexpr.simple2("[:][0-9.]+[,]",x)
+	# Returns the first and last positions in string "x" of the first match with string "a"
+	result<-list()
+	w<-regexpr(a,x)
+	result$from<-w[1]
+	if(w[1]>-1)
   {
-    count=count+1;
-    temp=odePars$paramValues[j];
-    odePars$paramValues[j]=odePars$paramValues[j]*(1+delta);
-    res[[count]]=createInSilicoData(odePars,y0,times,"myODE");  
-    odePars$paramValues[j]=temp;  
-  }
-  return(res); 
+	   result$to<-w[1]+attr(w, "match.length")-1
+	}
+	return(result)
 }
+
+
+
 
 library(CellNOptR);
 library(odeBooleanR)
-setwd("C:/Users/davidh/Desktop/testR/");
+setwd("C:/Users/David/Desktop/testR/");
 
 load("CNOlistSilico")
 
@@ -895,4 +837,5 @@ indexes=indexCNO2ODE(CNOlist,odePars)
 
 res=odeSensitivityAnalisys(CNOlist,model,odePars,times);
 #es=sensitivityMatrix(odePars,CNOlist)
+
 
