@@ -60,7 +60,7 @@ static int check_flag(void *flagvalue, char *funcname, int opt);
  */
 
 SEXP cvodes(SEXP r_y, SEXP r_times, SEXP r_rhs, SEXP r_data, SEXP r_jacfunc, SEXP r_rootfunc, SEXP r_numroots, SEXP r_solver, SEXP r_rtol, SEXP r_atol, SEXP r_maxnumsteps, SEXP r_maxstep, 
-			SEXP r_verbose, SEXP r_lasttime) {		
+			SEXP r_verbose, SEXP r_lasttime, SEXP r_vec1) {		
 		 
 	/* Badthing */
 	SEXP badthing;
@@ -80,6 +80,9 @@ SEXP cvodes(SEXP r_y, SEXP r_times, SEXP r_rhs, SEXP r_data, SEXP r_jacfunc, SEX
 	// Booleans
 	int verbose = INTEGER(r_verbose)[0];
 	int lasttime = INTEGER(r_lasttime)[0];
+	int rtrala=INTEGER(r_vec1);
+	Rprintf(rtrala);
+	Rprintf("I am here");
 	// Root info
 	int numroots = INTEGER(r_numroots)[0];
 	if (numroots == 0) numroots = 1;	// Otherwise next line will complain

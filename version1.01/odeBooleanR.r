@@ -165,6 +165,10 @@ createInSilicoData<-function(paramInfo,y0,times,cFileName)
    {
      out<-cvodes(y0,times,"myODE","rhs",fndata=paramInfo$paramValues,verbose=FALSE,maxnumsteps=1000);
    }
+    else if(cFileName=="sens")
+   {
+     out<-cvodes(y0,times,"sens","rhs",fndata=paramInfo$paramValues,verbose=FALSE,maxnumsteps=1000);
+   }
    else
    {       
       out=NA;
@@ -741,44 +745,124 @@ odeSensitivityAnalisys<-function(CNOlist,CNOModel,odePars,times)
   
   pderivs=getPartialDerivs(expressionsInfo)
   
-  res=writeSensitivityCode(expressionsInfo, pderivs)
+  odePars=writeSensitivityCCode(expressionsInfo, pderivs);
+  
+  res=simulateSensitivity(CNOlist,odePars,times);
   
   return(res)
   #res=computeSensitivities(expressionsInfo,pderivs,CNOlist,indexes,times)
 }
 
-writeSensitivityCode<-function(expressionsInfo, pderivs)
+writeSensitivityCCode<-function(expressionsInfo, pderivs)
 {
   exps=expressionsInfo$expressions;
   numExps=length(exps);
-  res=c();                         
-  ode=c();
-  for(i in 1:numExps){ode[i]=parseExpression(exps[i]);}
-  loc=regexpr.simple2('\\w+\\^\\w+',str)
-  expr=ode[1];
-  while(loc!=-1)
-  {   
-     tempSub=substring(expr,loc$from,loc$to);
-     tempSub=strsplit(tempSub,"\\^");
-     insertSub=paste("pow(",tempSub[[1]][1],",",tempSub[[1]][2],")",sep="",collapse="")
-     print(insertSub)
-     print(tempSub)
-     exp1=substr(expr,1,loc$from-1)
-     exp2=substr(expr,loc$to+1,nchar(expr));
-     expr=paste(exp1,exp2,sep="");
-     loc=regexpr.simple2('\\w+\\^\\w+',expr);
-     
-     
+  strODE=c();
+  for(i in 1:numExps)
+  { 
+    strODE[i]=parseExpression(exps[i]);
   }
-  return(res);
+  pderivs=getPartialDerivs(expressionsInfo);
+  
+  for(i in pderivs$indexNonZeroPDeriv)
+  {
+    strODE[length(strODE)+1]=parseExpression(pderivs$listPDeriv[[i]]);
+  }
+   headerDir=paste(.find.package("odeBooleanR"),"/textHeaders/startStringForFile.txt",sep="");
+   startString=readChar(headerDir,nchar=10000);
+   outputsStr=paste(expressionsInfo$outputs,sep=",",collapse=",");
+   outputsStr=paste("double ",outputsStr,";",sep="");
+   
+   declareParVecForPrint=paste("double ",expressionsInfo$parNames,";",sep="");
+   
+   outputAttr=c();
+   
+   numOutputs=length(expressionsInfo$outputs);
+
+   for(i in 1:numOutputs)
+   {
+      outputAttr[i]=paste(expressionsInfo$outputs[i],"=Ith(y,",i,");",sep="");  
+   }
+   
+   for(i in 1:length(strODE))
+   {
+      strODE[i]=paste("Ith(ydot,",i,")=",strODE[i],";",sep="");        
+   }
+   
+   sizeParVec=length(expressionsInfo$parNames);
+   count=0;
+   
+   parVecForPrint=c();
+   for(i in 1:length(expressionsInfo$parNames))
+   {
+     parVecForPrint[i]=paste(expressionsInfo$parNames[i],"=ptr[",i-1,"];",sep=""); 
+   }
+   
+   cFileDir=paste(.find.package("odeBooleanR"),"/models/sens.c",sep="");  
+   write(startString,file=cFileDir,sep="",append=FALSE)
+   write(outputsStr,file=cFileDir,sep="",append=TRUE);
+   write(declareParVecForPrint,file=cFileDir,sep="",append=TRUE);
+   write(parVecForPrint,file=cFileDir,sep="",append=TRUE);
+   write(outputAttr,file=cFileDir,sep="",append=TRUE);
+   write(strODE, file=cFileDir, sep="", append = TRUE);  
+   write("return(0);\n}",file=cFileDir, sep="", append = TRUE); 
+    
+   expressionsInfo$index_sensFunc=1:length(pderivs$indexNonZeroPDeriv)+numOutputs;
+
+   return(expressionsInfo);
 }
 
 parseExpression<-function(expr)
 {
     expr=paste(deparse(expr,width.cutoff=100000),collapse="",sep="");
-    expr=sub('expression\\(\\(', '', expr, perl = TRUE); ## Perl-style white space
-    expr=sub('\\)$', '',expr, perl = TRUE);
-    expr=gsub(' ','',expr,perl=TRUE);  
+    if(grepl('expression\\(\\(',expr))
+    {
+      expr=sub('expression\\(\\(', '', expr, perl = TRUE); ## Perl-style white space
+      expr=sub('\\)$', '',expr, perl = TRUE);
+    }
+    expr=gsub(' ','',expr,perl=TRUE);
+    
+    loc=regexpr.simple2('\\w+\\^2',expr)
+    while(loc!=-1)
+    {  
+      tempSub=substring(expr,loc$from,loc$to);
+      
+      tempSub=strsplit(tempSub,"\\d+\\^2");
+     
+      insertSub=paste("pow(",tempSub[[1]][1],",",tempSub[[1]][2],")",sep="",collapse="")
+      exp1=substr(expr,1,loc$from-1)
+      exp2=substr(expr,loc$to+1,nchar(expr));
+      expr=paste(exp1,insertSub,exp2,sep="");
+      loc=regexpr.simple2('\\d+\\^2',expr)  
+    }
+    
+    loc=regexpr.simple2('\\w+\\^\\(\\w+-1\\)',expr)
+    while(loc!=-1)
+    {  
+      tempSub=substring(expr,loc$from,loc$to);
+      
+      tempSub=strsplit(tempSub,"\\^");
+     
+      insertSub=paste("pow(",tempSub[[1]][1],",",tempSub[[1]][2],")",sep="",collapse="")
+      exp1=substr(expr,1,loc$from-1)
+      exp2=substr(expr,loc$to+1,nchar(expr));
+      expr=paste(exp1,insertSub,exp2,sep="");
+      loc=regexpr.simple2('\\w+\\^\\(\\w+-1\\)',expr)  
+    }
+    
+    loc=regexpr.simple2('\\w+\\^\\w+',expr)
+    while(loc!=-1)
+    {   
+      tempSub=substring(expr,loc$from,loc$to);
+      tempSub=strsplit(tempSub,"\\^");
+      insertSub=paste("pow(",tempSub[[1]][1],",",tempSub[[1]][2],")",sep="",collapse="")
+      exp1=substr(expr,1,loc$from-1)
+      exp2=substr(expr,loc$to+1,nchar(expr));
+      expr=paste(exp1,insertSub,exp2,sep="");
+      loc=regexpr.simple2('\\w+\\^\\w+',expr);  
+    }
+
+  return(expr);  
 }
 
 simulateODEAndPlotFitness<-function(CNOlist,CNOModel,odePars)
@@ -787,7 +871,8 @@ simulateODEAndPlotFitness<-function(CNOlist,CNOModel,odePars)
   
   simData=simulateData(CNOlist,indexes,odePars)
    
-  plotODESimFitness(simData,CNOlist); 
+  plotODESimFitness(simData,CNOlist);
+   
 }
 
 createODEModel<-function(CNOlist,CNOModel)
@@ -796,8 +881,7 @@ createODEModel<-function(CNOlist,CNOModel)
                                     
   paramInfo=writeCfunction(TTModel);
   
-  #compileResult=compileAndLoad("myODE");
-  
+  compileResult=compileAndLoad("myODE");
   
   return(paramInfo);
 }
@@ -816,12 +900,30 @@ regexpr.simple2<-function(a,x)
 	return(result)
 }
 
-
-
+simulateSensitivity<-function(CNOlist,odePars,times)
+{
+  compileResult=compileAndLoad("sens");
+  indexes=indexCNO2ODE(CNOlist,odePars)
+  numExperiments=length(CNOlist$valueStimuli[,1]);
+  res=list();
+  for(i in 1:numExperiments)
+  {
+    odePars$paramValues[odePars$index_inputs[indexes$ODEindexStimuli]]=
+      CNOlist$valueStimuli[i,indexes$CNOindexStimuli];
+    odePars$paramValues[odePars$index_inh[indexes$ODEindexInhibitors]]=
+      CNOlist$valueInhibitors[i,indexes$CNOindexInhibitors];
+      y0=matrix(0,1,length(odePars$outputs));
+    y0[indexes$ODEindexSignals]=CNOlist$valueSignals[[1]][i,indexes$CNOindexSignals]
+      CNOlist$valueInhibitors[i,indexes$CNOindexInhibitors];
+    tempRes=createInSilicoData(odePars,y0,times,"sens");
+    res[[i]]=tempRes;    
+  }
+  
+}
 
 library(CellNOptR);
 library(odeBooleanR)
-setwd("C:/Users/David/Desktop/testR/");
+setwd("C:/Users/davidh/Desktop/testR/");
 
 load("CNOlistSilico")
 
@@ -833,9 +935,11 @@ odePars=createODEModel(CNOlist,model);
 
 indexes=indexCNO2ODE(CNOlist,odePars)
 
-#simulateODEAndPlotFitness(CNOlist,CNOModel,odePars)
+##simulateSensitivity(CNOlist,odePars,times)
 
-res=odeSensitivityAnalisys(CNOlist,model,odePars,times);
+simulateODEAndPlotFitness(CNOlist,CNOModel,odePars)
+
+#res=odeSensitivityAnalisys(CNOlist,model,odePars,times);
 #es=sensitivityMatrix(odePars,CNOlist)
 
 
