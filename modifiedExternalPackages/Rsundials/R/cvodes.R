@@ -29,9 +29,9 @@ cvodes <- function(y, times, package, rhs, fndata = NULL, jacfunc = NULL, rootfu
 	rofunc = NULL
 	if (!is.null(rootfunc)) rofunc = getNativeSymbolInfo(rootfunc, PACKAGE=package)$address
   
-  r_vec1=1;
-  solutions = .Call("cvodes",PACKAGE="Rsundials", as.double(y), as.double(times), rhs, as.double(fndata), jfunc, rofunc, as.integer(numroots), as.integer(s), as.double(rtol), 
-	as.double(atol), as.integer(maxnumsteps), as.integer(maxstep), as.integer(verbose), as.integer(lasttime),as.integer(r_vec1))
+    r_vec1=1;
+    solutions = .Call("cvodes",PACKAGE="Rsundials", as.double(y), as.double(times), rhs, as.double(fndata), jfunc, rofunc, as.integer(numroots), as.integer(s), as.double(rtol), 
+	as.double(atol), as.integer(maxnumsteps), as.integer(maxstep), as.integer(verbose), as.integer(lasttime),as.integer(matrix(1,10,10)))
       
 	if (lasttime == TRUE) rows = 1
 	else rows = length(times)

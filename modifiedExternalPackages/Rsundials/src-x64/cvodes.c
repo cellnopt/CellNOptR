@@ -26,6 +26,7 @@
 
 /* Functions Called by the Solver */
 
+
 typedef int rhs_func(realtype t, N_Vector y, N_Vector ydot, void *f_data);
 
 typedef int root_func(realtype t, N_Vector y, realtype *gout, void *g_data);
@@ -52,6 +53,18 @@ static void PrintFinalStats(void *cvode_mem);
 
 static int check_flag(void *flagvalue, char *funcname, int opt);
 
+int myRHS(realtype t, N_Vector y, N_Vector ydot, void *data)
+{
+  
+  //Rprintf("%s",data);
+  //int *ptr=data;
+  
+  Ith(ydot, 1) =0;
+  Ith(ydot, 2) = 0;
+  Ith(ydot, 3) = 0;
+
+  return(0);
+}
 
 /*
  *-------------------------------
@@ -75,20 +88,40 @@ SEXP cvodes(SEXP r_y, SEXP r_times, SEXP r_rhs, SEXP r_data, SEXP r_jacfunc, SEX
 	N_Vector y, abstol;
 	void *cvode_mem;
 	double *data; data = NULL; data = (double *) malloc(LENGTH(r_data) * sizeof (double));
+	//data = (int *) malloc(LENGTH(r_data) * sizeof (int));
+	 //data[i] = 
+	//int k1=0;
+	//int k2=1;
+	//int k3=2;
+	
 	int flag, flagr, iout, neq;
 	int i = 0, j = 0, tcount = 0;
+	
 	// Booleans
 	int verbose = INTEGER(r_verbose)[0];
 	int lasttime = INTEGER(r_lasttime)[0];
-	int rtrala=INTEGER(r_vec1);
-	Rprintf(rtrala);
-	Rprintf("I am here");
+	
+	int n=10;
+	int count=0;
+	for(i=0;i<n;i++)
+	{
+		for(j=0;j<n;j++)
+		{
+				
+				Rprintf("%d ",INTEGER(r_vec1)[count]);
+				count++;
+		}
+	Rprintf("\n");
+	}
+	
+	i=0;j=0;
 	// Root info
 	int numroots = INTEGER(r_numroots)[0];
 	if (numroots == 0) numroots = 1;	// Otherwise next line will complain
 	int rootsfound[numroots];
 
 	// User RHS Function
+	//rhs_func *rhs = myRHS;
 	rhs_func *rhs = (rhs_func *) R_ExternalPtrAddr(r_rhs);
 	
 	y = NULL;
@@ -146,6 +179,7 @@ SEXP cvodes(SEXP r_y, SEXP r_times, SEXP r_rhs, SEXP r_data, SEXP r_jacfunc, SEX
 	if (verbose) Rprintf("Solver Memory Allocated\n");
 	
 	/* Set f_data */
+	/*
 	if (!isNull(r_data)) {
 		for (i=0; i<LENGTH(r_data); i++) data[i] = REAL(r_data)[i];
 		flag = CVodeSetFdata(cvode_mem, data);
@@ -153,7 +187,7 @@ SEXP cvodes(SEXP r_y, SEXP r_times, SEXP r_rhs, SEXP r_data, SEXP r_jacfunc, SEX
 			Rprintf("\nSolver failed. . .\n");
 			return(badthing);
 		}
-	}
+	}*/
 	
 	// Set and initialize error tolerances
 	reltol = RCONST(REAL(r_rtol)[0]);
