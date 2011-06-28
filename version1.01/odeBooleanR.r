@@ -455,34 +455,42 @@ indexCNO2ODE<-function(CNOlist,odePars)
 { 
   CNOindexSignals=c();
   ODEindexSignals=c();
-  for(i in 1:length(odePars$outputs))
+  count=0;
+  for(i in 1:length(CNOlist$namesSignals))
   {
-    tempIndex=which(CNOlist$namesSignals==odePars$outputs[i]);
+    tempIndex=which(odePars$outputs==CNOlist$namesSignals[i]);
     CNOindexSignals=c(CNOindexSignals,tempIndex);
+    
     if(length(tempIndex)>0)ODEindexSignals=c(ODEindexSignals,i);
   }
-  
+
   CNOindexStimuli=c();
   ODEindexStimuli=c();
-  for(i in 1:length(odePars$inputs))
+  for(i in 1:length(CNOlist$namesStimuli))
   {
-    tempIndex=which(CNOlist$namesStimuli==odePars$inputs[i]);
+    tempIndex=which(odePars$inputs==CNOlist$namesStimuli[i]);
     CNOindexStimuli=c(CNOindexStimuli,tempIndex);
     if(length(tempIndex)>0) ODEindexStimuli=c(ODEindexStimuli,i);
   }
   
   CNOindexInhibitors=c();
   ODEindexInhibitors=c();
-  for(i in 1:length(odePars$outputs))
+  for(i in 1:length(CNOlist$namesInhibitors))
   {
-    tempIndex=which(CNOlist$namesInhibitors==odePars$outputs[i]);
-    CNOindexInhibitors=c(CNOindexInhibitors,tempIndex);
-    if(length(tempIndex)>0)ODEindexInhibitors=c(ODEindexInhibitors,i);
+    tempIndex=which(odePars$outputs==CNOlist$namesInhibitors[i]);
+     CNOindexInhibitors=c(CNOindexInhibitors,tempIndex);
+    if(length(tempIndex)>0)
+    {  
+      ODEindexInhibitors=c(ODEindexInhibitors,i);
+      
+    }
   }
+  print(CNOindexInhibitors)
+  print(ODEindexInhibitors)
   res=list(CNOindexSignals=CNOindexSignals,ODEindexSignals=ODEindexSignals,
     CNOindexStimuli=CNOindexStimuli,ODEindexStimuli=ODEindexStimuli,
       CNOindexInhibitors=CNOindexInhibitors,ODEindexInhibitors=ODEindexInhibitors);
-  
+
   return(res);
 }
 
@@ -493,15 +501,22 @@ simulateData<-function(CNOlist,indexes,odePars)
   res=list();
   for(i in 1:numExperiments)
   {
+  
+    print('HERE1')
     odePars$paramValues[odePars$index_inputs[indexes$ODEindexStimuli]]=
       CNOlist$valueStimuli[i,indexes$CNOindexStimuli];
-    odePars$paramValues[odePars$index_inh[indexes$ODEindexInhibitors]]=
-      CNOlist$valueInhibitors[i,indexes$CNOindexInhibitors];
+    print('HERE2')
+   print(indexes$ODEindexInhibitors)
+    odePars$paramValues[odePars$index_inh[indexes$CNOindexInhibitors]]=
+      CNOlist$valueInhibitors[i,indexes$ODEindexInhibitors];
+       print('HERE3')
     y0=matrix(0,1,length(odePars$outputs));
-    y0[indexes$ODEindexSignals]=CNOlist$valueSignals[[1]][i,indexes$CNOindexSignals]
-      CNOlist$valueInhibitors[i,indexes$CNOindexInhibitors];
+    print(indexes$ODEindexSignals)
+    print(indexes$CNOindexSignals)
+    y0=CNOlist$valueSignals[[1]][i,indexes$CNOindexSignals]
+         print('here4')
     tempRes=createInSilicoData(odePars,y0,times,"myODE");
-    res[[i]]=tempRes[,indexes$ODEindexSignals];    
+    res[[i]]=tempRes[,indexes$CNOindexSignals];    
   }
   
   return(res);
@@ -515,8 +530,8 @@ simulateModel<-function(CNOlist,indexes,odePars,times)
   {
     odePars$paramValues[odePars$index_inputs[indexes$ODEindexStimuli]]=
       CNOlist$valueStimuli[i,indexes$CNOindexStimuli];
-    odePars$paramValues[odePars$index_inh[indexes$ODEindexInhibitors]]=
-      CNOlist$valueInhibitors[i,indexes$CNOindexInhibitors];
+    odePars$paramValues[odePars$index_inh[indexes$CNOindexInhibitors]]=
+      CNOlist$valueInhibitors[i,indexes$ODEindexInhibitors];
       y0=matrix(0,1,length(odePars$outputs));
     y0[indexes$ODEindexSignals]=CNOlist$valueSignals[[1]][i,indexes$CNOindexSignals]
       CNOlist$valueInhibitors[i,indexes$CNOindexInhibitors];
@@ -923,13 +938,27 @@ simulateSensitivity<-function(CNOlist,odePars,times)
 
 library(CellNOptR);
 library(odeBooleanR)
-setwd("C:/Users/davidh/Desktop/testR/");
+library(RBGL)
+setwd("C:/Users/davidh/Desktop/testCamData/");
 
-load("CNOlistSilico")
+dataToy<-readMIDAS(MIDASfile='LiverDreamReal.csv')
+CNOlist<-makeCNOlist(dataset=dataToy,subfield=FALSE)
 
-CNOlist=CNOlistSilico;
 
-model=readSif(sifFile = "modNet2.sif")
+model=readSif(sifFile = "feedbackREAL.sif")
+
+
+CNOlist$namesSpecies=tolower(CNOlist$namesSpecies);
+CNOlist$namesStimuli=tolower(CNOlist$namesStimuli);
+CNOlist$namesInhibitors=tolower(CNOlist$namesInhibitors);
+CNOlist$namesSignals=tolower(CNOlist$namesSignals);
+CNOlist$namesCues=tolower(CNOlist$namesCues)
+
+
+indices <- indexFinder(CNOlist, model, verbose = TRUE)
+modelNCNOindices <- findNONC(model, indices, verbose = TRUE)
+model <- cutNONC(model, modelNCNOindices)
+
 
 odePars=createODEModel(CNOlist,model);
 
@@ -941,5 +970,5 @@ simulateODEAndPlotFitness(CNOlist,CNOModel,odePars)
 
 #res=odeSensitivityAnalisys(CNOlist,model,odePars,times);
 #es=sensitivityMatrix(odePars,CNOlist)
-
+                                                          
 
