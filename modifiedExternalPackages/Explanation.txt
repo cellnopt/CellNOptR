@@ -1,5 +1,0 @@
-RSundials
-	-There was an annoying RPRINTF inside the function cvodes.c . 
-	 This line in now commented. If you are not bothered with blank 
-	 newlines, use the original package.
-	 
