@@ -1,3 +1,6 @@
+/* Prototype for a CNOstruct */
+
+
 typedef struct
 {
 	int** interMat;

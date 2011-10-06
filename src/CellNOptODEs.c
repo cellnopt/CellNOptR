@@ -179,6 +179,11 @@ int main(void)
 
 
   /* free memory */
+
+  /*what about *data ? 
+ 
+  */
+  free(data);
   /* simple pointers first */
   free(indexSig);
   free(indexStim);
