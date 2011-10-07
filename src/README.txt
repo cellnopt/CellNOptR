@@ -18,3 +18,17 @@ Case 2: arguments
 ====================
 
 
+    void func1(double *array, int *n)
+    {
+      int i = 0;
+      for (i=0; i<n; i++)
+         printf("%f\n", array[i]);
+
+      printf("%d \n", *n);
+    }
+
+compile it with the same method as above.
+Then in R, type:
+
+    .C("func1", as.double(c(1,2)), as.integer(2))
+

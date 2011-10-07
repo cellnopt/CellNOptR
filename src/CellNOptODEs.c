@@ -14,6 +14,19 @@
 #include "Toy_Model_MMB_Feedback_OriginalPars_C_test.h"
 
 
+void func1(double *array, int *n)
+{
+  int i;
+
+  //for (i=0; i<n; i++) 
+  printf("%d %f\n", 0, array[0]);
+  printf("%d %f\n", 1, array[1]);
+
+  printf("%d \n", *n);
+}
+
+
+
 int main(void)
 {
   int i,j;
@@ -134,9 +147,9 @@ int main(void)
 
   /* free memory */
 
-  /*what about *data ? 
+  /*what about *data ?*/ 
  
-  // /* */
+   
   free(data);
   /* simple pointers first */
   free(indexSig);
