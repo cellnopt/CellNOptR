@@ -11,54 +11,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "CNOStructure.h"
+#include "Toy_Model_MMB_Feedback_OriginalPars_C_test.h"
 
-int interMat [3][4]=
-{
-	{1,0,1,0},
-	{1,0,0,1},
-	{1,0,0,1}
-};
-
-static int notMat[3][4]=
-{
-		{1,0,1,0},
-		{1,0,0,1},
-		{1,0,0,1}
-};
-
-static double valueSignals[3][4]=
-{
-	{1e-04,0,1,0},
-	{1,0,0,1},
-	{1,0,0,1}
-};
-
-static double valueInhibitors[3][4]=
-{
-	{1e-04,0,1,0},
-	{1,0,0,1},
-	{1,0,0,1}
-};
-
-static double valueStimuli[3][4]=
-{
-	{1e-04,0,1,0},
-	{1,0,0,1},
-	{1,0,0,1}
-};
-
-static int indexSignals[3]={1,2,3};
-static int indexStimuli[3]={1,2,3};
-static int indexInhibitors[3]={1,2,3};
-static double odeParameters[5]={1,2,2,3,5};
-static int nPars=3;
-static int nRows=4;
-static int nCols=3;
-static int nStimuli=3;
-static int nInhibitors=3;
-static int nSignals=3;
-static int nTimes=1;
-static int nExperiments;
 
 int main(void)
 {
@@ -112,27 +66,27 @@ int main(void)
   valueSIGNALS = (double**)malloc(nExperiments * sizeof(double*));
   for (i = 0; i < nExperiments; i++)
   {
-    valueSIGNALS[i] = (double*)malloc(nSignals*sizeof(int));
+    valueSIGNALS[i] = (double*)malloc(nSignals*sizeof(double));
     for (j = 0; j < nSignals; j++)
     {
-      valueSIGNALS[i][j]=(double)interMat[i][j];
+      valueSIGNALS[i][j]= valueSignals[i][j];
     }
   }
 
   valueINHIBITORS = (double**)malloc(nExperiments * sizeof(double*));
   for (i = 0; i < nExperiments; i++)
   {
-    valueINHIBITORS[i] = (double*)malloc(nInhibitors*sizeof(int));
+    valueINHIBITORS[i] = (double*)malloc(nInhibitors*sizeof(double));
     for (j = 0; j < nInhibitors; j++)
     {
-      valueINHIBITORS[i][j]=(double)valueInhibitors[i][j];
+      valueINHIBITORS[i][j]=valueInhibitors[i][j];
     }
   }
 
   valueSTIMULI = (double**)malloc(nExperiments * sizeof(double*));
   for (i = 0; i < nExperiments; i++)
   {
-    valueSTIMULI[i] = (double*)malloc(nStimuli*sizeof(int));
+    valueSTIMULI[i] = (double*)malloc(nStimuli*sizeof(double));
     for (j = 0; j < nStimuli; j++)
     {
       valueSTIMULI[i][j]=(double)valueStimuli[i][j];
@@ -145,7 +99,7 @@ int main(void)
     notMAT[i] = (int*)malloc(nCols*sizeof(int));
     for (j = 0; j < nCols; j++)
     {
-      notMAT[i][j]=(int)notMat[i][j];
+      //notMAT[i][j]=(int)notMat[i][j];
     }
   }
     
@@ -167,14 +121,14 @@ int main(void)
   tempData.nInhibitors=nInhibitors;
   tempData.nSignals=nSignals;
   tempData.nTimes=nTimes;
-  tempData.nExperiments=nExperiments;
+  // tempData.nExperiments=nExperiments;
 
-  data=malloc(sizeof(tempData));
-  *data=tempData;
+  // data=malloc(sizeof(tempData));
+  // *data=tempData;
 
-  printf("haha %d",interMat[0][0]);
-  printf("%f",valueSignals[0][0]);
-  puts("!!!Hello World!!!"); /* prints !!!Hello World!!! */
+  // printf("haha %d",interMat[0][0]);
+  // printf("%f",valueSignals[0][0]);
+  // puts("!!!Hello World!!!"); /* prints !!!Hello World!!! */
 
 
 
@@ -182,7 +136,7 @@ int main(void)
 
   /*what about *data ? 
  
-  */
+  // /* */
   free(data);
   /* simple pointers first */
   free(indexSig);
@@ -209,7 +163,7 @@ int main(void)
 
    for (i = 0; i < nRows; i++)
      free(interMAT[i]);
-   free(interMAT);
+   free(interMAT); 
 
 return EXIT_SUCCESS;
 }
