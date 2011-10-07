@@ -15,7 +15,11 @@ clean:
 
 #	# $@ evaluate the current target
 #	$(CC) $(LDFLAGS) -o $@ $^
-
+#
+#
+Rlib:
+	#create a so lib for R
+	R CMD SHLIB  CellNOptODEs.c
 
 
 

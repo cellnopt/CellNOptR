@@ -99,7 +99,7 @@ int main(void)
     notMAT[i] = (int*)malloc(nCols*sizeof(int));
     for (j = 0; j < nCols; j++)
     {
-      //notMAT[i][j]=(int)notMat[i][j];
+      notMAT[i][j]=(int)notMat[i][j];
     }
   }
     
@@ -123,12 +123,12 @@ int main(void)
   tempData.nTimes=nTimes;
   // tempData.nExperiments=nExperiments;
 
-  // data=malloc(sizeof(tempData));
-  // *data=tempData;
+  data=malloc(sizeof(tempData));
+  *data=tempData;
 
-  // printf("haha %d",interMat[0][0]);
-  // printf("%f",valueSignals[0][0]);
-  // puts("!!!Hello World!!!"); /* prints !!!Hello World!!! */
+  printf("haha %d\n",interMAT[0][0]);
+  printf("%f",valueSIGNALS[0][0]);
+  puts("!!!Hello World!!!"); /* prints !!!Hello World!!! */
 
 
 
