@@ -24,21 +24,18 @@ static int check_flag(void *flagvalue, char *funcname, int opt);
 int simulateODE(CNOStructure* data)
 {
 	printf("\n\n Test %d",(*data).nStates);
-	int i,j,neq,index_signal,counter,flag, flagr, iout;
+	int i,j,neq,counter,flag, flagr, iout;
 	int* state_array = (int *)malloc(((*data).nRows)*sizeof(int));
 	realtype t, tout, ti, tf;
 	N_Vector y, abstol;
 	void *cvode_mem;
 	int exp_num=4;
-	rhs_func *rhs;
-	double maxStepSize=0.0;
+	double maxStepSize=0;
 	int maxNumSteps=10000;
-	 realtype *atol2;
-	 realtype atol=0.000000001;
-	 realtype reltol=0.00000001;
+	 realtype atol=0.00001;
+	 realtype reltol=0.00001;
 	 double** simResults= (double **) malloc((*data).nTimes*sizeof(double*));
-
-	int verbose=1;
+	 int verbose=1;
 
 	cvode_mem = NULL;
 	abstol = NULL;
@@ -125,12 +122,9 @@ int simulateODE(CNOStructure* data)
 		 return(0);
 	 }
 
-	 atol2 = &atol;
-
-	 rhs =*rhsODE;
-
 	 ti=(*data).timeSignals[0];
-	 flag = CVodeMalloc(cvode_mem, rhs, ti, y, CV_SS, reltol, atol2);
+	 tf=(*data).timeSignals[(*data).nTimes-1];
+	 flag = CVodeMalloc(cvode_mem,*rhsODE, ti, y, CV_SS, reltol, &atol);
 
 	 if (check_flag(&flag, "CVodeMalloc", 1))
 	 {
@@ -167,11 +161,12 @@ int simulateODE(CNOStructure* data)
 	  for (i = 1; i < (*data).nTimes; ++i)
 	  {
 		  tout=(*data).timeSignals[i];
-		  flag = CVode(cvode_mem, tout, y, &t, CV_NORMAL);
+		  flag = CVode(cvode_mem, tout, y, &tf, CV_NORMAL);
 
 		  for (j = 0; j < (*data).nStates; ++j)
 		  {
 			  simResults[i][j]= (double) Ith(y,i);
+			  printf("%f\t",Ith(y,i));
 		  }
 
 		  if (check_flag(&flag, "CVode", 1))
@@ -179,6 +174,8 @@ int simulateODE(CNOStructure* data)
 			  if(verbose)printf("\nSolver failed. . .\n");
 			  break;
 		  }
+
+		  printf("\n");
 	  }
 
 	return(0);
