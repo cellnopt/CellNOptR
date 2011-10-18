@@ -1,6 +1,6 @@
 #include <math.h>
 #include <stdio.h>
-
+#include <stdlib.h>
 /* Sundials Header Files */
 
 #include "CVODES/include/cvodes/cvodes.h"           /* prototypes for CVODES fcts. and consts. */
@@ -25,7 +25,7 @@ int simulateODE(CNOStructure* data)
 {
 	printf("\n\n Test %d",(*data).nStates);
 	int i,j,neq,index_signal,counter,flag, flagr, iout;
-	int* state_array=malloc((*data).nRows*sizeof(int));
+	int* state_array = (int *)malloc(((*data).nRows)*sizeof(int));
 	realtype t, tout, ti, tf;
 	N_Vector y, abstol;
 	void *cvode_mem;
@@ -36,7 +36,7 @@ int simulateODE(CNOStructure* data)
 	 realtype *atol2;
 	 realtype atol=0.000000001;
 	 realtype reltol=0.00000001;
-	 double** simResults=malloc((*data).nTimes*sizeof(double*));
+	 double** simResults= (double **) malloc((*data).nTimes*sizeof(double*));
 
 	int verbose=1;
 

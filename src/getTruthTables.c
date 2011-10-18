@@ -8,6 +8,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+int* decimal2binary(int decimal_value,int nBits);
+
+
+
 int** getTruthTables(int** adjMat,int** interMat,int** notMat,
 		int* isState,int* nInputs,int *nBits,int nRows,int nCols)
 {
@@ -120,7 +124,7 @@ int** getTruthTables(int** adjMat,int** interMat,int** notMat,
 		{
 			for (j = 0; j < nMiniTerms[i]; ++j)
 			{
-				binary_value=decimal2binary(k,nInputs[i]);
+				binary_value =  decimal2binary(k, nInputs[i]);
 				flag=1;
 				for (m = 0; m < nInputs[i]; m++)
 				{

@@ -131,18 +131,21 @@ int main(void)
   tempData.nSignals=nSignals;
   tempData.nTimes=nTimes;
 
-  tempData.adjacencyMatrix=getAdjacencyMatrix(tempData.interMat,tempData.nRows,tempData.nCols);
-
-  tempData.numInputs=getNumInputs(tempData.adjacencyMatrix,tempData.nCols);
-  tempData.numBits=getNumBits(tempData.numInputs,tempData.nRows);
-  tempData.isState=findStates(tempData.adjacencyMatrix,tempData.nRows);
-  tempData.truthTables=getTruthTables(tempData.adjacencyMatrix,tempData.interMat,
+  tempData.adjacencyMatrix = getAdjacencyMatrix(tempData.interMat,tempData.nRows,tempData.nCols);
+  tempData.numInputs = getNumInputs(tempData.adjacencyMatrix,tempData.nCols);
+  tempData.numBits = getNumBits(tempData.numInputs,tempData.nRows);
+  tempData.isState = findStates(tempData.adjacencyMatrix,tempData.nRows);
+  tempData.truthTables = getTruthTables(tempData.adjacencyMatrix,tempData.interMat,
 		  tempData.notMat,tempData.isState,tempData.numInputs,tempData.numBits,tempData.nRows,tempData.nCols);
 
   counter=0;
-  for (i = 0; i < nRows; ++i)if(tempData.isState[i])counter++;
+  for (i = 0; i < nRows; ++i){
+    if(tempData.isState[i]){
+        counter++;
+    }
+  }
 
-  tempData.nStates=counter;
+  tempData.nStates = counter;
 
   data=malloc(sizeof(tempData));
 

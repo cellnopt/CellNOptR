@@ -1,5 +1,6 @@
 
 #include <string.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include "CVODES/include/cvodes/cvodes.h"           /* prototypes for CVODES fcts. and consts. */
 #include "CVODES/include/sundials/sundials_types.h" /* definition of type realtype */
@@ -24,14 +25,14 @@ int rhsODE(realtype t, N_Vector y, N_Vector ydot, void *data)
 	    int countState=0;
 	    int inputCount;
 	    double test;
-	    double* binary_value;
+	    int* binary_value;
 
 	    //Loop through every column j in the Graph adjacency matrix
 	    for (j = 0; j <(*myData).nStates; j++)
 	    {
 	        if((*myData).isState[j])
 	        {
-	        	hillFuncValues=malloc((*myData).numInputs[j]*sizeof(double));
+	        	hillFuncValues= (double *)malloc((*myData).numInputs[j]*sizeof(double));
 	        	Ith(ydot,countState)=0;
 
 	           inputCount=0;
@@ -60,7 +61,7 @@ int rhsODE(realtype t, N_Vector y, N_Vector ydot, void *data)
 	        	   if ((*myData).truthTables[j][i])
 	        	   {
 	        		   tempProd=1;
-	        		   binary_value=decimal2binary(i-1,(*myData).numInputs[i]);
+	        		   binary_value = decimal2binary(i-1,(*myData).numInputs[i]);
 	        		   for (k = 0; k < (*myData).numInputs[j]; k++)
 	        		   {
 	        			   if(binary_value[i]==0)
