@@ -14,25 +14,14 @@
 #include "Toy_Model_MMB_Feedback_OriginalPars_C_test.h"
 
 
-void func1(double *array, int *n)
-{
-  int i;
-
-  //for (i=0; i<n; i++) 
-  printf("%d %f\n", 0, array[0]);
-  printf("%d %f\n", 1, array[1]);
-
-  printf("%d \n", *n);
-}
-
-
 
 int main(void)
 {
-  int i,j;
+  int i,j,nStates,counter;
   int *indexSig;
   int *indexStim;
   int *indexInh;
+  double* timeSig;
   int **interMAT;
   int **notMAT;
   double *odePARAMETERS;
@@ -106,16 +95,23 @@ int main(void)
     }
   }
 
+  timeSig= (double*)malloc(nTimes*sizeof(double*));
+   for (i = 0; i < nTimes; i++)
+   {
+	   timeSig[i]=timeSignals[i];
+   }
+
   notMAT = (int**)malloc(nRows * sizeof(int*));
   for (i = 0; i < nRows; i++)
   {
     notMAT[i] = (int*)malloc(nCols*sizeof(int));
     for (j = 0; j < nCols; j++)
     {
-      notMAT[i][j]=(int)notMat[i][j];
+      notMAT[i][j]=notMat[i][j];
     }
   }
-    
+
+
 
   /* Fill the CNOStructure */
   tempData.interMat=interMAT;
@@ -134,22 +130,26 @@ int main(void)
   tempData.nInhibitors=nInhibitors;
   tempData.nSignals=nSignals;
   tempData.nTimes=nTimes;
-  // tempData.nExperiments=nExperiments;
+
+  tempData.adjacencyMatrix=getAdjacencyMatrix(tempData.interMat,tempData.nRows,tempData.nCols);
+
+  tempData.numInputs=getNumInputs(tempData.adjacencyMatrix,tempData.nCols);
+  tempData.numBits=getNumBits(tempData.numInputs,tempData.nRows);
+  tempData.isState=findStates(tempData.adjacencyMatrix,tempData.nRows);
+  tempData.truthTables=getTruthTables(tempData.adjacencyMatrix,tempData.interMat,
+		  tempData.notMat,tempData.isState,tempData.numInputs,tempData.numBits,tempData.nRows,tempData.nCols);
+
+  counter=0;
+  for (i = 0; i < nRows; ++i)if(tempData.isState[i])counter++;
+
+  tempData.nStates=counter;
 
   data=malloc(sizeof(tempData));
+
   *data=tempData;
 
-  printf("haha %d\n",interMAT[0][0]);
-  printf("%f",valueSIGNALS[0][0]);
-  puts("!!!Hello World!!!"); /* prints !!!Hello World!!! */
+  simulateODE(data);
 
-
-
-  /* free memory */
-
-  /*what about *data ?*/ 
- 
-   
   free(data);
   /* simple pointers first */
   free(indexSig);
@@ -180,3 +180,5 @@ int main(void)
 
 return EXIT_SUCCESS;
 }
+
+

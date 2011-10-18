@@ -11,6 +11,13 @@ typedef struct
 	int* indexSignals;
 	int* indexStimuli;
 	int* indexInhibitors;
+	double* timeSignals;
+	int* isState;
+	int* isInput;
+	int** adjacencyMatrix;
+	int** truthTables;
+	int* numInputs;
+	int* numBits;
 	double* odeParameters;
 	int nPars;
 	int nRows;
@@ -20,5 +27,8 @@ typedef struct
 	int nSignals;
 	int nTimes;
 	int nExperiments;
+	int nStates;
+	//Use this only inside simulations
+	int* state_array;
 
 }CNOStructure;
