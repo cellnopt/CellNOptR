@@ -11,12 +11,58 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "CNOStructure.h"
-#include "Toy_Model_MMB_Feedback_OriginalPars_C_test.h"
+#include <R.h>
 
 
-
-int main(void)
+void hello(int *in)
 {
+    int i, n=in[0];
+ 
+    for(i=0; i < n; i++) {
+        Rprintf("Hello, world!\n");
+    }
+}
+
+void hello2(double *xIn, int *nrowsIn, int *ncolsIn)
+{
+    int nRows = nrowsIn[0];
+    int nCols = ncolsIn[0];
+
+    int i, j;
+ 
+    for(i=0; i < nRows; i++) {
+        for(j=0; j < nCols; j++) {
+        Rprintf("%f ", xIn[i*nRows + j]);
+    }
+        Rprintf("\n");
+    }
+}
+
+
+ 
+int CNORinterfaceTest(int *interMat, int *notMat, int *nRowsIn, int *nColsIn, 
+            double * valueInhibitors, int * indexInhibitors, int *nInhibitorsIn,
+            double * valueSignals,    int * indexSignals,    int *nSignalsIn,
+            double * valueStimuli,    int * indexStimuli,    int *nStimuliIn,
+            double *  timeSignals,     int *nTimesIn,
+            int *nExperimentsIn,
+            double *odeParameters, int *nParsIn) 
+
+{
+ /*Reading input*/
+ int nSignals = *nSignalsIn;
+ int nStimuli = *nStimuliIn;
+ int nTimes = *nTimesIn;
+ int nExperiments = *nExperimentsIn;
+ int nInhibitors = *nInhibitorsIn;
+ int nPars = *nParsIn;
+ int nRows = *nRowsIn;
+ int nCols = *nColsIn;
+
+
+
+
+
   int i,j,nStates,counter;
   int *indexSig;
   int *indexStim;
@@ -31,11 +77,13 @@ int main(void)
   CNOStructure tempData;
   CNOStructure *data;
 
-  indexSig=(int*)malloc(nSignals*sizeof(int));
+
+  indexSig = (int*) malloc(nSignals*sizeof(int));
   for (i = 0; i < nSignals; i++)
   {
     indexSig[i] = indexSignals[i];
   }
+
 
   indexStim=(int*)malloc(nStimuli*sizeof(int));
   for (i = 0; i < nStimuli; i++)
@@ -61,17 +109,18 @@ int main(void)
     interMAT[i] = (int*) malloc(nCols * sizeof(int));
     for (j = 0; j < nCols; j++)
     {
-      interMAT[i][j] = (int)interMat[i][j];
+      interMAT[i][j] = 2 * (int)interMat[i * nRows + j];
+      interMat[i * nRows + j]*=2;
     }
   }
 
-  valueSIGNALS = (double**)malloc(nExperiments * sizeof(double*));
+  valueSIGNALS = (double**) malloc(nExperiments * sizeof(double*));
   for (i = 0; i < nExperiments; i++)
   {
-    valueSIGNALS[i] = (double*)malloc(nSignals*sizeof(double));
+    valueSIGNALS[i] = (double*) malloc(nSignals * sizeof(double));
     for (j = 0; j < nSignals; j++)
     {
-      valueSIGNALS[i][j]= valueSignals[i][j];
+      valueSIGNALS[i][j]= valueSignals[i * nExperiments + j];
     }
   }
 
@@ -81,7 +130,7 @@ int main(void)
     valueINHIBITORS[i] = (double*)malloc(nInhibitors*sizeof(double));
     for (j = 0; j < nInhibitors; j++)
     {
-      valueINHIBITORS[i][j]=valueInhibitors[i][j];
+      valueINHIBITORS[i][j]=valueInhibitors[i * nExperiments + j];
     }
   }
 
@@ -91,7 +140,7 @@ int main(void)
     valueSTIMULI[i] = (double*)malloc(nStimuli*sizeof(double));
     for (j = 0; j < nStimuli; j++)
     {
-      valueSTIMULI[i][j]=(double)valueStimuli[i][j];
+      valueSTIMULI[i][j]=(double)valueStimuli[i * nExperiments + j];
     }
   }
 
@@ -107,14 +156,14 @@ int main(void)
     notMAT[i] = (int*)malloc(nCols*sizeof(int));
     for (j = 0; j < nCols; j++)
     {
-      notMAT[i][j]=notMat[i][j];
+      notMAT[i][j]=notMat[i * nRows  + j];
     }
   }
 
 
 
   /* Fill the CNOStructure */
-  tempData.interMat=interMAT;
+  /*tempData.interMat=interMAT;
   tempData.notMat=notMAT;
   tempData.valueSignals=valueSIGNALS;
   tempData.valueInhibitors=valueINHIBITORS;
@@ -154,6 +203,8 @@ int main(void)
   //simulateODE(data);
 
   free(data);
+*/
+
   /* simple pointers first */
   free(indexSig);
   free(indexStim);
@@ -164,6 +215,8 @@ int main(void)
   for (i = 0; i < nExperiments; i++)
     free(valueSIGNALS[i]);
   free(valueSIGNALS);
+  valueSignals[0] = 10;
+
 
   for (i = 0; i < nExperiments; i++)
     free(valueSTIMULI[i]);
@@ -181,7 +234,5 @@ int main(void)
      free(interMAT[i]);
    free(interMAT); 
 
-return EXIT_SUCCESS;
 }
-
 

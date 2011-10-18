@@ -1,5 +1,6 @@
 #include <math.h>
 #include <stdio.h>
+#include <R.h>
 
 double normHill(double x,double n,double k)
 {

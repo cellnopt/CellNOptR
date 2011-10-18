@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <R.h>
 
 void printInterMat(int** interMat,int nRows,int nCols)
 {

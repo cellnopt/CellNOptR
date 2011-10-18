@@ -3,7 +3,7 @@
 #
 #
 CC = gcc
-CFLAGS = -g -O2
+CFLAGS = -g -O2 -fPIC
 OUT = libcvodes.a
 
 
@@ -24,11 +24,13 @@ OBJ = $(SRC:.c=.o)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 
-all: $(OUT)
+all: $(OUT) sharelib
 
 $(OUT): $(OBJ)
 	ar rcs $(OUT) $(OBJ)
 
+sharelib:
+	$(CC) -fPIC -shared $(OBJ) -o libcvodes.so
 
 	
 clean:

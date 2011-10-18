@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-
+#include <R.h>
 
 int* getNumBits(int* numInputs,int n)
 {

@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <R.h>
 
 int* getNumInputs(int **adjMatrix,int n)
 {

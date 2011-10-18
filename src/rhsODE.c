@@ -6,7 +6,7 @@
 #include "CVODES/include/sundials/sundials_types.h" /* definition of type realtype */
 #include "CNOStructure.h"
 #include "CVODES/include/nvector/nvector_serial.h"  /* serial N_Vector types, fcts., and macros */
-
+#include <R.h>
 #define Ith(v,i) ( NV_DATA_S(v)[i] )
 
 double normHill(double x,double n,double k);
@@ -68,10 +68,10 @@ int rhsODE(realtype t, N_Vector y, N_Vector ydot, void *data)
 	        			   }
 	        			   else tempProd*=hillFuncValues[k];
 	        		   }
-					free(binary_value);
 					Ith(ydot,countState)+=tempProd;
 	        	   }
 	           }
+					free(binary_value);
 	           free(hillFuncValues);
 	           Ith(ydot,countState)=(Ith(ydot,countState)-Ith(y,countState))*(*myData).odeParameters[countPar++];
 	           printf("%f,\n",Ith(y,countState));

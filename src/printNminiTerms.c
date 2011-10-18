@@ -7,7 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <R.h>
 void printNminiterms(int*** miniTerms,int* nInputs, int* nMiniterms, int nRows)
 {
 	int i,j,k;

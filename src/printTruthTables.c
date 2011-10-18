@@ -7,6 +7,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <R.h>
+
 
 void printTruthTables(int** truthTables,int* nBits, int nRows)
 {

@@ -4,7 +4,7 @@
  *  Created on: 7 Oct 2011
  *      Author: davidh
  */
-
+#include <R.h>
 #include <stdio.h>
 #include <stdlib.h>
 

@@ -1,6 +1,8 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <R.h>
+
 /* Sundials Header Files */
 
 #include "CVODES/include/cvodes/cvodes.h"           /* prototypes for CVODES fcts. and consts. */
