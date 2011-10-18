@@ -15,7 +15,7 @@ int* decimal2binary(int decimal_value,int nBits);
 
 int rhsODE(realtype t, N_Vector y, N_Vector ydot, void *data)
 {
-	CNOStructure* myData=(CNOStructure*) data;
+		CNOStructure* myData=(CNOStructure*) data;
 
 	    int j,i,k;
 	    int countPar=0;
@@ -24,7 +24,6 @@ int rhsODE(realtype t, N_Vector y, N_Vector ydot, void *data)
 	    double* hillFuncValues;
 	    int countState=0;
 	    int inputCount;
-	    double test;
 	    int* binary_value;
 
 	    //Loop through every column j in the Graph adjacency matrix
@@ -40,18 +39,17 @@ int rhsODE(realtype t, N_Vector y, N_Vector ydot, void *data)
 	           {
 	        	   if((*myData).adjacencyMatrix[i][j])
 	        	   {
-	        		  kHill=(*myData).odeParameters[countPar++];
 	        		  nHill=(*myData).odeParameters[countPar++];
-
+	        		  kHill=(*myData).odeParameters[countPar++];
 	        		   if((*myData).isState[i])
 	        		   {
 	        			   hillFuncValues[inputCount++]=
-	        					   normHill(Ith(y,inputCount),kHill,nHill);
+	        					   normHill(Ith(y,inputCount),nHill,kHill);
 	        		   }
 	        		   else
 	        		   {
 	        			   hillFuncValues[inputCount++]=
-	        					   normHill((*myData).state_array[j],kHill,nHill);
+	        					   normHill((*myData).state_array[i],nHill,kHill);
 	        		   }
 	        	   }
 	           }
@@ -61,7 +59,7 @@ int rhsODE(realtype t, N_Vector y, N_Vector ydot, void *data)
 	        	   if ((*myData).truthTables[j][i])
 	        	   {
 	        		   tempProd=1;
-	        		   binary_value = decimal2binary(i-1,(*myData).numInputs[i]);
+	        		   binary_value = decimal2binary(i,(*myData).numInputs[i]);
 	        		   for (k = 0; k < (*myData).numInputs[j]; k++)
 	        		   {
 	        			   if(binary_value[i]==0)
@@ -75,7 +73,8 @@ int rhsODE(realtype t, N_Vector y, N_Vector ydot, void *data)
 	        	   }
 	           }
 	           free(hillFuncValues);
-	           printf("%f\n",Ith(ydot,countState));
+	           Ith(ydot,countState)=(Ith(ydot,countState)-Ith(y,countState))*(*myData).odeParameters[countPar++];
+	           printf("%f,\n",Ith(y,countState));
 	           countState++;
 	        }
 
