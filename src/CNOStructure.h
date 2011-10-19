@@ -29,6 +29,7 @@ typedef struct
 	int nExperiments;
 	int nStates;
 	//Use this only inside simulations
-	int* state_array;
+	double* state_array;
+	int* state_index;
 
 }CNOStructure;
