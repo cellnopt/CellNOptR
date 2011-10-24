@@ -18,29 +18,20 @@
 
 \section{A few words before we start...}
 
-This software is written in the R language, so in order to use it you will need to have R installed on your computer.  For more information and download of R, please refer to \url{http://www.r-project.org/}.   For more information about how to install R packages, please refer to \url{http://cran.r-project.org/doc/manuals/R-admin.html#Installing-packages}.  This package relies on a bioconductor package called RBGL, which you can install by typing:
-<<eval=FALSE>>=
+This software is written in the R language, so in order to use it you will need to have R installed on your computer.  For more information and download of R, please refer to \url{http://www.r-project.org/}.   For more information about how to install R packages, please refer to \url{http://cran.r-project.org/doc/manuals/R-admin.html#Installing-packages}.  This package relies on a Bioconductor package called RBGL, which you can install by typing:
+<<installRBGL, eval=FALSE>>=
 source("http://bioconductor.org/biocLite.R")
 biocLite("RBGL")
 @
 
-Before starting this tutorial you also need to install the package  \emph{CellNOptR}. On mac and linux machines you can install a source package by typing:
-<<eval=FALSE>>=
-install.packages("path_to_CellNOptR/CellNOptR_1.2.1.tar.gz",repos=NULL)
+Before starting this tutorial you also need to install the package  \emph{CellNOptR}, which you do by typing:
+<<installPackage, eval=FALSE>>=
+install.packages("path_to_CellNOptR/CellNOptR_1.0.0.tar.gz",repos=NULL)
 @
-or, using the R GUI by clicking on "Packages \& Data" then "Package installer", then choosing "local source" from the dropdown menu, clicking "install", choosing \emph{CellNOptR\_1.2.1.tar.gz} and finally clicking "open".
+or, using the R GUI by clicking on "Packages \& Data" then "Package installer", then choosing "local source" from the dropdown menu, clicking "install", choosing \emph{CellNOptR\_1.0.0.tar.gz} and finally clicking "open".
 
-On windows you can install a source package by typing:
-<<eval=FALSE>>=
-install.packages("path_to_CellNOptR/CellNOptR_1.2.1.tar.gz",type="source",repos=NULL)
-@
-You can also install the binary package from the local zip file by typing 
-<<eval=FALSE>>=
-install.packages("path_to_CellNOptR/CellNOptR_1.2.1.zip",repos=NULL)
-@
-or install the local binary from the menu in the GUI.
 A series of books about R can be found on the R project website (\url{http://www.r-project.org/}), and many tutorials are available on the internet. If you are a complete beginner, all you need to know is that by typing "?nameOfFunction" you get the help page about the function that you are interested in, and by typing
-<<eval=FALSE>>=
+<<Rdummies, eval=FALSE>>=
 a<-4+5
 @
 you assign the value 4+5=9 to the variable a, and if the expression on the right of the arrow is a function then you assign the result of the function to the variable on the left side of the arrow. If you type the name of your variable only, R shows you the content of this variable.
@@ -53,73 +44,75 @@ A typical analysis using \emph{CellNOptR} will be described here in detail on a 
 
 You can either copy and paste the lines of code in this document (not including the \(>\)) or type them yourself.  For easiness of use we also provide (in the doc folder of this package) a text file CellNOptR-examples.R which contains the R commands in this tutorial, as well as other examples of code.  We recommend that you use that script as a template for your analyses.  In the doc folder of this package you will also find a file called CellNOptR0\_1flowchart.pdf which graphically describes the pipeline of this package and places all of the functions of this package relative to each other.  Squared nodes in this flowchart are steps that should not be omitted in a normal analysis, whereas elliptic nodes are optional in most analyses.
 
-The first step of an analysis with \emph{CellNOptR} is to load the library, and create a directory where you can perform your analysis.
+The first step of an analysis with \emph{CellNOptR} is to load the library, and create a directory where you can perform your analysis, then set it as your working directory.
 
 <<Ropts, echo=FALSE, results=hide>>=
 options(width=70)
 @ 
 
-<<eval=TRUE>>=
+<<loadLib, eval=TRUE>>=
 library(CellNOptR)
 @
-<<eval=FALSE>>=
+
+<<newDir, eval=FALSE>>=
 dir.create("CNOR_analysis")
 setwd("CNOR_analysis")
 @
+
 
 \section{Loading the data and prior knowledge network.}
 
 
 The example that we use is the toy model example from CellNOpt, which is a data set and associated network that have been created in silico. This data and network can be found in the inst/ToyModel directory of this package.  The data is read using the function readMIDAS, which as the name states expects a MIDAS formatted csv file (see the documentation of DataRail and \cite{datarail} for more information about that file format).  Please note that this data is already normalised for boolean modelling. If it had not been the case we would have had to normalise the data first to scale it between 0 and 1, which can be done using the  \emph{normaliseCNOlist} function of CellNOptR (see the help of this function for more information about the normalisation procedure). This normalisation procedure is the one used in \cite{julio2009} as implemented in \emph{DataRail}.  
 
-<<eval=FALSE>>=
+<<getData, eval=TRUE>>=
 cpfile<-dir(system.file("ToyModel",package="CellNOptR"),full=TRUE)
 file.copy(from=cpfile,to=getwd(),overwrite=TRUE)
 dataToy<-readMIDAS(MIDASfile='ToyDataMMB.csv')
 CNOlistToy<-makeCNOlist(dataset=dataToy,subfield=FALSE)
 @
 
-For simplicity reasons, the above steps are not computed here and instead we will load the data already formatted as a CNOlist.
+Alternatively, you can also load the data already formatted as a CNOlist.
 
-<<eval=TRUE>>=
+<<getData2, eval=TRUE>>=
 data(CNOlistToy,package="CellNOptR")
 @
 
 A CNOlist is the central data object of this package, it is equivalent to the CNOproject object in \emph{CellNOpt}.  It is the object that contains measurements of elements of a prior knowledge network under different combinations of perturbations of other nodes in the network.  A CNOlist comprises the following fields: namesSignals, namesCues, namesStimuli, namesInhibitors  which are vectors holding the names of the measured, stimulated and inhibited, stimulated, and inhibited species, respectively.  The fields valueCues (and its derivatives valueStimuli and valueInhibitors) are boolean matrices that contain for each condition (row) a 1 when the corresponding cue (column) is present, and a zero otherwise.  You can have a look at your data and the CNOlist format by typing:
 
-<<eval=FALSE>>=
+<<showCNO, eval=TRUE, results=hide>>=
 CNOlistToy
 @
 
 You can also visualise your data using the function  \emph{plotCNOlist} which will produce a plot on your screen with a subplot for each signal and each condition, and an image plot for each condition that contains the information about which cues are present in each condition. This plot can also be produced and stored in your working directory as a single pdf file using the function \emph{plotCNOlistPDF}.
 
 \begin{center}
-<<fig=TRUE>>=
+<<plotCNO, fig=TRUE>>=
 plotCNOlist(CNOlistToy)
 @ 
 \end{center}
 
 
-<<eval=FALSE>>=
+<<ploCNOPDF, eval=TRUE>>=
 plotCNOlistPDF(CNOlist=CNOlistToy,fileName="ToyModelGraph.pdf")
 @
 
-We then load the prior knowledge network (PKN), contained in a cytoscape sif format file, using the function \emph{readSif} (this step is not computed here because the model is loaded as a R data object already formatted, similarly to what was done above for the CNOlist).  Cytoscape \cite{cytoscape} is a software for network visualisation and analysis. You can build a network within cytoscape and simply save it as the default sif file format, which can then be imported in \emph{CellNOptR}.  If you choose to do this, then you should make sure that if you have 'and' gates in your network they are present as dummy nodes named 'and' followed by a number from 1 to the number of 'and' nodes that you have.  
+We then load the prior knowledge network (PKN), contained in a cytoscape sif format file, using the function \emph{readSif} (alternatively, this example model can be loaded as a R data object already formatted, similarly to what is done above for the CNOlist).  Cytoscape \cite{cytoscape} is a software for network visualisation and analysis. You can build a network within cytoscape and simply save it as the default sif file format, which can then be imported in \emph{CellNOptR}.  If you choose to do this, then you should make sure that if you have 'and' gates in your network they are present as dummy nodes named 'and' followed by a number from 1 to the number of 'and' nodes that you have.  
 
 Alternatively, you can create your network file as a text file formatted as a sif file.  Briefly, the expected file format is a tab delimited text file with a line for each directed interaction and the following three elements per line: name of source node, 1 or -1 if the source node is activating or inhibiting the target node, name of target node.  The names of the species in the model must match some of the nodes in the model (and this is case sensitive).  'And' hyperedges are expected to be represented in the sif file as dummy nodes named 'and' followed by a number.  For example if you have an interaction of the type 'a \& b=c', your sif file should contain the following three rows: 'a	1	and1', 'b 1 and1', 'and1 1 c'.  Please be aware that when building the scaffold network for optimisation, the software will create all possible 'and' combinations (with maximum 3 inputs) of edges coming into each node, so in the general case it is not necessary to put 2 or 3 input 'and' hyperedges in the prior knowledge network since the software will create them if the corresponding single edges are present. 
 
 
-<<eval=FALSE>>=
+<<getModel, eval=TRUE>>=
 ToyModel<-readSif(sifFile="ToyPKNMMB.sif")
 @
 
-<<eval=TRUE>>=
+<<getModel2, eval=TRUE>>=
 data(ToyModel,package="CellNOptR")
 @
 
 Having loaded both the data set and corresponding model, we run a check to make sure that our data and model were correctly loaded and that our data matches our model (i.e. that species that were inhibited/stimulated/measured in our data set are present in our model).  If this is the case, then we can look for the indices of the species that are present in our dataset in our model, using \emph{indexFinder}. This step will have to be repeated every time an operation is done on the model that removes or reorders species.
 
-<<eval=TRUE>>=
+<<indices, eval=TRUE>>=
 checkSignals(CNOlistToy,ToyModel)
 indicesToy<-indexFinder(CNOlistToy,ToyModel,verbose=TRUE)
 @
@@ -140,7 +133,7 @@ Prior to optimisation, the model has to be pre-processed in 3 steps: removal of 
 
 Non observable nodes are those that do not have a path to any measured species in the PKN, whereas non controllable nodes are those that do not receive any information from a species that is perturbed in the data.  As we won't be able to conclude anything about these species, we will find them and remove them from the model. Please note that in this particular case there are no nodes to cut, but we still include these steps here because they are necessary in a general case.
 
-<<eval=TRUE>>=
+<<NONC, eval=TRUE>>=
 ToyNCNOindices<-findNONC(ToyModel,indicesToy,verbose=TRUE)
 ToyNCNOcut<-cutNONC(ToyModel,ToyNCNOindices)
 indicesToyNCNOcut<-indexFinder(CNOlistToy,ToyNCNOcut)
@@ -156,7 +149,7 @@ Compressing the model consists of collapsing paths in which a series of non meas
 
 Compression is performed using the function \emph{compressModel}.
 
-<<eval=TRUE>>=
+<<compress, eval=TRUE>>=
 ToyNCNOcutComp<-compressModel(ToyNCNOcut,indicesToyNCNOcut)
 indicesToyNCNOcutComp<-indexFinder(CNOlistToy,ToyNCNOcutComp)
 @
@@ -167,7 +160,7 @@ The last preprocessing step consists in expanding the gates present in the PKN, 
 
 This step, performed by the function \emph{expandGates}, will create additional fields \emph{SplitANDs} and \emph{newANDs} in the model that inform you about new edges that have been crated from splitting 'AND' hyperedges, and about new hyperedges that have been created from combinations of edges.  
 
-<<eval=TRUE>>=
+<<expand, eval=TRUE>>=
 ToyNCNOcutCompExp<-expandGates(ToyNCNOcutComp)
 @
  
@@ -181,8 +174,8 @@ The genetic algorithm function returns a list object that collects a number of i
 
 We start off by computing the residual error, which is the minimum error that is unavoidable with a boolean network and comes from the discrete nature of such a model (please remember that although the data is normalised in this pipeline, it is not discretised, and therefore we compare 0/1 values to continuous values between 0 and 1). This value is important because however good is our optimisation, the value of the goodness of fit term cannot go under this residual error. Then we prepare the model for simulation by applying the function \emph{prep4Sim} which adds fields that are needed for the simulation engine. We also create an initial bit string for the optimisation, which in this case is just a string of 1s, but could be a meaningful string if you have prior expectation about the topology of the model.  
 
-<<eval=TRUE>>=
-resECNOlistToy<-ResidualError(CNOlistToy)
+<<misc4Sim, eval=TRUE>>=
+resECNOlistToy<-residualError(CNOlistToy)
 ToyFields4Sim<-prep4Sim(ToyNCNOcutCompExp)
 initBstring<-rep(1,length(ToyNCNOcutCompExp$reacID))
 @
@@ -190,28 +183,46 @@ initBstring<-rep(1,length(ToyNCNOcutCompExp$reacID))
 We can now start the optimisation, in this case with default values for all non essential parameters of the genetic algorithm. If you set the argument verbose to TRUE, this function will print the following information, at each generation: generation number, best score and best string at this generation, stall generation number, average score of this generation and iteration time. You can also find these informations in the object that is returned by this function, as well as the best string the b\emph{bString} field, and strings within the relative tolerance limits in \emph{StringsTol}.
 
 
-<<eval=TRUE>>=
-ToyT1opt<-gaBinaryT1(CNOlist=CNOlistToy,Model=ToyNCNOcutCompExp,SimList=ToyFields4Sim,indexList=indicesToyNCNOcutComp,initBstring=initBstring,verbose=FALSE)
+<<optim, eval=TRUE>>=
+ToyT1opt<-gaBinaryT1(
+	CNOlist=CNOlistToy,
+	Model=ToyNCNOcutCompExp,
+	SimList=ToyFields4Sim,
+	indexList=indicesToyNCNOcutComp,
+	initBstring=initBstring,
+	verbose=FALSE)
 @
 
 We will now produce plots of our analysis.  First, we plot the results of simulating the data with our best model alongside the actual data set in a plot similar to that obtained above with \emph{plotCNOlist}, except that the simulated data is overlaid in dashed blue lines, and the background of the plot reflects the absolute difference between simulated and experimental data (greener=closer to 0; redder=closer to 1; white=NA, either for data or simulation).  Second, we will plot the evolution of the average score and best score during the evolution of the population of models, as a function of generations.  This is useful to detect problems in the optimisation.
 
 \begin{center}
-<<fig=TRUE>>=
-cutAndPlotResultsT1(Model=ToyNCNOcutCompExp,bString=ToyT1opt$bString,SimList=ToyFields4Sim,CNOlist=CNOlistToy,indexList=indicesToyNCNOcutComp,plotPDF=FALSE)
+<<resSim, fig=TRUE>>=
+cutAndPlotResultsT1(
+	Model=ToyNCNOcutCompExp,
+	bString=ToyT1opt$bString,
+	SimList=ToyFields4Sim,
+	CNOlist=CNOlistToy,
+	indexList=indicesToyNCNOcutComp,
+	plotPDF=FALSE)
 @ 
 \end{center}
 \begin{center}
-<<fig=TRUE>>=
+<<plotFit, fig=TRUE>>=
 plotFit(OptRes=ToyT1opt)
 @ 
 \end{center}
 
 
-If you want a pdf figure to be produced (advised, this will then be linked to your report), type:
+Setting the plotPDF argument to "TRUE" means that a pdf figure will be produced (advised, this will then be linked to your report).  To produce a pdf of the evolution of fit as well (advised), type:
 
-<<eval=FALSE>>=
-cutAndPlotResultsT1(Model=ToyNCNOcutCompExp,bString=ToyT1opt$bString,SimList=ToyFields4Sim,CNOlist=CNOlistToy,indexList=indicesToyNCNOcutComp,plotPDF=TRUE)
+<<simFitPDF, eval=TRUE, results=hide>>=
+cutAndPlotResultsT1(
+	Model=ToyNCNOcutCompExp,
+	bString=ToyT1opt$bString,
+	SimList=ToyFields4Sim,
+	CNOlist=CNOlistToy,
+	indexList=indicesToyNCNOcutComp,
+	plotPDF=TRUE)
 pdf("evolFitToyT1.pdf")
 plotFit(OptRes=ToyT1opt)
 dev.off()
@@ -240,24 +251,57 @@ You can then write a report that contains relevant information about your analys
 
 
 
-<<eval=FALSE>>=
-writeScaffold(ModelComprExpanded=ToyNCNOcutCompExp,optimResT1=ToyT1opt,optimResT2=NA,ModelOriginal=ToyModel,CNOlist=CNOlistToy)
-writeNetwork(ModelOriginal=ToyModel,ModelComprExpanded=ToyNCNOcutCompExp,optimResT1=ToyT1opt,optimResT2=NA,CNOlist=CNOlistToy)
-namesFilesToy<-list(dataPlot="ToyModelGraph.pdf",evolFit1="evolFitToyT1.pdf",evolFit2=NA,SimResults1="ToyNCNOcutCompExpSimResultsT1.pdf",SimResults2=NA,Scaffold="ToyNCNOcutCompExpScaffold.sif",ScaffoldDot="ModelModelComprExpandedScaffold.dot",tscaffold="ToyNCNOcutCompExpTimesScaffold.EA",wscaffold="ToyNCNOcutCompExpweightsScaffold.EA",PKN="ToyModelPKN.sif",PKNdot="ToyModelPKN.dot",wPKN="ToyModelTimesPKN.EA",nPKN="ToyModelnodesPKN.NA")
-writeReport(ModelOriginal=ToyModel,ModelOpt=ToyNCNOcutCompExp,optimResT1=ToyT1opt,optimResT2=NA,CNOlist=CNOlistToy,directory="testToy",namesFiles=namesFilesToy,namesData=list(CNOlist="Toy",Model="ToyModel"),resE=resECNOlistToy)
+<<writeRes, eval=TRUE>>=
+writeScaffold(
+	ModelComprExpanded=ToyNCNOcutCompExp,
+	optimResT1=ToyT1opt,
+	optimResT2=NA,
+	ModelOriginal=ToyModel,
+	CNOlist=CNOlistToy)
+	
+writeNetwork(
+	ModelOriginal=ToyModel,
+	ModelComprExpanded=ToyNCNOcutCompExp,
+	optimResT1=ToyT1opt,
+	optimResT2=NA,
+	CNOlist=CNOlistToy)
+	
+namesFilesToy<-list(
+	dataPlot="ToyModelGraph.pdf",
+	evolFit1="evolFitToyT1.pdf",
+	evolFit2=NA,
+	SimResults1="ToyNCNOcutCompExpSimResultsT1.pdf",
+	SimResults2=NA,
+	Scaffold="Scaffold.sif",
+	ScaffoldDot="Scaffold.dot",
+	tscaffold="TimesScaffold.EA",
+	wscaffold="weightsScaffold.EA",
+	PKN="PKN.sif",
+	PKNdot="PKN.dot",
+	wPKN="TimesPKN.EA",
+	nPKN="nodesPKN.NA")
+	
+writeReport(
+	ModelOriginal=ToyModel,
+	ModelOpt=ToyNCNOcutCompExp,
+	optimResT1=ToyT1opt,
+	optimResT2=NA,
+	CNOlist=CNOlistToy,
+	directory="testToy",
+	namesFiles=namesFilesToy,
+	namesData=list(CNOlist="Toy",Model="ToyModel"),
+	resE=resECNOlistToy)
+@
+
+<<eraseDir, eval=TRUE, echo=FALSE>>=
+unlink("testToy",recursive=TRUE)
 @
 
 \section{The one step version}
 
 If you do not want to bother with all of these steps, there is a function that allows you to do the whole analysis in one step.  In order to do this, you must first load the model and data, as above (assuming that you have already loaded the library and have copied the relevant files in your working directory).  
 
-<<eval=FALSE>>=
-library(CellNOptR)
-library(RBGL)
-dir.create("CNOR_analysis")
-setwd("CNOR_analysis")
-cpfile<-dir(system.file("ToyModel",package="CellNOptR"),full=TRUE)
-file.copy(from=cpfile,to=getwd(),overwrite=TRUE)
+<<getToy, eval=TRUE>>=
 dataToy<-readMIDAS(MIDASfile='ToyDataMMB.csv')
 CNOlistToy<-makeCNOlist(dataset=dataToy,subfield=FALSE)
 ToyModel<-readSif(sifFile="ToyPKNMMB.sif")
@@ -265,102 +309,69 @@ ToyModel<-readSif(sifFile="ToyPKNMMB.sif")
 
 Then you have two possibilities, either you keep all optimisation parameters to their default values and just type
 
-<<eval=FALSE>>=
-CNORwrap(paramsList=NA,Name="Toy",NamesData=list(CNOlist="ToyData",Model="ToyModel"),Data=CNOlistToy,Model=ToyModel)
+<<wrap1, eval=FALSE, results=hide>>=
+CNORwrap(
+	paramsList=NA,
+	Name="Toy",
+	NamesData=list(CNOlist="ToyData",Model="ToyModel"),
+	Data=CNOlistToy,
+	Model=ToyModel)
 @
 
 or you want to have some control over the parameters of the optimisation, in which case you create a parameters list with fields \emph{Data} (the CNOlist containing your data),  \emph{Model} (your model object),  \emph{sizeFac} (default to 1e-04), \emph{NAFac} (default to 1), \emph{PopSize} (default to 50), \emph{Pmutation} (default to 0.5), \emph{MaxTime} (default to 60), \emph{maxGens} (default to 500), \emph{StallGenMax} (default to 100), \emph{SelPress} (default to 1.2), \emph{elitism} (default to 5), \emph{RelTol} (default to 0.1), \emph{verbose} (default to FALSE ). You can then call the wrapper function with this set of parameters. 
 
-<<eval=FALSE>>=
-pList<-list(Data=CNOlistToy,Model=ToyModel,sizeFac = 1e-04, NAFac = 1, PopSize = 50, Pmutation = 0.5, MaxTime = 60, maxGens = 500, StallGenMax = 100, SelPress = 1.2, elitism = 5, RelTol = 0.1,verbose=TRUE)
-CNORwrap(paramsList=pList,Name="Toy",NamesData=list(CNOlist="ToyData",Model="ToyModel"),Data=NA,Model=NA)
+<<eraseToyDir, eval=TRUE, echo=FALSE>>=
+unlink("Toy",recursive=TRUE)
+@
+
+<<wrap2, eval=TRUE>>=
+pList<-list(	
+	Data=CNOlistToy,
+	Model=ToyModel,
+	sizeFac = 1e-04, 
+	NAFac = 1, 
+	PopSize = 10, 
+	Pmutation = 0.5, 
+	MaxTime = 60, 
+	maxGens = 5, 
+	StallGenMax = 5, 
+	SelPress = 1.2, 
+	elitism = 5, 
+	RelTol = 0.1,
+	verbose=FALSE)
+	
+CNORwrap(
+	paramsList=pList,
+	Name="Toy",
+	NamesData=list(CNOlist="ToyData",Model="ToyModel"),
+	Data=NA,
+	Model=NA)
 @
 
 Both of these versions will generate the graphs produced above on your graphics window, and as pdf's that will be hyperlinked to your html report, and you will be able to find all of these hyperlinked with your html report, all in a directory called by the \emph{Name} parameter, in your working directory.
 
+<<eraseData, eval=TRUE, echo=FALSE>>=
+unlink("ToyDataMMB.csv")
+unlink("ToyPKNMMB.sif")
+unlink("Toy",recursive=TRUE)
+@
+
 \section{A real example}
 
-We will now apply the same procedure to a slightly larger and more realistic data set, which is a part of the network analysed in \cite{julio2009}, which comprises 40 species and 58 interactions in the PKN. This network was also used for the signaling challenge in DREAM 4 (see \url{http://www.the-dream-project.org/}).  The associated data was collected in hepatocellular carcinoma cell line HepG2 (see \cite{alexopoulos_networks_2010}).  
+This package also contains a slightly larger and more realistic data set, which is a part of the network analysed in \cite{julio2009} and comprises 40 species and 58 interactions in the PKN. This network was also used for the signaling challenge in DREAM 4 (see \url{http://www.the-dream-project.org/}).  The associated data was collected in hepatocellular carcinoma cell line HepG2 (see \cite{alexopoulos_networks_2010}).   The same analysis as above can be performed on this data set.  In order to load this data, you need to copy the files in the "DREAMModel" directory to you working directory (see below) then use \emph{readMIDAS}, \emph{readSif} and \emph{makeCNOlist}, or load the pre-formatted model and CNOlist objects, as above.
 
-First, you load and visualise your data.
-
-<<eval=FALSE>>=
-library(CellNOptR)
-dir.create("CNOR_analysis")
-setwd("CNOR_analysis")
+<<getDREAM, eval=FALSE>>=
+#Option 1: copy the sif and MIDAS files (followed by readMIDAS, makeCNOlist and readSif)
 cpfile<-dir(system.file("DREAMModel",package="CellNOptR"),full=TRUE)
 file.copy(from=cpfile,to=getwd(),overwrite=TRUE)
-#Load the data
-dreamData<-readMIDAS(MIDASfile="LiverDataDREAMMIDAS.csv")
-CNOlistDREAM<-makeCNOlist(dataset=dreamData,subfield=FALSE)
-plotCNOlist(CNOlistDREAM)
-plotCNOlistPDF(CNOlist=CNOlistDREAM,fileName="DREAMdataGraph.pdf")
-@
-Then, you load the model, check that the data matches the model, and get the indices of measured/inhibited/stimulated species.
-
-<<eval=FALSE>>=
-#Load the model
-DreamModel<-readSif(sifFile="LiverPKNDREAM.sif")
-#Check and find indices
-checkSignals(CNOlistDREAM,DreamModel)
-indicesDream<-indexFinder(CNOlistDREAM,DreamModel,verbose=TRUE)
-@
-
-Alternatively, you can also load the R object that contains the CNOlist and model for this analysis, in which case you would type the following instead of the above.
-
-<<eval=FALSE>>=
-library(CellNOptR)
-dir.create("CNOR_analysis")
-setwd("CNOR_analysis")
-#Load the model and data
+#Option 2: load the CNOlist and model objects
 data(CNOlistDREAM,package="CellNOptR")
 data(DreamModel,package="CellNOptR")
-plotCNOlistPDF(CNOlist=CNOlistDREAM,fileName="DREAMdataGraph.pdf")
-#Check and find indices
-checkSignals(CNOlistDREAM,DreamModel)
-indicesDream<-indexFinder(CNOlistDREAM,DreamModel,verbose=TRUE)
 @
 
-You can now start the preprocessing of the model, i.e. find the non-observable/non-controllable species, cut them, recompute the indices, compress the model, recompute the indices, and expand the gates.
+Having loaded both data and model, you can now visualise your data using \emph{plotCNOlist} and \emph{plotCNOlistPDF}.  Then, you check that the data matches the model (\emph{checkSignals}), and get the indices of measured/inhibited/stimulated species (\emph{indexFinder}). You can now start the preprocessing of the model, i.e. find the non-observable/non-controllable species (\emph{findNONC}), cut them (\emph{cutNONC}), recompute the indices (\emph{indexFinder}), compress the model (\emph{compressModel}), recompute the indices (\emph{indexFinder}), and expand the gates (\emph{expandGates}).
 
-<<eval=FALSE>>=
-#Find the index of the non-obs/non-ctrl
-DreamNCNOindices<-findNONC(DreamModel,indicesDream,verbose=TRUE)
-#cut the nonc off the model
-DreamNCNOcut<-cutNONC(DreamModel,DreamNCNOindices)
-#recompute the indices of the species
-indicesDreamNCNOcut<-indexFinder(CNOlistDREAM,DreamNCNOcut)
-#compress the model
-DreamNCNOcutComp<-compressModel(DreamNCNOcut,indicesDreamNCNOcut)
-#Recompute the indices of the species
-indicesDreamNCNOcutComp<-indexFinder(CNOlistDREAM,DreamNCNOcutComp)
-#Expand the gates
-DreamNCNOcutCompExp<-expandGates(DreamNCNOcutComp)
-@
-
-Having obtained a pre-processed model, we now compute the residual error, prepare the model for simulation, and run the training function.
-
-<<eval=FALSE>>=
-#Compute resiudal error
-resECNOdream<-ResidualError(CNOlistDREAM)
-#Prepare for simulation
-DreamFields4Sim<-prep4Sim(DreamNCNOcutCompExp)
-#Optimisation
-initBstring<-rep(1,length(DreamNCNOcutCompExp$reacID))
-DreamT1opt<-gaBinaryT1(CNOlist=CNOlistDREAM,Model=DreamNCNOcutCompExp,SimList=DreamFields4Sim,indexList=indicesDreamNCNOcutComp,initBstring=initBstring,verbose=TRUE,MaxTime=600)
-@
-
-We now plot the results of our training (see figure \ref{fig:DREAMres}) as well as the information about the evolution of fit during optimisation.
-
-<<eval=FALSE>>=
-#Plot simulated and experimental results
-cutAndPlotResultsT1(Model=DreamNCNOcutCompExp,bString=DreamT1opt$bString,SimList=DreamFields4Sim,CNOlist=CNOlistDREAM,indexList=indicesDreamNCNOcutComp,plotPDF=TRUE)
-#Plot the evolution of fit
-pdf("evolFitDreamT1.pdf")
-plotFit(OptRes=DreamT1opt)
-dev.off()
-plotFit(OptRes=DreamT1opt)
-@
+Having obtained a pre-processed model, we compute the residual error (\emph{residualError}), prepare the model for simulation (\emph{prep4Sim}), and run the training function (\emph{gaBinaryT1}). Finally,we plot the results of our training (\emph{cutAndPlotResultsT1}, see figure \ref{fig:DREAMres}) as well as the information about the evolution of fit during optimisation (\emph{plotFit}).
 
 \begin{figure*}
 \centerline{\includegraphics[width=\textwidth]{Fig4.pdf}}
@@ -368,16 +379,7 @@ plotFit(OptRes=DreamT1opt)
 \label{fig:DREAMres}
 \end{figure*}
 
-Our analysis is now complete and we can write our results (scaffold network, prior knowledge network and html report). An example of the html report generated for this analysis is shown on figure \ref{fig:DREAMreport}.  The scaffold network produced by \emph{writeScaffold} is shown on figure \ref{fig:DREAMscaffold} .
-
-<<eval=FALSE>>=
-#Write the networks
-writeScaffold(ModelComprExpanded=DreamNCNOcutCompExp,optimResT1=DreamT1opt,optimResT2=NA,ModelOriginal=DreamModel,CNOlist=CNOlistDREAM)
-writeNetwork(ModelOriginal=DreamModel,ModelComprExpanded=DreamNCNOcutCompExp,optimResT1=DreamT1opt,optimResT2=NA,CNOlist=CNOlistDREAM)
-#Write the report
-namesFilesDream<-list(dataPlot="DREAMdataGraph.pdf",evolFit1="evolFitDreamT1.pdf",evolFit2=NA,SimResults1="DreamNCNOcutCompExpSimResultsT1.pdf",SimResults2=NA,Scaffold="DreamNCNOcutCompExpScaffold.sif",ScaffoldDot="ModelModelComprExpandedScaffold.dot",tscaffold="DreamNCNOcutCompExpTimesScaffold.EA",wscaffold="DreamNCNOcutCompExpweightsScaffold.EA",PKN="DreamModelPKN.sif",PKNdot="DreamModelPKN.dot",wPKN="DreamModelTimesPKN.EA",nPKN="DreamModelnodesPKN.NA")
-writeReport(ModelOriginal=DreamModel,ModelOpt=DreamNCNOcutCompExp,optimResT1=DreamT1opt,optimResT2=NA,CNOlist=CNOlistDREAM,directory="testDREAM",namesFiles=namesFilesDream,namesData=list(CNOlist="Dream",Model="DreamModel"),resE=resECNOdream)
-@
+Our analysis is then complete and we can write our results (scaffold network (\emph{writeScaffold}), prior knowledge network (\emph{writeNetwork}) and html report (\emph{writeReport})). An example of the html report generated for this analysis is shown on figure \ref{fig:DREAMreport}.  The scaffold network produced by \emph{writeScaffold} is shown on figure \ref{fig:DREAMscaffold} .
 
 \begin{figure*}
 \centerline{\includegraphics[width=\textwidth]{Fig5.png}}

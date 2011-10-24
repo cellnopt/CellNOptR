@@ -16,6 +16,9 @@ a csv MIDAS file
 }
 \details{
 This function does not return a CNOlist, but the output of this function can be used directly into makeCNOlist to create one. The MIDAS file format is described in Saez-Rodriguez et al. (2008).
+
+If you have all of the readouts measured at the same series of time points, you can specify a unique DA: column which must have the format "DA:ALL". 
+
 }
 \value{
 this function returns a list with fields:
@@ -34,13 +37,11 @@ C.Terfve
 makeCNOlist
 }
 \examples{
-\dontrun{
-dir.create("CNOR_analysis")
-setwd("CNOR_analysis")
+tmpdir<-tempdir()
+setwd(tmpdir)
 cpfile<-dir(system.file("ToyModel",package="CellNOptR"),full=TRUE)
 file.copy(from=cpfile,to=getwd(),overwrite=TRUE)
 dataToy<-readMIDAS(MIDASfile='ToyDataMMB.csv')
 CNOlistToy<-makeCNOlist(dataset=dataToy,subfield=FALSE)
-}
 }
 

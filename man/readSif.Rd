@@ -31,11 +31,9 @@ Shannon P, Markiel A, Ozier O, Baliga NS, Wang JT, Ramage D, Amin N, Schwikowski
 C. Terfve
 }
 \examples{
-\dontrun{
-dir.create("CNOR_analysis")
-setwd("CNOR_analysis")
+tmpdir<-tempdir()
+setwd(tmpdir)
 cpfile<-dir(system.file("ToyModel",package="CellNOptR"),full=TRUE)
 file.copy(from=cpfile,to=getwd(),overwrite=TRUE)
 ToyModel<-readSif(sifFile="ToyPKNMMB.sif")
-}
 }

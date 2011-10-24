@@ -26,15 +26,27 @@ gabinaryT1
 \examples{
 data(CNOlistToy,package="CellNOptR")
 data(ToyModel,package="CellNOptR")
+
+#process the model
+
 indicesToy<-indexFinder(CNOlistToy,ToyModel,verbose=FALSE)
-ToyNCNOindices<-findNONC(ToyModel,indicesToy,verbose=FALSE)
-ToyNCNOcut<-cutNONC(ToyModel,ToyNCNOindices)
-indicesToyNCNOcut<-indexFinder(CNOlistToy,ToyNCNOcut)
-ToyNCNOcutComp<-compressModel(ToyNCNOcut,indicesToyNCNOcut)
-indicesToyNCNOcutComp<-indexFinder(CNOlistToy,ToyNCNOcutComp)
-ToyNCNOcutCompExp<-expandGates(ToyNCNOcutComp)
-ToyFields4Sim<-prep4Sim(ToyNCNOcutCompExp)
-initBstring<-rep(1,length(ToyNCNOcutCompExp$reacID))
-ToyT1opt<-gaBinaryT1(CNOlist=CNOlistToy,Model=ToyNCNOcutCompExp,SimList=ToyFields4Sim,indexList=indicesToyNCNOcutComp,initBstring=initBstring,maxGens=3,verbose=FALSE)
+ToyComp<-compressModel(ToyModel,indicesToy)
+indicesToyComp<-indexFinder(CNOlistToy,ToyComp)
+ToyCompExp<-expandGates(ToyComp)
+
+#optimise
+
+ToyFields4Sim<-prep4Sim(ToyCompExp)
+initBstring<-rep(1,length(ToyCompExp$reacID))
+ToyT1opt<-gaBinaryT1(
+	CNOlist=CNOlistToy,
+	Model=ToyCompExp,
+	SimList=ToyFields4Sim,
+	indexList=indicesToyComp,
+	initBstring=initBstring,
+	maxGens=2,
+	PopSize=5,
+	verbose=FALSE)
+
 plotFit(OptRes=ToyT1opt)
 }

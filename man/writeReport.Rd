@@ -51,33 +51,59 @@ C.Terfve
 writeNetwork, writeScaffold
 }
 \examples{
-\dontrun{
+tmpdir<-tempdir()
+setwd(tmpdir)
+
+#load data
+
 data(CNOlistToy,package="CellNOptR")
 data(ToyModel,package="CellNOptR")
-CNOlistToy
-plotCNOlist(CNOlistToy)
-plotCNOlistPDF(CNOlist=CNOlistToy,fileName="ToyModelGraph.pdf")
-checkSignals(CNOlistToy,ToyModel)
+
+#pre-process model (partial)
+
 indicesToy<-indexFinder(CNOlistToy,ToyModel,verbose=TRUE)
-ToyNCNOindices<-findNONC(ToyModel,indicesToy,verbose=TRUE)
-ToyNCNOcut<-cutNONC(ToyModel,ToyNCNOindices)
-indicesToyNCNOcut<-indexFinder(CNOlistToy,ToyNCNOcut)
-ToyNCNOcutComp<-compressModel(ToyNCNOcut,indicesToyNCNOcut)
+ToyNCNOcutComp<-compressModel(ToyModel,indicesToy)
 indicesToyNCNOcutComp<-indexFinder(CNOlistToy,ToyNCNOcutComp)
 ToyNCNOcutCompExp<-expandGates(ToyNCNOcutComp)
-resECNOlistToy<-ResidualError(CNOlistToy)
+
+#optimise
+
 ToyFields4Sim<-prep4Sim(ToyNCNOcutCompExp)
 initBstring<-rep(1,length(ToyNCNOcutCompExp$reacID))
-ToyT1opt<-gaBinaryT1(CNOlist=CNOlistToy,Model=ToyNCNOcutCompExp,SimList=ToyFields4Sim,indexList=indicesToyNCNOcutComp,initBstring=initBstring,verbose=TRUE)
-cutAndPlotResultsT1(Model=ToyNCNOcutCompExp,bString=ToyT1opt$bString,SimList=ToyFields4Sim,CNOlist=CNOlistToy,indexList=indicesToyNCNOcutComp,plotPDF=TRUE)
-plotFit(OptRes=ToyT1opt)
-cutAndPlotResultsT1(Model=ToyNCNOcutCompExp,bString=ToyT1opt$bString,SimList=ToyFields4Sim,CNOlist=CNOlistToy,indexList=indicesToyNCNOcutComp,plotPDF=TRUE)
-pdf("evolFitToyT1.pdf")
-plotFit(OptRes=ToyT1opt)
-dev.off()
-writeScaffold(ModelComprExpanded=ToyNCNOcutCompExp,optimResT1=ToyT1opt,optimResT2=NA,ModelOriginal=ToyModel,CNOlist=CNOlistToy)
-writeNetwork(ModelOriginal=ToyModel,ModelComprExpanded=ToyNCNOcutCompExp,optimResT1=ToyT1opt,optimResT2=NA,CNOlist=CNOlistToy)
-namesFilesToy<-list(dataPlot="ToyModelGraph.pdf",evolFit1="evolFitToyT1.pdf",evolFit2=NA,SimResults1="ToyNCNOcutCompExpSimResultsT1.pdf",SimResults2=NA,Scaffold="ToyNCNOcutCompExpScaffold.sif",ScaffoldDot="ModelModelComprExpandedScaffold.dot",tscaffold="ToyNCNOcutCompExpTimesScaffold.EA",wscaffold="ToyNCNOcutCompExpweightsScaffold.EA",PKN="ToyModelPKN.sif",PKNdot="ToyModelPKN.dot",wPKN="ToyModelTimesPKN.EA",nPKN="ToyModelnodesPKN.NA")
-writeReport(ModelOriginal=ToyModel,ModelOpt=ToyNCNOcutCompExp,optimResT1=ToyT1opt,optimResT2=NA,CNOlist=CNOlistToy,directory="testToy",namesFiles=namesFilesToy,namesData=list(CNOlist="Toy",Model="ToyModel"),resE=resECNOlistToy)
-}
+ToyT1opt<-gaBinaryT1(
+	CNOlist=CNOlistToy,
+	Model=ToyNCNOcutCompExp,
+	SimList=ToyFields4Sim,
+	indexList=indicesToyNCNOcutComp,
+	initBstring=initBstring, 
+	maxGens=2,
+	PopSize=5,
+	verbose=TRUE)
+
+#write report
+
+namesFilesToy<-list(
+	dataPlot=NA,
+	evolFit1=NA,
+	evolFit2=NA,
+	SimResults1=NA,
+	SimResults2=NA,
+	Scaffold=NA,
+	ScaffoldDot=NA,
+	tscaffold=NA,
+	wscaffold=NA,
+	PKN=NA,
+	PKNdot=NA,
+	wPKN=NA,
+	nPKN=NA)
+writeReport(
+	ModelOriginal=ToyModel,
+	ModelOpt=ToyNCNOcutCompExp,
+	optimResT1=ToyT1opt,
+	optimResT2=NA,
+	CNOlist=CNOlistToy,
+	directory="testToy",
+	namesFiles=namesFilesToy,
+	namesData=list(CNOlist="Toy",Model="ToyModel"),
+	resE=NA)
 }

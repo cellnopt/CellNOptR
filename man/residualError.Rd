@@ -1,5 +1,5 @@
-\name{ResidualError}
-\alias{ResidualError}
+\name{residualError}
+\alias{residualError}
 \title{
 Compute the residual error for a dataset
 }
@@ -7,7 +7,7 @@ Compute the residual error for a dataset
 This function takes in a CNOlist and computes the residual error, which is the minimum error between the scaled continuous data and a binary boolean approximation of this data.
 }
 \usage{
-ResidualError(CNOlist)
+residualError(CNOlist)
 }
 \arguments{
   \item{CNOlist}{
@@ -28,5 +28,5 @@ makeCNOlist, normaliseCNOlist, GetFit
 }
 \examples{
 data(CNOlistToy,package="CellNOptR")
-resECNOlistToy<-ResidualError(CNOlistToy)
+resECNOlistToy<-residualError(CNOlistToy)
 }

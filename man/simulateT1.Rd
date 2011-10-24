@@ -1,5 +1,5 @@
-\name{SimulateT1}
-\alias{SimulateT1}
+\name{simulateT1}
+\alias{simulateT1}
 \title{
 Cut and simulation of a boolean model at t1
 }
@@ -7,7 +7,7 @@ Cut and simulation of a boolean model at t1
 This function cuts a model according to a bitstring optimised at T1, and simulates the model accordingly
 }
 \usage{
-SimulateT1(CNOlist, Model, bStringT1, SimList, indexList)
+simulateT1(CNOlist, Model, bStringT1, SimList, indexList)
 }
 \arguments{
   \item{CNOlist}{
@@ -40,9 +40,17 @@ cutAndPlotOptimResultsT1, simulatorT1
 }
 \examples{
 #This will compute the output of a random model obtained by randomly selecting which gates of the initial models are included
+
 data(CNOlistToy,package="CellNOptR")
 data(ToyModel,package="CellNOptR")
+
 indicesToy<-indexFinder(CNOlistToy,ToyModel,verbose=FALSE)
 ToyFields4Sim<-prep4Sim(ToyModel)
-SimRes<-SimulateT1(CNOlist=CNOlistToy, Model=ToyModel, bStringT1=round(runif(length(ToyModel$reacID))), SimList=ToyFields4Sim, indexList=indicesToy)
+
+SimRes<-simulateT1(
+	CNOlist=CNOlistToy, 
+	Model=ToyModel, 
+	bStringT1=round(runif(length(ToyModel$reacID))), 
+	SimList=ToyFields4Sim, 
+	indexList=indicesToy)
 }

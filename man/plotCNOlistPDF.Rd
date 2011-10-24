@@ -27,9 +27,9 @@ C. Terfve
 plotCNolist, plotCNOlistLarge, plotCNOlistLargePDF
 }
 \examples{
-\dontrun{
+tmpdir<-tempdir()
+setwd(tmpdir)
 data(CNOlistToy,package="CellNOptR")
 plotCNOlistPDF(CNOlist=CNOlistToy,fileName="ToyModelGraph.pdf")
-}
 }
 

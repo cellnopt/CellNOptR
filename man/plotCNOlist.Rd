@@ -27,8 +27,6 @@ C. Terfve
 plotCNOlistPDF, plotCNOlistLarge, plotCNOlistLargePDF
 }
 \examples{
-\dontrun{
 data(CNOlistToy,package="CellNOptR")
 plotCNOlist(CNOlistToy)
-}
 }

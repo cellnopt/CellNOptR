@@ -40,9 +40,13 @@ C.Terfve
 gabinaryT1, prep4Sim
 }
 \examples{
-\dontrun{
+#load data
+
 data(CNOlistToy,package="CellNOptR")
 data(ToyModel,package="CellNOptR")
+
+#pre-process model
+
 checkSignals(CNOlistToy,ToyModel)
 indicesToy<-indexFinder(CNOlistToy,ToyModel,verbose=FALSE)
 ToyNCNOindices<-findNONC(ToyModel,indicesToy,verbose=FALSE)
@@ -51,9 +55,25 @@ indicesToyNCNOcut<-indexFinder(CNOlistToy,ToyNCNOcut)
 ToyNCNOcutComp<-compressModel(ToyNCNOcut,indicesToyNCNOcut)
 indicesToyNCNOcutComp<-indexFinder(CNOlistToy,ToyNCNOcutComp)
 ToyNCNOcutCompExp<-expandGates(ToyNCNOcutComp)
+
+#optimise
+
 ToyFields4Sim<-prep4Sim(ToyNCNOcutCompExp)
 initBstring<-rep(1,length(ToyNCNOcutCompExp$reacID))
-ToyT1opt<-gaBinaryT1(CNOlist=CNOlistToy,Model=ToyNCNOcutCompExp,SimList=ToyFields4Sim,indexList=indicesToyNCNOcutComp,initBstring=initBstring,verbose=FALSE)
-cutAndPlotResultsT1(Model=ToyNCNOcutCompExp,bString=ToyT1opt$bString,SimList=ToyFields4Sim,CNOlist=CNOlistToy,indexList=indicesToyNCNOcutComp,plotPDF=FALSE)
-}
+ToyT1opt<-gaBinaryT1(
+	CNOlist=CNOlistToy,
+	Model=ToyNCNOcutCompExp,
+	SimList=ToyFields4Sim,
+	indexList=indicesToyNCNOcutComp,
+	initBstring=initBstring, 
+	maxGens=2, 
+	PopSize = 5,
+	verbose=FALSE)
+cutAndPlotResultsT1(
+	Model=ToyNCNOcutCompExp,
+	bString=ToyT1opt$bString,
+	SimList=ToyFields4Sim,
+	CNOlist=CNOlistToy,
+	indexList=indicesToyNCNOcutComp,
+	plotPDF=FALSE)
 }

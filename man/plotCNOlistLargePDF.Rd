@@ -33,8 +33,8 @@ C. Terfve
 plotCNOlistLarge, plotCNOlist, plotCNOlistPDF
 }
 \examples{
-\dontrun{
+tmpdir<-tempdir()
+setwd(tmpdir)
 data(CNOlistDREAM,package="CellNOptR")
 plotCNOlistLargePDF(CNOlistDREAM, fileName="dreamData.pdf",nsplit=2)
-}
 }

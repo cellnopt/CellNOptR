@@ -30,11 +30,11 @@ C.Terfve
 indexFinder, readSif
 }
 \examples{
+#load data
+
 data(CNOlistToy,package="CellNOptR")
 data(ToyModel,package="CellNOptR")
+
 indicesToy<-indexFinder(CNOlistToy,ToyModel,verbose=FALSE)
-ToyNCNOindices<-findNONC(ToyModel,indicesToy,verbose=FALSE)
-ToyNCNOcut<-cutNONC(ToyModel,ToyNCNOindices)
-indicesToyNCNOcut<-indexFinder(CNOlistToy,ToyNCNOcut)
-ToyNCNOcutComp<-compressModel(ToyNCNOcut,indicesToyNCNOcut)
+ToyComp<-compressModel(ToyModel,indicesToy)
 }

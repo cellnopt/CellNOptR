@@ -39,9 +39,16 @@ C. Terfve
 writeNetwork, writeScaffold
 }
 \examples{
-\dontrun{
+tmpdir<-tempdir()
+setwd(tmpdir)
+
+#load data
+
 data(CNOlistToy,package="CellNOptR")
 data(ToyModel,package="CellNOptR")
+
+#pre-process model
+
 indicesToy<-indexFinder(CNOlistToy,ToyModel,verbose=TRUE)
 ToyNCNOindices<-findNONC(ToyModel,indicesToy,verbose=TRUE)
 ToyNCNOcut<-cutNONC(ToyModel,ToyNCNOindices)
@@ -49,9 +56,27 @@ indicesToyNCNOcut<-indexFinder(CNOlistToy,ToyNCNOcut)
 ToyNCNOcutComp<-compressModel(ToyNCNOcut,indicesToyNCNOcut)
 indicesToyNCNOcutComp<-indexFinder(CNOlistToy,ToyNCNOcutComp)
 ToyNCNOcutCompExp<-expandGates(ToyNCNOcutComp)
+
+#optimise
+
 ToyFields4Sim<-prep4Sim(ToyNCNOcutCompExp)
 initBstring<-rep(1,length(ToyNCNOcutCompExp$reacID))
-ToyT1opt<-gaBinaryT1(CNOlist=CNOlistToy,Model=ToyNCNOcutCompExp,SimList=ToyFields4Sim,indexList=indicesToyNCNOcutComp,initBstring=initBstring,verbose=TRUE)
-writeNetwork(ModelOriginal=ToyModel,ModelComprExpanded=ToyNCNOcutCompExp,optimResT1=ToyT1opt,optimResT2=NA,CNOlist=CNOlistToy)
-}
+ToyT1opt<-gaBinaryT1(
+	CNOlist=CNOlistToy,
+	Model=ToyNCNOcutCompExp,
+	SimList=ToyFields4Sim,
+	indexList=indicesToyNCNOcutComp,
+	initBstring=initBstring, 
+	maxGens=2,
+	PopSize=5, 
+	verbose=TRUE)
+
+#write network
+
+writeNetwork(
+	ModelOriginal=ToyModel,
+	ModelComprExpanded=ToyNCNOcutCompExp,
+	optimResT1=ToyT1opt,
+	optimResT2=NA,
+	CNOlist=CNOlistToy)
 }

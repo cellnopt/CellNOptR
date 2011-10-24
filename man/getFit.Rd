@@ -1,5 +1,5 @@
-\name{GetFit}
-\alias{GetFit}
+\name{getFit}
+\alias{getFit}
 \title{
 Compute the score of a model
 }
@@ -7,7 +7,7 @@ Compute the score of a model
 This function computes the value of the objective function for a model and an associated data set, as a sum of a term that computes the fit of model to data, a term that penalises the NA values produced by the model, and a term that penalises increasing size of the model.
 }
 \usage{
-GetFit(SimResults, CNOlist, Model, indexList, timePoint = c("t1", "t2"), sizeFac = 1e-04, NAFac = 1)
+getFit(SimResults, CNOlist, Model, indexList, timePoint = c("t1", "t2"), sizeFac = 1e-04, NAFac = 1)
 }
 \arguments{
   \item{SimResults}{
@@ -49,11 +49,23 @@ C. Terfve
 gabinaryT1, indexFinder, simulatorT1
 }
 \examples{
-#Here we will evaluate the fit of the full initial model, without pre-processing or any optimisation
+#Here we will evaluate the fit of the full initial model, 
+#without pre-processing or any optimisation
+
 data(CNOlistToy,package="CellNOptR")
 data(ToyModel,package="CellNOptR")
+
 indicesToy<-indexFinder(CNOlistToy,ToyModel,verbose=FALSE)
 ToyFields4Sim<-prep4Sim(ToyModel)
-SimResults<-simulatorT1(CNOlist=CNOlistToy,Model=ToyModel,SimList=ToyFields4Sim,indexList=indicesToy)
-Score<-GetFit(SimResults=SimResults,CNOlist=CNOlistToy,Model=ToyModel,indexList=indicesToy,timePoint="t1")
+SimResults<-simulatorT1(
+	CNOlist=CNOlistToy,
+	Model=ToyModel,
+	SimList=ToyFields4Sim,
+	indexList=indicesToy)
+Score<-getFit(
+	SimResults=SimResults,
+	CNOlist=CNOlistToy,
+	Model=ToyModel,
+	indexList=indicesToy,
+	timePoint="t1")
 }

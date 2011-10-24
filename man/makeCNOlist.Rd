@@ -19,6 +19,9 @@ TRUE or FALSE, specifies if the column headers contain subfields or not i.e. if 
 }
 \details{
 Be aware that most of the functions in this package, including this one, expect the data to contain measurements at time 0, but these should all be equal to zero according to the normalisation procedure that should be used. Therefore, if you have on time point, the files valueSignals contains two matrices, one for t0 and one for t1.
+
+I there are replicate rows in the MIDAS file (i.e. identical cues and identical time), this function averages the values of the measurements for these replicates.
+
 }
 \value{
 a CNOlist with fields
@@ -43,13 +46,11 @@ C. Terfve
 readMIDAS
 }
 \examples{
-\dontrun{
-dir.create("CNOR_analysis")
-setwd("CNOR_analysis")
+tmpdir<-tempdir()
+setwd(tmpdir)
 cpfile<-dir(system.file("ToyModel",package="CellNOptR"),full=TRUE)
 file.copy(from=cpfile,to=getwd(),overwrite=TRUE)
 dataToy<-readMIDAS(MIDASfile='ToyDataMMB.csv')
 CNOlistToy<-makeCNOlist(dataset=dataToy,subfield=FALSE)
-}
 }
 

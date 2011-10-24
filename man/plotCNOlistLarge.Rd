@@ -30,8 +30,6 @@ C. Terfve
 plotCNOlist, plotCNOlistPDF, plotCNOlistLargePDF
 }
 \examples{
-\dontrun{
 data(CNOlistDREAM,package="CellNOptR")
 plotCNOlistLarge(CNOlistDREAM, nsplit=2)
-}
 }

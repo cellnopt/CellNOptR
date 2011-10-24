@@ -29,8 +29,13 @@ C.Terfve
 This function could be simplified in the future.
 }
 \examples{
+#load data
+
 data(CNOlistToy,package="CellNOptR")
 data(ToyModel,package="CellNOptR")
+
+#pre-process the model
+
 indicesToy<-indexFinder(CNOlistToy,ToyModel,verbose=TRUE)
 ToyNCNOindices<-findNONC(ToyModel,indicesToy,verbose=TRUE)
 ToyNCNOcut<-cutNONC(ToyModel,ToyNCNOindices)

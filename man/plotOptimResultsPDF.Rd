@@ -45,17 +45,38 @@ C. Terfve
 plotOptimResults, cutAndPlotResultsT1
 }
 \examples{
-\dontrun{
+tmpdir<-tempdir()
+setwd(tmpdir)
+
 #We will plot the fit of the full initial model compared to the data, without any optimisation
-#This is normally not done on a stand alone basis, but if you have a model and would like to visualise its output compared to your data, then this is what you should do
+#This is normally not done on a stand alone basis, but if you have a model and would like to visualise 
+#its output compared to your data, then this is what you should do
+
+#load and prepare data
+
 data(CNOlistToy,package="CellNOptR")
 data(ToyModel,package="CellNOptR")
 indicesToy<-indexFinder(CNOlistToy,ToyModel,verbose=TRUE)
 ToyFields4Sim<-prep4Sim(ToyModel)
+
+#simulate the model
+
 Sim<-simulatorT1(CNOlist=CNOlistToy,Model=ToyModel,SimList=ToyFields4Sim,indexList=indicesToy)
+
+#format the results and data as expected by plotOptimResults
+
 SimRes<-Sim[,indicesToy$signals]
 SimResults<-list(t0=matrix(data=0,nrow=dim(SimRes)[1],ncol=dim(SimRes)[2]),t1=SimRes)
 expResults<-list(t0=CNOlistToy$valueSignals[[1]],t1=CNOlistToy$valueSignals[[2]])
-plotOptimResultsPDF(SimResults=SimResults,expResults=expResults,times=CNOlistToy$timeSignals[1:2],namesCues=CNOlistToy$namesCues,namesSignals=CNOlistToy$namesSignals,valueCues=CNOlistToy$valueCues, fileName="Toyfull.pdf")
-}
+
+#plot
+
+plotOptimResultsPDF(
+	SimResults=SimResults,
+	expResults=expResults,
+	times=CNOlistToy$timeSignals[1:2],
+	namesCues=CNOlistToy$namesCues,
+	namesSignals=CNOlistToy$namesSignals,
+	valueCues=CNOlistToy$valueCues, 
+	fileName="Toyfull.pdf")
 }

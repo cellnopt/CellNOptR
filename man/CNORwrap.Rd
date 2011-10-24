@@ -39,19 +39,49 @@ This function does not return anything, it does the analysis, produces all the p
 C. Terfve
 }
 \examples{
+#version with paramslist
+
+tmpdir<-tempdir()
+setwd(tmpdir)
+
+data(CNOlistToy,package="CellNOptR")
+data(ToyModel,package="CellNOptR")
+
+pList<-list(
+	Data=CNOlistToy,
+	Model=ToyModel,
+	sizeFac = 1e-04, 
+	NAFac = 1, 
+	PopSize = 5, 
+	Pmutation = 0.5, 
+	MaxTime = 60, 
+	maxGens = 5, 
+	StallGenMax = 5, 
+	SelPress = 1.2, 
+	elitism = 5, 
+	RelTol = 0.1,
+	verbose=TRUE)
+CNORwrap(
+	paramsList=pList,
+	Name="Toy",
+	NamesData=list(CNOlist="ToyData",Model="ToyModel"),
+	Data=NA,
+	Model=NA)
+
 \dontrun{
 #version with default parameters
+
 dir.create("CNOR_analysis")
 setwd("CNOR_analysis")
+
 data(CNOlistToy,package="CellNOptR")
 data(ToyModel,package="CellNOptR")
-CNORwrap(paramsList=NA,Name="Toy",NamesData=list(CNOlist="ToyData",Model="ToyModel"),Data=CNOlistToy,Model=ToyModel)
-#version with paramslist
-dir.create("CNOR_analysis")
-setwd("CNOR_analysis")
-data(CNOlistToy,package="CellNOptR")
-data(ToyModel,package="CellNOptR")
-pList<-list(Data=CNOlistToy,Model=ToyModel,sizeFac = 1e-04, NAFac = 1, PopSize = 50, Pmutation = 0.5, MaxTime = 60, maxGens = 500, StallGenMax = 100, SelPress = 1.2, elitism = 5, RelTol = 0.1,verbose=TRUE)
-CNORwrap(paramsList=pList,Name="Toy",NamesData=list(CNOlist="ToyData",Model="ToyModel"),Data=NA,Model=NA)
+
+CNORwrap(
+	paramsList=NA,
+	Name="Toy",
+	NamesData=list(CNOlist="ToyData",Model="ToyModel"),
+	Data=CNOlistToy,
+	Model=ToyModel)
 }
 }

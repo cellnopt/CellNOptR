@@ -82,6 +82,9 @@ GetFit, prep4Sim, indexFinder, simulatorT1
 \examples{
 data(CNOlistToy,package="CellNOptR")
 data(ToyModel,package="CellNOptR")
+
+#pre-process model
+
 indicesToy<-indexFinder(CNOlistToy,ToyModel,verbose=FALSE)
 ToyNCNOindices<-findNONC(ToyModel,indicesToy,verbose=FALSE)
 ToyNCNOcut<-cutNONC(ToyModel,ToyNCNOindices)
@@ -89,7 +92,18 @@ indicesToyNCNOcut<-indexFinder(CNOlistToy,ToyNCNOcut)
 ToyNCNOcutComp<-compressModel(ToyNCNOcut,indicesToyNCNOcut)
 indicesToyNCNOcutComp<-indexFinder(CNOlistToy,ToyNCNOcutComp)
 ToyNCNOcutCompExp<-expandGates(ToyNCNOcutComp)
+
+#optimise
+
 ToyFields4Sim<-prep4Sim(ToyNCNOcutCompExp)
 initBstring<-rep(1,length(ToyNCNOcutCompExp$reacID))
-ToyT1opt<-gaBinaryT1(CNOlist=CNOlistToy,Model=ToyNCNOcutCompExp,SimList=ToyFields4Sim,indexList=indicesToyNCNOcutComp,initBstring=initBstring,maxGens=10,verbose=FALSE)
+ToyT1opt<-gaBinaryT1(
+	CNOlist=CNOlistToy,
+	Model=ToyNCNOcutCompExp,
+	SimList=ToyFields4Sim,
+	indexList=indicesToyNCNOcutComp,
+	initBstring=initBstring,
+	maxGens=2,
+	PopSize=5,
+	verbose=FALSE)
 }
