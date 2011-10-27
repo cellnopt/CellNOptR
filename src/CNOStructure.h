@@ -31,5 +31,7 @@ typedef struct
 	//Use this only inside simulations
 	double* state_array;
 	int* state_index;
+	double *inhibitor_array;
+	double** sim_results;
 
 }CNOStructure;
