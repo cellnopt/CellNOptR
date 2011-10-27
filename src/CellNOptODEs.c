@@ -16,7 +16,7 @@
 
 int main(void)
 {
-  int i,j,nStates,counter;
+  int i,j,counter;
   int *indexSig;
   int *indexStim;
   int *indexInh;
@@ -158,11 +158,13 @@ int main(void)
 	  simResults[i]=malloc(tempData.nStates*sizeof(double));
   }
 
+  tempData.sim_results=simResults;
+
   data=malloc(sizeof(tempData));
 
   *data=tempData;
 
- //simulateODE(data);
+  simulateODE(data);
 
   free(data);
 
@@ -192,6 +194,13 @@ int main(void)
      free(interMAT[i]);
    free(interMAT); 
 
+   for (i = 0; i <tempData.nTimes; ++i)
+	   free(simResults[i]);
+   free(simResults);
+
+   free(state_array);
+   free(malloc(tempData.nTimes*sizeof(double*)));
+   free(inhibitor_array);
 
 return EXIT_SUCCESS;
 }
