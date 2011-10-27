@@ -27,17 +27,16 @@ int simulateODE(CNOStructure* data)
 {
 	printf("\n\n Test %d",(*data).nStates);
 	int i,j,neq,counter,flag, flagr, iout;
-	int* state_array = (int *)malloc(((*data).nRows)*sizeof(int));
 	realtype t, tout, ti, tf;
 	N_Vector y, abstol;
 	void *cvode_mem;
-	int exp_num=4;
-	double maxStepSize=0;
+	int exp_num=1;
+	double maxStepSize=0.0;
 	int maxNumSteps=10000;
-	 realtype atol=0.00001;
-	 realtype reltol=0.00001;
-	 double** simResults= (double **) malloc((*data).nTimes*sizeof(double*));
-	 int verbose=1;
+	realtype atol=1e-5;
+	realtype reltol=1e-3;
+	int verbose=1;
+
 
 	cvode_mem = NULL;
 	abstol = NULL;
@@ -62,7 +61,10 @@ int simulateODE(CNOStructure* data)
 
     /* Initialize y */
 	for(i=0; i<(*data).nRows; i++)
-			state_array[i] = 0;
+	{
+		(*data).state_array[i] = 0;
+		(*data).inhibitor_array[i]=0;
+	}
 
 	for(i=0; i<(*data).nRows; ++i)
 	{
@@ -73,7 +75,16 @@ int simulateODE(CNOStructure* data)
 			//	The passed indexes are from 1 to N intead from 0 to N-1
 				if((*data).indexSignals[j]==i+1)
 				{
-					state_array[i] = (*data).valueSignals[exp_num][(*data).indexSignals[j]-1];
+					(*data).state_array[i] = (*data).valueSignals[exp_num][j];
+				}
+			}
+
+			for (j = 0; j < (*data).nInhibitors; j++)
+			{
+				//	The passed indexes are from 1 to N intead from 0 to N-1
+				if((*data).indexInhibitors[j]==i+1)
+				{
+					(*data).inhibitor_array[i] = (*data).valueInhibitors[exp_num][j];
 				}
 			}
 		}
@@ -84,29 +95,25 @@ int simulateODE(CNOStructure* data)
 				//	The passed indexes are from 1 to N intead from 0 to N-1
 				if((*data).indexStimuli[j]==i+1)
 				{
-					state_array[i] = (*data).valueStimuli[exp_num][(*data).indexStimuli[j]-1];
+					(*data).state_array[i] = (*data).valueStimuli[exp_num][j];
 				}
 			}
 		}
 	}
 
-	for (i = 0; i <(*data).nStates; ++i)
+	for (i = 0; i < (*data).nRows; ++i)
 	{
-		simResults[i]=malloc((*data).nStates*sizeof(double));
+		printf("State ARRRAAYYY***%f\n",(*data).state_array[i]);
 	}
 
 	for(i=0; i<(*data).nRows; i++)
 	{
 		if((*data).isState[i])
 		{
-			Ith(y,i) = state_array[i];
-			simResults[0][i]=state_array[i];
-
+			Ith(y,i) = (*data).state_array[i];
+			(*data).sim_results[0][i]=(*data).state_array[i];
 		}
 	}
-
-	//Dont use this field out of simulation
-	(*data).state_array=state_array;
 
 	cvode_mem = CVodeCreate(CV_BDF, CV_NEWTON);
 	if (check_flag((void *)cvode_mem, "CVodeCreate", 0)) {
@@ -165,10 +172,14 @@ int simulateODE(CNOStructure* data)
 		  tout=(*data).timeSignals[i];
 		  flag = CVode(cvode_mem, tout, y, &tf, CV_NORMAL);
 
-		  for (j = 0; j < (*data).nStates; ++j)
+
+		  printf("\n");
+		  printf("\n\n");
+
+		  for (j = 0; j < (*data).nStates; j++)
 		  {
-			  simResults[i][j]= (double) Ith(y,i);
-			  printf("%f\t",Ith(y,i));
+			  (*data).sim_results[i][j]= (double) Ith(y,j);
+			  printf("%f\t",Ith(y,j));
 		  }
 
 		  if (check_flag(&flag, "CVode", 1))
@@ -177,8 +188,11 @@ int simulateODE(CNOStructure* data)
 			  break;
 		  }
 
-		  printf("\n");
 	  }
+
+	  N_VDestroy_Serial(y);
+	  /* Free integrator memory */
+	  CVodeFree(&cvode_mem);
 
 	return(0);
 }

@@ -8,12 +8,11 @@
  ============================================================================
  */
 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "CNOStructure.h"
 #include "Toy_Model_MMB_Feedback_OriginalPars_C_test.h"
-
-
 
 int main(void)
 {
@@ -30,6 +29,9 @@ int main(void)
   double **valueSTIMULI;
   CNOStructure tempData;
   CNOStructure *data;
+  double* state_array;
+  double** simResults;
+  double* inhibitor_array;;
 
   indexSig=(int*)malloc(nSignals*sizeof(int));
   for (i = 0; i < nSignals; i++)
@@ -111,8 +113,6 @@ int main(void)
     }
   }
 
-
-
   /* Fill the CNOStructure */
   tempData.interMat=interMAT;
   tempData.notMat=notMAT;
@@ -122,6 +122,7 @@ int main(void)
   tempData.indexSignals=indexSig;
   tempData.indexStimuli=indexStim;
   tempData.indexInhibitors=indexInh;
+  tempData.timeSignals=timeSig;
   tempData.odeParameters=odePARAMETERS;
   tempData.nPars=nPars;
   tempData.nRows=nRows;
@@ -138,29 +139,39 @@ int main(void)
   tempData.truthTables = getTruthTables(tempData.adjacencyMatrix,tempData.interMat,
 		  tempData.notMat,tempData.isState,tempData.numInputs,tempData.numBits,tempData.nRows,tempData.nCols);
 
+  state_array= malloc((tempData.nRows)*sizeof(double));
+  simResults= malloc(tempData.nTimes*sizeof(double*));
+  inhibitor_array= malloc((tempData.nRows)*sizeof(double));
+
+  tempData.state_index=getStateIndex(tempData.adjacencyMatrix,tempData.nRows);
+  tempData.inhibitor_array=inhibitor_array;
+  tempData.state_array=state_array;
+
   counter=0;
-  for (i = 0; i < nRows; ++i){
-    if(tempData.isState[i]){
-        counter++;
-    }
-  }
+  for (i = 0; i < nRows; ++i)
+	  if(tempData.isState[i]) counter++;
 
   tempData.nStates = counter;
+
+  for (i = 0; i <tempData.nTimes; ++i)
+  {
+	  simResults[i]=malloc(tempData.nStates*sizeof(double));
+  }
 
   data=malloc(sizeof(tempData));
 
   *data=tempData;
 
-  //simulateODE(data);
+ //simulateODE(data);
 
   free(data);
-  /* simple pointers first */
+
   free(indexSig);
   free(indexStim);
   free(indexInh);
   free(odePARAMETERS);
 
-  /* ** pointer then */
+
   for (i = 0; i < nExperiments; i++)
     free(valueSIGNALS[i]);
   free(valueSIGNALS);
@@ -180,6 +191,7 @@ int main(void)
    for (i = 0; i < nRows; i++)
      free(interMAT[i]);
    free(interMAT); 
+
 
 return EXIT_SUCCESS;
 }

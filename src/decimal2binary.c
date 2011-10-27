@@ -21,7 +21,6 @@ int* decimal2binary(int decimal_value,int nBits)
 	  binary_value[j--] = decimal_value%2;
 	  decimal_value = decimal_value/2;
   }
-
   return(binary_value);
 
  }
