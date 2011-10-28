@@ -5,13 +5,12 @@
 
 /* Sundials Header Files */
 
-#include "CVODES/include/cvodes/cvodes.h"           /* prototypes for CVODES fcts. and consts. */
-#include "CVODES/include/cvodes/cvodes_dense.h"     /* prototype for CVDense */
-#include "CVODES/include/cvodes/cvodes_band.h"
-#include "CVODES/include/cvodes/cvodes_diag.h"
-#include "CVODES/include/nvector/nvector_serial.h"  /* serial N_Vector types, fcts., and macros */
-#include "CVODES/include/sundials/sundials_dense.h" /* definitions DenseMat and DENSE_ELEM */
-#include "CVODES/include/sundials/sundials_types.h" /* definition of type realtype */
+#include <cvodes/cvodes.h>
+#include <nvector/nvector_serial.h>
+#include <sundials/sundials_types.h>
+#include <sundials/sundials_math.h>
+
+
 #include "CNOStructure.h"
 
 #define Ith(v,i) ( NV_DATA_S(v)[i] )
@@ -105,7 +104,7 @@ int simulateODE(CNOStructure* data)
 	{
 		printf("State ARRRAAYYY***%f\n",(*data).state_array[i]);
 	}
-
+	fprintf(stderr,"create");
 	for(i=0; i<(*data).nRows; i++)
 	{
 		if((*data).isState[i])
@@ -115,6 +114,7 @@ int simulateODE(CNOStructure* data)
 		}
 	}
 
+	fprintf(stderr,"create");
 	cvode_mem = CVodeCreate(CV_BDF, CV_NEWTON);
 	if (check_flag((void *)cvode_mem, "CVodeCreate", 0)) {
 		if(verbose)printf("\nSolver failed. . .\n");
@@ -124,7 +124,7 @@ int simulateODE(CNOStructure* data)
 	if(verbose)printf("Solver Memory Allocated\n");
 
 	/* Set f_data */
-	 flag = CVodeSetFdata(cvode_mem, data);
+	 flag = CVodeSetUserData(cvode_mem, data);
 	 if(check_flag(&flag, "CVodeSetFdata", 1))
 	 {
 		 if(verbose)printf("\nSolver failed. . .\n");
@@ -133,23 +133,24 @@ int simulateODE(CNOStructure* data)
 
 	 ti=(*data).timeSignals[0];
 	 tf=(*data).timeSignals[(*data).nTimes-1];
-	 flag = CVodeMalloc(cvode_mem,*rhsODE, ti, y, CV_SS, reltol, &atol);
-
+	  flag = CVodeInit(cvode_mem,*rhsODE, ti, y);
+	// flag = CVodeMalloc(cvode_mem,*rhsODE, ti, y)
 	 if (check_flag(&flag, "CVodeMalloc", 1))
 	 {
 		if(verbose)printf("\nSolver failed. . .\n");
 	 	return(0);
 	 }
 
-	 flag = CVDense(cvode_mem, neq);
-	 if (check_flag(&flag, "CVDense", 1))
-	 {
-		 if(verbose)printf("\nSolver failed. . .\n");
-		 return(0);
-	 }
+	 flag = CVodeSStolerances(cvode_mem, reltol, atol);
+	  if(check_flag(&flag, "CVodeSStolerances", 1)) return(1);
+
+
+	  flag = CVDense(cvode_mem, neq);
+	  if (check_flag(&flag, "CVDense", 1)) return(1);
 	 if(verbose)printf("CVDENSE Solver Initiated\n");
 
 	 /* Set maxnumsteps */
+	  fprintf(stderr,"hereee");
 	 flag = CVodeSetMaxNumSteps(cvode_mem, maxNumSteps);
 	 if(check_flag(&flag, "CVodeSetMaxNumSteps", 1))
 	 {
