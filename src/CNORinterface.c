@@ -19,7 +19,7 @@ void hello(int *in)
     int i, n=in[0];
  
     for(i=0; i < n; i++) {
-        Rprintf("Hello, world!\n");
+        //Rprintf("Hello, world!\n");
     }
 }
 
@@ -32,9 +32,9 @@ void hello2(double *xIn, int *nrowsIn, int *ncolsIn)
  
     for(i=0; i < nRows; i++) {
         for(j=0; j < nCols; j++) {
-        Rprintf("%f ", xIn[i*nRows + j]);
+       // Rprintf("%f ", xIn[i*nRows + j]);
     }
-        Rprintf("\n");
+    //    Rprintf("\n");
     }
 }
 

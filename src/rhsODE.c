@@ -2,10 +2,10 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "CVODES/include/cvodes/cvodes.h"           /* prototypes for CVODES fcts. and consts. */
-#include "CVODES/include/sundials/sundials_types.h" /* definition of type realtype */
+#include <cvodes/cvodes.h>          /* prototypes for CVODES fcts. and consts. */
+#include <sundials/sundials_types.h> /* definition of type realtype */
 #include "CNOStructure.h"
-#include "CVODES/include/nvector/nvector_serial.h"  /* serial N_Vector types, fcts., and macros */
+#include <nvector/nvector_serial.h>/* serial N_Vector types, fcts., and macros */
 #include <R.h>
 #define Ith(v,i) ( NV_DATA_S(v)[i] )
 

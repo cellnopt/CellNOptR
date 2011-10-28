@@ -164,7 +164,10 @@ int main(void)
 
   *data=tempData;
 
-  simulateODE(data);
+  for (i = 0; i <15; ++i)
+  {
+	  simulateODE(data);
+  }
 
   free(data);
 
