@@ -4,7 +4,8 @@ cutAndPlotResultsT1<-function(
 	SimList,
 	CNOlist,
 	indexList,
-	plotPDF=FALSE){
+	plotPDF=FALSE,
+    tag=NULL){
 	
 	Modelcut<-Model
 	Modelcut$interMat<-Modelcut$interMat[,as.logical(bString)]
@@ -32,11 +33,17 @@ cutAndPlotResultsT1<-function(
 		valueCues=CNOlist$valueCues)
 		
 	if(plotPDF == TRUE){
+        if ( is.null(tag)){
+               filename<-paste(deparse(substitute(Model)), "SimResultsT1.pdf", sep="")
+        }
+        else{
+            filename<-paste(tag, "SimResultsT1.pdf", sep="_")
+        }
 		plotOptimResultsPDF(
 			SimResults=SimResults,
 			expResults=expResults,
 			times=CNOlist$timeSignals[1:2],
-			fileName=paste(deparse(substitute(Model)),"SimResultsT1.pdf",sep=""),
+			filename=filename,
 			namesCues=CNOlist$namesCues,
 			namesSignals=CNOlist$namesSignals,
 			valueCues=CNOlist$valueCues)

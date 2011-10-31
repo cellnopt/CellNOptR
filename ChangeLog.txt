@@ -1,0 +1,14 @@
+31/Oct/2011
+-------------
+
+* add verbose options in all functions that do print
+* change fileName into filename everywhere
+* add tag option (prefix) when files are saved.
+
+
+
+
+27/oct/2011
+--------------
+
+Copy the CNORBiocond directory (release 0.99.6) to start an official trunk.

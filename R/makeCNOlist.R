@@ -1,4 +1,4 @@
-makeCNOlist<-function(dataset,subfield){
+makeCNOlist<-function(dataset,subfield, verbose=TRUE){
 
 #check that all the needed elements are present
 	if(!is.list(dataset)){
@@ -166,9 +166,9 @@ makeCNOlist<-function(dataset,subfield){
 	if(length(unique(whereTimes[2:length(whereTimes)])) != 1){
 		warning("This program expects data across all conditions at all time points (except t=0) ")
 		}
-		
-	print("Please be aware that if you only have some conditions at time zero (e.g.only inhibitor/no inhibitor), the measurements for these conditions will be copied across matching conditions at t=0")		
-
+	if (verbose){
+	    print("Please be aware that if you only have some conditions at time zero (e.g.only inhibitor/no inhibitor), the measurements for these conditions will be copied across matching conditions at t=0")		
+    }
 #Do the t=0 matrix, and produce a new cues matrix, that does not contain duplicates 
 #(1 row per condition and different matrices will be build for the different times)
 	valueSignals<-list(t0=matrix(data=0,nrow=whereTimes[2],ncol=length(dataset$DVcol)))

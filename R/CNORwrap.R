@@ -43,7 +43,7 @@ CNORwrap<-function(paramsList,Data,Model,Name,NamesData,Time=1){
 	plotCNOlist(paramsList$Data)
 	plotCNOlistPDF(
 		CNOlist=paramsList$Data,
-		fileName=paste(Name,"DataPlot.pdf",sep="")
+		filename=paste(Name,"DataPlot.pdf",sep="")
 		)
 		
 #2.Checks data to model compatibility

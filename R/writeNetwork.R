@@ -6,9 +6,10 @@ writeNetwork<-function(
 	ModelOriginal,
 	ModelComprExpanded,
 	optimResT1,
-	optimResT2,
-	CNOlist){
-	
+	optimResT2=NA,
+	CNOlist, 
+    tag=NULL){
+
 	nwInfo<-getNetworkInfo(
 		ModelOriginal=ModelOriginal,
 		ModelComprExpanded=ModelComprExpanded,
@@ -22,7 +23,8 @@ writeNetwork<-function(
 		ModelOriginal=ModelOriginal,
 		sifFile=nwInfo$sifFile,
 		EAweights=nwInfo$EAweights,
-		nodesAttr=nwInfo$nodesAttr)
+		nodesAttr=nwInfo$nodesAttr, 
+        tag=tag)
 	
 	}
 	
@@ -31,27 +33,37 @@ writeNetwork<-function(
 ##############these are the functions used above
 #########################################################################
 #this is the bit that writes
-writeNetworkW<-function(dN,dM,ModelOriginal,sifFile,EAweights,nodesAttr){
+writeNetworkW<-function(dN,dM,ModelOriginal,sifFile,EAweights,nodesAttr, tag=NULL){
+
+ create_filename<-function(x, tag=NULL){
+        if (is.null(tag)){
+            return(x)
+        }
+        else{
+            return(paste(c(tag, "_", x), collapse=""))
+        }
+    }
+
 
 	writeDot(
 		dotNodes=dN,
 		dotMatrix=dM,
 		Model=ModelOriginal,
-		fileName="PKN.dot")
+		filename=create_filename("PKN.dot", tag=tag))
 		
 	write.table(
 		sifFile[,1:3],
-		file="PKN.sif",
+		file=create_filename("PKN.sif", tag=tag),
 		row.names=FALSE,col.names=FALSE,quote=FALSE,sep="\t")
 		
 	write.table(
 		EAweights,
-		file="TimesPKN.EA",
+		file=create_filename("TimesPKN.EA", tag=tag),
 		row.names=FALSE,col.names="Times",quote=FALSE,sep="\t")	
 		
 	write.table(
 		nodesAttr,
-		file="nodesPKN.NA",
+		file=create_filename("nodesPKN.NA", tag=tag),
 		row.names=FALSE,col.names="NodesType",quote=FALSE,sep="\t")	
 		
 	}	

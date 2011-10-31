@@ -8,7 +8,8 @@ writeScaffold<-function(
 	optimResT1,
 	optimResT2,
 	ModelOriginal,
-	CNOlist){
+	CNOlist, 
+    tag=NULL){
 	
 #get the stuff that I need for the sif file
 	sif<-getSifInfo(ModelComprExpanded=ModelComprExpanded,
@@ -31,7 +32,8 @@ writeScaffold<-function(
 		ModelComprExpanded=ModelComprExpanded,
 		sifFile=sif$sifFile,
 		EApresent=sif$EApresent,
-		EAweights=sif$EAweights)
+		EAweights=sif$EAweights, 
+        tag=tag)
 		
 	}
 
@@ -46,27 +48,37 @@ writeScaffoldW<-function(
 	ModelComprExpanded,
 	sifFile,
 	EApresent,
-	EAweights){
+	EAweights, 
+    tag=NULL){
 	
+    create_filename<-function(x, tag=NULL){
+        if (is.null(tag)){
+            return(x)
+        }
+        else{
+            return(paste(c(tag, "_", x), collapse=""))
+        }
+    }
+
 	writeDot(
 		dotNodes=dN,
 		dotMatrix=dM,
 		Model=ModelComprExpanded,
-		fileName="Scaffold.dot")
+		filename=create_filename("Scaffold.dot", tag=tag))
 			
 	write.table(
 		sifFile[,1:3],
-		file="Scaffold.sif",
+		file=create_filename("Scaffold.sif", tag=tag),
 		row.names=FALSE,col.names=FALSE,quote=FALSE,sep="\t")
 		
 	write.table(
 		EApresent,
-		file="TimesScaffold.EA",
+		file=create_filename("TimesScaffold.EA", tag=tag),
 		row.names=FALSE,col.names="Times",quote=FALSE,sep="\t")
 		
 	write.table(
 		EAweights,
-		file="weightsScaffold.EA",
+		file=create_filename("weightsScaffold.EA", tag=tag),
 		row.names=FALSE,col.names="Weights",quote=FALSE,sep="\t")
 		
 	}

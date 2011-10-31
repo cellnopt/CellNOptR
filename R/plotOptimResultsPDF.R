@@ -5,15 +5,15 @@ plotOptimResultsPDF<-function(
 	namesCues=namesCues,
 	namesSignals=namesSignals,
 	valueCues=valueCues,
-	fileName){
+	filename){
 	
 	if(sum(dim(SimResults[[1]])) < 20){
 	
-		pdf(file=fileName,width=14,height=7)
+		pdf(file=filename,width=14,height=7)
 		
 		}else{
 		
-			pdf(file=fileName,width=21,height=10)
+			pdf(file=filename,width=21,height=10)
 			
 			}
 			
