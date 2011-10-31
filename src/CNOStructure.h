@@ -32,6 +32,6 @@ typedef struct
 	double* state_array;
 	int* state_index;
 	double *inhibitor_array;
-	double** sim_results;
+	double*** sim_results;
 
 }CNOStructure;
