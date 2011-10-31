@@ -30,7 +30,7 @@ int main(void)
   CNOStructure tempData;
   CNOStructure *data;
   double* state_array;
-  double** simResults;
+  double*** simResults;
   double* inhibitor_array;;
 
   indexSig=(int*)malloc(nSignals*sizeof(int));
@@ -42,6 +42,7 @@ int main(void)
   indexStim=(int*)malloc(nStimuli*sizeof(int));
   for (i = 0; i < nStimuli; i++)
   {
+
     indexStim[i] = indexStimuli[i];
   }
 
@@ -97,7 +98,7 @@ int main(void)
     }
   }
 
-  timeSig= (double*)malloc(nTimes*sizeof(double*));
+  timeSig= (double*)malloc(nTimes*sizeof(double));
    for (i = 0; i < nTimes; i++)
    {
 	   timeSig[i]=timeSignals[i];
@@ -139,11 +140,10 @@ int main(void)
   tempData.truthTables = getTruthTables(tempData.adjacencyMatrix,tempData.interMat,
 		  tempData.notMat,tempData.isState,tempData.numInputs,tempData.numBits,tempData.nRows,tempData.nCols);
 
-  state_array= malloc((tempData.nRows)*sizeof(double));
-  simResults= malloc(tempData.nTimes*sizeof(double*));
-  inhibitor_array= malloc((tempData.nRows)*sizeof(double));
+  state_array= (double*)malloc(tempData.nRows*sizeof(double));
+  inhibitor_array=(double*)malloc((tempData.nRows)*sizeof(double));
 
-  tempData.state_index=getStateIndex(tempData.adjacencyMatrix,tempData.nRows);
+  tempData.state_index=(int*)getStateIndex(tempData.adjacencyMatrix,tempData.nRows);
   tempData.inhibitor_array=inhibitor_array;
   tempData.state_array=state_array;
 
@@ -153,9 +153,16 @@ int main(void)
 
   tempData.nStates = counter;
 
-  for (i = 0; i <tempData.nTimes; ++i)
+ //simResults=(double**)malloc(nExperiments*sizeof(double*));
+  simResults=(double***)malloc(nExperiments*sizeof(double**));
+  for (i = 0; i <nExperiments; ++i)
   {
-	  simResults[i]=malloc(tempData.nStates*sizeof(double));
+	  simResults[i]=(double**)malloc(nTimes*sizeof(double*));
+  	//  simResults=(double**)malloc(nTimes*sizeof(double*));
+	  for (j = 0; j <nTimes; ++j)
+	  {
+	  	  simResults[i][j]=(double*)malloc(tempData.nStates*sizeof(double));
+	  }
   }
 
   tempData.sim_results=simResults;
@@ -164,18 +171,25 @@ int main(void)
 
   *data=tempData;
 
-  for (i = 0; i <15; ++i)
+
+  for (i = 0; i <nExperiments; ++i)
   {
-	  simulateODE(data);
+	  simulateODE(data,i,1);
   }
 
   free(data);
-
   free(indexSig);
   free(indexStim);
   free(indexInh);
   free(odePARAMETERS);
 
+  for (i = 0; i < nRows; i++)
+  {
+	free(tempData.adjacencyMatrix[i]);
+    free(tempData.truthTables[i]);
+  }
+  free(tempData.truthTables);
+  free(tempData.adjacencyMatrix);
 
   for (i = 0; i < nExperiments; i++)
     free(valueSIGNALS[i]);
@@ -202,9 +216,21 @@ int main(void)
    free(simResults);
 
    free(state_array);
-   free(malloc(tempData.nTimes*sizeof(double*)));
    free(inhibitor_array);
-
+   free(tempData.state_index);
+   free(tempData.numBits);
+   free(tempData.numInputs);
+/*
+   for (i = 0; i <tempData.nExperiments; ++i)
+   {
+	   for (j = 0; j <tempData.nTimes; ++j)
+  	  {
+		   free(simResults[i][j]);
+  	  }
+	   free(simResults[i]);
+   }
+   free(simResults);
+*/
 return EXIT_SUCCESS;
 }
 
