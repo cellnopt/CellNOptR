@@ -73,16 +73,37 @@ readMIDAS<-function(MIDASfile, verbose=TRUE){
 	DVcol<-grep(pattern="DV",x=colnames(data),ignore.case=FALSE)
 	data<-data[,c(TRcol,DAcol,DVcol)]
 	
-	if(any(as.matrix(data == "NaN"))){
-	
-		for(c in 1:dim(data)[2]){
-			for(r in 1:dim(data)[1]){if(data[r,c] == "NaN") data[r,c]<-NA}
-			}
-        if (verbose){
-            print("Your data file contained 'NaN'. We have assumed that these were missing values and replaced them by NAs.")
-        }
-		
+
+    # replace NaN character by NA. as.matrix is required to scan all columns AND rows
+    # Note that on some older R version, the is.nan does not seem to work well, hence thw
+    # try catch (see Changelog 0.99.6
+
+    conversion <- tryCatch({
+        if (any(is.nan(as.matrix(data)))){
+            data[is.nan(as.matrix(data))] <- NA
+            if (verbose){
+                print("Your data file contained 'NaN'. We have assumed that these were missing values and replaced them by NAs.")
+            }
+        }}, 
+        error=function(e) {return(NULL)}
+    )
+
+    if (is.null(conversion)){
+
+        if(any(as.matrix(data == "NaN"))){
+			for(c in 1:dim(data)[2]){
+	            for(r in 1:dim(data)[1]){
+                     if(data[r,c] == NA) {
+                         data[r,c]<-NA
+                     }
+                }
+		    }
+            if (verbose){
+                print("Your data file contained 'NaN'. We have assumed that these were missing values and replaced them by NAs.")
+            }
+	    }
     }
+
 	
 	return(list(
 		dataMatrix=data,
