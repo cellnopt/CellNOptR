@@ -12,3 +12,173 @@
 --------------
 
 Copy the CNORBiocond directory (release 0.99.6) to start an official trunk.
+CellNOptR_0.99.4 is based on CellNOptR_0.1 but changes a few things as asked by
+Biocond review:
+
+
+Release 0.99.6 to BioConductor 25/Oct/2011
+-----------------------------------------------
+
+-fix a bug in writeReport: when the files are copied to the results directory,
+it now doesn't try to copy NAs anymore (the NAs are the names of files relating
+to time 2 optim.)
+
+-it changes the version number so that it is according to Bioconductor
+guidelines: this number will be pushed to 1.0.0 automatically once the package
+is released
+
+-it changes the installation instructions in the vignette (this will need to be
+changed again once accepted into Bioconductor)
+
+-all the code chances in the vignette are now named
+
+-all the code lines in the vignette have been reformatted to be under 80
+characters in length
+
+-in the vignette, the DREAM example was changed from a full example to a briefly
+outlined one, the code being the same as above, just changing the name of
+variables (this also avoids having too many chunks of code tagged as eval=FALSE)
+
+-fig 4 of vignette: file size reduction
+
+-in the vignette, all the code is now tagged as eval=TRUE, except the
+installation one.  This is done by now evaluating even the bits of code that
+produce a file or directory, but then erasing these afterwards
+
+-help files: all the code is not tagged as \dontrun{} anymore
+
+-some man pages examples were shortened, wherever possible
+
+-in help pages: code lines reformatted to not exceed 80 characters; code layout
+made more aerated
+
+-in R code: code lines reformatted to not exceed 80 characters; code layout made
+more aerated
+
+-fixes a bug in readMIDAS that was asked by reviewer who had a problem with the
+line is.nan(data) ->  it wasn't working for him, but anyway I don't think it was
+doing what I wanted because I wanted this line to look for the character "NaN"
+which is the Matlab equivalent of "NA" in R. Apparently in the reviewers dev
+(unstable) version of R, is.nan does not work on data.frames (which is what
+'data' is at this point in the function).
+
+-makes the building faster compared to 0.99.3 by shortening some of the help
+files: CellNOptR-package, CNORwrap, cutAndPlotResultsT1, gaBinaryT1, plotFit,
+writeDot, writeNetwork, writeScaffold; and the CNORwrap part in the vignette
+(essentially all this involves mainly changing the parameters of the
+optimisation so that the optimisation does not explore so many solutions).
+
+-fixes a bug in plotCNOlist and plotCNOlistLarge:
+	if(c != 1 && r!=1 && r!=dim(CNOlist$valueSignals[[1]])[1] && 
+				c != dim(CNOlist$valueSignals[[1]])[1]+1)
+should be
+	if(c != 1 && r!=1 && r!=dim(CNOlist$valueSignals[[1]])[1] && 
+				c != dim(CNOlist$valueSignals[[1]])[2]+1)
+-fixes the same bug as above in plotOptimResults:
+	if(c != 1 && r!=1 && r!=dim(expResults[[1]])[1] && c != dim(expResults[[1]])[1]+1)
+should be
+	if(c != 1 && r!=1 && r!=dim(expResults[[1]])[1] && c != dim(expResults[[1]])[2]+1)
+
+-plotOptimResults and plotCNOList/plotCNOlistLarge: Cor's email Oct 13th: some
+of the code could be simplified: the code has been dramatically shortened,
+rendering the above modification useless…  In the plotting section, instead of
+going through every possible combination or row and column index, I now do the
+plot and then add the x axis (if bottom row) and the y axis (if first column)
+
+-functions writeNetwork, writeScaffold, writeDot: simplify, make different
+functions for the computing of weights and stuff and for the writing of the
+network
+
+-function writeScaffold: the global function is still called writeScaffold and
+still needs the same arguments (ModelComprExpanded, optimResT1, optimResT2,
+ModelOriginal=ToyModel, CNOlist), but it is divided into: 
+	-a function writeScaffoldW that does the actual writing to files, 
+	-a function that gets the info for the sif file, 
+	-and a function that gets the additional info for the dot file.
+!!!only the writeScaffold function is imported in the namespace-> it is the only
+one with a help, the other function are hidden inside
+	-> if somebody wants to get the cytoscape info without writing it to a file they need to do:
+	sif<-getSifInfo(ModelComprExpanded=ModelComprExpanded,
+		optimResT1=optimResT1,
+		optimResT2=optimResT2,
+		ModelOriginal=ModelOriginal,
+		CNOlist=CNOlist)
+	where the arguments are the same as those originally used for the
+	writeScaffold function then the sif file is actually sif$sifFile[,1:3], and
+	the attributes are  sif$EAweights and sif$EApresent
+
+-there was a typo in "writeScaffold" that meant that the dot file was called
+ModelModelComprExpandedScaffold.dot instead of ModelComprExpandedScaffold.dot ->
+I corrected this but this means that I had to correct the argument namesFiles of
+writeReport in the vignette and in the CNORwrap function (to keep in mind when
+testing the package on old test scripts).
+
+
+-function writeNetwork: the global function is still called writeNetwork and
+still needs the same arguments (ModelComprExpanded, optimResT1, optimResT2,
+ModelOriginal, CNOlist), but it is divided into: 
+	-a function writeSNetworkW that does the actual writing to files, 
+	-a function that gets the info for the sif and dot files
+!!!only the writeNetwork function is imported in the namespace-> it is the only
+one with a help, the other function are hidden inside
+	-> if somebody wants to get the cytoscape info without writing it to a file
+	They need to do:
+	nwInfo<-getNetworkInfo(
+		ModelOriginal=ModelOriginal,
+		ModelComprExpanded=ModelComprExpanded,
+		optimResT1=optimResT1,
+		optimResT2=optimResT2,
+		CNOlist=CNOlist)
+	where the arguments are the same as those originally used for the
+	writeScaffold function  then the sif file is actually nwInfo$sifFile[,1:3],
+	and the attributes are  nwInfo$EAweaights and nwInfo$nodesAttr
+
+-function writeNetwork: the nodes that were neither inh/stim/sig nor NCNO did
+not end up in the cytoscape node attribute file so I added a couple of lines of
+code that put them in.
+
+-naming consistency: 
+		-GetFit -> getFit
+		-ResidualError-> residualError
+		-SimulateT1 -> simulateT1
+	-change in the functions
+	-change the function files names
+	-change the helps and their file names
+	-change the namespace
+	-change the scripts and the vignette
+	-change in the functions that use those:CNORwrap, simulatorT1, gaBinaryT1
+	!!!!careful when adding the T2 back
+
+-readMIDAS can now handle a DA:ALL column.  This has required quite some change
+in the code of the function, but that shouldn't change anything for the rest of
+the package since the output of the function is strictly the same.  What the
+function does if the number of DA and DV columns are different, and if this is
+because the only DA column is a DA:ALL column, is that the function creates all
+of the DA:xyz columns, so that in the end the output of readMIDAS is exactly the
+same whether DA:ALL was used or not.
+
+-readSif: the big for loop of point 2 (for(i in 1:length(AndNodes)))  and the
+internal for loop at point 5b (for(n in 2:length(output))) used to both use the
+index i.  That is now changed.
+
+-normalizeCNOlist: I put a warning in the help file that there shouldn't be
+zeros in the data (either NA or some low number, 0 is pretty unlikely as a
+biochemical measurement).
+
+-writeScaffold: I changed the names of the files produced because it caused
+problems with the new version that works with multiple functions.  I also had to
+change the names in the CNORwrap function and in the vignette.  Same for
+writeNetwork.
+
+-in the makeCNOlist: I added a bit that averages across replicate conditions if
+they exist.  I added a note about that in the help.
+***********************
+************************
+
+*****STILL TO DOs:
+-make the optimisation faster (through the simulator)
+-make the "Large" equivalent to "plotOptimResults" (see plotCNOlistLarge)
+-when replicates are available, add a section in the CNOlist that would hold the
+standard deviation of each summarised measurement (only when replicates are
+available for all conditions and time points)
+-make the function makeCNOlist more flexible and robust?

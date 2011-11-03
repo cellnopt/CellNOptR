@@ -7,13 +7,13 @@ Plots a CNOlist into a pdf file, for lists with many conditions.
 This function is a wrapper for plotCNOlistLarge, that plots the output directly in a pdf file.
 }
 \usage{
-plotCNOlistLargePDF(CNOlist, fileName, nsplit)
+plotCNOlistLargePDF(CNOlist, filename, nsplit)
 }
 \arguments{
   \item{CNOlist}{
 a CNOlist
 }
-  \item{fileName}{
+  \item{filename}{
 a name for your pdf file, eg. "plot.pdf"
 }
   \item{nsplit}{
@@ -36,5 +36,5 @@ plotCNOlistLarge, plotCNOlist, plotCNOlistPDF
 tmpdir<-tempdir()
 setwd(tmpdir)
 data(CNOlistDREAM,package="CellNOptR")
-plotCNOlistLargePDF(CNOlistDREAM, fileName="dreamData.pdf",nsplit=2)
+plotCNOlistLargePDF(CNOlistDREAM, filename="dreamData.pdf",nsplit=2)
 }

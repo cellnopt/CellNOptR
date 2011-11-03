@@ -94,7 +94,7 @@ plotCNOlist(CNOlistToy)
 
 
 <<ploCNOPDF, eval=TRUE>>=
-plotCNOlistPDF(CNOlist=CNOlistToy,fileName="ToyModelGraph.pdf")
+plotCNOlistPDF(CNOlist=CNOlistToy,filename="ToyModelGraph.pdf")
 @
 
 We then load the prior knowledge network (PKN), contained in a cytoscape sif format file, using the function \emph{readSif} (alternatively, this example model can be loaded as a R data object already formatted, similarly to what is done above for the CNOlist).  Cytoscape \cite{cytoscape} is a software for network visualisation and analysis. You can build a network within cytoscape and simply save it as the default sif file format, which can then be imported in \emph{CellNOptR}.  If you choose to do this, then you should make sure that if you have 'and' gates in your network they are present as dummy nodes named 'and' followed by a number from 1 to the number of 'and' nodes that you have.  
