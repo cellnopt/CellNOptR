@@ -14,7 +14,7 @@ readMIDAS(MIDASfile, verbose=TRUE)
 a csv MIDAS file
 }
   \item{verbose}{
-switch verbose option TRUE/FALSE
+logical (default to TRUE) print information on the screen.
 }
 
 }

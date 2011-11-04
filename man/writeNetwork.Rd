@@ -9,7 +9,8 @@ This function writes the original previous knowledge network (the model that you
 This function also writes a Graphviz dot file that contains the same information (see \code{writeDot} for more information about the dot file conventions).
 }
 \usage{
-writeNetwork(ModelOriginal, ModelComprExpanded, optimResT1, optimResT2, CNOlist)
+writeNetwork(ModelOriginal, ModelComprExpanded, optimResT1, optimResT2, CNOlist,
+tag = NULL)
 }
 \arguments{
   \item{ModelOriginal}{
@@ -26,6 +27,11 @@ The results of the optimisation process at t2 (set this to NA, the t2 optimisati
 }
   \item{CNOlist}{
 The CNOlist on which the optimisation is based
+}
+
+  \item{tag}{
+NULL or string; tells whether you want to prefix filenames with a tag (replaces
+the default behaviour).
 }
 }
 \details{

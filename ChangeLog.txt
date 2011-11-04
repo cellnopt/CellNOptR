@@ -1,3 +1,12 @@
+3d/Nov/2011
+------------
+
+* Update version to 0.99.7
+* Update the vignette to reflect the small changes made in the code (tag/verbose
+option)
+* multicore option added into gaBinaryT1 a revision 211 and removed...Will be
+incorporated after v1.0
+
 31/Oct/2011
 -------------
 
