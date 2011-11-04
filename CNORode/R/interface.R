@@ -12,7 +12,7 @@ function(cnolist, sif, indices, odeParameters, time=1,verbose=0)
 	# cnolist
 	timeSignals <- as.double(cnolist$timeSignals)
 	valueInhibitors <- as.double(t(cnolist$valueInhibitors))
-	valueSignals <- as.double(as.vector(cnolist$valueSignals[[time]]))
+	valueSignals <- as.double(t(cnolist$valueSignals[[time]]))
 	valueStimuli <- as.double(t(cnolist$valueStimuli))
 	nTimes = as.integer(length(cnolist$timeSignals))
 	
