@@ -15,7 +15,6 @@
 #include <math.h>
 #include <string.h>
 
-
 #include <R.h>
 #include <Rinternals.h>
 #include <R_ext/Print.h>
@@ -61,6 +60,8 @@ SEXP sim_logic_ode
 	 int nExperiments=INTEGER(nExperiments_in)[0];
 	 int nTimes=INTEGER(nTimes_in)[0];
 	 int verbose=INTEGER(verbose_in)[0];
+
+	 int experiment_succeed[nExperiments];
 
 	 counter=0;
 	 indexSig=(int*)malloc(nSignals*sizeof(int));
@@ -149,7 +150,6 @@ SEXP sim_logic_ode
 		  timeSig[i]=REAL(timeSignals_in)[i];
 	  }
 
-
 	  // Fill the CNOStructure
 	  tempData.interMat=interMAT;
 	  tempData.notMat=notMAT;
@@ -211,7 +211,7 @@ SEXP sim_logic_ode
 
 	  for (i = 0; i <nExperiments; ++i)
 	  {
-		  simulateODE(data,i,verbose);
+		  experiment_succeed[i]=simulateODE(data,i,verbose);
 	  }
 
 	  //Put the data into a LIST
@@ -226,7 +226,7 @@ SEXP sim_logic_ode
 			  {
 				  for (j = 0; j < nExperiments; ++j)
 				  {
-					  if(tempData.isState[k])
+					  if(tempData.isState[k] && experiment_succeed[j])
 					  	  REAL(arg)[counter++]=simResults[j][i][tempData.state_index[k]];
 				  	  else  REAL(arg)[counter++]=NA_REAL;
 				  }
