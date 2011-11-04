@@ -76,4 +76,19 @@
  * In all other cases (other platforms or static libraries under
  * Windows), the SUNDIALS_EXPORT macro is empty
  */
-#define SUNDIALS_EXPORT __declspec(dllexport)
+
+/* Only windows seem to require a special SUNDIALS export, but we create if/else
+ * for each operating systems for the sake of clarity and future modifications. 
+ * */
+#if defined(_WIN32) || defined(WIN32) || defined(__CYGWIN__) || defined(__MINGW32__) || defined(__BORLANDC__)
+    #define SUNDIALS_EXPORT __declspec(dllexport)
+#elif defined(__linux__)
+    #define SUNDIALS_EXPORT
+#elif defined(__APPLE__) || defined(__MACH__)
+    #define SUNDIALS_EXPORT
+#else
+    #define SUNDIALS_EXPORT
+#endif
+
+
+ 
