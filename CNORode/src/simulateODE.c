@@ -183,7 +183,9 @@ int simulateODE(CNOStructure* data,int exp_num, int verbose)
 		  if (check_flag(&flag, "CVode", 1))
 		  {
 			  if(verbose)fprintf(stderr,"\nSolver failed. . .\n");
-			  break;
+			  N_VDestroy_Serial(y);
+			  CVodeFree(&cvode_mem);
+			  return(0);
 		  }
 		  if(verbose)printf("\n");
 	  }
@@ -193,7 +195,7 @@ int simulateODE(CNOStructure* data,int exp_num, int verbose)
 	  /* Free integrator memory */
 	  CVodeFree(&cvode_mem);
 
-	return(0);
+	return(1);
 }
 
 static int check_flag(void *flagvalue, char *funcname, int opt)
