@@ -28,11 +28,13 @@ int simulateODE(CNOStructure* data,int exp_num, int verbose)
 	realtype t, tout, ti, tf,abstol;
 	N_Vector y;
 	void *cvode_mem;
-	double maxStepSize=0.0;
-	int maxNumSteps=10000;
 	realtype atol=1e-5;
 	realtype reltol=1e-3;
 
+	//Definitions for CVODES 
+	int maxNumSteps=10000; 
+	int maxErrTestFails=50; 
+	
 	cvode_mem = NULL;
 	y = NULL;
 
@@ -156,17 +158,25 @@ int simulateODE(CNOStructure* data,int exp_num, int verbose)
 	 }
 	 if(verbose)printf("Max number of steps: %i\n", maxNumSteps);
 
-	  /* Set maxstepsize */
+    CVodeSetMaxStep(cvode_mem, 100000000);
+    CVodeSetMaxErrTestFails(cvode_mem, 50);
+	 
+	 
+	 
+	 
+	  // Set maxstepsize
+	 /*
 	  flag = CVodeSetMaxStep(cvode_mem, maxStepSize);
 	  if(check_flag(&flag, "CVodeSetMaxStep", 1))
 	  {
 		  if(verbose)printf("\nSolver failed. . .\n");
 		  N_VDestroy_Serial(y);
-		  /* Free integrator memory */
+		  // Free integrator memory
 		  CVodeFree(&cvode_mem);
 		  return(0);
 	  }
-	  if(verbose)printf("Max step size: %f\n", maxStepSize);
+		*/
+	  //if(verbose)printf("Max step size: %f\n", maxStepSize);
 
 	  for (i = 1; i < (*data).nTimes; ++i)
 	  {

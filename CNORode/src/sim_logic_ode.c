@@ -15,6 +15,10 @@
 #include <math.h>
 #include <string.h>
 
+#include <sys/types.h>
+#include <time.h>
+#include <unistd.h>
+
 #include <R.h>
 #include <Rinternals.h>
 #include <R_ext/Print.h>
@@ -168,6 +172,24 @@ SEXP sim_logic_ode
 	  tempData.nInhibitors=nInhibitors;
 	  tempData.nSignals=nSignals;
 	  tempData.nTimes=nTimes;
+	  
+	    time_t  t0, t1; /* time_t is defined on <time.h> and <sys/types.h> as long */
+  clock_t c0, c1; /* clock_t is defined on <time.h> and <sys/types.h> as int */
+
+  long count;
+  double a, b, c;
+
+  Rprintf ("using UNIX function time to measure wallclock time ... \n");
+  Rprintf ("using UNIX function clock to measure CPU time ... \n");
+
+  t0 = time(NULL);
+  c0 = clock();
+
+  Rprintf ("\tbegin (wall):            %ld\n", (long) t0);
+  Rprintf ("\tbegin (CPU):             %d\n", (int) c0);
+
+
+
 
 	  tempData.adjacencyMatrix = getAdjacencyMatrix(tempData.interMat,tempData.nRows,tempData.nCols);
 	  tempData.numInputs = getNumInputs(tempData.adjacencyMatrix,tempData.nRows);
@@ -191,7 +213,7 @@ SEXP sim_logic_ode
 		  if(tempData.isState[i]) counter++;
 
 	  tempData.nStates = counter;
-	  //simResults=(double**)malloc(nExperiments*sizeof(double*));
+	  
 	  simResults=(double***)malloc(nExperiments*sizeof(double**));
 	  for (i = 0; i <nExperiments; ++i)
 	  {
@@ -209,10 +231,27 @@ SEXP sim_logic_ode
 
 	  *data=tempData;
 
+	  t1 = time(NULL);
+  c1 = clock();
+
+  Rprintf("I refer to conversion");
+  Rprintf ("\tend (wall):              %ld\n", (long) t1);
+  Rprintf ("\tend (CPU);               %d\n", (int) c1);
+  Rprintf ("\telapsed wall clock time: %ld\n", (long) (t1 - t0));
+  Rprintf ("\telapsed CPU time:        %f\n", (float) (c1 - c0)/CLOCKS_PER_SEC);
+	  
 	  for (i = 0; i <nExperiments; ++i)
 	  {
 		  experiment_succeed[i]=simulateODE(data,i,verbose);
 	  }
+	  
+t1 = time(NULL);
+  c1 = clock();
+	Rprintf("I refer to simuluation");
+  Rprintf ("\tend (wall):              %ld\n", (long) t1);
+  Rprintf ("\tend (CPU);               %d\n", (int) c1);
+  Rprintf ("\telapsed wall clock time: %ld\n", (long) (t1 - t0));
+  Rprintf ("\telapsed CPU time:        %f\n", (float) (c1 - c0)/CLOCKS_PER_SEC);
 
 	  //Put the data into a LIST
 	  PROTECT(ans = allocVector(VECSXP, nTimes));
