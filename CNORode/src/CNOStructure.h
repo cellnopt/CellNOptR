@@ -33,5 +33,7 @@ typedef struct
 	int* state_index;
 	double *inhibitor_array;
 	double*** sim_results;
+	int*** support_truth_tables;
+	double(*transfer_function)(double,double,double);
 
 }CNOStructure;

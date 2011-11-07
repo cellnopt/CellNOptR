@@ -23,15 +23,21 @@
 #include <Rinternals.h>
 #include <R_ext/Print.h>
 
+double normHill(double x,double n,double k);
+double hill_function(double x,double n,double k);
+double linear_transfer_function(double x,double n,double k);
+
 SEXP sim_logic_ode
 (
-		SEXP interMat_in,			SEXP notMat_in,				SEXP nRows_in,
-		SEXP nCols_in,				SEXP nPars_in,				SEXP timeSignals_in,
-		SEXP valueInhibitors_in,	SEXP valueSignals_in,		SEXP valueStimuli_in,
-		SEXP nTimes_in,				SEXP nExperiments_in,		SEXP nSignals_in,
-		SEXP indexSignals_in,		SEXP nStimuli_in,			SEXP indexStimuli_in,
-		SEXP nInhibitors_in,		SEXP indexInhibitors_in,	SEXP odeParameters_in,
-		SEXP verbose_in
+		SEXP interMat_in,			SEXP notMat_in,				SEXP adjMatrix_in,
+		SEXP nRows_in,				SEXP nCols_in,				SEXP nPars_in,
+		SEXP timeSignals_in,		SEXP valueInhibitors_in,	SEXP valueSignals_in,
+		SEXP valueStimuli_in,		SEXP nTimes_in,				SEXP nExperiments_in,
+		SEXP nSignals_in,			SEXP indexSignals_in,		SEXP nStimuli_in,
+		SEXP indexStimuli_in,		SEXP nInhibitors_in,		SEXP indexInhibitors_in,
+		SEXP odeParameters_in,		SEXP verbose_in,			SEXP transfer_function_in,
+		SEXP reltol_in,				SEXP atol_in,				SEXP maxStepSize_in,
+		SEXP maxNumSteps_in,		SEXP maxErrTestFails_in
 )
 {
 
@@ -45,6 +51,7 @@ SEXP sim_logic_ode
 	 double* timeSig;
 	 int **interMAT;
 	 int **notMAT;
+	 int** adjMatrix;
 	 double *odePARAMETERS;
 	 double **valueSIGNALS;
 	 double **valueINHIBITORS;
@@ -54,6 +61,7 @@ SEXP sim_logic_ode
 	 double* state_array;
 	 double*** simResults;
 	 double* inhibitor_array;
+	 int ***support_truth_tables;
 
 	 int nRows = INTEGER(nRows_in)[0];
 	 int nCols=INTEGER(nCols_in)[0];
@@ -64,6 +72,12 @@ SEXP sim_logic_ode
 	 int nExperiments=INTEGER(nExperiments_in)[0];
 	 int nTimes=INTEGER(nTimes_in)[0];
 	 int verbose=INTEGER(verbose_in)[0];
+	 int transfer_function=(INTEGER)(transfer_function_in)[0];
+	 double reltol=(REAL)(reltol_in)[0];
+	 double atol=(REAL)(atol_in)[0];
+	 double maxStepSize=(REAL)(maxStepSize_in)[0];
+	 int maxNumSteps=(INTEGER)(maxNumSteps_in)[0];
+	 int maxErrTestFails=(INTEGER)(maxErrTestFails_in)[0];
 
 	 int experiment_succeed[nExperiments];
 
@@ -113,6 +127,17 @@ SEXP sim_logic_ode
 		  for (j = 0; j < nCols; j++)
 		  {
 			  notMAT[i][j]=INTEGER(notMat_in)[counter++];
+		  }
+	  }
+
+	  counter=0;
+	  adjMatrix = (int**)malloc(nRows * sizeof(int*));
+	  for (i = 0; i < nRows; i++)
+	  {
+		  adjMatrix[i] = (int*)malloc(nRows*sizeof(int));
+		  for (j = 0; j < nCols; j++)
+		  {
+			  adjMatrix[i][j]=INTEGER(adjMatrix_in)[counter++];
 		  }
 	  }
 
@@ -172,31 +197,13 @@ SEXP sim_logic_ode
 	  tempData.nInhibitors=nInhibitors;
 	  tempData.nSignals=nSignals;
 	  tempData.nTimes=nTimes;
-	  
-	    time_t  t0, t1; /* time_t is defined on <time.h> and <sys/types.h> as long */
-  clock_t c0, c1; /* clock_t is defined on <time.h> and <sys/types.h> as int */
 
-  long count;
-  double a, b, c;
-
-  Rprintf ("using UNIX function time to measure wallclock time ... \n");
-  Rprintf ("using UNIX function clock to measure CPU time ... \n");
-
-  t0 = time(NULL);
-  c0 = clock();
-
-  Rprintf ("\tbegin (wall):            %ld\n", (long) t0);
-  Rprintf ("\tbegin (CPU):             %d\n", (int) c0);
-
-
-
-
-	  tempData.adjacencyMatrix = getAdjacencyMatrix(tempData.interMat,tempData.nRows,tempData.nCols);
+	  //tempData.adjacencyMatrix = getAdjacencyMatrix(tempData.interMat,tempData.nRows,tempData.nCols);
+	  tempData.adjacencyMatrix=adjMatrix;
 	  tempData.numInputs = getNumInputs(tempData.adjacencyMatrix,tempData.nRows);
 
 	  tempData.numBits = getNumBits(tempData.numInputs,tempData.nRows);
 	  tempData.isState = findStates(tempData.adjacencyMatrix,tempData.nRows);
-
 
 	  tempData.truthTables = getTruthTables(tempData.adjacencyMatrix,tempData.interMat,
 	  tempData.notMat,tempData.isState,tempData.numInputs,tempData.numBits,tempData.nRows,tempData.nCols);
@@ -225,33 +232,27 @@ SEXP sim_logic_ode
 		  }
 	  }
 
+
+	  tempData.support_truth_tables= get_support_truth_tables(nRows,tempData.numInputs);
+
 	  tempData.sim_results=simResults;
+
+	  if(transfer_function==1)
+		  tempData.transfer_function = &linear_transfer_function;
+	  else if(transfer_function==2)
+		  tempData.transfer_function = &hill_function;
+	  else
+		  tempData.transfer_function = &normHill;
 
 	  data=malloc(sizeof(tempData));
 
 	  *data=tempData;
 
-	  t1 = time(NULL);
-  c1 = clock();
-
-  Rprintf("I refer to conversion");
-  Rprintf ("\tend (wall):              %ld\n", (long) t1);
-  Rprintf ("\tend (CPU);               %d\n", (int) c1);
-  Rprintf ("\telapsed wall clock time: %ld\n", (long) (t1 - t0));
-  Rprintf ("\telapsed CPU time:        %f\n", (float) (c1 - c0)/CLOCKS_PER_SEC);
-	  
 	  for (i = 0; i <nExperiments; ++i)
-	  {
-		  experiment_succeed[i]=simulateODE(data,i,verbose);
-	  }
+		  experiment_succeed[i]=simulateODE(data,i,verbose,reltol,atol,
+				  maxStepSize,maxNumSteps,maxErrTestFails);
+
 	  
-t1 = time(NULL);
-  c1 = clock();
-	Rprintf("I refer to simuluation");
-  Rprintf ("\tend (wall):              %ld\n", (long) t1);
-  Rprintf ("\tend (CPU);               %d\n", (int) c1);
-  Rprintf ("\telapsed wall clock time: %ld\n", (long) (t1 - t0));
-  Rprintf ("\telapsed CPU time:        %f\n", (float) (c1 - c0)/CLOCKS_PER_SEC);
 
 	  //Put the data into a LIST
 	  PROTECT(ans = allocVector(VECSXP, nTimes));
@@ -275,6 +276,16 @@ t1 = time(NULL);
 	  }
 	  UNPROTECT(1);
 	  //ALL THE DATA IS NOW INSIDE ANS
+
+	  for (i = 0; i < nRows; ++i)
+	  {
+		  for (j = 0; j < pow(2,tempData.numInputs[i]); ++j)
+		  {
+			  free(tempData.support_truth_tables[i][j]);
+		  }
+		  free(tempData.support_truth_tables[i]);
+	  }
+	  free(tempData.support_truth_tables);
 
 	  for (i = 0; i <nExperiments; ++i)
 	  {

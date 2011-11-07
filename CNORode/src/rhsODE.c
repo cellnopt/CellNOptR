@@ -9,7 +9,7 @@
 
 #define Ith(v,i) ( NV_DATA_S(v)[i] )
 
-double normHill(double x,double n,double k);
+
 
 int* decimal2binary(int decimal_value,int nBits);
 
@@ -23,7 +23,6 @@ int rhsODE(realtype t, N_Vector y, N_Vector ydot, void *data)
 	    double* hillFuncValues;
 	    int countState=0;
 	    int inputCount;
-	    int* binary_value;
 
 	    //Loop through every column j in the Graph adjacency matrix
 	    for (j = 0; j <(*myData).nRows; j++)
@@ -43,12 +42,12 @@ int rhsODE(realtype t, N_Vector y, N_Vector ydot, void *data)
 	        		   if((*myData).isState[i])
 	        		   {
 	        			   hillFuncValues[inputCount++]=
-	        					   normHill(Ith(y,(*myData).state_index[i]),nHill,kHill);
+	        					   (*myData).transfer_function(Ith(y,(*myData).state_index[i]),nHill,kHill);
 	        		   }
 	        		   else
 	        		   {
 	        			   hillFuncValues[inputCount++]=
-	        					   normHill((*myData).state_array[i],nHill,kHill);
+	        					   (*myData).transfer_function((*myData).state_array[i],nHill,kHill);
 	        		   }
 	        	   }
 	           }
@@ -59,18 +58,16 @@ int rhsODE(realtype t, N_Vector y, N_Vector ydot, void *data)
 	        	   if ((*myData).truthTables[j][i])
 	        	   {
 	        		   tempProd=1;
-	        		   binary_value = decimal2binary(i,(*myData).numInputs[j]);
 	        		   for (k = 0; k < (*myData).numInputs[j]; k++)
 	        		   {
 
-	        			   if(binary_value[k]==0)
+	        			   if((*myData).support_truth_tables[j][i][k]==0)
 	        			   {
 	        				   tempProd*=(1-hillFuncValues[k]);
 	        			   }
 	        			   else tempProd*=hillFuncValues[k];
 	        		   }
 
-	        		   free(binary_value);
 	        		   Ith(ydot,countState)+=tempProd;
 	        	   }
 	           }

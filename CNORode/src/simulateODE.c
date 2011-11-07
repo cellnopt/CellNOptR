@@ -20,20 +20,19 @@ typedef int rhs_func(realtype t, N_Vector y, N_Vector ydot, void *f_data);
 
 int rhsODE(realtype t, N_Vector y, N_Vector ydot, void *data);
 
-static int check_flag(void *flagvalue, char *funcname, int opt);
+static int check_flag(void *flagvalue, char *funcname, int opt,int verbose);
 
-int simulateODE(CNOStructure* data,int exp_num, int verbose)
+int simulateODE
+(
+		CNOStructure* data,		int exp_num, 			int verbose,
+		double reltol,			double atol,			double maxStepSize,
+		int maxNumSteps,		int maxErrTestFails
+)
 {
 	int i,j,neq,counter,flag, flagr, iout;
-	realtype t, tout, ti, tf,abstol;
+	realtype t, tout, ti, tf;
 	N_Vector y;
 	void *cvode_mem;
-	realtype atol=1e-5;
-	realtype reltol=1e-3;
-
-	//Definitions for CVODES 
-	int maxNumSteps=10000; 
-	int maxErrTestFails=50; 
 	
 	cvode_mem = NULL;
 	y = NULL;
@@ -41,7 +40,7 @@ int simulateODE(CNOStructure* data,int exp_num, int verbose)
 	neq=(*data).nStates;
 
     y = N_VNew_Serial(neq);
-	if (check_flag((void *)y, "N_VNew_Serial", 0))
+	if (check_flag((void *)y, "N_VNew_Serial", 0,verbose))
     {
 		if(verbose)printf("\nSolver failed. . .\n");
 		return(0);
@@ -98,16 +97,18 @@ int simulateODE(CNOStructure* data,int exp_num, int verbose)
 					(*data).state_array[i];
 			(*data).sim_results[exp_num][0][(*data).state_index[i]]=
 					(*data).state_array[i];
+			/*
 			if(verbose)
 			{
 				printf("species number initial value %d",i);
 				printf("\t%f\n",Ith(y,(*data).state_index[i]));
 			}
+			*/
 		}
 	}
 
 	cvode_mem = CVodeCreate(CV_BDF, CV_NEWTON);
-	if (check_flag((void *)cvode_mem, "CVodeCreate", 0)) {
+	if (((void *)cvode_mem, "CVodeCreate", 0,verbose)) {
 		if(verbose)printf("\nSolver failed. . .\n");
 		N_VDestroy_Serial(y);
 		return(0);
@@ -116,7 +117,7 @@ int simulateODE(CNOStructure* data,int exp_num, int verbose)
 	 ti=(*data).timeSignals[0];
 	 tf=(*data).timeSignals[(*data).nTimes-1];
 	  flag = CVodeInit(cvode_mem,*rhsODE, ti, y);
-	 if (check_flag(&flag, "CVodeMalloc", 1))
+	 if ((&flag, "CVodeMalloc", 1,verbose))
 	 {
 		if(verbose)printf("\nSolver failed. . .\n");
 		  N_VDestroy_Serial(y);
@@ -129,7 +130,7 @@ int simulateODE(CNOStructure* data,int exp_num, int verbose)
 
 	/* Set f_data */
 	 flag = CVodeSetUserData(cvode_mem, data);
-	 if(check_flag(&flag, "CVodeSetFdata", 1))
+	 if((&flag, "CVodeSetFdata", 1,verbose))
 	 {
 		 if(verbose)printf("\nSolver failed. . .\n");
 		  N_VDestroy_Serial(y);
@@ -138,17 +139,21 @@ int simulateODE(CNOStructure* data,int exp_num, int verbose)
 		 return(0);
 	 }
 
-	 flag = CVodeSStolerances(cvode_mem, reltol, atol);
-	  if(check_flag(&flag, "CVodeSStolerances", 1)) return(1);
+	 flag = CVodeSStolerances(cvode_mem,(realtype)reltol,(realtype)atol);
+	  if((&flag, "CVodeSStolerances", 1,verbose)) return(1);
 
+	  if(!verbose)
+	  {
+		  flag = CVodeSetErrFile(cvode_mem, NULL);
+	  }
 
 	  flag = CVDense(cvode_mem, neq);
-	  if (check_flag(&flag, "CVDense", 1)) return(1);
+	  if (check_flag(&flag, "CVDense", 1,verbose)) return(1);
 	 if(verbose)printf("CVDENSE Solver Initiated\n");
 
 	 /* Set maxnumsteps */
 	 flag = CVodeSetMaxNumSteps(cvode_mem, maxNumSteps);
-	 if(check_flag(&flag, "CVodeSetMaxNumSteps", 1))
+	 if(check_flag(&flag, "CVodeSetMaxNumSteps", 1,verbose))
 	 {
 		if(verbose)printf("\nSolver failed. . .\n");
 		return(0);
@@ -158,81 +163,66 @@ int simulateODE(CNOStructure* data,int exp_num, int verbose)
 	 }
 	 if(verbose)printf("Max number of steps: %i\n", maxNumSteps);
 
-    CVodeSetMaxStep(cvode_mem, 100000000);
-    CVodeSetMaxErrTestFails(cvode_mem, 50);
+    CVodeSetMaxStep(cvode_mem,(realtype)maxStepSize);
+    CVodeSetMaxErrTestFails(cvode_mem, maxErrTestFails);
 	 
-	 
-	 
-	 
-	  // Set maxstepsize
-	 /*
-	  flag = CVodeSetMaxStep(cvode_mem, maxStepSize);
-	  if(check_flag(&flag, "CVodeSetMaxStep", 1))
-	  {
-		  if(verbose)printf("\nSolver failed. . .\n");
-		  N_VDestroy_Serial(y);
-		  // Free integrator memory
-		  CVodeFree(&cvode_mem);
-		  return(0);
-	  }
-		*/
-	  //if(verbose)printf("Max step size: %f\n", maxStepSize);
 
-	  for (i = 1; i < (*data).nTimes; ++i)
-	  {
-		  tout=(*data).timeSignals[i];
-		  flag = CVode(cvode_mem, tout, y, &tf, CV_NORMAL);
+    for (i = 1; i < (*data).nTimes; ++i)
+    {
+    	tout=(*data).timeSignals[i];
+    	flag = CVode(cvode_mem, tout, y, &tf, CV_NORMAL);
 
-		  for (j = 0; j < (*data).nStates; j++)
-		  {
-			//  (*data).sim_results[exp_num][i][j]= (double) Ith(y,j);
-			  (*data).sim_results[exp_num][i][j]= (double)Ith(y,j);
-			if(verbose)printf("%f\t",Ith(y,j));
-		  }
+    	for (j = 0; j < (*data).nStates; j++)
+    	{
+    		(*data).sim_results[exp_num][i][j]= (double)Ith(y,j);
+    		if(verbose)printf("%f\t",Ith(y,j));
+    	}
 
-		  if (check_flag(&flag, "CVode", 1))
-		  {
-			  if(verbose)fprintf(stderr,"\nSolver failed. . .\n");
-			  N_VDestroy_Serial(y);
-			  CVodeFree(&cvode_mem);
-			  return(0);
-		  }
-		  if(verbose)printf("\n");
-	  }
-	  if(verbose)printf("\n");
+    	if (check_flag(&flag, "CVode", 1,verbose))
+    	{
+    		if(verbose)fprintf(stderr,"\nSolver failed. . .\n");
+    		N_VDestroy_Serial(y);
+    		CVodeFree(&cvode_mem);
+    		return(0);
+    	}
+    	if(verbose)printf("\n");
+    }
+    if(verbose)printf("\n");
 
-	  N_VDestroy_Serial(y);
-	  /* Free integrator memory */
-	  CVodeFree(&cvode_mem);
+    N_VDestroy_Serial(y);
+    /* Free integrator memory */
+    CVodeFree(&cvode_mem);
 
-	return(1);
+    return(1);
 }
 
-static int check_flag(void *flagvalue, char *funcname, int opt)
+static int check_flag(void *flagvalue, char *funcname, int opt,int verbose)
 {
-  int *errflag;
+	int *errflag;
 
-  /* Check if SUNDIALS function returned NULL pointer - no memory allocated */
-  if (opt == 0 && flagvalue == NULL) {
-    fprintf(stderr, "\nSUNDIALS_ERROR: %s() failed - returned NULL pointer\n\n",
-	    funcname);
-    return(1); }
+	/* Check if SUNDIALS function returned NULL pointer - no memory allocated */
+	if (opt == 0 && flagvalue == NULL) {
+		if(verbose)fprintf(stderr, "\nSUNDIALS_ERROR: %s() failed - returned NULL pointer\n\n",funcname);
+		return(1); }
 
-  /* Check if flag < 0 */
-  else if (opt == 1) {
-    errflag = (int *) flagvalue;
-    if (*errflag < 0) {
-      fprintf(stderr, "\nSUNDIALS_ERROR: %s() failed with flag = %d\n\n",
-	      funcname, *errflag);
-      return(1); }}
+	/* Check if flag < 0 */
+	else if (opt == 1)
+	{
+		errflag = (int *) flagvalue;
+		if (*errflag < 0)
+		{	if(verbose)fprintf(stderr, "\nSUNDIALS_ERROR: %s() failed with flag = %d\n\n",funcname, *errflag);
+			return(1);
+		}
+	}
 
-  /* Check if function returned NULL pointer - no memory allocated */
-  else if (opt == 2 && flagvalue == NULL) {
-    fprintf(stderr, "\nMEMORY_ERROR: %s() failed - returned NULL pointer\n\n",
-	    funcname);
-    return(1); }
+	/* Check if function returned NULL pointer - no memory allocated */
+	else if (opt == 2 && flagvalue == NULL)
+	{
+		if(verbose)fprintf(stderr, "\nMEMORY_ERROR: %s() failed - returned NULL pointer\n\n",funcname);
+		return(1);
+	}
 
-  return(0);
+	return(0);
 }
 
 
