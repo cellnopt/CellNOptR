@@ -36,7 +36,7 @@ sim=simulator(cnolist,s,ode_parameters$parValues)
 value_signals<-lapply(sim,function(x) x[,indices$signals]);
 
 plotCNOlist(cnolist)
-windows();
+#windows();
 cnolist$valueSignals=value_signals;
 plotCNOlist(cnolist)
 
