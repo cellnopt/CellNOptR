@@ -80,7 +80,6 @@ SEXP sim_logic_ode
 	 int maxErrTestFails=(INTEGER)(maxErrTestFails_in)[0];
 
 	 int experiment_succeed[nExperiments];
-
 	 counter=0;
 	 indexSig=(int*)malloc(nSignals*sizeof(int));
 	 for (i = 0; i < nSignals; i++)
@@ -135,7 +134,7 @@ SEXP sim_logic_ode
 	  for (i = 0; i < nRows; i++)
 	  {
 		  adjMatrix[i] = (int*)malloc(nRows*sizeof(int));
-		  for (j = 0; j < nCols; j++)
+		  for (j = 0; j < nRows; j++)
 		  {
 			  adjMatrix[i][j]=INTEGER(adjMatrix_in)[counter++];
 		  }

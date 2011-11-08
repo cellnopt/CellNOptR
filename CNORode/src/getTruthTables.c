@@ -10,8 +10,6 @@
 #include <R.h>
 int* decimal2binary(int decimal_value,int nBits);
 
-
-
 int** getTruthTables(int** adjMat,int** interMat,int** notMat,
 		int* isState,int* nInputs,int *nBits,int nRows,int nCols)
 {
@@ -50,7 +48,6 @@ int** getTruthTables(int** adjMat,int** interMat,int** notMat,
 				miniTermPositions[i][counter1++]=j;
 		}
 	}
-
 	//Find the inputs to these miniterms. This info is
 	//the adjacency matrix
 	for (j = 0; j < nRows; j++)
@@ -82,6 +79,7 @@ int** getTruthTables(int** adjMat,int** interMat,int** notMat,
 		}
 	}
 
+
 	//These should be ordered according to the adjacency matrix
 	//We iterate through columns first(targets). See definition of adjacency
 	//Matrix in case of doubt
@@ -91,7 +89,6 @@ int** getTruthTables(int** adjMat,int** interMat,int** notMat,
 		{
 			for (j = 0; j < nInputs[i];j++)
 			{
-
 				input=miniTermInputs[i][j];
 				for (k = 0; k < nMiniTerms[i];k++)
 				{
