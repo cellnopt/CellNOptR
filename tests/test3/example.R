@@ -60,9 +60,21 @@ plot_fit_ode_simulation<-function
 			ode_parameters,indices,time,verbose,transfer_function,	
 			reltol,atol=,maxStepSize=Inf,maxNumSteps,maxErrTestsFails=50);
 	
+	times=cnolist$timeSignals;
+	expResults=cnolist$valueSignals;  
+	namesSignals=cnolist$namesSignals;
+	namesCues=c(cnolist$namesStimuli,cnolist$namesInhibitors);
+	
+	valueCues=cbind(cnolist$valueStimuli,cnolist$valueInhibitors)
+	valueCues=as.matrix(valueCues);
+	valueCues[which(valueCues>0)]=1;
+	names(valueCues)=namesCues;
+	
+	plotOptimResults(SimResults=sim_data,expResults=expResults,
+			times=times,namesCues=namesCues,namesSignals=namesSignals,
+			valueCues=valueCues); 
+	
 }
-
-
 
 library(CellNOptR)
 #install.packages("CNORode_1.0.zip",repos=NULL);
@@ -96,6 +108,7 @@ indices <- indexFinder(cnolist, s, verbose = TRUE)
 #plotCNOlist(cnolist);
 
 #res=get_logic_based_ode_data_simulation(cnolist,s)
-res=get_logic_based_ode_model_simulation(cnolist,s)
+#res=get_logic_based_ode_model_simulation(cnolist,s)
+plot_fit_ode_simulation(cnolist,s);
 #plotCNOlistLargePDF(cnolist,"simulated.pdf",nsplit=10)
 
