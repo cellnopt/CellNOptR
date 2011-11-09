@@ -14,6 +14,7 @@
 
 library(CellNOptR)
 #install.packages("CNORode_1.0.zip",repos=NULL);
+
 #setwd("tests/test3");
 library("CNORode")
 
@@ -22,21 +23,24 @@ m = readMIDAS('initialData.csv')
 cnolist = makeCNOlist(m, subfield=FALSE)
 
 indices <- indexFinder(cnolist, s, verbose = TRUE)
-modelNCNOindices <- findNONC(s, indices, verbose = TRUE)
-s <- cutNONC(s, modelNCNOindices);
+#modelNCNOindices <- findNONC(s, indices, verbose = TRUE)
+#s <- cutNONC(s, modelNCNOindices);
 
-#results=logic_based_ode_parameters_estimation_SSm(cnolist,s)
+#results=logic_based_ode_parameters_estimation_SSm(cnolist,s,ndiverse=10,dim_refset=6)
 #logic_based_ode_MINLP_SSm(cnolist,s,ndiverse=10,dim_refset=6)
 
 adjMat=incidence2Adjacency(s);
 ode_parameters=makeParameterList(adjMat,s$namesSpecies);
-simulator<-get_simulation_function(cnolist,s,adjMat,indices,ode_parameters,reltol=1e-3,atol=1e-5);
+simulator<-get_simulation_function(cnolist,s,adjMat,indices,ode_parameters,reltol=1e-6,atol=1e-6);
 
 sim=simulator(cnolist,s,ode_parameters$parValues)
 value_signals<-lapply(sim,function(x) x[,indices$signals]);
 
-plotCNOlist(cnolist)
-#windows();
+print(unlist(sum((unlist(cnolist$valueSignals)-unlist(value_signals))^2)));
+#plotCNOlistLargePDF(cnolist,"original.pdf",nsplit=10)
+plotCNOlist(cnolist);
 cnolist$valueSignals=value_signals;
-plotCNOlist(cnolist)
+windows();
+plotCNOlist(cnolist);
+#plotCNOlistLargePDF(cnolist,"simulated.pdf",nsplit=10)
 
