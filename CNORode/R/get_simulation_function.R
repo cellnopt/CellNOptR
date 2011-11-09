@@ -1,22 +1,30 @@
-get_simulation_function <-
-function(cnolist1,model1,adjMatrix1,
-		indices1, odeParameters1,time1=1,verbose1=0,transfer_function1=3,
-		reltol1=1e-4,atol1=1e-3,maxStepSize1=Inf,maxNumSteps1=100000,maxErrTestsFails1=50)
+get_simulation_function <-function
+(
+		cnolist1,				model1,					adjMatrix1,
+		indices1, 				odeParameters1,			time1=1,
+		verbose1=0,				transfer_function1=3,	reltol1=1e-4,	
+		atol1=1e-3,				maxStepSize1=Inf,		maxNumSteps1=100000,
+		maxErrTestsFails1=50
+)
 {
 				
-	simulate_logic_based_ode_model <- 
-	function(cnolist, sif, odeParameters,indices=indices1,adjMatrix=adjMatrix1, time=time1,verbose=verbose1, 
-	transfer_function=transfer_function1,reltol=reltol1,atol=atol1,maxStepSize=maxStepSize1,
-	maxNumSteps=maxNumSteps1,maxErrTestsFails=maxErrTestsFails1)
+	simulate_logic_based_ode_model <- function
+	(
+			cnolist,	 						sif, 									odeParameters,
+			indices=indices1,					adjMatrix=adjMatrix1, 					time=time1,
+			verbose=verbose1, 					transfer_function=transfer_function1,	reltol=reltol1,
+			atol=atol1,							maxStepSize=maxStepSize1,				maxNumSteps=maxNumSteps1,
+			maxErrTestsFails=maxErrTestsFails1
+	)
 	{	 
 		interMat <- as.integer(as.vector(t(sif$interMat)))
 		notMat <- as.integer(as.vector(t(sif$notMat)))
+		print(adjMatrix)
 		adjMatrix <- as.integer(as.vector(t(adjMatrix)))
 		nRows <- as.integer(dim(sif$interMat)[1])
 		
 		nCols <- as.integer(dim(sif$interMat)[2])
 		verbose=as.integer(verbose);
-		# ode
 	
 		nPars <- as.integer(length(odeParameters))
 	

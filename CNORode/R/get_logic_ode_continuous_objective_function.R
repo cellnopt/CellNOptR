@@ -1,22 +1,29 @@
 get_logic_ode_continuous_objective_function <-
-function(cnolist1,model1,ode_parameters1,indices1,
-		time1=1,verbose1=0, transfer_function1=3,reltol1=1e-4,atol1=1e-3,maxStepSize1=Inf,maxNumSteps1=100000,
-		maxErrTestsFails1=50)
+function
+(
+		cnolist,				model,					ode_parameters,	
+		indices,				time=1,					verbose=0, 
+		transfer_function=3,	reltol=1e-4,			atol=1e-3,
+		maxStepSize=Inf,		maxNumSteps=100000,		maxErrTestsFails=50
+)
 {
-	adjMatrix1=incidence2Adjacency(model1);
-	sim_function1=get_simulation_function(cnolist1,model1,adjMatrix=adjMatrix1,
-			indices=indices1, odeParameters=ode_parameters1$parValues, time=time1,verbose=verbose1,
-			transfer_function=transfer_function1,reltol=reltol1,atol=atol1,maxStepSize=maxStepSize1,
-			maxNumSteps=maxNumSteps1,maxErrTestsFails=maxErrTestsFails1)
+	adjMatrix=incidence2Adjacency(model);
+	sim_function=get_simulation_function(cnolist,model,adjMatrix1=adjMatrix,
+			indices1=indices, odeParameters1=ode_parameters$parValues, time1=time,verbose1=verbose,
+			transfer_function1=transfer_function,reltol1=reltol,atol1=atol,maxStepSize1=maxStepSize,
+			maxNumSteps1=maxNumSteps,maxErrTestsFails1=maxErrTestsFails)
 
-	logic_ode_continuous_objective_function<-
-			function(x,cnolist=cnolist1,model=model1,adjMatrix=adjMatrix1,
-					indices=indices1,ode_parameters=ode_parameters1,sim_function=sim_function1)
+	logic_ode_continuous_objective_function<-function
+	(
+			x,							cnolist1=cnolist,		model1=model,
+			adjMatrix1=adjMatrix,		indices1=indices,		ode_parameters1=ode_parameters,
+			sim_function1=sim_function
+	)
 	{
-		ode_parameters$parValues[ode_parameters$index_opt_pars]=x;
-		sim=sim_function(cnolist,model,ode_parameters$parValues);
-		sim<-unlist(lapply(sim,function(x) x[,indices$signals]));
-		measured_values=unlist(cnolist$valueSignals);                                                    
+		ode_parameters1$parValues[ode_parameters1$index_opt_pars]=x;
+		sim=sim_function1(cnolis1t,model1,ode_parameters1$parValues);
+		sim<-unlist(lapply(sim,function(x) x[,indices1$signals]));
+		measured_values=unlist(cnolist1$valueSignals);                                                    
 		NaNs=which(is.na(sim));
 		not_NaNs=which(!is.na(sim));
 		error=sum((sim[not_NaNs]-measured_values[not_NaNs])^2);
