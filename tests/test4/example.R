@@ -121,7 +121,7 @@ logic_based_ode_continous_PSO <-function
 install.packages("CNORode_1.0.tar.gz");
 #source("psoptim.R")
 #setwd("tests/test3");
-#library("CNORode")
+library("CNORode")
 
 #s = readSif('model.sif')
 #m = readMIDAS('initialData.csv')
