@@ -118,7 +118,7 @@ logic_based_ode_continous_PSO <-function
 }
 
 #library(CellNOptR)
-install.packages("CNORode_1.0.tar.gz");
+install.packages("CNORode_1.0.tar.gz",type="source");
 #source("psoptim.R")
 #setwd("tests/test3");
 library("CNORode")
