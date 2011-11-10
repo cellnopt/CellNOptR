@@ -118,12 +118,30 @@ logic_based_ode_continous_PSO <-function
 }
 
 #library(CellNOptR)
-setwd("..")
-setwd("..")
-install.packages("CNORode_1.0.tar.gz",type="source");
+#install.packages("CNORode_1.0.tar.gz",type="source");
 #source("psoptim.R")
-setwd("tests/test4");
+#setwd("tests/test4");
 library("CNORode")
+
+.Last <- function(){
+	if (is.loaded("mpi_initialize")){
+		if (mpi.comm.size(1) > 0){
+			print("Please use mpi.close.Rslaves() to close slaves.")
+			mpi.close.Rslaves()
+		}
+		print("Please use mpi.quit() to quit R")
+		.Call("mpi_finalize")
+	}
+}
+
+.Last()
+mpi.remote.exec(paste("I am",mpi.comm.rank(),"of",mpi.comm.size()))
+
+
+
+
+
+
 
 #s = readSif('model.sif')
 #m = readMIDAS('initialData.csv')
