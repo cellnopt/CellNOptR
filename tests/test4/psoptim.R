@@ -1,60 +1,4 @@
-get_iter_function<-function()
-{	
-	compute_particle<-function(p.w0,p.w1,p.maxit,p.maxf,p.c.p,p.c.g,p.vmax,p.p,p.hybrid,f,f.p,f.x,i,V,X,P,i.best,links,init.links,stats.iter,stats.feval,npar,lower,upper,fn1)
-	{
-		nevals=0;
-		if (p.p==1){
-			j <- i.best
-		}
-		else{
-			j <- which(links[,i])[which.min(f.p[links[,i]])]; # best informant
-		}
-		
-		temp <- (p.w0+(p.w1-p.w0)*max(stats.iter/p.maxit,stats.feval/p.maxf))
-		V[,i] <- temp*V[,i] # exploration tendency
-		V[,i] <- V[,i]+runif(npar,0,p.c.p)*(P[,i]-X[,i]) # exploitation
-		if (i!=j) V[,i] <- V[,i]+runif(npar,0,p.c.g)*(P[,j]-X[,i])
-		if (!is.na(p.vmax)) {
-			temp <- norm(V[,i])
-			if (temp>p.vmax) V[,i] <- (p.vmax/temp)*V[,i]
-		}
-		X[,i] <- X[,i]+V[,i]
-		## Check bounds
-		temp <- X[,i]<lower
-		if (any(temp)) {
-			X[temp,i] <- lower[temp]
-			V[temp,i] <- 0
-		}
-		temp <- X[,i]>upper
-		if (any(temp)) {
-			X[temp,i] <- upper[temp]
-			V[temp,i] <- 0
-		}
-		## Evaluate function
-		if (p.hybrid) {
-			temp <- optim(X[,i],fn,gr,...,method="L-BFGS-B",lower=lower,
-					upper=upper,control=p.hcontrol)
-			V[,i] <- V[,i]+temp$par-X[,i] # disregards any v.max imposed
-			X[,i] <- temp$par
-			f.x[i] <- temp$value
-			nevals <- nevals+as.integer(temp$counts[1])
-		} else {
-			f.x[i] <- fn1(X[,i])
-			nevals <- nevals+1
-		}
-		
-		
-		res=list();
-		res$V=V;
-		res$X=X;
-		res$P=P;
-		res$f.x=f.x;
-		res$f.p=f.p;
-		res$nevals=nevals;
-		return(res);
-	}
-	return(compute_particle);
-}
+
 
 
 psoptim <- function (par, fn, gr = NULL, ..., lower=-1, upper=1,
@@ -63,9 +7,7 @@ psoptim <- function (par, fn, gr = NULL, ..., lower=-1, upper=1,
   mrunif <- function(n,m,lower,upper) {
     return(matrix(runif(n*m,0,1),nrow=n,ncol=m)*(upper-lower)+lower)
   }
-  iter_function<-get_iter_function();
   
-  library(doSMP);
 
   norm <- function(x) sqrt(sum(x*x))
   npar <- length(par)
@@ -171,17 +113,11 @@ psoptim <- function (par, fn, gr = NULL, ..., lower=-1, upper=1,
 
 	  temp_res=list();
 	  ##################################################################################
-	  w <- startWorkers(workerCount = 4)
-	  registerDoSMP(w)
-	 
-      foreach(i=index)%dopar%
+      for(i in index)#%%%dopar%
 	  {
-		  library(CNORode)
-		  	print(i);
-        	temp_res[[i]]=iter_function(p.w0,p.w1,p.maxit,p.maxf,p.c.p,p.c.g,p.vmax,p.p,p.hybrid,f,f.p,f.x,i,V,X,P,i.best,links,init.links,stats.iter,stats.feval,npar,lower,upper,fn1);
+        	temp_res[[i]]=compute_particle(p.w0,p.w1,p.maxit,p.maxf,p.c.p,p.c.g,p.vmax,p.p,p.hybrid,f,f.p,f.x,i,V,X,P,i.best,links,init.links,stats.iter,stats.feval,npar,lower,upper,fn1);
         	if (stats.feval>=p.maxf) break
       }
-	stopWorkers(w)
 	  for (i in index) 
 	  {
 		  f.x[i]=temp_res[[i]]$f.x[i];
@@ -280,4 +216,58 @@ setMethod(f="psoptim",
                        time=t))
           })
   
+  compute_particle<-function(p.w0,p.w1,p.maxit,p.maxf,p.c.p,p.c.g,p.vmax,p.p,p.hybrid,f,f.p,f.x,i,V,X,P,i.best,links,init.links,stats.iter,stats.feval,npar,lower,upper,fn1)
+  {
+	  nevals=0;
+	  if (p.p==1){
+		  j <- i.best
+	  }
+	  else{
+		  j <- which(links[,i])[which.min(f.p[links[,i]])]; # best informant
+	  }
+	  
+	  temp <- (p.w0+(p.w1-p.w0)*max(stats.iter/p.maxit,stats.feval/p.maxf))
+	  V[,i] <- temp*V[,i] # exploration tendency
+	  V[,i] <- V[,i]+runif(npar,0,p.c.p)*(P[,i]-X[,i]) # exploitation
+	  if (i!=j) V[,i] <- V[,i]+runif(npar,0,p.c.g)*(P[,j]-X[,i])
+	  if (!is.na(p.vmax)) {
+		  temp <- norm(V[,i])
+		  if (temp>p.vmax) V[,i] <- (p.vmax/temp)*V[,i]
+	  }
+	  X[,i] <- X[,i]+V[,i]
+	  ## Check bounds
+	  temp <- X[,i]<lower
+	  if (any(temp)) {
+		  X[temp,i] <- lower[temp]
+		  V[temp,i] <- 0
+	  }
+	  temp <- X[,i]>upper
+	  if (any(temp)) {
+		  X[temp,i] <- upper[temp]
+		  V[temp,i] <- 0
+	  }
+	  ## Evaluate function
+	  if (p.hybrid) {
+		  temp <- optim(X[,i],fn,gr,...,method="L-BFGS-B",lower=lower,
+				  upper=upper,control=p.hcontrol)
+		  V[,i] <- V[,i]+temp$par-X[,i] # disregards any v.max imposed
+		  X[,i] <- temp$par
+		  f.x[i] <- temp$value
+		  nevals <- nevals+as.integer(temp$counts[1])
+	  } else {
+		  f.x[i] <- fn1(X[,i])
+		  nevals <- nevals+1
+	  }
+	  
+	  
+	  res=list();
+	  res$V=V;
+	  res$X=X;
+	  res$P=P;
+	  res$f.x=f.x;
+	  res$f.p=f.p;
+	  res$nevals=nevals;
+	  return(res);
+	  
+  }
  

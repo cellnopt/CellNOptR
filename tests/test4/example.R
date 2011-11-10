@@ -118,9 +118,10 @@ logic_based_ode_continous_PSO <-function
 }
 
 #library(CellNOptR)
+setwd("..")
 install.packages("CNORode_1.0.tar.gz",type="source");
 #source("psoptim.R")
-#setwd("tests/test3");
+setwd("tests/test4");
 library("CNORode")
 
 #s = readSif('model.sif')
