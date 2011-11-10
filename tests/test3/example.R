@@ -105,17 +105,17 @@ logic_based_ode_continous_PSO <-function
 	
 }
 
-library(CellNOptR)
-#install.packages("CNORode_1.0.zip",repos=NULL);
-source("psoptim.R")
+#library(CellNOptR)
+install.packages("CNORode_1.0.zip",repos=NULL);
+#source("psoptim.R")
 #setwd("tests/test3");
-library("CNORode")
+#library("CNORode")
 
-s = readSif('model.sif')
-m = readMIDAS('initialData.csv')
-cnolist = makeCNOlist(m, subfield=FALSE)
+#s = readSif('model.sif')
+#m = readMIDAS('initialData.csv')
+#cnolist = makeCNOlist(m, subfield=FALSE)
 
-indices <- indexFinder(cnolist, s, verbose = TRUE)
+#indices <- indexFinder(cnolist, s, verbose = TRUE)
 #modelNCNOindices <- findNONC(s, indices, verbose = TRUE)
 #s <- cutNONC(s, modelNCNOindices);
 
@@ -140,4 +140,4 @@ indices <- indexFinder(cnolist, s, verbose = TRUE)
 #res=get_logic_based_ode_model_simulation(cnolist,s)
 #plot_fit_ode_simulation(cnolist,s);
 #plotCNOlistLargePDF(cnolist,"simulated.pdf",nsplit=10)
-print(system.time(logic_based_ode_continous_PSO(cnolist,s,maxeval=500)))
+#print(system.time(logic_based_ode_continous_PSO(cnolist,s,maxeval=500)))
