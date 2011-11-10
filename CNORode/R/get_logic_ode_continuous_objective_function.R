@@ -21,7 +21,7 @@ function
 	)
 	{
 		ode_parameters1$parValues[ode_parameters1$index_opt_pars]=x;
-		sim=sim_function1(cnolis1t,model1,ode_parameters1$parValues);
+		sim=sim_function1(cnolist1,model1,ode_parameters1$parValues);
 		sim<-unlist(lapply(sim,function(x) x[,indices1$signals]));
 		measured_values=unlist(cnolist1$valueSignals);                                                    
 		NaNs=which(is.na(sim));

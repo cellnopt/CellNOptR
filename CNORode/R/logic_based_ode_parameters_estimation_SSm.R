@@ -1,5 +1,9 @@
-logic_based_ode_parameters_estimation_SSm <-
-function(cnolist,model,ode_parameters=NULL,maxeval=Inf,maxtime=100,ndiverse=NULL,dim_refset=NULL)
+logic_based_ode_parameters_estimation_SSm <-function
+(
+		cnolist,			model,			ode_parameters=NULL,
+		maxeval=Inf,		maxtime=100,	ndiverse=NULL,
+		dim_refset=NULL
+)
 {
 	library(eSSmR)
 	library(Rsolnp)

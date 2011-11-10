@@ -19,7 +19,6 @@ get_simulation_function <-function
 	{	 
 		interMat <- as.integer(as.vector(t(sif$interMat)))
 		notMat <- as.integer(as.vector(t(sif$notMat)))
-		print(adjMatrix)
 		adjMatrix <- as.integer(as.vector(t(adjMatrix)))
 		nRows <- as.integer(dim(sif$interMat)[1])
 		

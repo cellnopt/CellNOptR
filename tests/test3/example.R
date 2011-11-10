@@ -19,7 +19,7 @@ get_logic_based_ode_model_simulation<-function
 )
 {
 	adjMat=incidence2Adjacency(model);
-	print(adjMat)
+z
 	if(is.null(indices))indices <- indexFinder(cnolist,model,verbose=FALSE);
 	if(is.null(ode_parameters))ode_parameters=makeParameterList(adjMat,model$namesSpecies);
 	sim_function=get_simulation_function(cnolist,model,adjMat,
@@ -76,9 +76,38 @@ plot_fit_ode_simulation<-function
 	
 }
 
+logic_based_ode_continous_PSO <-function
+(
+		cnolist,				model,			ode_parameters=NULL,
+		maxeval=Inf,			maxtime=100,	swarm_size=10,	
+		exploration_w=c(1,0),	hybrid=FALSE
+)
+{
+
+	if(is.null(ode_parameters))
+	{
+		adjMat=incidence2Adjacency(model);
+		ode_parameters=makeParameterList(adjMat,model$namesSpecies,random=TRUE);
+	}
+	
+	f_obj<-get_logic_ode_continuous_objective_function(cnolist,
+			model,ode_parameters,indices);
+	x_L <- ode_parameters$LB[ode_parameters$index_opt_pars];
+	x_U <- ode_parameters$UB[ode_parameters$index_opt_pars];
+	x_0<- ode_parameters$parValues[ode_parameters$index_opt_pars];
+	control=list();
+	control$maxf=maxeval;
+	control$abstol=0;
+	control$s=swarm_size;
+	control$trace=1;
+	res=psoptim(x_0,f_obj,lower=x_L,upper=x_U,control=control)
+	return(res);
+	
+}
+
 library(CellNOptR)
 #install.packages("CNORode_1.0.zip",repos=NULL);
-
+source("psoptim.R")
 #setwd("tests/test3");
 library("CNORode")
 
@@ -109,6 +138,6 @@ indices <- indexFinder(cnolist, s, verbose = TRUE)
 
 #res=get_logic_based_ode_data_simulation(cnolist,s)
 #res=get_logic_based_ode_model_simulation(cnolist,s)
-plot_fit_ode_simulation(cnolist,s);
+#plot_fit_ode_simulation(cnolist,s);
 #plotCNOlistLargePDF(cnolist,"simulated.pdf",nsplit=10)
-
+print(system.time(logic_based_ode_continous_PSO(cnolist,s,maxeval=500)))
