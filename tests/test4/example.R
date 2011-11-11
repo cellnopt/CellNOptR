@@ -23,7 +23,7 @@
 
 # First read the MIDAS and SIF file to get some data
 get_logic_based_ode_model_simulation<-function
-		(
+(
 		cnolist,				model,					ode_parameters=NULL,	
 		indices=NULL,			time=1,					verbose=0, 
 		transfer_function=3,	reltol=1e-4,			atol=1e-3,	
@@ -31,43 +31,49 @@ get_logic_based_ode_model_simulation<-function
 )
 {
 	adjMat=incidence2Adjacency(model);
-	z
 	if(is.null(indices))indices <- indexFinder(cnolist,model,verbose=FALSE);
 	if(is.null(ode_parameters))ode_parameters=makeParameterList(adjMat,model$namesSpecies);
 	sim_function=get_simulation_function(cnolist,model,adjMat,
-			indices1=indices, odeParameters1=ode_parameters1$parValues, time1=time,verbose1=verbose,
-			transfer_function1=transfer_function,reltol1=reltol,atol1=atol,maxStepSize1=maxStepSize,
-			maxNumSteps1=maxNumSteps,maxErrTestsFails1=maxErrTestsFails);
+			indices, ode_parameters1$parValues, time,verbose,
+			transfer_function,reltol,atol,maxStepSize,
+			maxNumSteps,maxErrTestsFails);
 	return(sim_function(cnolist,model,ode_parameters$parValues));
 }
 
 get_logic_based_ode_data_simulation<-function
-		(
+(
 		cnolist,				model,					ode_parameters=NULL,	
 		indices=NULL,			time=1,					verbose=0, 
 		transfer_function=3,	reltol=1e-4,			atol=1e-3,	
 		maxStepSize=Inf,		maxNumSteps=100000,		maxErrTestsFails=50
 )
 {
-	adjMat=incidence2Adjacency(model);
+	adjMatrix=incidence2Adjacency(model);
 	if(is.null(indices))indices <- indexFinder(cnolist,model,verbose=FALSE);
-	if(is.null(ode_parameters))ode_parameters=makeParameterList(adjMat,model$namesSpecies);
+	if(is.null(ode_parameters))ode_parameters=makeParameterList(adjMatrix,model$namesSpecies);
 	sim_function=get_simulation_function(cnolist,model,adjMat,
 			indices1=indices, odeParameters1=ode_parameters1$parValues, time1=time,verbose1=verbose,
 			transfer_function1=transfer_function,reltol1=reltol,atol1=atol,maxStepSize1=maxStepSize,
 			maxNumSteps1=maxNumSteps,maxErrTestsFails1=maxErrTestsFails);
 	sim=sim_function(cnolist,model,ode_parameters$parValues);
-	return(lapply(sim,function(x) x[,indices$signals]));
+	sim=lapply(sim,function(x) x[,indices$signals]);
+	return(sim);
 }
 
-plot_fit_ode_simulation<-function
-		(
+simulate_and_plot_ode_fitness<-function
+(
 		cnolist,				model,					ode_parameters=NULL,	
-		indices=NULL,			time=1,					verbose=0, 
-		transfer_function=3,	reltol=1e-4,			atol=1e-3,	
-		maxStepSize=Inf,		maxNumSteps=100000,		maxErrTestsFails=50
+		indices=NULL,			adjMatrix=NULL,			time=1,					
+		verbose=0, 				transfer_function=3,	reltol=1e-4,			
+		atol=1e-3,				maxStepSize=Inf,		maxNumSteps=100000,
+		maxErrTestsFails=50
 )
 {
+	
+	if(is.null(indices))indices=indexFinder(cnolist,model);
+	if(is.null(adjMatrix))adjMatrix=incidence2Adjacency(model);
+	if(is.null(ode_parameters))ode_parameters=makeParameterList(adjMatrix,model$namesSpecies);
+	
 	sim_data=get_logic_based_ode_data_simulation(cnolist,model,
 			ode_parameters,indices,time,verbose,transfer_function,	
 			reltol,atol=,maxStepSize=Inf,maxNumSteps,maxErrTestsFails=50);
@@ -77,7 +83,7 @@ plot_fit_ode_simulation<-function
 	namesSignals=cnolist$namesSignals;
 	namesCues=c(cnolist$namesStimuli,cnolist$namesInhibitors);
 	
-	valueCues=cbind(cnolist$valueStimuli,cnolist$valueInhibitors)
+	valueCues=cbind(cnolist$valueStimuli,cnolist$valueInhibitors);
 	valueCues=as.matrix(valueCues);
 	valueCues[which(valueCues>0)]=1;
 	names(valueCues)=namesCues;
@@ -89,7 +95,7 @@ plot_fit_ode_simulation<-function
 }
 
 logic_based_ode_continous_PSO <-function
-		(
+(
 		cnolist,				model,			ode_parameters=NULL,
 		maxeval=Inf,			maxtime=100,	swarm_size=4,	
 		exploration_w=c(1,0),	hybrid=FALSE
@@ -117,37 +123,18 @@ logic_based_ode_continous_PSO <-function
 	
 }
 
-#library(CellNOptR)
+library(CellNOptR)
 #install.packages("CNORode_1.0.tar.gz",type="source");
 #source("psoptim.R")
 #setwd("tests/test4");
 library("CNORode")
 
-.Last <- function(){
-	if (is.loaded("mpi_initialize")){
-		if (mpi.comm.size(1) > 0){
-			print("Please use mpi.close.Rslaves() to close slaves.")
-			mpi.close.Rslaves()
-		}
-		print("Please use mpi.quit() to quit R")
-		.Call("mpi_finalize")
-	}
-}
+s = readSif('model.sif')
+m = readMIDAS('initialData.csv')
+cnolist = makeCNOlist(m, subfield=FALSE)
 
-.Last()
-mpi.remote.exec(paste("I am",mpi.comm.rank(),"of",mpi.comm.size()))
+indices <- indexFinder(cnolist, s, verbose = TRUE)
 
-
-
-
-
-
-
-#s = readSif('model.sif')
-#m = readMIDAS('initialData.csv')
-#cnolist = makeCNOlist(m, subfield=FALSE)
-
-#indices <- indexFinder(cnolist, s, verbose = TRUE)
 #modelNCNOindices <- findNONC(s, indices, verbose = TRUE)
 #s <- cutNONC(s, modelNCNOindices);
 
@@ -158,7 +145,7 @@ mpi.remote.exec(paste("I am",mpi.comm.rank(),"of",mpi.comm.size()))
 #ode_parameters=makeParameterList(adjMat,s$namesSpecies);
 #simulator<-get_simulation_function(cnolist,s,adjMat,indices,ode_parameters,reltol=1e-6,atol=1e-6);
 
-#sim=simulator(cnolist,s,ode_parameters$parValues)
+
 #value_signals<-lapply(sim,function(x) x[,indices$signals]);
 
 #print(unlist(sum((unlist(cnolist$valueSignals)-unlist(value_signals))^2)));
@@ -171,6 +158,17 @@ mpi.remote.exec(paste("I am",mpi.comm.rank(),"of",mpi.comm.size()))
 
 #res=get_logic_based_ode_data_simulation(cnolist,s)
 #res=get_logic_based_ode_model_simulation(cnolist,s)
-#plot_fit_ode_simulation(cnolist,s);
-#plotCNOlistLargePDF(cnolist,"simulated.pdf",nsplit=10)
+adjMat=incidence2Adjacency(s);
+ode_parameters=makeParameterList(adjMat,s$namesSpecies,default_n=1);
+simulate_and_plot_ode_fitness(cnolist,s,transfer_function=3);
+
+#sim=get_logic_based_ode_data_simulation(cnolist,s,indices=indices);
+
+#print(unlist(sum((unlist(cnolist$valueSignals)-unlist(value_signals)))));
+##value_signals<-lapply(sim,function(x) x[,indices$signals]);
+#windows();
 #print(system.time(logic_based_ode_continous_PSO(cnolist,s,maxeval=20)))
+#plotCNOlist(cnolist)
+#windows()
+#cnolist$valueSignals=value_signals;
+#plotCNOlist(cnolist)

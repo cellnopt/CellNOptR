@@ -8,6 +8,29 @@ psoptim <- function (par, fn, gr = NULL, ..., lower=-1, upper=1,
     return(matrix(runif(n*m,0,1),nrow=n,ncol=m)*(upper-lower)+lower)
   }
   
+  
+# Initialize MPI
+  library("Rmpi")
+  
+# Notice we just say "give us all the slaves you've got."
+  mpi.spawn.Rslaves()
+  
+  if (mpi.comm.size() < 2) {
+	  print("More slave processes are required.")
+	  mpi.quit()
+  }
+  
+  .Last <- function(){
+	  if (is.loaded("mpi_initialize")){
+		  if (mpi.comm.size(1) > 0){
+			  print("Please use mpi.close.Rslaves() to close slaves.")
+			  mpi.close.Rslaves()
+		  }
+		  print("Please use mpi.quit() to quit R")
+		  .Call("mpi_finalize")
+	  }
+  }
+  
 
   norm <- function(x) sqrt(sum(x*x))
   npar <- length(par)
