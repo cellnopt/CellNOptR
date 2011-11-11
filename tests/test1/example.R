@@ -29,14 +29,10 @@ s <- cutNONC(s, modelNCNOindices);
 #logic_based_ode_MINLP_SSm(cnolist,s,ndiverse=10,dim_refset=6)
 
 adjMat=incidence2Adjacency(s);
-ode_parameters=makeParameterList(adjMat,s$namesSpecies);
-simulator<-get_simulation_function(cnolist,s,adjMat,indices,ode_parameters,reltol=1e-3,atol=1e-5);
+ode_parameters=makeParameterList(adjMat,s$namesSpecies,random=TRUE);
+results=logic_based_ode_parameters_estimation_SSm(cnolist,s,ode_parameters=ode_parameters)
 
-sim=simulator(cnolist,s,ode_parameters$parValues)
-value_signals<-lapply(sim,function(x) x[,indices$signals]);
-
-plotCNOlist(cnolist)
-#windows();
-cnolist$valueSignals=value_signals;
-plotCNOlist(cnolist)
+#simulator<-get_simulation_function(cnolist,s,adjMat,indices,ode_parameters);
+#sim=simulator(cnolist,s,indices,ode_parameters$parValues)
+#value_signals<-lapply(sim,function(x) x[,indices$signals]);
 
