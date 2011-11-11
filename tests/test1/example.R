@@ -22,8 +22,6 @@ m = readMIDAS('initialData.csv')
 cnolist = makeCNOlist(m, subfield=FALSE)
 
 indices <- indexFinder(cnolist, s, verbose = TRUE)
-modelNCNOindices <- findNONC(s, indices, verbose = TRUE)
-s <- cutNONC(s, modelNCNOindices);
 
 #results=logic_based_ode_parameters_estimation_SSm(cnolist,s)
 #logic_based_ode_MINLP_SSm(cnolist,s,ndiverse=10,dim_refset=6)
@@ -31,8 +29,8 @@ s <- cutNONC(s, modelNCNOindices);
 adjMat=incidence2Adjacency(s);
 ode_parameters=makeParameterList(adjMat,s$namesSpecies,random=TRUE);
 results=logic_based_ode_parameters_estimation_SSm(cnolist,s,ode_parameters=ode_parameters)
-ode_parameters$parValues[ode_parameters$index_opt_pars]=results$x_best;
-simulator<-get_simulation_function(cnolist,s,adjMat,indices,ode_parameters);
-sim=simulator(cnolist,s,indices,ode_parameters$parValues)
+ode_parameters$parValues[ode_parameters$index_opt_pars]=results$xbest;
+simulator<-get_simulation_function(cnolist,s,ode_parameters,indices,adjMat);
+sim=simulator(cnolist,s,ode_parameters$parValues,indices,adjMat)
 value_signals<-lapply(sim,function(x) x[,indices$signals]);
 
