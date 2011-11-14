@@ -117,14 +117,51 @@ CNORwrap<-function(paramsList,Data,Model,Name,NamesData,Time=1){
 	plotFit(OptRes=T1opt)
 	
 #15.Optimise t2	
-#Not implemented in this version
-	T2opt<-NA
+	if(Time==2){
 	
+		SimT1<-simulateT1(
+			CNOlist=paramsList$Data,
+			Model=NCNOcutCompExp,
+			bStringT1=T1opt$bString,
+			SimList=fields4Sim,
+			indexList=IndicesNCNOcutComp)
+			
+		T2opt<-gaBinaryT2(
+			CNOlist=paramsList$Data,
+			Model=NCNOcutCompExp,
+			SimList=fields4Sim,
+			indexList=IndicesNCNOcutComp,
+			bStringT1=T1opt$bString,
+			SimResT1=SimT1,
+			sizeFac=paramsList$sizeFac,
+			NAFac=paramsList$NAFac,
+			PopSize=paramsList$PopSize,
+			Pmutation=paramsList$Pmutation,
+			MaxTime=paramsList$MaxTime,
+			maxGens=paramsList$maxGens,
+			StallGenMax=paramsList$StallGenMax,
+			SelPress=paramsList$SelPress,
+			elitism=paramsList$elitism,
+			RelTol=paramsList$RelTol,
+			verbose=paramsList$verbose)
+			
+		cutAndPlotResultsT2(Model=NCNOcutCompExp,bStringT1=T1opt$bString,bStringT2=T2opt$bString,SimList=fields4Sim,CNOlist=paramsList$Data,indexList=IndicesNCNOcutComp,plotPDF=TRUE)
+		
+		pdf(paste(Name,"evolFitT2.pdf",sep=""))
+		plotFit(OptRes=T2opt)
+		dev.off()
+		plotFit(OptRes=T2opt)
+		
+		}else{
+		
+			T2opt<-NA
+			
+			}
 #16.Write the scaffold and PKN
 #and
 #17.Write the report
 	if(Time==2){
-#not implemented in this version
+
 
 		writeScaffold(
 			ModelComprExpanded=NCNOcutCompExp,
