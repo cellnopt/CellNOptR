@@ -18,7 +18,7 @@ The scaffold model (i.e. compressed and expanded)
 The results of the optimisation process at t1
 }
   \item{optimResT2}{
-The results of the optimisation process at t2 (set this to NA, the t2 optimisation is not implemented in this version).
+The results of the optimisation process at t2 (set this to NA if you have performed a one time point optimisation).
 }
   \item{ModelOriginal}{
 The PKN model
