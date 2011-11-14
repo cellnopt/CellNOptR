@@ -1,14 +1,14 @@
-\name{simulate_and_plot_model}
-\alias{simulate_and_plot_model}
+\name{simulate_and_plot_ode_model}
+\alias{simulate_and_plot_ode_model}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-simulate_and_plot_model
+%%  ~~function to do ... ~~
 }
 \description{
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-simulate_and_plot_model(cnolist, model, ode_parameters = NULL, indices = NULL, adjMatrix = NULL, time = 1, verbose = 0, transfer_function = 3, reltol = 1e-04, atol = 0.001, maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails = 50, large = FALSE, nsplit = 4)
+simulate_and_plot_ode_model(cnolist, model, ode_parameters = NULL, indices = NULL, adjMatrix = NULL, time = 1, verbose = 0, transfer_function = 3, reltol = 1e-04, atol = 0.001, maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails = 50, large = FALSE, nsplit = 4)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -91,32 +91,45 @@ simulate_and_plot_model(cnolist, model, ode_parameters = NULL, indices = NULL, a
 ## The function is currently defined as
 function
 (
-		cnolist,				      model,					      ode_parameters=NULL,
-		indices=NULL,			    adjMatrix=NULL,			  time=1,
-		verbose=0, 				    transfer_function=3,	reltol=1e-4,
-		atol=1e-3,				    maxStepSize=Inf,		  maxNumSteps=100000,
-		maxErrTestsFails=50,  large=FALSE,          nsplit=4
+cnolist,    model,      ode_parameters=NULL,
+indices=NULL,    adjMatrix=NULL,  time=1,
+verbose=0,     transfer_function=3,reltol=1e-4,
+atol=1e-3,    maxStepSize=Inf,  maxNumSteps=100000,
+maxErrTestsFails=50,  large=FALSE,          nsplit=4
 )
 {
-	if(is.null(indices))indices=indexFinder(cnolist,model);
-	if(is.null(adjMatrix))adjMatrix=incidence2Adjacency(model);
-	if(is.null(ode_parameters))ode_parameters=makeParameterList(adjMatrix,model$namesSpecies);
+
+if(is.null(indices))indices=indexFinder(cnolist,model);
+if(is.null(adjMatrix))adjMatrix=incidence2Adjacency(model);
+if(is.null(ode_parameters))ode_parameters=makeParameterList(adjMatrix,model$namesSpecies);
   states_index=which(as.logical(getStates(adjMatrix)));
-	sim_data=get_logic_based_ode_model_simulation(cnolist,model,
-			ode_parameters,indices,time,verbose,transfer_function,
-			reltol,atol,maxStepSize,maxNumSteps,maxErrTestsFails);
-			
-	sim_data=lapply(sim_data,function(x) x[,states_index]);
-	times=cnolist$timeSignals;
-	cnolist$valueSignals=sim_data;
-	cnolist$namesSignals=model$namesSpecies[states_index];
-	cnolist$namesCues=c(cnolist$namesStimuli,cnolist$namesInhibitors);
-	cnolist$valueCues=cbind(cnolist$valueStimuli,cnolist$valueInhibitors);
-	cnolist$valueCues=as.matrix(cnolist$valueCues);
-	cnolist$valueCues[which(cnolist$valueCues>0)]=1;
-	names(cnolist$valueCues)=cnolist$namesCues;
-	plotCNOlist(cnolist);
-			
+
+sim_data=get_logic_based_ode_model_simulation(cnolist,model,
+ode_parameters,indices,time,verbose,transfer_function,
+reltol,atol,maxStepSize,maxNumSteps,maxErrTestsFails);
+
+sim_data=lapply(sim_data,function(x) x[,states_index]);
+
+times=cnolist$timeSignals;
+cnolist$valueSignals=sim_data;
+cnolist$namesSignals=model$namesSpecies[states_index];
+cnolist$namesCues=c(cnolist$namesStimuli,cnolist$namesInhibitors);
+
+cnolist$valueCues=cbind(cnolist$valueStimuli,cnolist$valueInhibitors);
+cnolist$valueCues=as.matrix(cnolist$valueCues);
+cnolist$valueCues[which(cnolist$valueCues>0)]=1;
+names(cnolist$valueCues)=cnolist$namesCues;
+
+if(large)
+{
+plotCNOlistLarge(cnolist,nsplit);
+  }
+else
+{
+plotCNOlist(cnolist);
+  }
+
+
   return(sim_data);
   }
 }

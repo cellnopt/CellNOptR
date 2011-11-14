@@ -2,51 +2,51 @@
 \alias{get_logic_ode_MINLP_objective_function}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-get_logic_ode_MINLP_objective_function
+%%  ~~function to do ... ~~
 }
 \description{
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-get_logic_ode_MINLP_objective_function(cnolist1, model1, ode_parameters1, indices1, time1 = 1, verbose1 = 0, transfer_function1 = 3, reltol1 = 1e-04, atol1 = 0.001, maxStepSize1 = Inf, maxNumSteps1 = 1e+05, maxErrTestsFails1 = 50)
+get_logic_ode_MINLP_objective_function(cnolist, model, ode_parameters, indices, time = 1, verbose = 0, transfer_function = 3, reltol = 1e-04, atol = 0.001, maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails = 50)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{cnolist1}{
-%%     ~~Describe \code{cnolist1} here~~
+  \item{cnolist}{
+%%     ~~Describe \code{cnolist} here~~
 }
-  \item{model1}{
-%%     ~~Describe \code{model1} here~~
+  \item{model}{
+%%     ~~Describe \code{model} here~~
 }
-  \item{ode_parameters1}{
-%%     ~~Describe \code{ode_parameters1} here~~
+  \item{ode_parameters}{
+%%     ~~Describe \code{ode_parameters} here~~
 }
-  \item{indices1}{
-%%     ~~Describe \code{indices1} here~~
+  \item{indices}{
+%%     ~~Describe \code{indices} here~~
 }
-  \item{time1}{
-%%     ~~Describe \code{time1} here~~
+  \item{time}{
+%%     ~~Describe \code{time} here~~
 }
-  \item{verbose1}{
-%%     ~~Describe \code{verbose1} here~~
+  \item{verbose}{
+%%     ~~Describe \code{verbose} here~~
 }
-  \item{transfer_function1}{
-%%     ~~Describe \code{transfer_function1} here~~
+  \item{transfer_function}{
+%%     ~~Describe \code{transfer_function} here~~
 }
-  \item{reltol1}{
-%%     ~~Describe \code{reltol1} here~~
+  \item{reltol}{
+%%     ~~Describe \code{reltol} here~~
 }
-  \item{atol1}{
-%%     ~~Describe \code{atol1} here~~
+  \item{atol}{
+%%     ~~Describe \code{atol} here~~
 }
-  \item{maxStepSize1}{
-%%     ~~Describe \code{maxStepSize1} here~~
+  \item{maxStepSize}{
+%%     ~~Describe \code{maxStepSize} here~~
 }
-  \item{maxNumSteps1}{
-%%     ~~Describe \code{maxNumSteps1} here~~
+  \item{maxNumSteps}{
+%%     ~~Describe \code{maxNumSteps} here~~
 }
-  \item{maxErrTestsFails1}{
-%%     ~~Describe \code{maxErrTestsFails1} here~~
+  \item{maxErrTestsFails}{
+%%     ~~Describe \code{maxErrTestsFails} here~~
 }
 }
 \details{
@@ -80,40 +80,42 @@ get_logic_ode_MINLP_objective_function(cnolist1, model1, ode_parameters1, indice
 ##--	or do  help(data=index)  for the standard data sets.
 
 ## The function is currently defined as
-function(cnolist1,model1,ode_parameters1,indices1,
-		time1=1,verbose1=0, transfer_function1=3,reltol1=1e-4,atol1=1e-3,maxStepSize1=Inf,
-		maxNumSteps1=100000,maxErrTestsFails1=50)
+function (cnolist, model, ode_parameters, indices, time = 1, 
+    verbose = 0, transfer_function = 3, reltol = 1e-04, atol = 0.001, 
+    maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails = 50) 
 {
-	adjMatrix1=incidence2Adjacency(model1);
-	n_cont1=length(ode_parameters1$index_opt_pars);
-	n_int1=dim(model1$interMat)[2];
-	sim_function1<-get_simulation_function(cnolist1,model1,adjMatrix=adjMatrix1,
-			indices=indices1,odeParameters=ode_parameters1$parValues, time=time1,verbose=verbose1,
-			transfer_function=transfer_function1,reltol=reltol1,atol=atol1,maxStepSize=maxStepSize1,
-			maxNumSteps=maxNumSteps1,maxErrTestsFails=maxErrTestsFails1)
-	
-	logic_ode_MINLP_objective_function<-
-			function(x,cnolist=cnolist1,model=model1,adjMatrix=adjMatrix1,n_cont=n_cont1,n_int=n_int1,
-					indices=indices1,ode_parameters=ode_parameters1,sim_function=sim_function1)
-	{
-		temp_model=model;
-		x_cont=as.double(x[seq(1,n_cont)]);
-		x_int=as.integer(x[seq((n_cont+1),(n_cont+n_int))]);
-		if(length(which(as.logical(x_int)))<2)return(1);
-		temp_model$interMat=model$interMat[,which(as.logical(x_int))];
-		temp_model$notMat=model$notMat[,which(as.logical(x_int))];
-		ode_parameters$parValues[ode_parameters$index_opt_pars]=x_cont;
-		sim=sim_function(cnolist,temp_model,indices,ode_parameters$parValues);
-		sim<-unlist(lapply(sim,function(x) x[,indices$signals]));
-		measured_values=unlist(cnolist$valueSignals);                                                    
-		NaNs=which(is.na(sim));
-		not_NaNs=which(!is.na(sim));
-		error=sum((sim[not_NaNs]-measured_values[not_NaNs])^2);
-		if(is.na(error))error=0;
-		res=(error+length(NaNs))/length(sim);
-		return(res);
-	}
-	return(logic_ode_MINLP_objective_function);
+    adjMatrix = incidence2Adjacency(model)
+    n_cont = length(ode_parameters1$index_opt_pars)
+    n_int = dim(model$interMat)[2]
+    sim_function <- get_simulation_function(cnolist, model, adjMatrix1 = adjMatrix, 
+        indices1 = indices, odeParameters1 = ode_parameters$parValues, 
+        time1 = time, verbose1 = verbose, transfer_function1 = transfer_function, 
+        reltol1 = reltol, atol1 = atol, maxStepSize1 = maxStepSize, 
+        maxNumSteps1 = maxNumSteps, maxErrTestsFails1 = maxErrTestsFails)
+    logic_ode_MINLP_objective_function <- function(x, cnolist1 = cnolist, 
+        model1 = model, adjMatrix1 = adjMatrix, n_cont1 = n_cont, 
+        n_int1 = n_int, indices1 = indices, ode_parameters1 = ode_parameters, 
+        sim_function1 = sim_function) {
+        temp_model = model1
+        x_cont = as.double(x[seq(1, n_cont1)])
+        x_int = as.integer(x[seq((n_cont1 + 1), (n_cont1 + n_int1))])
+        if (length(which(as.logical(x_int1))) < 2) 
+            return(1)
+        temp_model$interMat = model1$interMat[, which(as.logical(x_int))]
+        temp_model$notMat = model1$notMat[, which(as.logical(x_int))]
+        ode_parameters1$parValues[ode_parameters1$index_opt_pars] = x_cont
+        sim = sim_function1(cnolist1, temp_model, ode_parameters1$parValues)
+        sim <- unlist(lapply(sim, function(x) x[, indices1$signals]))
+        measured_values = unlist(cnolist1$valueSignals)
+        NaNs = which(is.na(sim))
+        not_NaNs = which(!is.na(sim))
+        error = sum((sim[not_NaNs] - measured_values[not_NaNs])^2)
+        if (is.na(error)) 
+            error = 0
+        res = (error + length(NaNs))/length(sim)
+        return(res)
+    }
+    return(logic_ode_MINLP_objective_function)
   }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

@@ -2,13 +2,13 @@
 \alias{makeParameterList}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-makeParameterList
+%%  ~~function to do ... ~~
 }
 \description{
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-makeParameterList(adjMat, namesSpecies, LB_n = 1, LB_k = 0.4, LB_tau = 0.1, UB_n = 3, UB_k = 0.6, UB_tau = 10, default_n = 3, default_k = 0.5, default_tau = 1, LB_in = c(), UB_in = c(), opt_n = TRUE, opt_k = TRUE, opt_tau = TRUE, random = FALSE)
+makeParameterList(adjMat, namesSpecies, LB_n = 1, LB_k = 0.1, LB_tau = 0.01, UB_n = 5, UB_k = 0.9, UB_tau = 10, default_n = 3, default_k = 0.5, default_tau = 1, LB_in = c(), UB_in = c(), opt_n = TRUE, opt_k = TRUE, opt_tau = TRUE, random = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -95,71 +95,69 @@ makeParameterList(adjMat, namesSpecies, LB_n = 1, LB_k = 0.4, LB_tau = 0.1, UB_n
 ##--	or do  help(data=index)  for the standard data sets.
 
 ## The function is currently defined as
-function
-				(
-				adjMat,namesSpecies,
-				LB_n=1,LB_k=0.4,LB_tau=1e-1,
-				UB_n=3,UB_k=0.6,UB_tau=10,
-				default_n=3,default_k=0.5,default_tau=1,
-				LB_in=c(),UB_in=c(),opt_n=TRUE,
-				opt_k=TRUE,opt_tau=TRUE,random=FALSE
-)
+function (adjMat, namesSpecies, LB_n = 1, LB_k = 0.1, LB_tau = 0.01, 
+    UB_n = 5, UB_k = 0.9, UB_tau = 10, default_n = 3, default_k = 0.5, 
+    default_tau = 1, LB_in = c(), UB_in = c(), opt_n = TRUE, 
+    opt_k = TRUE, opt_tau = TRUE, random = FALSE) 
 {
-	isState=getStates(adjMat);
-	numStates=as.integer(sqrt(length(adjMat)));
-	parNames=c();
-	parValues=c();
-	index_k=c();
-	index_n=c();
-	index_tau=c();
-	LB=c();
-	UB=c();
-	index_opt_pars=c();
-	
-	count=0;
-	for(j in 1:numStates)
-	{ 
-		if(isState[j])
-		{
-			jCol=adjMat[,j];
-			inputs=which(as.logical(jCol));
-			numInputs=length(inputs);
-			for(i in 1:numInputs)
-			{
-				count=count+1;
-				parNames[count]=paste(namesSpecies[inputs[i]],"_n_",namesSpecies[j],sep="");
-				parValues[count]=default_n;
-				index_k=c(index_k,count);
-				LB[count]=LB_n;
-				UB[count]=UB_n;
-				if(opt_n)index_opt_pars=c(index_opt_pars,count);
-				
-				count=count+1;
-				parNames[count]=paste(namesSpecies[inputs[i]],"_k_",namesSpecies[j],sep="");
-				parValues[count]=default_k;
-				index_n=c(index_k,count);
-				LB[count]=LB_k;
-				UB[count]=UB_k;
-				if(opt_k)index_opt_pars=c(index_opt_pars,count);
-			}
-			count=count+1;
-			parNames[count]=paste("tau_",namesSpecies[j],sep="");
-			parValues[count]=default_tau;
-			index_tau=c(index_tau,count);
-			LB[count]=LB_tau;
-			UB[count]=UB_tau;
-			if(opt_tau)index_opt_pars=c(index_opt_pars,count);
-		}
-	}
-	if(length(LB_in)==length(LB))LB=LB_in;
-	if(length(UB_in)==length(UB))UB=UB_in;
-	if(random)parValues=LB[index_opt_pars]+((UB[index_opt_pars]-LB[index_opt_pars])*runif(length(index_opt_pars)));
-	
-	parList=list(parNames=parNames,parValues=parValues,
-			index_opt_pars=index_opt_pars,index_n=index_n,
-			index_k=index_k,index_tau=index_tau,LB=LB,UB=UB);
-	
-	return(parList);
+    isState = getStates(adjMat)
+    numStates = as.integer(sqrt(length(adjMat)))
+    parNames = c()
+    parValues = c()
+    index_k = c()
+    index_n = c()
+    index_tau = c()
+    LB = c()
+    UB = c()
+    index_opt_pars = c()
+    count = 0
+    for (j in 1:numStates) {
+        if (isState[j]) {
+            jCol = adjMat[, j]
+            inputs = which(as.logical(jCol))
+            numInputs = length(inputs)
+            for (i in 1:numInputs) {
+                count = count + 1
+                parNames[count] = paste(namesSpecies[inputs[i]], 
+                  "_n_", namesSpecies[j], sep = "")
+                parValues[count] = default_n
+                index_k = c(index_k, count)
+                LB[count] = LB_n
+                UB[count] = UB_n
+                if (opt_n) 
+                  index_opt_pars = c(index_opt_pars, count)
+                count = count + 1
+                parNames[count] = paste(namesSpecies[inputs[i]], 
+                  "_k_", namesSpecies[j], sep = "")
+                parValues[count] = default_k
+                index_n = c(index_k, count)
+                LB[count] = LB_k
+                UB[count] = UB_k
+                if (opt_k) 
+                  index_opt_pars = c(index_opt_pars, count)
+            }
+            count = count + 1
+            parNames[count] = paste("tau_", namesSpecies[j], 
+                sep = "")
+            parValues[count] = default_tau
+            index_tau = c(index_tau, count)
+            LB[count] = LB_tau
+            UB[count] = UB_tau
+            if (opt_tau) 
+                index_opt_pars = c(index_opt_pars, count)
+        }
+    }
+    if (length(LB_in) == length(LB)) 
+        LB = LB_in
+    if (length(UB_in) == length(UB)) 
+        UB = UB_in
+    if (random) 
+        parValues = LB[index_opt_pars] + ((UB[index_opt_pars] - 
+            LB[index_opt_pars]) * runif(length(index_opt_pars)))
+    parList = list(parNames = parNames, parValues = parValues, 
+        index_opt_pars = index_opt_pars, index_n = index_n, index_k = index_k, 
+        index_tau = index_tau, LB = LB, UB = UB)
+    return(parList)
   }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

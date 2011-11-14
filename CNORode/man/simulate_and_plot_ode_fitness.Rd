@@ -2,7 +2,7 @@
 \alias{simulate_and_plot_ode_fitness}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-simulate_and_plot_ode_fitness
+%%  ~~function to do ... ~~
 }
 \description{
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
@@ -83,41 +83,32 @@ simulate_and_plot_ode_fitness(cnolist, model, ode_parameters = NULL, indices = N
 ##--	or do  help(data=index)  for the standard data sets.
 
 ## The function is currently defined as
-function
-(
-		cnolist,				      model,					      ode_parameters=NULL,	
-		indices=NULL,			    adjMatrix=NULL,			  time=1,					
-		verbose=0, 				    transfer_function=3,	reltol=1e-4,			
-		atol=1e-3,				    maxStepSize=Inf,		  maxNumSteps=100000,
-		maxErrTestsFails=50
-)
+function (cnolist, model, ode_parameters = NULL, indices = NULL, 
+    adjMatrix = NULL, time = 1, verbose = 0, transfer_function = 3, 
+    reltol = 1e-04, atol = 0.001, maxStepSize = Inf, maxNumSteps = 1e+05, 
+    maxErrTestsFails = 50) 
 {
-	
-	if(is.null(indices))indices=indexFinder(cnolist,model);
-	if(is.null(adjMatrix))adjMatrix=incidence2Adjacency(model);
-	if(is.null(ode_parameters))ode_parameters=makeParameterList(adjMatrix,model$namesSpecies);
-	
-	sim_data=get_logic_based_ode_data_simulation(cnolist,model,
-			ode_parameters,indices,time,verbose,transfer_function,	
-			reltol,atol,maxStepSize,maxNumSteps,maxErrTestsFails);
-	
-	times=cnolist$timeSignals;
-	expResults=cnolist$valueSignals;  
-	namesSignals=cnolist$namesSignals;
-	namesCues=c(cnolist$namesStimuli,cnolist$namesInhibitors);
-	
-	valueCues=cbind(cnolist$valueStimuli,cnolist$valueInhibitors);
-	valueCues=as.matrix(valueCues);
-	valueCues[which(valueCues>0)]=1;
-	names(valueCues)=namesCues;
-	
-	print(sum(unlist(sim_data)-unlist(cnolist$valueSignals)))
-	
-	
-	plotOptimResults(SimResults=sim_data,expResults=expResults,
-			times=times,namesCues=namesCues,namesSignals=namesSignals,
-			valueCues=valueCues); 
-	
+    if (is.null(indices)) 
+        indices = indexFinder(cnolist, model)
+    if (is.null(adjMatrix)) 
+        adjMatrix = incidence2Adjacency(model)
+    if (is.null(ode_parameters)) 
+        ode_parameters = makeParameterList(adjMatrix, model$namesSpecies)
+    sim_data = get_logic_based_ode_data_simulation(cnolist, model, 
+        ode_parameters, indices, time, verbose, transfer_function, 
+        reltol, atol, maxStepSize, maxNumSteps, maxErrTestsFails)
+    times = cnolist$timeSignals
+    expResults = cnolist$valueSignals
+    namesSignals = cnolist$namesSignals
+    namesCues = c(cnolist$namesStimuli, cnolist$namesInhibitors)
+    valueCues = cbind(cnolist$valueStimuli, cnolist$valueInhibitors)
+    valueCues = as.matrix(valueCues)
+    valueCues[which(valueCues > 0)] = 1
+    names(valueCues) = namesCues
+    plotOptimResults(SimResults = sim_data, expResults = expResults, 
+        times = times, namesCues = namesCues, namesSignals = namesSignals, 
+        valueCues = valueCues)
+    return(sim_data)
   }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

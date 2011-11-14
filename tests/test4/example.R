@@ -53,7 +53,7 @@ logic_based_ode_continous_PSO <-function
 }
 
 library(CellNOptR)
-setwd("C:/Users/David/Desktop/stuff/CNOR_ode/tests/test4")
+setwd("tests/test4")
 #install.packages("CNORode_1.0.tar.gz",type="source");
 #source("psoptim.R")
 #source("temp.R");

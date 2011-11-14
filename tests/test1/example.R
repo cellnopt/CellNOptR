@@ -14,23 +14,33 @@
 
 library(CellNOptR)
 #install.packages("CNORode_1.0.zip",repos=NULL);
-setwd("tests/test1");
-library("CNORode")
+#setwd("tests/test1");
+library("CNORode");
+#m = readMIDAS('initialData.csv')
+#cnolist = makeCNOlist(m, subfield=FALSE)
 
-s = readSif('model.sif')
-m = readMIDAS('initialData.csv')
-cnolist = makeCNOlist(m, subfield=FALSE)
+load("CNOlistToyFB.RData");
+cnolist=CNOlistToyFB;
 
-indices <- indexFinder(cnolist, s, verbose = TRUE)
 
-#results=logic_based_ode_parameters_estimation_SSm(cnolist,s)
+model = readSif('ToyModelFeedbackDataGenerator.sif')
+indices <- indexFinder(cnolist, model)
+
+#indices<- findNONC(model, indices, verbose = TRUE)
+#model <- cutNONC(model, indices)
+#indices <- indexFinder(cnolist, model)
+#model <- compressModel(model, indices)
+#indices<- indexFinder(cnolist, model)
+
+
+#results=logic_based_ode_parameters_estimation_eSSm(cnolist,s)
 #logic_based_ode_MINLP_SSm(cnolist,s,ndiverse=10,dim_refset=6)
 
-adjMat=incidence2Adjacency(s);
-ode_parameters=makeParameterList(adjMat,s$namesSpecies,default_n=3,random=TRUE);
-simulate_and_plot_ode_fitness(cnolist,s,ode_parameters,indices,transfer_function=3);
-res=logic_based_ode_parameters_estimation_SSm(cnolist,s,ode_parameters,dim_refset=20);
+adjMat=incidence2Adjacency(model);
+ode_parameters=makeParameterList(adjMat,model$namesSpecies,default_n=3,random=TRUE);
+simulate_and_plot_ode_fitness(cnolist,model,ode_parameters,indices,transfer_function=3);
+res=logic_based_ode_parameters_estimation_SSm(cnolist,model,ode_parameters,dim_refset=20,maxtime=1000);
 ode_parameters$parValues[ode_parameters$index_opt_pars]=res$xbest;
-windows();
-simulate_and_plot_ode_fitness(cnolist,s,ode_parameters,indices,transfer_function=3);
+dev.new();
+simulate_and_plot_ode_fitness(cnolist,model,ode_parameters,indices,transfer_function=3);
                                            

@@ -2,7 +2,7 @@
 \alias{getStates}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-getStates
+%%  ~~function to do ... ~~
 }
 \description{
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
@@ -47,22 +47,19 @@ getStates(adjacency)
 ##--	or do  help(data=index)  for the standard data sets.
 
 ## The function is currently defined as
-function(adjacency)
+function (adjacency) 
 {
-	nSpecies=dim(adjacency)[1];
-	count=0;
-	res=matrix(0,1,nSpecies);
-	for(j in 1:nSpecies)
-	{
-		for(i in 1:nSpecies)
-		{
-			if(adjacency[i,j])
-			{
-				res[j]=1;
-			}
-		}
-	}
-	return(res);
+    nSpecies = dim(adjacency)[1]
+    count = 0
+    res = matrix(0, 1, nSpecies)
+    for (j in 1:nSpecies) {
+        for (i in 1:nSpecies) {
+            if (adjacency[i, j]) {
+                res[j] = 1
+            }
+        }
+    }
+    return(res)
   }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

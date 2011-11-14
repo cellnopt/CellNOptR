@@ -1,10 +1,10 @@
-simulate_and_plot_model<-function
+simulate_and_plot_ode_model<-function
 (
-		cnolist,				      model,					      ode_parameters=NULL,
+		cnolist,				    model,					      ode_parameters=NULL,
 		indices=NULL,			    adjMatrix=NULL,			  time=1,
 		verbose=0, 				    transfer_function=3,	reltol=1e-4,
 		atol=1e-3,				    maxStepSize=Inf,		  maxNumSteps=100000,
-		maxErrTestsFails=50,  large=FALSE,          nsplit=4
+		maxErrTestsFails=50,  		large=FALSE,          nsplit=4
 )
 {
 
@@ -29,7 +29,15 @@ simulate_and_plot_model<-function
 	cnolist$valueCues[which(cnolist$valueCues>0)]=1;
 	names(cnolist$valueCues)=cnolist$namesCues;
 
-	plotCNOlist(cnolist);
+	if(large)
+	{
+		plotCNOlistLarge(cnolist,nsplit);
+	}
+	else
+	{
+		plotCNOlist(cnolist);
+	}
+	
 
   return(sim_data);
 }

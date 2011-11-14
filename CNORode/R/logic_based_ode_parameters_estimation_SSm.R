@@ -1,8 +1,8 @@
 logic_based_ode_parameters_estimation_SSm <-function
 (
-		cnolist,			model,			ode_parameters=NULL,
-		maxeval=Inf,		maxtime=100,	ndiverse=NULL,
-		dim_refset=NULL
+		cnolist,			model,					ode_parameters=NULL,
+		maxeval=Inf,		maxtime=100,			ndiverse=NULL,
+		dim_refset=NULL, 	local_solver=NULL
 )
 {
 	library(eSSmR)
@@ -24,9 +24,10 @@ logic_based_ode_parameters_estimation_SSm <-function
 	opts=list();
 	opts$maxeval=maxeval;
 	opts$maxtime=maxtime;
+	if(!is.null(local_solver))opts$local_solver=local_solver;
 	if(!is.null(ndiverse))opts$ndiverse=ndiverse;      
 	if(!is.null(dim_refset))opts$dim_refset=dim_refset;  
-	opts$local_solver="SOLNP";
+	
 	return(essR(problem,opts));	
 }
 

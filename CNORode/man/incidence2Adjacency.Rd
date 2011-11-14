@@ -2,7 +2,7 @@
 \alias{incidence2Adjacency}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-incidence2Adjacency
+%%  ~~function to do ... ~~
 }
 \description{
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
@@ -47,31 +47,25 @@ incidence2Adjacency(model)
 ##--	or do  help(data=index)  for the standard data sets.
 
 ## The function is currently defined as
-function(model)
-{ 
-	incidence=model$interMat;
-	nNodes=dim(incidence)[1];
-	nEdges=dim(incidence)[2];
-	adjacency=matrix(0,nNodes,nNodes);
-	
-	for(j in 1:nEdges)
-	{
-		for(i in 1:nNodes)
-		{
-			if(incidence[i,j]==1)
-			{
-				node1=i;
-				for(k in 1:nNodes)
-				{
-					if(incidence[k,j]==-1)
-					{
-						adjacency[k,node1]=1
-					}
-				}
-			}
-		}
-	}
-	return(adjacency);  
+function (model) 
+{
+    incidence = model$interMat
+    nNodes = dim(incidence)[1]
+    nEdges = dim(incidence)[2]
+    adjacency = matrix(0, nNodes, nNodes)
+    for (j in 1:nEdges) {
+        for (i in 1:nNodes) {
+            if (incidence[i, j] == 1) {
+                node1 = i
+                for (k in 1:nNodes) {
+                  if (incidence[k, j] == -1) {
+                    adjacency[k, node1] = 1
+                  }
+                }
+            }
+        }
+    }
+    return(adjacency)
   }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
