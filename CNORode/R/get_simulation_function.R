@@ -10,7 +10,7 @@ get_simulation_function <-function
 				
 	simulate_logic_based_ode_model <- function
 	(
-			cnolist,	 						sif, 									odeParameters1,
+			cnolist,	 						sif, 									odeParameters,
 			indices=indices1,					adjMatrix=adjMatrix1, 					time=time1,
 			verbose=verbose1, 					transfer_function=transfer_function1,	reltol=reltol1,
 			atol=atol1,							maxStepSize=maxStepSize1,				maxNumSteps=maxNumSteps1,

@@ -1,7 +1,7 @@
 makeParameterList <-function
 (		
 		adjMat,			namesSpecies,	LB_n=1,
-		LB_k=0.1,		LB_tau=1e-1,	UB_n=5,		
+		LB_k=0.1,		LB_tau=1e-2,	UB_n=5,		
 		UB_k=0.9,		UB_tau=10,		default_n=3,
 		default_k=0.5,	default_tau=1,	LB_in=c(),	
 		UB_in=c(),		opt_n=TRUE,		opt_k=TRUE,	
