@@ -14,8 +14,7 @@
 
 library(CellNOptR)
 #install.packages("CNORode_1.0.zip",repos=NULL);
-#setwd("tests/test2");
-#setwd("tests/test1");
+setwd("C:/Users/David/Desktop/stuff/CNOR_ode/tests/test2");
 library("CNORode")
 
 s = readSif('model.sif')
@@ -23,22 +22,10 @@ m = readMIDAS('initialData.csv')
 cnolist = makeCNOlist(m, subfield=FALSE)
 
 indices <- indexFinder(cnolist, s, verbose = TRUE)
-modelNCNOindices <- findNONC(s, indices, verbose = TRUE)
-s <- cutNONC(s, modelNCNOindices);
 
 #results=logic_based_ode_parameters_estimation_SSm(cnolist,s)
 #logic_based_ode_MINLP_SSm(cnolist,s,ndiverse=10,dim_refset=6)
 
 adjMat=incidence2Adjacency(s);
-ode_parameters=makeParameterList(adjMat,s$namesSpecies);
-simulator<-get_simulation_function(cnolist,s,adjMat,indices,ode_parameters,reltol=1e-3,atol=1e-5);
-
-sim=simulator(cnolist,s,ode_parameters$parValues)
-value_signals<-lapply(sim,function(x) x[,indices$signals]);
-
-plotCNOlist(cnolist)
-#windows();
-cnolist$valueSignals=value_signals;
-plotCNOlist(cnolist)
-
-
+ode_parameters=makeParameterList(adjMat,s$namesSpecies,default_n=3);
+simulate_and_plot_ode_fitness(cnolist,s,ode_parameters,indices,transfer_function=3);

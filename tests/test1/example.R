@@ -14,7 +14,7 @@
 
 library(CellNOptR)
 #install.packages("CNORode_1.0.zip",repos=NULL);
-#setwd("tests/test1");
+setwd("C:/Users/David/Desktop/stuff/CNOR_ode/tests/test1");
 library("CNORode")
 
 s = readSif('model.sif')
@@ -27,10 +27,10 @@ indices <- indexFinder(cnolist, s, verbose = TRUE)
 #logic_based_ode_MINLP_SSm(cnolist,s,ndiverse=10,dim_refset=6)
 
 adjMat=incidence2Adjacency(s);
-ode_parameters=makeParameterList(adjMat,s$namesSpecies,random=TRUE);
-results=logic_based_ode_parameters_estimation_SSm(cnolist,s,ode_parameters=ode_parameters)
-ode_parameters$parValues[ode_parameters$index_opt_pars]=results$xbest;
-simulator<-get_simulation_function(cnolist,s,ode_parameters,indices,adjMat);
-sim=simulator(cnolist,s,ode_parameters$parValues,indices,adjMat)
-value_signals<-lapply(sim,function(x) x[,indices$signals]);
-
+ode_parameters=makeParameterList(adjMat,s$namesSpecies,default_n=3,random=TRUE);
+simulate_and_plot_ode_fitness(cnolist,s,ode_parameters,indices,transfer_function=3);
+res=logic_based_ode_parameters_estimation_SSm(cnolist,s,ode_parameters,dim_refset=20);
+ode_parameters$parValues[ode_parameters$index_opt_pars]=res$xbest;
+windows();
+simulate_and_plot_ode_fitness(cnolist,s,ode_parameters,indices,transfer_function=3);
+                                           
