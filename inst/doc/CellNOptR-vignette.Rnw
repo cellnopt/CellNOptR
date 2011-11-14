@@ -94,7 +94,7 @@ plotCNOlist(CNOlistToy)
 
 
 <<ploCNOPDF, eval=TRUE>>=
-plotCNOlistPDF(CNOlist=CNOlistToy,filename="ToyModelGraph.pdf")
+plotCNOlistPDF(CNOlist=CNOlistToy,fileName="ToyModelGraph.pdf")
 @
 
 We then load the prior knowledge network (PKN), contained in a cytoscape sif format file, using the function \emph{readSif} (alternatively, this example model can be loaded as a R data object already formatted, similarly to what is done above for the CNOlist).  Cytoscape \cite{cytoscape} is a software for network visualisation and analysis. You can build a network within cytoscape and simply save it as the default sif file format, which can then be imported in \emph{CellNOptR}.  If you choose to do this, then you should make sure that if you have 'and' gates in your network they are present as dummy nodes named 'and' followed by a number from 1 to the number of 'and' nodes that you have.  
@@ -354,6 +354,7 @@ Both of these versions will generate the graphs produced above on your graphics 
 unlink("ToyDataMMB.csv")
 unlink("ToyPKNMMB.sif")
 unlink("Toy",recursive=TRUE)
+unlink("ToyModelMMB2.sif")
 @
 
 \section{A real example}
@@ -392,6 +393,141 @@ Our analysis is then complete and we can write our results (scaffold network (\e
 \caption{Scaffold network for the DREAM model, as produced by writeScaffold.}
 \label{fig:DREAMscaffold}
 \end{figure*}
+
+\clearpage
+
+\section{A toy example with two time points}
+
+In this section we will demonstrate the use of CellNOptR used when the data comprises two time points where we assume that different mechanisms of regulation are at play, which act on separate time scales.  The data set that we use is the toy model example from CellNOpt, adapted for an optimisation based on two time points (i.e. all signals are kept at the same value as t1 except for cJun and Jnk which go down to zero). The model that we will load is the toymodel from CellNOpt where weadded a negative feedback between cJun and Jnk (!cJun=Jnk).  We are going to try and capture this feedback, assuming that this is a slow mechanism that shuts the cJun - Jnk branch down at the second, slower time scale.
+
+In this case the data comprises two time points that we assume are pseudo steady states corresponding to different time scales. The optimisation will therefore be performed in 2 steps, one that finds the reactions present at time 1, and one that finds the reactions that were not present at time 1 and might have entered into play at time 2, explaining the evolution of the signals from time 1 to time 2. First, we load the data and model, and perform the optimisation just as we did for the Toy model above.
+
+<<t2load, eval=TRUE>>=
+data(CNOlistToy2,package="CellNOptR")
+data(ToyModel2,package="CellNOptR")
+@
+
+<<t2plotCNOlist, eval=FALSE>>=
+plotCNOlist(CNOlistToy2)
+plotCNOlistPDF(CNOlist=CNOlistToy2,fileName="ToyModelGraphT2.pdf")
+@
+
+<<t2Opt1, eval=TRUE>>=
+checkSignals(CNOlistToy2,ToyModel2)
+indicesToy2<-indexFinder(CNOlistToy2,ToyModel2,verbose=FALSE)
+ToyNCNOindices2<-findNONC(ToyModel2,indicesToy2,verbose=FALSE)
+ToyNCNOcut2<-cutNONC(ToyModel2,ToyNCNOindices2)
+indicesToyNCNOcut2<-indexFinder(CNOlistToy2,ToyNCNOcut2)
+ToyNCNOcutComp2<-compressModel(ToyNCNOcut2,indicesToyNCNOcut2)
+indicesToyNCNOcutComp2<-indexFinder(CNOlistToy2,ToyNCNOcutComp2)
+ToyNCNOcutCompExp2<-expandGates(ToyNCNOcutComp2)
+resECNOlistToy2<-residualError(CNOlistToy2)
+ToyFields4Sim2<-prep4Sim(ToyNCNOcutCompExp2)
+initBstring2<-rep(1,length(ToyNCNOcutCompExp2$reacID))
+ToyT1opt2<-gaBinaryT1(
+	CNOlist=CNOlistToy2,
+	Model=ToyNCNOcutCompExp2,
+	SimList=ToyFields4Sim2,
+	indexList=indicesToyNCNOcutComp2,
+	initBstring=initBstring2,
+	StallGenMax=10,
+	MaxTime=60,
+	verbose=FALSE)
+@
+
+<<t2OptT1plot, eval=FALSE>>=
+cutAndPlotResultsT1(
+	Model=ToyNCNOcutCompExp2,
+	bString=ToyT1opt2$bString,
+	SimList=ToyFields4Sim2,
+	CNOlist=CNOlistToy2,
+	indexList=indicesToyNCNOcutComp2,
+	plotPDF=TRUE)
+pdf("evolFitToy2T1.pdf")
+plotFit(OptRes=ToyT1opt2)
+dev.off()
+plotFit(OptRes=ToyT1opt2)
+@
+
+We can now optimise the second time point.
+
+<<t2OptT2, eval=TRUE>>=
+SimToyT12<-simulateT1(
+	CNOlist=CNOlistToy2,
+	Model=ToyNCNOcutCompExp2,
+	bStringT1=ToyT1opt2$bString,
+	SimList=ToyFields4Sim2,
+	indexList=indicesToyNCNOcutComp2)
+	
+ToyT1opt2T2<-gaBinaryT2(
+	CNOlist=CNOlistToy2,
+	Model=ToyNCNOcutCompExp2,
+	SimList=ToyFields4Sim2,
+	indexList=indicesToyNCNOcutComp2,
+	bStringT1=ToyT1opt2$bString,
+	SimResT1=SimToyT12,
+	StallGenMax=10,
+	MaxTime=60,
+	verbose=FALSE)
+@
+
+
+
+Finally, we produce all the plots and write the report.
+
+<<resSimT2, fig=TRUE>>=	
+cutAndPlotResultsT2(
+	Model=ToyNCNOcutCompExp2,
+	bStringT1=ToyT1opt2$bString,
+	bStringT2=ToyT1opt2T2$bString,
+	SimList=ToyFields4Sim2,
+	CNOlist=CNOlistToy2,
+	indexList=indicesToyNCNOcutComp2,
+	plotPDF=FALSE)
+@
+
+<<t2OptT2plot, eval=FALSE>>=	
+pdf("evolFitToy2T2.pdf")
+plotFit(OptRes=ToyT1opt2T2)
+dev.off()
+plotFit(OptRes=ToyT1opt2T2)
+writeScaffold(
+	ModelComprExpanded=ToyNCNOcutCompExp2,
+	optimResT1=ToyT1opt2,
+	optimResT2=ToyT1opt2T2,
+	ModelOriginal=ToyModel2,
+	CNOlist=CNOlistToy2)
+writeNetwork(
+	ModelOriginal=ToyModel2,
+	ModelComprExpanded=ToyNCNOcutCompExp2,
+	optimResT1=ToyT1opt2,
+	optimResT2=ToyT1opt2T2,
+	CNOlist=CNOlistToy2)
+namesFilesToy<-list(
+	dataPlot="ToyModelGraphT2.pdf",
+	evolFit1="evolFitToy2T1.pdf",
+	evolFit2="evolFitToy2T2.pdf",
+	SimResults2="ToyNCNOcutCompExp2SimResultsT1T2.pdf",
+	SimResults1="ToyNCNOcutCompExp2SimResultsT1.pdf",
+	Scaffold="Scaffold.sif",
+	ScaffoldDot="Scaffold.dot",
+	tscaffold="TimesScaffold.EA",
+	wscaffold="weightsScaffold.EA",
+	PKN="PKN.sif",
+	PKNdot="PKN.dot",
+	wPKN="TimesPKN.EA",
+	nPKN="nodesPKN.NA")
+writeReport(
+	ModelOriginal=ToyModel2,
+	ModelOpt=ToyNCNOcutCompExp2,
+	optimResT1=ToyT1opt2,
+	optimResT2=ToyT1opt2T2,
+	CNOlist=CNOlistToy2,
+	directory="testToy2",
+	namesFiles=namesFilesToy,
+	namesData=list(CNOlist="ToyModified4T2",Model="ToyModified4T2"),
+	resE=resECNOlistToy2)
+@
 
 \clearpage
 
