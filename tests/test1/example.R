@@ -14,7 +14,7 @@
 
 library(CellNOptR)
 #install.packages("CNORode_1.0.zip",repos=NULL);
-setwd("C:/Users/David/Desktop/stuff/CNOR_ode/tests/test1");
+setwd("tests/test1");
 library("CNORode")
 
 s = readSif('model.sif')
