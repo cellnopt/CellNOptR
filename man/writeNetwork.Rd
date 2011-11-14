@@ -10,7 +10,7 @@ This function also writes a Graphviz dot file that contains the same information
 }
 \usage{
 writeNetwork(ModelOriginal, ModelComprExpanded, optimResT1, optimResT2, CNOlist,
-tag = NULL)
+tag = NULL,verbose=FALSE)
 }
 \arguments{
   \item{ModelOriginal}{
@@ -32,6 +32,9 @@ The CNOlist on which the optimisation is based
   \item{tag}{
 NULL or string; tells whether you want to prefix filenames with a tag (replaces
 the default behaviour).
+}
+  \item{verbose}{
+If verbose=TRUE, the function prints a message every time an edge in the scaffold network couldn't be mapped back to the PKN
 }
 }
 \details{
