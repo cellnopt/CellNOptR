@@ -2,7 +2,7 @@
 \alias{logic_based_ode_MINLP_SSm}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-%%  ~~function to do ... ~~
+logic_based_ode_MINLP_SSm
 }
 \description{
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~

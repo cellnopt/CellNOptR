@@ -2,7 +2,7 @@
 \alias{simulate_and_plot_ode_fitness}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-%%  ~~function to do ... ~~
+simulate_and_plot_ode_fitness
 }
 \description{
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
