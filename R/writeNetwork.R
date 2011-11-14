@@ -8,14 +8,14 @@ writeNetwork<-function(
 	optimResT1,
 	optimResT2=NA,
 	CNOlist, 
-    tag=NULL){
+    tag=NULL,verbose=FALSE){
 
 	nwInfo<-getNetworkInfo(
 		ModelOriginal=ModelOriginal,
 		ModelComprExpanded=ModelComprExpanded,
 		optimResT1=optimResT1,
 		optimResT2=optimResT2,
-		CNOlist=CNOlist)
+		CNOlist=CNOlist,verbose=verbose)
 		
 	writeNetworkW(
 		dN=nwInfo$dN,
@@ -74,7 +74,8 @@ getNetworkInfo<-function(
 	ModelComprExpanded,
 	optimResT1,
 	optimResT2,
-	CNOlist){
+	CNOlist,
+	verbose){
 
 	#These are used to create the string that holds the information about whether an edge is present
 #or not (BStimes)
@@ -255,13 +256,27 @@ for(i in 1:dim(adj)[1]){
 					}else{
 					
 						n<-n+1
+						#this sets those variables to NA if the path couldn't be mapped
+						rIn<-NA
+						rOut<-NA
 						
 						}
 						
 				}	
-				
-			OrigMap[rIn]<-max(OrigMap[rIn],adj[i,3])	
-			OrigMap[rOut]<-max(OrigMap[rOut],adj[i,3])
+			#if the path could be mapped, we record the mapping	
+			if(!is.na(rIn) && !is.na(rOut)){
+			
+				OrigMap[rIn]<-max(OrigMap[rIn],adj[i,3])	
+				OrigMap[rOut]<-max(OrigMap[rOut],adj[i,3])
+			#if the path couldn't be mapped (path too long), we print a warning, nad OrigMap 
+			#stays 0
+				}else{
+					
+					if(verbose == TRUE){
+						print("Please be aware that when mapping the scaffold network back to the PKN, compressed paths of length > 2 are ignored.")
+						}
+					
+					}
 			
 			}
 	}
