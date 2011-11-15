@@ -12,13 +12,13 @@
 
 int* getNumBits(int* numInputs,int n)
 {
-    int *numBits=malloc(n*sizeof(int));
+    int *numBits=(int*)malloc(n*sizeof(int));
     int i;
     for (i = 0; i <n; i++)
     {
         if(numInputs[i]>0)
         {
-            numBits[i]=(int)pow(2,numInputs[i]);
+            numBits[i]=(int)pow(2,(double)numInputs[i]);
         }
         else
         {

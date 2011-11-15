@@ -26,6 +26,15 @@
 double normHill(double x,double n,double k);
 double hill_function(double x,double n,double k);
 double linear_transfer_function(double x,double n,double k);
+int* getNumInputs(int **adjMatrix,int n);
+int* getNumBits(int* numInputs,int n);
+int *findStates(int **adjMatrix, int n);
+int** getTruthTables(int** adjMat,int** interMat,int** notMat,int* isState,int* nInputs,int *nBits,int nRows,int nCols);
+int *getStateIndex(int **adjMatrix, int n);
+int*** get_support_truth_tables(int n,int *nInputs);
+int simulateODE(CNOStructure* data,	int exp_num,int verbose,double reltol,double atol,double maxStepSize,
+int maxNumSteps,int maxErrTestFails);
+
 
 SEXP sim_logic_ode
 (
@@ -199,12 +208,12 @@ SEXP sim_logic_ode
 
 	  //tempData.adjacencyMatrix = getAdjacencyMatrix(tempData.interMat,tempData.nRows,tempData.nCols);
 	  tempData.adjacencyMatrix=adjMatrix;
-	  tempData.numInputs = getNumInputs(tempData.adjacencyMatrix,tempData.nRows);
+	  tempData.numInputs =(int*) getNumInputs(tempData.adjacencyMatrix,tempData.nRows);
 
-	  tempData.numBits = getNumBits(tempData.numInputs,tempData.nRows);
-	  tempData.isState = findStates(tempData.adjacencyMatrix,tempData.nRows);
+	  tempData.numBits =(int*) getNumBits(tempData.numInputs,tempData.nRows);
+	  tempData.isState =(int*) findStates(tempData.adjacencyMatrix,tempData.nRows);
 
-	  tempData.truthTables = getTruthTables(tempData.adjacencyMatrix,tempData.interMat,
+	  tempData.truthTables =(int**) getTruthTables(tempData.adjacencyMatrix,tempData.interMat,
 	  tempData.notMat,tempData.isState,tempData.numInputs,tempData.numBits,tempData.nRows,tempData.nCols);
 
 	  state_array= (double*)malloc(tempData.nRows*sizeof(double));
@@ -232,7 +241,7 @@ SEXP sim_logic_ode
 	  }
 
 
-	  tempData.support_truth_tables= get_support_truth_tables(nRows,tempData.numInputs);
+	  tempData.support_truth_tables=(int***)get_support_truth_tables(nRows,tempData.numInputs);
 
 	  tempData.sim_results=simResults;
 
@@ -248,7 +257,7 @@ SEXP sim_logic_ode
 	  *data=tempData;
 
 	  for (i = 0; i <nExperiments; ++i)
-		  experiment_succeed[i]=simulateODE(data,i,verbose,reltol,atol,
+		  experiment_succeed[i]=(int)simulateODE(data,i,verbose,reltol,atol,
 				  maxStepSize,maxNumSteps,maxErrTestFails);
 
 	  

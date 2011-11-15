@@ -11,7 +11,7 @@
 
 int* getNumInputs(int **adjMatrix,int n)
 {
-    int *numInputs=malloc(n*sizeof(int));
+    int* numInputs=(int*)malloc(n*sizeof(int));
     int i,j,count;
     for (j = 0; j <n; j++)
     {

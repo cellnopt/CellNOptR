@@ -9,8 +9,6 @@
 
 #define Ith(v,i) ( NV_DATA_S(v)[i] )
 
-
-
 int* decimal2binary(int decimal_value,int nBits);
 
 int rhsODE(realtype t, N_Vector y, N_Vector ydot, void *data)

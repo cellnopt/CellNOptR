@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include <math.h>
 
+int* decimal2binary(int decimal_value,int nBits);
+
 int*** get_support_truth_tables(int n,int *nInputs)
 {
 	int i,j,k;
@@ -19,7 +21,7 @@ int*** get_support_truth_tables(int n,int *nInputs)
 		support_truth_tables[i]=(int**)malloc(pow(2,nInputs[i])*sizeof(int*));
 		for (j = 0; j < pow(2,nInputs[i]); ++j)
 		{
-			support_truth_tables[i][j]= decimal2binary(j,nInputs[i]);
+			support_truth_tables[i][j]= (int*)decimal2binary(j,nInputs[i]);
 		}
 	}
 	return(support_truth_tables);

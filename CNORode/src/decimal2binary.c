@@ -7,8 +7,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <R.h>
-
 
 int* decimal2binary(int decimal_value,int nBits)
 {
