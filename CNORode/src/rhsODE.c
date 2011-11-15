@@ -30,24 +30,24 @@ int rhsODE(realtype t, N_Vector y, N_Vector ydot, void *data)
 	          // hillFuncValues= (double*)malloc((*myData).numInputs[j]*sizeof(double));
 	           Ith(ydot,countState)=0;
 	           inputCount=0;
-	           for (i = 0; i < (*myData).nRows; ++i)
+	           for (i = 0; i < (*myData).numInputs[j]; ++i)
 	           {
-	        	   if((*myData).adjacencyMatrix[i][j])
-	        	   {
+	        	 //  if((*myData).adjacencyMatrix[i][j])
+	        	  // {
 	        		  nHill=(*myData).odeParameters[countPar++];
 	        		  kHill=(*myData).odeParameters[countPar++];
 
 	        		   if((*myData).isState[i])
 	        		   {
 	        			   hillFuncValues[inputCount++]=
-	        					   (*myData).transfer_function(Ith(y,(*myData).state_index[i]),nHill,kHill);
+	        					   (*myData).transfer_function(Ith(y,(*myData).state_index[(*myData).input_index[j][i]]),nHill,kHill);
 	        		   }
 	        		   else
 	        		   {
 	        			   hillFuncValues[inputCount++]=
-	        					   (*myData).transfer_function((*myData).state_array[i],nHill,kHill);
+	        					   (*myData).transfer_function((*myData).state_array[(*myData).input_index[j][i]],nHill,kHill);
 	        		   }
-	        	   }
+	        	   //}
 	           }
 
 	           //For every bit in the truth table

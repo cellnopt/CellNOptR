@@ -36,5 +36,8 @@ typedef struct
 	int*** support_truth_tables;
 	double(*transfer_function)(double,double,double);
 	int maxNumInputs;
+	int** truth_tables_index;
+	int** input_index;
+	int* count_bits;
 
 }CNOStructure;

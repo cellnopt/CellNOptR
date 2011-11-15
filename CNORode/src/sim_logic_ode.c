@@ -34,6 +34,9 @@ int *getStateIndex(int **adjMatrix, int n);
 int*** get_support_truth_tables(int n,int *nInputs);
 int simulateODE(CNOStructure* data,	int exp_num,int verbose,double reltol,double atol,double maxStepSize,
 int maxNumSteps,int maxErrTestFails);
+int** get_input_index(int** AdjMat,int n,int* numInputs);
+int* get_count_bits(int n,int** truth_tables, int* numBits);
+int** truth_tables_index(int n,int** truth_tables, int* numBits,int* count_bits);
 
 
 SEXP sim_logic_ode
@@ -220,6 +223,7 @@ SEXP sim_logic_ode
 	  tempData.numBits =(int*) getNumBits(tempData.numInputs,tempData.nRows);
 	  tempData.isState =(int*) findStates(tempData.adjacencyMatrix,tempData.nRows);
 
+
 	  tempData.truthTables =(int**) getTruthTables(tempData.adjacencyMatrix,tempData.interMat,
 	  tempData.notMat,tempData.isState,tempData.numInputs,tempData.numBits,tempData.nRows,tempData.nCols);
 
@@ -229,6 +233,13 @@ SEXP sim_logic_ode
 	  tempData.state_index=(int*)getStateIndex(tempData.adjacencyMatrix,tempData.nRows);
 	  tempData.inhibitor_array=inhibitor_array;
 	  tempData.state_array=state_array;
+
+	  tempData.count_bits=(int*)get_count_bits(nRows,tempData.truthTables, tempData.numBits);
+
+	  tempData.truth_tables_index=(int**)get_truth_tables_index(nRows,
+			  tempData.truthTables,tempData.numBits,tempData.count_bits);
+
+	  tempData.input_index=(int**)get_input_index(tempData.adjacencyMatrix,nRows,tempData.numInputs);
 
 	  counter=0;
 	  for (i = 0; i < nRows; ++i)
@@ -322,9 +333,13 @@ SEXP sim_logic_ode
 	  {
 		free(tempData.adjacencyMatrix[i]);
 	    free(tempData.truthTables[i]);
+	    free(tempData.truth_tables_index[i]);
+	    free(tempData.input_index[i]);
 	  }
 	  free(tempData.truthTables);
 	  free(tempData.adjacencyMatrix);
+	  free(tempData.truth_tables_index);
+	  free(tempData.input_index);
 
 	  for (i = 0; i < nExperiments; i++)
 		  free(valueSIGNALS[i]);
@@ -351,6 +366,7 @@ SEXP sim_logic_ode
 	  free(tempData.state_index);
 	  free(tempData.numBits);
 	  free(tempData.numInputs);
+	  free(tempData.count_bits);
 
 	  return(ans);
 }

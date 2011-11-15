@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-int** truth_table_index(int n,int** truth_tables, int* numBits)
+int* get_count_bits(int n,int** truth_tables, int* numBits)
 {
     int *count_bits=(int*)malloc(n*sizeof(int));
     int i,j;
@@ -13,7 +13,6 @@ int** truth_table_index(int n,int** truth_tables, int* numBits)
     	{
     		if(truth_tables[i][j])count_bits[i]++;
     	}
-
 	}
     return(count_bits);
 }
