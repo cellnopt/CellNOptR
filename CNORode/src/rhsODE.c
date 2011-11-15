@@ -13,12 +13,12 @@ int* decimal2binary(int decimal_value,int nBits);
 
 int rhsODE(realtype t, N_Vector y, N_Vector ydot, void *data)
 {
+		int i,j,k;
 		CNOStructure* myData=(CNOStructure*) data;
-	    int j,i,k;
 	    int countPar=0;
 	    double tempProd;
 		double kHill,nHill;
-	    double* hillFuncValues;
+	    double hillFuncValues[(*myData).maxNumInputs];
 	    int countState=0;
 	    int inputCount;
 
@@ -27,7 +27,7 @@ int rhsODE(realtype t, N_Vector y, N_Vector ydot, void *data)
 	    {
 	        if((*myData).isState[j])
 	        {
-	           hillFuncValues= (double*)malloc((*myData).numInputs[j]*sizeof(double));
+	          // hillFuncValues= (double*)malloc((*myData).numInputs[j]*sizeof(double));
 	           Ith(ydot,countState)=0;
 	           inputCount=0;
 	           for (i = 0; i < (*myData).nRows; ++i)
@@ -69,7 +69,6 @@ int rhsODE(realtype t, N_Vector y, N_Vector ydot, void *data)
 	        		   Ith(ydot,countState)+=tempProd;
 	        	   }
 	           }
-	           free(hillFuncValues);
 	           Ith(ydot,countState)=
 	        		   (Ith(ydot,countState)-Ith(y,countState))
 	        		   	   *(*myData).odeParameters[countPar++]

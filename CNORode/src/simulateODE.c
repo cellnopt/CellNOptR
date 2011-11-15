@@ -42,7 +42,7 @@ int simulateODE
     y = N_VNew_Serial(neq);
 	if (check_flag((void *)y, "N_VNew_Serial", 0,verbose))
     {
-		if(verbose)printf("\nSolver failed. . .\n");
+		if(verbose)printf("\nSolver failed in N_VNew_Serial(neq). . .\n");
 		return(0);
 	}
 
@@ -109,7 +109,7 @@ int simulateODE
 
 	cvode_mem = CVodeCreate(CV_BDF, CV_NEWTON);
 	if (((void *)cvode_mem, "CVodeCreate", 0,verbose)) {
-		if(verbose)printf("\nSolver failed. . .\n");
+		if(verbose)printf("\nSolver failed in CVodeCreate(CV_BDF, CV_NEWTON) . . .\n");
 		N_VDestroy_Serial(y);
 		return(0);
 	}
@@ -119,7 +119,7 @@ int simulateODE
 	  flag = CVodeInit(cvode_mem,*rhsODE, ti, y);
 	 if ((&flag, "CVodeMalloc", 1,verbose))
 	 {
-		if(verbose)printf("\nSolver failed. . .\n");
+		if(verbose)printf("\nSolver failed in CVodeInit(cvode_mem,*rhsODE, ti, y). . .\n");
 		  N_VDestroy_Serial(y);
 		  /* Free integrator memory */
 		  CVodeFree(&cvode_mem);
@@ -132,7 +132,7 @@ int simulateODE
 	 flag = CVodeSetUserData(cvode_mem, data);
 	 if((&flag, "CVodeSetFdata", 1,verbose))
 	 {
-		 if(verbose)printf("\nSolver failed. . .\n");
+		 if(verbose)printf("\nSolver failed in flag = CVodeSetUserData(cvode_mem, data). . .\n");
 		  N_VDestroy_Serial(y);
 		  /* Free integrator memory */
 		  CVodeFree(&cvode_mem);
@@ -155,7 +155,7 @@ int simulateODE
 	 flag = CVodeSetMaxNumSteps(cvode_mem, maxNumSteps);
 	 if(check_flag(&flag, "CVodeSetMaxNumSteps", 1,verbose))
 	 {
-		if(verbose)printf("\nSolver failed. . .\n");
+		if(verbose)printf("\nSolver failed in CVodeSetMaxNumSteps(cvode_mem, maxNumSteps). . .\n");
 		return(0);
 		  N_VDestroy_Serial(y);
 		  /* Free integrator memory */
@@ -180,7 +180,7 @@ int simulateODE
 
     	if (check_flag(&flag, "CVode", 1,verbose))
     	{
-    		if(verbose)fprintf(stderr,"\nSolver failed. . .\n");
+    		if(verbose)fprintf(stderr,"\nSolver failed at flag = CVode(cvode_mem, tout, y, &tf, CV_NORMAL);. . .\n");
     		N_VDestroy_Serial(y);
     		CVodeFree(&cvode_mem);
     		return(0);

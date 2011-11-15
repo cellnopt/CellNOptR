@@ -71,6 +71,7 @@ SEXP sim_logic_ode
 	 double*** simResults;
 	 double* inhibitor_array;
 	 int ***support_truth_tables;
+	 int maxNumInputs=-1;
 
 	 int nRows = INTEGER(nRows_in)[0];
 	 int nCols=INTEGER(nCols_in)[0];
@@ -209,6 +210,12 @@ SEXP sim_logic_ode
 	  //tempData.adjacencyMatrix = getAdjacencyMatrix(tempData.interMat,tempData.nRows,tempData.nCols);
 	  tempData.adjacencyMatrix=adjMatrix;
 	  tempData.numInputs =(int*) getNumInputs(tempData.adjacencyMatrix,tempData.nRows);
+
+	  for (i = 0; i < nRows; ++i) {
+		  if(tempData.numInputs[i]>maxNumInputs)maxNumInputs=tempData.numInputs[i];
+
+	}
+	  tempData.maxNumInputs=maxNumInputs;
 
 	  tempData.numBits =(int*) getNumBits(tempData.numInputs,tempData.nRows);
 	  tempData.isState =(int*) findStates(tempData.adjacencyMatrix,tempData.nRows);

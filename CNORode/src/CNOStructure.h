@@ -35,5 +35,6 @@ typedef struct
 	double*** sim_results;
 	int*** support_truth_tables;
 	double(*transfer_function)(double,double,double);
+	int maxNumInputs;
 
 }CNOStructure;
