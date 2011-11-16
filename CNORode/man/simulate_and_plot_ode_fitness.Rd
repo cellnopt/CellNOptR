@@ -2,13 +2,13 @@
 \alias{simulate_and_plot_ode_fitness}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-simulate_and_plot_ode_fitness
+%%  ~~function to do ... ~~
 }
 \description{
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-simulate_and_plot_ode_fitness(cnolist, model, ode_parameters = NULL, indices = NULL, adjMatrix = NULL, time = 1, verbose = 0, transfer_function = 3, reltol = 1e-04, atol = 0.001, maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails = 50)
+simulate_and_plot_ode_fitness(cnolist, model, ode_parameters = NULL, indices = NULL, adjMatrix = NULL, time = 1, verbose = 0, transfer_function = 3, reltol = 1e-04, atol = 0.001, maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails = 50, plot_index_signals = NULL, plot_index_experiments = NULL, plot_index_cues = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -51,6 +51,15 @@ simulate_and_plot_ode_fitness(cnolist, model, ode_parameters = NULL, indices = N
   \item{maxErrTestsFails}{
 %%     ~~Describe \code{maxErrTestsFails} here~~
 }
+  \item{plot_index_signals}{
+%%     ~~Describe \code{plot_index_signals} here~~
+}
+  \item{plot_index_experiments}{
+%%     ~~Describe \code{plot_index_experiments} here~~
+}
+  \item{plot_index_cues}{
+%%     ~~Describe \code{plot_index_cues} here~~
+}
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~
@@ -83,32 +92,45 @@ simulate_and_plot_ode_fitness(cnolist, model, ode_parameters = NULL, indices = N
 ##--	or do  help(data=index)  for the standard data sets.
 
 ## The function is currently defined as
-function (cnolist, model, ode_parameters = NULL, indices = NULL, 
-    adjMatrix = NULL, time = 1, verbose = 0, transfer_function = 3, 
-    reltol = 1e-04, atol = 0.001, maxStepSize = Inf, maxNumSteps = 1e+05, 
-    maxErrTestsFails = 50) 
+function
+(
+		cnolist,				    model,					    ode_parameters=NULL,
+		indices=NULL,			    adjMatrix=NULL,			 	time=1,
+		verbose=0, 				    transfer_function=3,		reltol=1e-4,
+		atol=1e-3,				    maxStepSize=Inf,		 	maxNumSteps=100000,
+		maxErrTestsFails=50,		plot_index_signals=NULL,	plot_index_experiments=NULL,
+		plot_index_cues=NULL
+)
 {
-    if (is.null(indices)) 
-        indices = indexFinder(cnolist, model)
-    if (is.null(adjMatrix)) 
-        adjMatrix = incidence2Adjacency(model)
-    if (is.null(ode_parameters)) 
-        ode_parameters = makeParameterList(adjMatrix, model$namesSpecies)
-    sim_data = get_logic_based_ode_data_simulation(cnolist, model, 
-        ode_parameters, indices, time, verbose, transfer_function, 
-        reltol, atol, maxStepSize, maxNumSteps, maxErrTestsFails)
-    times = cnolist$timeSignals
-    expResults = cnolist$valueSignals
-    namesSignals = cnolist$namesSignals
-    namesCues = c(cnolist$namesStimuli, cnolist$namesInhibitors)
-    valueCues = cbind(cnolist$valueStimuli, cnolist$valueInhibitors)
-    valueCues = as.matrix(valueCues)
-    valueCues[which(valueCues > 0)] = 1
-    names(valueCues) = namesCues
-    plotOptimResults(SimResults = sim_data, expResults = expResults, 
-        times = times, namesCues = namesCues, namesSignals = namesSignals, 
-        valueCues = valueCues)
-    return(sim_data)
+	if(is.null(plot_index_experiments))plot_index_experiments=1:dim(cnolist$valueCues)[1];
+	if(is.null(plot_index_cues))plot_index_cues=1:dim(cnolist$valueCues)[2];
+	if(is.null(plot_index_signals))plot_index_signals=1:dim(cnolist$valueSignals[[1]])[1];
+	if(is.null(indices))indices=indexFinder(cnolist,model);
+	if(is.null(adjMatrix))adjMatrix=incidence2Adjacency(model);
+	if(is.null(ode_parameters))ode_parameters=makeParameterList(adjMatrix,model$namesSpecies);
+
+	sim_data=get_logic_based_ode_data_simulation(cnolist,model,
+			ode_parameters,indices,time,verbose,transfer_function,
+			reltol,atol,maxStepSize,maxNumSteps,maxErrTestsFails);
+
+	times=cnolist$timeSignals;
+	sim_data=lapply(sim_data,function(x)x[plot_index_experiments,plot_index_signals]);
+	expResults=lapply(cnolist$valueSignals,function(x)x[plot_index_experiments,plot_index_signals]);
+
+	namesSignals=cnolist$namesSignals[plot_index_signals];
+	namesCues=c(cnolist$namesStimuli,cnolist$namesInhibitors);
+
+	valueCues=cbind(cnolist$valueStimuli,cnolist$valueInhibitors);
+	valueCues=as.matrix(valueCues);
+	valueCues[which(valueCues>0)]=1;
+	valueCues=valueCues[plot_index_experiments,plot_index_cues];
+	names(valueCues)=namesCues[plot_index_cues];
+
+	plotOptimResults(SimResults=sim_data,expResults=expResults,
+			times=times,namesCues=namesCues,namesSignals=namesSignals,
+			valueCues=valueCues);
+			
+  return(sim_data);
   }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

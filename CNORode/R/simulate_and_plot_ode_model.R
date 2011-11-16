@@ -1,10 +1,10 @@
 simulate_and_plot_ode_model<-function
 (
-		cnolist,				    model,					      ode_parameters=NULL,
-		indices=NULL,			    adjMatrix=NULL,			  time=1,
-		verbose=0, 				    transfer_function=3,	reltol=1e-4,
-		atol=1e-3,				    maxStepSize=Inf,		  maxNumSteps=100000,
-		maxErrTestsFails=50,  		large=FALSE,          nsplit=4
+		cnolist,				    model,					    ode_parameters=NULL,
+		indices=NULL,			    adjMatrix=NULL,			  	time=1,
+		verbose=0, 				    transfer_function=3,		reltol=1e-4,
+		atol=1e-3,				    maxStepSize=Inf,		  	maxNumSteps=100000,
+		maxErrTestsFails=50,  		large=FALSE,          		nsplit=4
 )
 {
 

@@ -24,11 +24,14 @@ function
 		sim=sim_function1(cnolist1,model1,ode_parameters1$parValues);
 		sim<-unlist(lapply(sim,function(x) x[,indices1$signals]));
 		measured_values=unlist(cnolist1$valueSignals);                                                    
-		NaNs=which(is.na(sim));
-		not_NaNs=which(!is.na(sim));
+		NaNs_sim=which(is.na(sim));
+		NaNs_data=which(is.nan(measured_values));		
+		not_NaNs_data=which(!is.na(measured_values)));
+		not_Nas_sim=which(!is.na(sim);
+		not_NaNs=unique(c(not_NaNs_sim,not_NaNs_data));
 		error=sum((sim[not_NaNs]-measured_values[not_NaNs])^2);
-		if(is.na(error))error=0;
-		res=(error+length(NaNs))/length(sim);
+		if(is.na(error))return(1);
+		res=(error+length(NaNs_sim))/length(not_NaNs_data);
 		return(res);
 	}
 	return(logic_ode_continuous_objective_function);

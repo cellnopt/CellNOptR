@@ -10,15 +10,8 @@ int** get_input_index(int** adjMat,int n,int* numInputs)
     for (j = 0; j < n; ++j)
     {
     	input_index[j]=(int*)malloc(numInputs[j]*sizeof(int));
-
     	count=0;
     	for (i = 0; i < n; ++i)	if(adjMat[i][j])input_index[j][count++]=i;
-
-    	for (i = 0; i < numInputs[j]; ++i)
-    	{
-    		Rprintf("%d\t",input_index[j][i]);
-		}
-    	Rprintf("\n");
 	}
     return(input_index);
 }
