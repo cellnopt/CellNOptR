@@ -26,7 +26,7 @@ indices <- indexFinder(cnolist, s, verbose = TRUE)
 
 adjMat=incidence2Adjacency(s);
 ode_parameters=makeParameterList(adjMat,s$namesSpecies,LB_k=0.15,UB_k=0.85,LB_n=1,UB_n=5,
-LB_tau=0.001,UB_tau=0.03,random=TRUE);
-#print(system.time(get_logic_based_ode_data_simulation(cnolist,s,ode_parameters,indices,transfer_function=3)));
-results=logic_based_ode_parameters_estimation_SSm(cnolist,s,ode_parameters=ode_parameters,ndiverse=10,dim_refset=6);
+LB_tau=0.001,UB_tau=0.03,random=FALSE,default_tau=0.001,default_n=3);
+print(system.time(get_logic_based_ode_data_simulation(cnolist,s,ode_parameters,indices,transfer_function=3)));
+#results=logic_based_ode_parameters_estimation_SSm(cnolist,s,ode_parameters=ode_parameters,ndiverse=10,dim_refset=6);
 
