@@ -10,7 +10,7 @@ simulate_and_plot_ode_fitness<-function
 {
 	if(is.null(plot_index_experiments))plot_index_experiments=1:dim(cnolist$valueCues)[1];
 	if(is.null(plot_index_cues))plot_index_cues=1:dim(cnolist$valueCues)[2];
-	if(is.null(plot_index_signals))plot_index_signals=1:dim(cnolist$valueSignals[[1]])[1];
+    if(is.null(plot_index_signals))plot_index_signals=1:dim(cnolist$valueSignals[[1]])[2];
 	if(is.null(indices))indices=indexFinder(cnolist,model);
 	if(is.null(adjMatrix))adjMatrix=incidence2Adjacency(model);
 	if(is.null(ode_parameters))ode_parameters=makeParameterList(adjMatrix,model$namesSpecies);
@@ -20,8 +20,11 @@ simulate_and_plot_ode_fitness<-function
 			reltol,atol,maxStepSize,maxNumSteps,maxErrTestsFails);
 
 	times=cnolist$timeSignals;
+	print(1)
 	sim_data=lapply(sim_data,function(x)x[plot_index_experiments,plot_index_signals]);
+	print(2)
 	expResults=lapply(cnolist$valueSignals,function(x)x[plot_index_experiments,plot_index_signals]);
+	print(3)
 
 	namesSignals=cnolist$namesSignals[plot_index_signals];
 	namesCues=c(cnolist$namesStimuli,cnolist$namesInhibitors);
