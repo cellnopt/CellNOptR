@@ -51,10 +51,13 @@ get_simulation_function <-function
 		maxStepSize=as.double(maxStepSize);
 		maxNumSteps=as.integer(maxNumSteps);
 		maxErrTestsFails=as.integer(maxErrTestsFails);
+		break_at_1st_fail=as.integer(0);
+		
 		res = .Call("sim_logic_ode",interMat,notMat,adjMatrix,nRows,nCols,nPars,timeSignals,
 				valueInhibitors,valueSignals,valueStimuli,nTimes,nExperiments,nSignals,
 				indexSignals,nStimuli,indexStimuli,nInhibitors,indexInhibitors,odeParameters,
-				verbose,transfer_function,reltol,atol,maxStepSize,maxNumSteps,maxErrTestsFails);
+				verbose,transfer_function,reltol,atol,maxStepSize,maxNumSteps,maxErrTestsFails,
+				break_at_1st_fail);
 		return(res);
 	}
 	return(simulate_logic_based_ode_model);

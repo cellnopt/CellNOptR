@@ -36,7 +36,7 @@ int simulateODE(CNOStructure* data,	int exp_num,int verbose,double reltol,double
 int maxNumSteps,int maxErrTestFails);
 int** get_input_index(int** AdjMat,int n,int* numInputs);
 int* get_count_bits(int n,int** truth_tables, int* numBits);
-int** truth_tables_index(int n,int** truth_tables, int* numBits,int* count_bits);
+int** get_truth_tables_index(int n,int** truth_tables, int* numBits,int* count_bits);
 
 
 SEXP sim_logic_ode
@@ -49,14 +49,13 @@ SEXP sim_logic_ode
 		SEXP indexStimuli_in,		SEXP nInhibitors_in,		SEXP indexInhibitors_in,
 		SEXP odeParameters_in,		SEXP verbose_in,			SEXP transfer_function_in,
 		SEXP reltol_in,				SEXP atol_in,				SEXP maxStepSize_in,
-		SEXP maxNumSteps_in,		SEXP maxErrTestFails_in
+		SEXP maxNumSteps_in,		SEXP maxErrTestFails_in,	SEXP break_at_1st_fail_in
 )
 {
 
 	SEXP arg,ans;
-	 double *x;
 	 int countProtected=0;
-	 int i,j,k,nStates,counter;
+	 int i,j,k,counter;
 	 int *indexSig;
 	 int *indexStim;
 	 int *indexInh;
@@ -73,7 +72,6 @@ SEXP sim_logic_ode
 	 double* state_array;
 	 double*** simResults;
 	 double* inhibitor_array;
-	 int ***support_truth_tables;
 	 int maxNumInputs=-1;
 
 	 int nRows = INTEGER(nRows_in)[0];
@@ -91,6 +89,7 @@ SEXP sim_logic_ode
 	 double maxStepSize=(REAL)(maxStepSize_in)[0];
 	 int maxNumSteps=(INTEGER)(maxNumSteps_in)[0];
 	 int maxErrTestFails=(INTEGER)(maxErrTestFails_in)[0];
+	 int break_at_1st_fail=(INTEGER)(break_at_1st_fail_in)[0];
 
 	 int experiment_succeed[nExperiments];
 	 counter=0;
@@ -274,9 +273,16 @@ SEXP sim_logic_ode
 
 	  *data=tempData;
 
+	  for (i = 0; i <nExperiments; ++i)experiment_succeed[i]=0;
 	  for (i = 0; i <nExperiments; ++i)
-		  experiment_succeed[i]=(int)simulateODE(data,i,verbose,reltol,atol,
+		{
+			experiment_succeed[i]=(int)simulateODE(data,i,verbose,reltol,atol,
 				  maxStepSize,maxNumSteps,maxErrTestFails);
+				 if(break_at_1st_fail)
+					{
+						if(!experiment_succeed[i])break;
+					}
+		}
 
 	  
 
