@@ -7,7 +7,7 @@ Plot the results of an optimisation at t2
 This function takes a model and an optimised bitstring, it cuts the model according to the bitstring and plots the results of the simulation along with the experimental data. This function is designed to work on results of a 2 step optimisation.
 }
 \usage{
-cutAndPlotResultsT2(Model, bStringT1, bStringT2, SimList, CNOlist, indexList, plotPDF = FALSE)
+cutAndPlotResultsT2(Model, bStringT1, bStringT2, SimList, CNOlist, indexList, plotPDF = FALSE, tag=NULL)
 }
 \arguments{
   \item{Model}{
@@ -31,7 +31,12 @@ an indexList, produced by indexFinder ran on the model and the CNOlist above
   \item{plotPDF}{
 TRUE or FALSE, tells whether you want a pdf to be produced or not
 }
+  \item{tag}{
+NULL or string; tells whether you want to prefix filenames with a tag (replaces
+the default behaviour).
 }
+}
+
 \value{
 This function doesn't return anything, it only plots the graph in your graphic window, and in a pdf file if asked
 }

@@ -5,7 +5,8 @@ cutAndPlotResultsT2 <-function(
 	SimList,
 	CNOlist,
 	indexList,
-	plotPDF=FALSE){
+	plotPDF=FALSE, 
+	tag=NULL){
 	
 
 	
@@ -82,11 +83,18 @@ cutAndPlotResultsT2 <-function(
 		valueCues=CNOlist$valueCues)
 		
 	if(plotPDF == TRUE){
+		if ( is.null(tag)){
+			filename <- paste(deparse(substitute(Model)),"SimResultsT1T2.pdf",sep="")
+		}
+		else{
+            filename<-paste(tag, "SimResultsT1T2.pdf", sep="_")
+		}
+
 		plotOptimResultsPDF(
 			SimResults=SimResults,
 			expResults=expResults,
 			times=CNOlist$timeSignals[1:3],
-			fileName=paste(deparse(substitute(Model)),"SimResultsT1T2.pdf",sep=""),
+			filename=filename,
 			namesCues=CNOlist$namesCues,
 			namesSignals=CNOlist$namesSignals,
 			valueCues=CNOlist$valueCues)

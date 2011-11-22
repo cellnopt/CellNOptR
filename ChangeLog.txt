@@ -1,7 +1,12 @@
 
+20/Nov/2011 0.99.9
+-------------------
 
-
-
+* Fix bug http://www.ebi.ac.uk/panda/jira/browse/CNO-22 reported by Inna related
+  to 2 steady states. (typo in filename argument in cutAndPlotResultsT2). Similarly to  cutAndPlotResultsT1, 
+  an if statement was added to provide a tag for the filename instead of the
+  model name.
+* Updated Rd files where needed
 
 
 14/Nov/2011
