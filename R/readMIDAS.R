@@ -58,7 +58,9 @@ readMIDAS<-function(MIDASfile, verbose=TRUE){
 
 		}else{
 
+		if (verbose){
 			print(paste("Your data set comprises ", length(TRcol),"stimuli and inhibitors"))
+        }
 			warning("There is no cell line information. If some of your TR columns represents the cell lines, please indicate it in your file by naming them 'TR:name:CellLine'")
 
 		}
@@ -73,22 +75,21 @@ readMIDAS<-function(MIDASfile, verbose=TRUE){
 
 
     # replace NaN character by NA. as.matrix is required to scan all columns AND rows
-    # Note that on some older R version, the is.nan does not seem to work well, hence thw
+    # Note that on some older R version, the is.nan does not seem to work well, hence the
     # try catch (see Changelog 0.99.6
-
     conversion <- tryCatch({
         if (any(is.nan(as.matrix(data)))){
             data[is.nan(as.matrix(data))] <- NA
-        }},
-        error=function(e) {return(NULL)},
+        }
+        conversion = TRUE},
+        error=function(e) {return(FALSE)},
         finally={
             if (verbose){
                 print("Your data file contained 'NaN'. We have assumed that these were missing values and replaced them by NAs.")
             }}
     )
 
-    if (is.null(conversion)){
-
+    if ( conversion == FALSE){
         if(any(as.matrix(data == "NaN"))){
 			for(c in 1:dim(data)[2]){
 	            for(r in 1:dim(data)[1]){
