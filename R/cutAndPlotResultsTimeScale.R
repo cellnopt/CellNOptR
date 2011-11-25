@@ -1,4 +1,4 @@
-cutAndPlotResultsTimeScale <- function(Model, bString, SimList, CNOlist, indexList, plotPDF=FALSE, boolUpdates=boolUpdates, divTime=NULL) {
+cutAndPlotResultsTimeScale <- function(Model, bString, SimList, CNOlist, indexList, boolUpdates=boolUpdates, divTime=NULL) {
 	
 	Modelcut <- Model
 	Modelcut$interMat <- Modelcut$interMat[,as.logical(bString)]

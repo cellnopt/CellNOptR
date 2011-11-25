@@ -27,8 +27,10 @@ The number of update rounds the simulator should run for.
 }
 }
 \details{
+To simulate a particular model according to a user-defined bit string, use cutModel() and then simulate from the output.
 }
 \value{
+A 3-dimensional array that gives the value of all species under each condition at each update ([conditions, species, update].
 }
 \references{
 }

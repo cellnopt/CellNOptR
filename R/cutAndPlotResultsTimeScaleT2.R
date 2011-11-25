@@ -1,4 +1,4 @@
-cutAndPlotResultsTimeScaleT2 <- function(Model, bStringT1, bStringT2, SimList, CNOlist, indexList, plotPDF=FALSE, boolUpdates, divTime) {
+cutAndPlotResultsTimeScaleT2 <- function(Model, bStringT1, bStringT2, SimList, CNOlist, indexList, boolUpdates, divTime) {
 	
 	library(abind)
 	# simulate T1

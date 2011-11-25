@@ -4,84 +4,81 @@
 Plot the results of a time-course optimisation
 }
 \description{
-This function
+This function takes the optimized bit string, cuts the model according to the string and then finds the optimized scaling factor to pass on to plotOptimResultsTimeScale for visualization.
 }
 \usage{
-cutAndPlotResultsT1(Model, bString, SimList, CNOlist, indexList, plotPDF =
-FALSE, tag = NULL, show=TRUE)
+cutAndPlotResultsTimeScale(Model, bString, SimList, CNOlist,
+indexList, boolUpdates=boolUpdates, divTime=NULL)
 }
 \arguments{
-  \item{Model}{
+\item{Model}{
 a model (the full one that was used for optimisation)
 }
-  \item{bString}{
-a bitstring for T1  as output by gabinaryT1 (i.e. a vector of 1s and 0s)
+\item{bString}{
+a bit string for T1 as output by gabinaryT1 (i.e. a vector of 1s and 0s)
 }
-  \item{SimList}{
+\item{SimList}{
 a simlist corresponding to the model, as output by prep4Sim
 }
-  \item{CNOlist}{
-a CNOlist, corresponding to the optimisation one
+\item{CNOlist}{
+the CNOlist used in optimization
 }
-  \item{indexList}{
-an indexList, produced by indexFinder ran on the model and the CNOlist above
+\item{indexList}{
+an indexList, produced by indexFinder run on the model and the CNOlist above
 }
-  \item{plotPDF}{
-TRUE or FALSE; tells whether you want a pdf to be produced or not
+\item{boolUpdates}{
+the number of synchronous updates performed by the boolean simulator.
 }
-  \item{tag}{
-NULL or string; tells whether you want to prefix filenames with a tag (replaces
-the default behaviour).
-}
-  \item{show}{
-TRUE of FALSE; FALSE tells not to show the plot, which can be useful when scripting.
+\item{divTime}{
+the experimental time point that divides the early and late steady states, if using the 2-steady state version.
 }
 }
 
 \value{
-This function doesn't return anything, it only plots the graph in your graphic window, and in a pdf file if asked
+This function doesn't return anything, it only plots the graph in your graphic window.
 }
 \author{
-C.Terfve
+A. MacNamara
 }
 \seealso{
-gabinaryT1, prep4Sim
+plotOptimResultsTimeScale
 }
 \examples{
-#load data
+data(CNOlistToyFB, package="CNORdiscreteTime")
+data(ToyModelFB, package="CNORdiscreteTime")
 
-data(CNOlistToy,package="CellNOptR")
-data(ToyModel,package="CellNOptR")
+# pre-process model
 
-#pre-process model
+indexOrig <- indexFinder(CNOlist=CNOlistToyFB, Model=ToyModelFB, verbose=T)
+indexNONC <- findNONC(Model=ToyModelFB, indexes=indexOrig, verbose=T)
+ModelCut <- cutNONC(Model=ToyModelFB, NONCindexes=indexNONC)
+indexNONCcut <- indexFinder(CNOlist=CNOlistToyFB, Model=ModelCut)
+ModelCutCompress <- compressModel(Model=ModelCut, indexes=indexNONCcut)
+indexNONCcutComp <- indexFinder(CNOlist=CNOlistToyFB, Model=ModelCutCompress)
+ModelCutCompressExpand <- expandGates(Model=ModelCutCompress)
+fields4Sim <- prep4Sim(Model=ModelCutCompressExpand)
+initBstring <- rep(1, length(ModelCutCompressExpand$reacID))
 
-checkSignals(CNOlistToy,ToyModel)
-indicesToy<-indexFinder(CNOlistToy,ToyModel,verbose=FALSE)
-ToyNCNOindices<-findNONC(ToyModel,indicesToy,verbose=FALSE)
-ToyNCNOcut<-cutNONC(ToyModel,ToyNCNOindices)
-indicesToyNCNOcut<-indexFinder(CNOlistToy,ToyNCNOcut)
-ToyNCNOcutComp<-compressModel(ToyNCNOcut,indicesToyNCNOcut)
-indicesToyNCNOcutComp<-indexFinder(CNOlistToy,ToyNCNOcutComp)
-ToyNCNOcutCompExp<-expandGates(ToyNCNOcutComp)
+# optimize
 
-#optimise
+boolUpdates = 20
+optFB <- gaBinaryTimeScale(
+  CNOlist=CNOlistToyFB,
+  Model=ModelCutCompressExpand,
+  SimList=fields4Sim,
+  indexList=indexNONCcutComp,
+  initBstring=initBstring,
+  verbose=TRUE,
+  boolUpdates=boolUpdates,
+  divTime=NULL)
 
-ToyFields4Sim<-prep4Sim(ToyNCNOcutCompExp)
-initBstring<-rep(1,length(ToyNCNOcutCompExp$reacID))
-ToyT1opt<-gaBinaryT1(
-	CNOlist=CNOlistToy,
-	Model=ToyNCNOcutCompExp,
-	SimList=ToyFields4Sim,
-	indexList=indicesToyNCNOcutComp,
-	initBstring=initBstring, 
-	maxGens=2, 
-	PopSize = 5,
-	verbose=FALSE)
-cutAndPlotResultsT1(
-	Model=ToyNCNOcutCompExp,
-	bString=ToyT1opt$bString,
-	SimList=ToyFields4Sim,
-	CNOlist=CNOlistToy,
-	indexList=indicesToyNCNOcutComp,
-	plotPDF=FALSE)
+cutAndPlotResultsTimeScale(
+  Model=ModelCutCompressExpand,
+  bString=optFB$bString,
+  SimList=fields4Sim,
+  CNOlist=CNOlistToyFB,
+  indexList=indexNONCcutComp,
+  plotPDF=FALSE,
+  boolUpdates=boolUpdates)
 }
+
