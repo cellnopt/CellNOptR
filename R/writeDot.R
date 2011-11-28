@@ -55,7 +55,7 @@ writeDot<-function(dotNodes,dotMatrix,Model,filename){
 		}
 		
 	notSinks<-apply(Model$interMat,1,findSinks)
-	sinks<-rownames(Model$interMat[!notSinks,])
+	sinks<-rownames(Model$interMat)[!notSinks]
 	
 #now find the distances from nodes to source/sink
 	ModeltoGraphNEL<-function(Model){

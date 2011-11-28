@@ -1,3 +1,6 @@
+28/Nov/2011 0.99.10
+-------------------
+*fix a bug in writeDot so that it still works when there is only one sink node
 
 20/Nov/2011 0.99.9
 -------------------

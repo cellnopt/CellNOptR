@@ -1,8 +1,8 @@
 Package: CellNOptR
 Type: Package
 Title: R version of CellNOpt, boolean features only
-Version: 0.99.9
-Date: 2011-11-14
+Version: 0.99.10
+Date: 2011-11-28
 Author: C.Terfve
 Maintainer: C.Terfve <terfve@ebi.ac.uk>
 Depends: RBGL, graph
