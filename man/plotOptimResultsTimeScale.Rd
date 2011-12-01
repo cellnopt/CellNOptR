@@ -1,104 +1,88 @@
 \name{plotOptimResultsTimeScale}
 \alias{plotOptimResultsTimeScale}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-plotOptimResultsTimeScale
+Plot the data and simulated values for time course data
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+This function is the equivalent of CNOPlotFits, it plots the data and the simulated values,  along with an image plot that tells which cues were present. The plots are colored according to the fit between data and simulated data.
 }
 \usage{
-logic_based_ode_MINLP_SSm(cnolist, model, ode_parameters = NULL, maxeval = Inf, maxtime = 100, ndiverse = NULL, dim_refset = NULL)
+plotOptimResults(SimResults = SimResults, yInterpol = yInterpol, xCoords = xCoords,
+times = times, namesCues = namesCues, namesSignals = namesSignals, valueCues = valueCues)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{cnolist}{
-%%     ~~Describe \code{cnolist} here~~
+\item{SimResults}{
+a list with a field for each time point, each containing a matrix of dimensions (number of conditions) * (number of signals), with the first field being t=0. Typically produced by simulating a model and then extracting the columns that correspond to signals
 }
-  \item{model}{
-%%     ~~Describe \code{model} here~~
+\item{yInterpol}{
+the interpolated experimental data returned by \code{getFitTimeScale}
 }
-  \item{ode_parameters}{
-%%     ~~Describe \code{ode_parameters} here~~
+\item{xCoords}{
+the x-coordinates of the data and simulation after the application of the optimized scaling factor
 }
-  \item{maxeval}{
-%%     ~~Describe \code{maxeval} here~~
+\item{namesCues}{
+a vector of names, typically \code{CNOlist$namesCues}
 }
-  \item{maxtime}{
-%%     ~~Describe \code{maxtime} here~~
+\item{namesSignals}{
+a vector of names, typically \code{CNOlist$namesSignals}
 }
-  \item{ndiverse}{
-%%     ~~Describe \code{ndiverse} here~~
-}
-  \item{dim_refset}{
-%%     ~~Describe \code{dim_refset} here~~
+\item{valueCues}{
+a matrix of dimensions (number of conditions) * (number of cues), typically \code{CNOlist$valueCues}
 }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+A single coloring denotes the goodness of fit between simulation and experiment, this needs to be looked at again.
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+This function doesn't return anything, it just produces a plot in your graphics window.
 }
 \references{
-%% ~put references to the literature/web site here ~
+J. Saez-Rodriguez, L. G. Alexopoulos, J. Epperlein, R. Samaga, D. A. Lauffenburger, S. Klamt and P. K. Sorger. Discrete logic modeling as a means to link protein signaling networks with functional analysis of mammalian signal transduction, Molecular Systems Biology, 5:331, 2009.
 }
 \author{
-%%  ~~who you are~~
+A. MacNamara
 }
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+cutAndPlotResultsTimeScale
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+# this function is usually contained within cutAndPlotResultsTimeScale
+# but the output can be viewed as follows:
 
-## The function is currently defined as
-function (cnolist, model, ode_parameters = NULL, maxeval = Inf, 
-    maxtime = 100, ndiverse = NULL, dim_refset = NULL) 
-{
-    library(eSSmR)
-    library(Rsolnp)
-    if (is.null(ode_parameters)) {
-        adjMat = incidence2Adjacency(model)
-        ode_parameters = makeParameterList(adjMat, model$namesSpecies, 
-            random = TRUE)
-    }
-    n_cont = length(ode_parameters$index_opt_pars)
-    n_int = dim(model$interMat)[2]
-    problem = list()
-    problem$f <- get_logic_ode_MINLP_objective_function(cnolist, 
-        model, ode_parameters, indices)
-    problem$x_L <- c(ode_parameters$LB[ode_parameters$index_opt_pars], 
-        matrix(0, 1, n_int))
-    problem$x_U <- c(ode_parameters$UB[ode_parameters$index_opt_pars], 
-        matrix(1, 1, n_int))
-    problem$x_0 <- c(ode_parameters$parValues[ode_parameters$index_opt_pars], 
-        as.integer(round(runif(12))))
-    problem$int_var = 0
-    problem$bin_var = n_int
-    opts = list()
-    opts$maxeval = maxeval
-    opts$maxtime = maxtime
-    if (!is.null(ndiverse)) 
-        opts$ndiverse = ndiverse
-    if (!is.null(dim_refset)) 
-        opts$dim_refset = dim_refset
-    return(essR(problem, opts))
-  }
+library(CellNOptR)
+library(CNORdiscreteTime)
+data(CNOlistToyFB, package="CNORdiscreteTime")
+data(ToyModelFB, package="CNORdiscreteTime")
+boolUpdates=20
+
+indexOrig <- indexFinder(CNOlistToyFB, ToyModelFB, verbose=TRUE)
+fields4Sim <- prep4Sim(ToyModelFB)
+
+SimRes <- simulatorTimeScale(
+  CNOlist=CNOlistToyFB,
+  Model=ToyModelFB,
+  SimList=fields4Sim,
+  indexList=indexOrig,
+  boolUpdates=boolUpdates
+)
+
+SimRes <- SimRes[,indexOrig$signals,]
+
+getFitRes <- getFitTimeScale(
+ SimList=fields4Sim,
+ CNOlist=CNOlistToyFB,
+ Model=ToyModelFB,
+ indexList=indexOrig,
+ boolUpdates=boolUpdates
+)
+
+plotOptimResultsTimeScale(
+  SimResults=SimRes,
+  yInterpol=getFitRes$yInter,
+  xCoords=getFitRes$xCoords,
+  expResults=CNOlistToyFB$valueSignals,
+  times=CNOlistToyFB$timeSignals,
+  namesCues=CNOlistToyFB$namesCues,
+  namesSignals=CNOlistToyFB$namesSignals,
+  valueCues=CNOlistToyFB$valueCues)
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
