@@ -29,7 +29,21 @@ writeDot<-function(dotNodes,dotMatrix,Model,filename){
 	#a vector when the node has more than one attribute, I could then look into the identity 
 	#of the entries of this vector and define a color depending on this
 		nClass[i]<-dotNodes[match(nodes[i],dotNodes[,1]),2]
-		}
+
+        # search for this node. Is it repeated ?
+        indices = grep(nodes[i], dotNodes[,1])
+        if (length(indices)>1){
+            # It may belong to both signal and inhibited classes, so let us
+            # check:
+            classes = dotNodes[indices, 2]
+            if ("signal" %in% classes && "inhibited" %in% classes){
+                nClass[i] = "bicolor"
+	        }
+        }
+    }	
+    print(dotNodes)
+    print(nodes)
+    print(nClass)
 		
 	AndNodes<-grep(pattern="(and\\d+$)",nodes,perl=TRUE,ignore.case=FALSE)	
 	
@@ -169,6 +183,10 @@ writeDot<-function(dotNodes,dotMatrix,Model,filename){
 			
 				if(nClass[i] == "signal"){
 					cat(' [color="lightblue" shape="ellipse" style="filled" label="',
+						file=filename,append=TRUE,sep="")
+					}
+				if(nClass[i] == "bicolor"){
+					cat(' [fillcolor="lightblue" color="orangered" shape="ellipse" style="filled, bold, diagonals" label="',
 						file=filename,append=TRUE,sep="")
 					}
 					
