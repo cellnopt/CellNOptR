@@ -2,7 +2,7 @@
 \alias{plotLBodeModelSim}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-%%  ~~function to do ... ~~
+ 	Simulate the model and plot the obtained with the different experimental conditions.
 }
 \description{
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~

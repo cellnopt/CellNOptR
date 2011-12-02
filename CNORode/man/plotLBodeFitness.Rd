@@ -2,13 +2,16 @@
 \alias{plotLBodeFitness}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-%%  ~~function to do ... ~~
+	Plot data against simulated values. 
 }
 \description{
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-plotLBodeFitness(cnolist, model, ode_parameters = NULL, indices = NULL, adjMatrix = NULL, time = 1, verbose = 0, transfer_function = 3, reltol = 1e-04, atol = 0.001, maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails = 50, plot_index_signals = NULL, plot_index_experiments = NULL, plot_index_cues = NULL)
+plotLBodeFitness(cnolist, model, ode_parameters = NULL, indices = NULL,
+ 	adjMatrix = NULL, time = 1, verbose = 0, transfer_function = 3, reltol = 1e-04,
+	atol = 0.001, maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails = 50,
+   	plot_index_signals = NULL, plot_index_experiments = NULL, plot_index_cues = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

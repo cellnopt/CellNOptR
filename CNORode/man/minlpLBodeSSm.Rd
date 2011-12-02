@@ -2,13 +2,17 @@
 \alias{minlpLBodeSSm}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-%%  ~~function to do ... ~~
+	Search for the best combination of continuous parameters and logic gates.
 }
 \description{
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-minlpLBodeSSm(cnolist, model, ode_parameters = NULL, indices = NULL, maxeval = Inf, maxtime = 100, ndiverse = NULL, dim_refset = NULL, local_solver = NULL, time = 1, verbose = 0, transfer_function = 3, reltol = 1e-04, atol = 0.001, maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails = 50, nan_fac = 1)
+minlpLBodeSSm(cnolist, model, ode_parameters = NULL, indices = NULL, maxeval = Inf,
+maxtime = 100, ndiverse = NULL, dim_refset = NULL, local_solver = NULL, time = 1, 
+verbose = 0, transfer_function = 3, reltol = 1e-04, atol = 0.001, maxStepSize = Inf,
+maxNumSteps = 1e+05, maxErrTestsFails = 50, nan_fac = 1)
+
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
