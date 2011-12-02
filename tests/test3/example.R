@@ -17,11 +17,11 @@ library(CellNOptR)
 setwd("C:/Users/David/Desktop/stuff/CNOR_ode/tests/test3");
 library("CNORode")
 
-s = readSif('model.sif')
-m = readMIDAS('initialData.csv')
-cnolist = makeCNOlist(m, subfield=FALSE)
+model = readSif('model.sif')
+data = readMIDAS('initialData.csv')
+cnolist = makeCNOlist(data, subfield=FALSE)
 
-indices <- indexFinder(cnolist, s, verbose = TRUE)
+indices <- indexFinder(cnolist, model, verbose = TRUE)
 
 #results=logic_based_ode_parameters_estimation_SSm(cnolist,s)
 #logic_based_ode_MINLP_SSm(cnolist,s,ndiverse=10,dim_refset=6)

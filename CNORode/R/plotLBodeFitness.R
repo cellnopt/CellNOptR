@@ -20,11 +20,8 @@ plotLBodeFitness <-function
 			reltol,atol,maxStepSize,maxNumSteps,maxErrTestsFails);
 
 	times=cnolist$timeSignals;
-	print(1)
 	sim_data=lapply(sim_data,function(x)x[plot_index_experiments,plot_index_signals]);
-	print(2)
 	expResults=lapply(cnolist$valueSignals,function(x)x[plot_index_experiments,plot_index_signals]);
-	print(3)
 
 	namesSignals=cnolist$namesSignals[plot_index_signals];
 	namesCues=c(cnolist$namesStimuli,cnolist$namesInhibitors);

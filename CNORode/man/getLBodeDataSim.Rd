@@ -5,10 +5,8 @@
 		Simulate Value Signals a CNO List With Logic-Based ODEs.
 }
 \description{
-
 	This function receives a set of inputs, namely the cnolist and the model and
 	returns a list with the same size of the cnolist$valueSignals. 
-
 }
 \usage{
 getLBodeDataSim(cnolist, model, ode_parameters = NULL, indices = NULL, time = 1, verbose = 0, transfer_function = 3, reltol = 1e-04, atol = 0.001, maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails = 50)
