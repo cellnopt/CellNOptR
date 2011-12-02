@@ -1,4 +1,4 @@
-simulate_and_plot_ode_model<-function
+plotLBodeModelSim <-function
 (
 		cnolist,				    model,					    ode_parameters=NULL,
 		indices=NULL,			    adjMatrix=NULL,			  	time=1,
@@ -10,10 +10,10 @@ simulate_and_plot_ode_model<-function
 
 	if(is.null(indices))indices=indexFinder(cnolist,model);
 	if(is.null(adjMatrix))adjMatrix=incidence2Adjacency(model);
-	if(is.null(ode_parameters))ode_parameters=makeParameterList(adjMatrix,model$namesSpecies);
+	if(is.null(ode_parameters))ode_parameters=createLBodeContPars(adjMatrix,model$namesSpecies);
   states_index=which(as.logical(getStates(adjMatrix)));
 
-	sim_data=get_logic_based_ode_model_simulation(cnolist,model,
+	sim_data=getLbodeModelSim(cnolist,model,
 			ode_parameters,indices,time,verbose,transfer_function,
 			reltol,atol,maxStepSize,maxNumSteps,maxErrTestsFails);
 

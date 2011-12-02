@@ -1,4 +1,4 @@
-get_simulation_function <-function
+getLBodeSimFunction <-function
 (
 		cnolist1,				model1,					adjMatrix1,
 		indices1, 				odeParameters1,			time1=1,

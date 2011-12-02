@@ -1,4 +1,4 @@
-simulate_and_plot_ode_fitness<-function
+plotLBodeFitness <-function
 (
 		cnolist,				    model,					    ode_parameters=NULL,
 		indices=NULL,			    adjMatrix=NULL,			 	time=1,
@@ -13,9 +13,9 @@ simulate_and_plot_ode_fitness<-function
     if(is.null(plot_index_signals))plot_index_signals=1:dim(cnolist$valueSignals[[1]])[2];
 	if(is.null(indices))indices=indexFinder(cnolist,model);
 	if(is.null(adjMatrix))adjMatrix=incidence2Adjacency(model);
-	if(is.null(ode_parameters))ode_parameters=makeParameterList(adjMatrix,model$namesSpecies);
+	if(is.null(ode_parameters))ode_parameters=createLBodeContPars(adjMatrix,model$namesSpecies);
 
-	sim_data=get_logic_based_ode_data_simulation(cnolist,model,
+	sim_data=getLBodeDataSim(cnolist,model,
 			ode_parameters,indices,time,verbose,transfer_function,
 			reltol,atol,maxStepSize,maxNumSteps,maxErrTestsFails);
 

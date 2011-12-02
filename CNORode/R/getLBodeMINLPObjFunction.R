@@ -1,4 +1,4 @@
-get_logic_ode_MINLP_objective_function <-function
+getLBodeMINLPObjFunction <-function
 (
 		cnolist,				model,					ode_parameters,
 		indices,				time=1,					verbose=0, 
@@ -10,7 +10,7 @@ get_logic_ode_MINLP_objective_function <-function
 	adjMatrix=incidence2Adjacency(model);
 	n_cont=length(ode_parameters1$index_opt_pars);
 	n_int=dim(model$interMat)[2];
-	sim_function<-get_simulation_function(cnolist,model,adjMatrix1=adjMatrix,
+	sim_function<-getLBodeSimFunction(cnolist,model,adjMatrix1=adjMatrix,
 			indices1=indices,odeParameters1=ode_parameters$parValues, time1=time,verbose1=verbose,
 			transfer_function1=transfer_function,reltol1=reltol,atol1=atol,maxStepSize1=maxStepSize,
 			maxNumSteps1=maxNumSteps,maxErrTestsFails1=maxErrTestsFails)
@@ -41,7 +41,6 @@ get_logic_ode_MINLP_objective_function <-function
         error=sum((sim[not_NaNs]-measured_values[not_NaNs])^2);
         res=(error+length(NaNs)*nan_fac1)/length(not_NaNs_data);
         return(res);
-
 	}
 	return(logic_ode_MINLP_objective_function);
 }

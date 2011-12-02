@@ -1,4 +1,4 @@
-makeParameterList <-function
+createLBodeContPars <-function
 (		
 		adjMat,			namesSpecies,	LB_n=1,
 		LB_k=0.1,		LB_tau=1e-2,	UB_n=5,		

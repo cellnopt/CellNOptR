@@ -1,15 +1,15 @@
-get_logic_ode_continuous_objective_function <-
+getLBodeContObjFunction<-
 function
 (
-        cnolist,                model,                    ode_parameters,    
-        indices,                time=1,                    verbose=0, 
+        cnolist,                model,                	ode_parameters,    
+        indices,                time=1,               	verbose=0, 
         transfer_function=3,    reltol=1e-4,            atol=1e-3,
-        maxStepSize=Inf,        maxNumSteps=100000,        maxErrTestsFails=50,
+        maxStepSize=Inf,        maxNumSteps=100000,    	maxErrTestsFails=50,
 		nan_fac=1
 )
 {
     adjMatrix=incidence2Adjacency(model);
-    sim_function=get_simulation_function(cnolist,model,adjMatrix1=adjMatrix,
+    sim_function=getLBodeSimFunction(cnolist,model,adjMatrix1=adjMatrix,
             indices1=indices, odeParameters1=ode_parameters$parValues, time1=time,verbose1=verbose,
             transfer_function1=transfer_function,reltol1=reltol,atol1=atol,maxStepSize1=maxStepSize,
             maxNumSteps1=maxNumSteps,maxErrTestsFails1=maxErrTestsFails)

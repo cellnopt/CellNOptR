@@ -1,4 +1,4 @@
-get_logic_based_ode_model_simulation<-function
+getLbodeModelSim<-function
 (
 		cnolist,				model,					ode_parameters=NULL,
 		indices=NULL,			time=1,					verbose=0,
@@ -8,8 +8,8 @@ get_logic_based_ode_model_simulation<-function
 {
 	adjMat=incidence2Adjacency(model);
 	if(is.null(indices))indices <- indexFinder(cnolist,model,verbose=FALSE);
-	if(is.null(ode_parameters))ode_parameters=makeParameterList(adjMat,model$namesSpecies);
-	sim_function=get_simulation_function(cnolist,model,adjMat,
+	if(is.null(ode_parameters))ode_parameters=createLBodeContPars(adjMat,model$namesSpecies);
+	sim_function=getLBodeSimFunction(cnolist,model,adjMat,
 			indices, ode_parameters1$parValues, time,verbose,
 			transfer_function,reltol,atol,maxStepSize,
 			maxNumSteps,maxErrTestsFails);

@@ -1,25 +1,21 @@
-logic_based_ode_parameters_estimation_SSm <-function
+parEstimationLBodeSSm <-function
 (
 		cnolist,				model,					ode_parameters=NULL,
 		indices=NULL,			maxeval=Inf,			maxtime=100,			
 		ndiverse=NULL,			dim_refset=NULL, 		local_solver=NULL,      
 		time=1,					verbose=0, 				transfer_function=3,	
 		reltol=1e-4,			atol=1e-3,				maxStepSize=Inf,		
-		maxNumSteps=100000,		maxErrTestsFails=50,		nan_fac=1
+		maxNumSteps=100000,		maxErrTestsFails=50,	nan_fac=1
 )
 {
-	library(eSSmR)
-	library(Rsolnp)
-	
-	if(is.null(ode_parameters))
-	{
-		adjMat=incidence2Adjacency(model);
-		ode_parameters=makeParameterList(adjMat,model$namesSpecies,random=TRUE);
+	adjMat=incidence2Adjacency(model);
+	if(is.null(ode_parameters)){
+		ode_parameters=createLBodeContPars(adjMat,model$namesSpecies,random=TRUE);
 	}
 	if(is.null(indices))indices <- indexFinder(cnolist,model,verbose=FALSE);
 	
 	problem=list();
-	problem$f<-get_logic_ode_continuous_objective_function(cnolist,	model,ode_parameters,indices,
+	problem$f<-getLBodeContObjFunction(cnolist,	model,ode_parameters,indices,
 	time,verbose,transfer_function,reltol,atol,maxStepSize,maxNumSteps,maxErrTestsFails);
 	problem$x_L <- ode_parameters$LB[ode_parameters$index_opt_pars];
 	problem$x_U <- ode_parameters$UB[ode_parameters$index_opt_pars];
@@ -32,7 +28,9 @@ logic_based_ode_parameters_estimation_SSm <-function
 	if(!is.null(local_solver))opts$local_solver=local_solver;
 	if(!is.null(ndiverse))opts$ndiverse=ndiverse;      
 	if(!is.null(dim_refset))opts$dim_refset=dim_refset;  
-	
-	return(essR(problem,opts));	
+	results=essR(problem,opts);
+	ode_parameters$parValues[ode_parameters$index_opt_pars]=results$xbest;
+	ode_parameters$ssm_results=results;
+	return(ode_parameters);	
 }
 
