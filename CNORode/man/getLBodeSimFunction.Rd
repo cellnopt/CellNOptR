@@ -1,14 +1,14 @@
-\name{get_simulation_function}
-\alias{get_simulation_function}
+\name{getLBodeSimFunction}
+\alias{getLBodeSimFunction}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-get_simulation_function
+%%  ~~function to do ... ~~
 }
 \description{
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-get_simulation_function(cnolist1, model1, adjMatrix1, indices1, odeParameters1, time1 = 1, verbose1 = 0, transfer_function1 = 3, reltol1 = 1e-04, atol1 = 0.001, maxStepSize1 = Inf, maxNumSteps1 = 1e+05, maxErrTestsFails1 = 50)
+getLBodeSimFunction(cnolist1, model1, adjMatrix1, indices1, odeParameters1, time1 = 1, verbose1 = 0, transfer_function1 = 3, reltol1 = 1e-04, atol1 = 0.001, maxStepSize1 = Inf, maxNumSteps1 = 1e+05, maxErrTestsFails1 = 50)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -118,12 +118,14 @@ function (cnolist1, model1, adjMatrix1, indices1, odeParameters1,
         maxStepSize = as.double(maxStepSize)
         maxNumSteps = as.integer(maxNumSteps)
         maxErrTestsFails = as.integer(maxErrTestsFails)
+        break_at_1st_fail = as.integer(0)
         res = .Call("sim_logic_ode", interMat, notMat, adjMatrix, 
             nRows, nCols, nPars, timeSignals, valueInhibitors, 
             valueSignals, valueStimuli, nTimes, nExperiments, 
             nSignals, indexSignals, nStimuli, indexStimuli, nInhibitors, 
             indexInhibitors, odeParameters, verbose, transfer_function, 
-            reltol, atol, maxStepSize, maxNumSteps, maxErrTestsFails)
+            reltol, atol, maxStepSize, maxNumSteps, maxErrTestsFails, 
+            break_at_1st_fail)
         return(res)
     }
     return(simulate_logic_based_ode_model)
