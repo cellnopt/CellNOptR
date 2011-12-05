@@ -1,4 +1,4 @@
-getLbodeModelSim<-function
+getLBodeModelSim<-function
 (
 		cnolist,				model,					ode_parameters=NULL,
 		indices=NULL,			time=1,					verbose=0,

@@ -13,7 +13,7 @@ plotLBodeModelSim <-function
 	if(is.null(ode_parameters))ode_parameters=createLBodeContPars(adjMatrix,model$namesSpecies);
   states_index=which(as.logical(getStates(adjMatrix)));
 
-	sim_data=getLbodeModelSim(cnolist,model,
+	sim_data=getLBodeModelSim(cnolist,model,
 			ode_parameters,indices,time,verbose,transfer_function,
 			reltol,atol,maxStepSize,maxNumSteps,maxErrTestsFails);
 

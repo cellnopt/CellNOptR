@@ -1,5 +1,5 @@
-\name{getLbodeModelSim}
-\alias{getLbodeModelSim}
+\name{getLBodeModelSim}
+\alias{getLBodeModelSim}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 		Simulate the logic-based ODE model
@@ -11,7 +11,7 @@
 	the solver will fill the experience row with NA values.
 }
 \usage{
-	getLbodeModelSim(cnolist, model, ode_parameters = NULL, indices = NULL, time = 1,
+	getLBodeModelSim(cnolist, model, ode_parameters = NULL, indices = NULL, time = 1,
 	verbose = 0, transfer_function = 3, reltol = 1e-04, atol = 0.001, maxStepSize = Inf,
 	maxNumSteps = 1e+05, maxErrTestsFails = 50)
 }
@@ -97,26 +97,11 @@ David Henriques, Thomas Cokelaer
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (cnolist, model, ode_parameters = NULL, indices = NULL, 
-    time = 1, verbose = 0, transfer_function = 3, reltol = 1e-04, 
-    atol = 0.001, maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails = 50) 
-{
-    adjMat = incidence2Adjacency(model)
-    if (is.null(indices)) 
-        indices <- indexFinder(cnolist, model, verbose = FALSE)
-    if (is.null(ode_parameters)) 
-        ode_parameters = createLBodeContPars(adjMat, model$namesSpecies)
-    sim_function = getLBodeSimFunction(cnolist, model, adjMat, 
-        indices, ode_parameters1$parValues, time, verbose, transfer_function, 
-        reltol, atol, maxStepSize, maxNumSteps, maxErrTestsFails)
-    return(sim_function(cnolist, model, ode_parameters$parValues))
-  }
-}
+data("ToyCNOlist",package="CNORode");
+data("ToyModel",package="CNORode");
+data("ToyIndices",package="CNORode");
+modelSimulation=getLBodeModelSim(cnolist, model,indices=indices);
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ ~kwd1 }
