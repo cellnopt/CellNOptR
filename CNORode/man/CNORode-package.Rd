@@ -1,14 +1,12 @@
-\name{CNORode-package}
-\alias{CNORode-package}
+\name{CNORode}
 \alias{CNORode}
 \docType{package}
 \title{
-CNORode-package
+Logic based ODE extension for CellNOptR
 }
 \description{
 This package is used for the simulation and fitting of
-logic based ODE models. This package was developed to work 
-as an extension of CellNOptR.
+logic based ODE models. 
 }
 \details{
 \tabular{ll}{
@@ -50,7 +48,7 @@ Maintainer: David Henriques <dhenriques@ebi.ac.uk>
 \keyword{CNORode}
 \seealso{
 ~~ Optional links to other man pages, e.g. ~~
-~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
+~~ \code{\link{CellNOptR}} ~~
 }
 \examples{
 data("ToyCNOlist",package="CNORode");

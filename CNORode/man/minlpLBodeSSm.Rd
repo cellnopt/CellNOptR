@@ -9,7 +9,7 @@
 	The objective function is the same as the one provided by \code{\link{getLBodeMINLPObjFunction}}.
 }
 \usage{
-minlpLBodeSSm(cnolist, model, ode_parameters = NULL, indices = NULL, maxeval = Inf,
+minlpLBodeSSm(cnolist, model, ode_parameters = NULL, int_x0=NULL, indices = NULL, maxeval = Inf,
 maxtime = 100, ndiverse = NULL, dim_refset = NULL, local_solver = NULL, time = 1, 
 verbose = 0, transfer_function = 3, reltol = 1e-04, atol = 0.001, maxStepSize = Inf,
 maxNumSteps = 1e+05, maxErrTestsFails = 50, nan_fac = 1)
