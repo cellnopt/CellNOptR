@@ -2,86 +2,145 @@
 \alias{parEstimationLBodeSSm}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-		Perform parameter estimation over the model parameters.
+		Perform parameter estimation
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+	This function uses ssmR to perform continuous parameter estimation. The objective function
+	is the same as the one provided by \code{\link{getLBodeContObjFunction}}.
 }
 \usage{
-parEstimationLBodeSSm(cnolist, model, ode_parameters = NULL, indices = NULL, maxeval = Inf, maxtime = 100, ndiverse = NULL, dim_refset = NULL, local_solver = NULL, time = 1, verbose = 0, transfer_function = 3, reltol = 1e-04, atol = 0.001, maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails = 50, nan_fac = 1)
+parEstimationLBodeSSm(cnolist, model, ode_parameters = NULL, indices = NULL, 
+maxeval = Inf, maxtime = 100, ndiverse = NULL, dim_refset = NULL, local_solver = NULL,
+time = 1, verbose = 0, transfer_function = 3, reltol = 1e-04, atol = 0.001, 
+maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails = 50, nan_fac = 1)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{cnolist}{
-%%     ~~Describe \code{cnolist} here~~
+A list containing the experimental design and data.
 }
   \item{model}{
-%%     ~~Describe \code{model} here~~
+The logic model to be simulated.
 }
   \item{ode_parameters}{
-%%     ~~Describe \code{ode_parameters} here~~
+A list with the ODEs parameter information. Obtained with \code{\link{createLBodeContPars}}.
 }
   \item{indices}{
-%%     ~~Describe \code{indices} here~~
+Indices to map data in the model. Obtained with indexFinder function from CellNOptR. 
 }
   \item{maxeval}{
-%%     ~~Describe \code{maxeval} here~~
+Maximum number of evaluation in the optimisation procedure.
 }
   \item{maxtime}{
-%%     ~~Describe \code{maxtime} here~~
+Duration of the optinisation procedure.
 }
   \item{ndiverse}{
-%%     ~~Describe \code{ndiverse} here~~
+Number of diverse initial solutions.
 }
   \item{dim_refset}{
-%%     ~~Describe \code{dim_refset} here~~
+Size of the reference set.
 }
   \item{local_solver}{
-%%     ~~Describe \code{local_solver} here~~
+Local solver to be used in SSm.
 }
   \item{time}{
-%%     ~~Describe \code{time} here~~
+
 }
   \item{verbose}{
-%%     ~~Describe \code{verbose} here~~
+A logical value that triggers a set of comments.
 }
   \item{transfer_function}{
-%%     ~~Describe \code{transfer_function} here~~
+The type of used transfer. Use 1 for no transfer function, 2 for Hill function and
+3 for normalized Hill function.~
 }
   \item{reltol}{
-%%     ~~Describe \code{reltol} here~~
+Relative Tolerance for numerical integration.
 }
   \item{atol}{
-%%     ~~Describe \code{atol} here~~
+Absolute tolerance for numerical integration.
 }
   \item{maxStepSize}{
-%%     ~~Describe \code{maxStepSize} here~~
+The maximum step size allowed to ODE solver.
 }
   \item{maxNumSteps}{
-%%     ~~Describe \code{maxNumSteps} here~~
+	The maximum number of internal steps between two points being sampled before
+	the solver fails.
 }
   \item{maxErrTestsFails}{
-%%     ~~Describe \code{maxErrTestsFails} here~~
+Specifies the maximum number of error test failures permitted in attempting
+	 one step.
 }
   \item{nan_fac}{
-%%     ~~Describe \code{nan_fac} here~~
+A penalty for each data point the model is not able to simulate. We recommend higher than
+0 and smaller that 1.
 }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+	Check \code{\link{CellNOptR}} for details about the cnolist and the model format.
+	For more details in the configuration of the ODE solver check the CVODES manual. 
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+ \item{LB_n}{
+A numeric value to be used as lower bound for all parameters of type n.
+}
+  \item{LB_k}{
+A numeric value to be used as lower bound for all parameters of type k.
+}
+
+  \item{LB_tau}{
+A numeric value to be used as lower bound for all parameters of type tau.
+}
+
+  \item{UB_n}{
+A numeric value to be used as upper bound for all parameters of type n.
+}
+
+  \item{UB_k}{
+A numeric value to be used as upper bound for all parameters of type k.
+}
+
+  \item{UB_tau}{
+A numeric value to be used as upper bound for all parameters of type tau. 
+}
+
+  \item{default_n}{
+The default parameter to be used for every parameter of type n. 
+}
+  \item{default_k}{
+The default parameter to be used for every parameter of type k. 
+}
+  \item{default_tau}{
+The default parameter to be used for every parameter of type tau. 
+}
+  \item{LB_in}{
+An array with the the same length as ode_parameters$parValues with lower bounds
+for each specific parameter. 
+}
+  \item{UB_in}{
+An array with the the same length as ode_parameters$parValues with upper bounds
+for each specific parameter.
+}
+  \item{opt_n}{
+Add all parameter n to the index of parameters to be fitted.
+}
+  \item{opt_k}{
+Add all parameter k to the index of parameters to be fitted.
+}
+  \item{opt_tau}{
+Add all parameter tau to the index of parameters to be fitted.
+}
+  \item{random}{
+A logical value that determines that a random solution is for the parameters 
+to be optimised.
+}
+
+\item{smm_results}{A list containing the information provided by the nonlinear optimization solver.}
+
 }
 \references{
-%% ~put references to the literature/web site here ~
 }
 \author{
-%%  ~~who you are~~
+David Henriques, Thomas Cokelaer
 }
 \note{
 %%  ~~further notes~~
@@ -90,54 +149,23 @@ parEstimationLBodeSSm(cnolist, model, ode_parameters = NULL, indices = NULL, max
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{CellNOptR}}
+\code{\link{createLBodeContPars}}
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+data("ToyCNOlist",package="CNORode");
+data("ToyModel",package="CNORode");
+data("ToyIndices",package="CNORode");
 
-## The function is currently defined as
-function (cnolist, model, ode_parameters = NULL, indices = NULL, 
-    maxeval = Inf, maxtime = 100, ndiverse = NULL, dim_refset = NULL, 
-    local_solver = NULL, time = 1, verbose = 0, transfer_function = 3, 
-    reltol = 1e-04, atol = 0.001, maxStepSize = Inf, maxNumSteps = 1e+05, 
-    maxErrTestsFails = 50, nan_fac = 1) 
-{
-    library(eSSmR)
-    library(Rsolnp)
-    if (is.null(ode_parameters)) {
-        adjMat = incidence2Adjacency(model)
-        ode_parameters = createLBodeContPars(adjMat, model$namesSpecies, 
-            random = TRUE)
-    }
-    if (is.null(indices)) 
-        indices <- indexFinder(cnolist, model, verbose = FALSE)
-    problem = list()
-    problem$f <- getLBodeContObjFunction(cnolist, model, ode_parameters, 
-        indices, time, verbose, transfer_function, reltol, atol, 
-        maxStepSize, maxNumSteps, maxErrTestsFails)
-    problem$x_L <- ode_parameters$LB[ode_parameters$index_opt_pars]
-    problem$x_U <- ode_parameters$UB[ode_parameters$index_opt_pars]
-    problem$x_0 <- ode_parameters$parValues[ode_parameters$index_opt_pars]
-    problem$int_var = 0
-    problem$bin_var = 0
-    opts = list()
-    opts$maxeval = maxeval
-    opts$maxtime = maxtime
-    if (!is.null(local_solver)) 
-        opts$local_solver = local_solver
-    if (!is.null(ndiverse)) 
-        opts$ndiverse = ndiverse
-    if (!is.null(dim_refset)) 
-        opts$dim_refset = dim_refset
-    results = essR(problem, opts)
-    ode_parameters$parValues[ode_parameters$index_opt_pars] = results$xbest
-    ode_parameters$ssm_results = results
-    return(ode_parameters)
-  }
+ode_parameters=createLBodeContPars(model,random=TRUE);
+%Visualize intial simulation
+%simulatedData=plotLBodeFitness(cnolist, model,ode_parameters,indices=indices)
+ode_parameters=parEstimationLBodeSSm(cnolist,model,ode_parameters,
+	indices=indices,maxtime=10,ndiverse=10,dim_refset=6);
+
+%Visual solution after optimization
+%simulatedData=plotLBodeFitness(cnolist, model,indices=indices);
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+

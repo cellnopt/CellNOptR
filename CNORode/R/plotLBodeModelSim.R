@@ -10,8 +10,8 @@ plotLBodeModelSim <-function
 
 	if(is.null(indices))indices=indexFinder(cnolist,model);
 	if(is.null(adjMatrix))adjMatrix=incidence2Adjacency(model);
-	if(is.null(ode_parameters))ode_parameters=createLBodeContPars(adjMatrix,model$namesSpecies);
-  states_index=which(as.logical(getStates(adjMatrix)));
+	if(is.null(ode_parameters))ode_parameters=createLBodeContPars(model);
+  	states_index=which(as.logical(getStates(adjMatrix)));
 
 	sim_data=getLBodeModelSim(cnolist,model,
 			ode_parameters,indices,time,verbose,transfer_function,

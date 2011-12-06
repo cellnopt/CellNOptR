@@ -2,169 +2,105 @@
 \alias{createLBodeContPars}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
+	Create a list with ODE parameter information needed to perform parameter estimation
+}
+\description{
 	Creates a list with the needed the continuous parameters to simulate the model,
 	upper and lower bounds for the parameter estimation, parameters names, indices of
 	the parameters and others.
 }
-\description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
-}
 \usage{
-createLBodeContPars(adjMat, namesSpecies, LB_n = 1, LB_k = 0.1, LB_tau = 0.01, 
+createLBodeContPars(model, LB_n = 1, LB_k = 0.1, LB_tau = 0.01, 
 UB_n = 5, UB_k = 0.9, UB_tau = 10, default_n = 3, default_k = 0.5, default_tau = 1,
- LB_in = c(), UB_in = c(), opt_n = TRUE, opt_k = TRUE, opt_tau = TRUE, random = FALSE)
+LB_in = c(), UB_in = c(), opt_n = TRUE, opt_k = TRUE, opt_tau = TRUE, random = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{adjMat}{
-%%     ~~Describe \code{adjMat} here~~
-}
-  \item{namesSpecies}{
-%%     ~~Describe \code{namesSpecies} here~~
+  \item{model}{
+The logic model to be simulated.
 }
   \item{LB_n}{
-%%     ~~Describe \code{LB_n} here~~
+A numeric value to be used as lower bound for all parameters of type n.
 }
   \item{LB_k}{
-%%     ~~Describe \code{LB_k} here~~
+A numeric value to be used as lower bound for all parameters of type k.
 }
+
   \item{LB_tau}{
-%%     ~~Describe \code{LB_tau} here~~
+A numeric value to be used as lower bound for all parameters of type tau.
 }
+
   \item{UB_n}{
-%%     ~~Describe \code{UB_n} here~~
+A numeric value to be used as upper bound for all parameters of type n.
 }
+
   \item{UB_k}{
-%%     ~~Describe \code{UB_k} here~~
+A numeric value to be used as upper bound for all parameters of type k.
 }
+
   \item{UB_tau}{
-%%     ~~Describe \code{UB_tau} here~~
+A numeric value to be used as upper bound for all parameters of type tau. 
 }
+
   \item{default_n}{
-%%     ~~Describe \code{default_n} here~~
+The default parameter to be used for every parameter of type n. 
 }
   \item{default_k}{
-%%     ~~Describe \code{default_k} here~~
+The default parameter to be used for every parameter of type k. 
 }
   \item{default_tau}{
-%%     ~~Describe \code{default_tau} here~~
+The default parameter to be used for every parameter of type tau. 
 }
   \item{LB_in}{
-%%     ~~Describe \code{LB_in} here~~
+An array with the the same length as ode_parameters$parValues with lower bounds
+for each specific parameter. 
 }
   \item{UB_in}{
-%%     ~~Describe \code{UB_in} here~~
+An array with the the same length as ode_parameters$parValues with upper bounds
+for each specific parameter.
 }
   \item{opt_n}{
-%%     ~~Describe \code{opt_n} here~~
+Add all parameter n to the index of parameters to be fitted.
 }
   \item{opt_k}{
-%%     ~~Describe \code{opt_k} here~~
+Add all parameter k to the index of parameters to be fitted.
 }
   \item{opt_tau}{
-%%     ~~Describe \code{opt_tau} here~~
+Add all parameter tau to the index of parameters to be fitted.
 }
   \item{random}{
-%%     ~~Describe \code{random} here~~
+A logical value that determines that a random solution is for the parameters 
+to be optimised.
 }
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
+
+\item{parNames}{An array containing the names of the parameters.}
+\item{parValues}{An array containing the values of the parameters, in the same order as the names.}
+\item{index_opt_pars}{An array containing the indexes for the parameters to be fitted.}
+\item{index_n}{An array containing the indexes of the parameters of type n.}
+\item{index_k}{An array containing the indexes of the parameters of type k.}
+\item{index_tau}{An array containing the indexes of the parameters of type tau.}
+\item{LB}{An array containing the lower bound for each parameter.}
+\item{UB}{An array containing the upper bound for each parameter.}
 %% ...
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
+
 \author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
+David Henriques, Thomas Cokelaer
 }
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (adjMat, namesSpecies, LB_n = 1, LB_k = 0.1, LB_tau = 0.01, 
-    UB_n = 5, UB_k = 0.9, UB_tau = 10, default_n = 3, default_k = 0.5, 
-    default_tau = 1, LB_in = c(), UB_in = c(), opt_n = TRUE, 
-    opt_k = TRUE, opt_tau = TRUE, random = FALSE) 
-{
-    isState = getStates(adjMat)
-    numStates = as.integer(sqrt(length(adjMat)))
-    parNames = c()
-    parValues = c()
-    index_k = c()
-    index_n = c()
-    index_tau = c()
-    LB = c()
-    UB = c()
-    index_opt_pars = c()
-    count = 0
-    for (j in 1:numStates) {
-        if (isState[j]) {
-            jCol = adjMat[, j]
-            inputs = which(as.logical(jCol))
-            numInputs = length(inputs)
-            for (i in 1:numInputs) {
-                count = count + 1
-                parNames[count] = paste(namesSpecies[inputs[i]], 
-                  "_n_", namesSpecies[j], sep = "")
-                parValues[count] = default_n
-                index_k = c(index_k, count)
-                LB[count] = LB_n
-                UB[count] = UB_n
-                if (opt_n) 
-                  index_opt_pars = c(index_opt_pars, count)
-                count = count + 1
-                parNames[count] = paste(namesSpecies[inputs[i]], 
-                  "_k_", namesSpecies[j], sep = "")
-                parValues[count] = default_k
-                index_n = c(index_k, count)
-                LB[count] = LB_k
-                UB[count] = UB_k
-                if (opt_k) 
-                  index_opt_pars = c(index_opt_pars, count)
-            }
-            count = count + 1
-            parNames[count] = paste("tau_", namesSpecies[j], 
-                sep = "")
-            parValues[count] = default_tau
-            index_tau = c(index_tau, count)
-            LB[count] = LB_tau
-            UB[count] = UB_tau
-            if (opt_tau) 
-                index_opt_pars = c(index_opt_pars, count)
-        }
-    }
-    if (length(LB_in) == length(LB)) 
-        LB = LB_in
-    if (length(UB_in) == length(UB)) 
-        UB = UB_in
-    if (random) 
-        parValues = LB[index_opt_pars] + ((UB[index_opt_pars] - 
-            LB[index_opt_pars]) * runif(length(index_opt_pars)))
-    parList = list(parNames = parNames, parValues = parValues, 
-        index_opt_pars = index_opt_pars, index_n = index_n, index_k = index_k, 
-        index_tau = index_tau, LB = LB, UB = UB)
-    return(parList)
-  }
+data("ToyCNOlist",package="CNORode");
+data("ToyModel",package="CNORode");
+data("ToyIndices",package="CNORode");
+ode_parameters=createLBodeContPars(model, opt_n=FALSE,default_n=2,
+random=TRUE,LB_k=0.25,UB_k=0.8,LB_tau=0.01,UB_tau=10);
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

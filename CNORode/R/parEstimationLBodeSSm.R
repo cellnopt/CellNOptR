@@ -10,7 +10,7 @@ parEstimationLBodeSSm <-function
 {
 	adjMat=incidence2Adjacency(model);
 	if(is.null(ode_parameters)){
-		ode_parameters=createLBodeContPars(adjMat,model$namesSpecies,random=TRUE);
+		ode_parameters=createLBodeContPars(model,random=TRUE);
 	}
 	if(is.null(indices))indices <- indexFinder(cnolist,model,verbose=FALSE);
 	

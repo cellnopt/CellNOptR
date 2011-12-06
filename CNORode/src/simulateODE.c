@@ -29,8 +29,8 @@ int simulateODE
 		int maxNumSteps,		int maxErrTestFails
 )
 {
-	int i,j,neq,counter,flag, flagr, iout;
-	realtype t, tout, ti, tf;
+	int i,j,neq,counter,flag;
+	realtype tout, ti, tf;
 	N_Vector y;
 	void *cvode_mem;
 	
@@ -108,7 +108,7 @@ int simulateODE
 	}
 
 	cvode_mem = CVodeCreate(CV_BDF, CV_NEWTON);
-	if (((void *)cvode_mem, "CVodeCreate", 0,verbose)) {
+	if(check_flag((void *)cvode_mem, "CVodeCreate", 0,verbose)) {
 		if(verbose)printf("\nSolver failed in CVodeCreate(CV_BDF, CV_NEWTON) . . .\n");
 		N_VDestroy_Serial(y);
 		return(0);
@@ -117,7 +117,7 @@ int simulateODE
 	 ti=(*data).timeSignals[0];
 	 tf=(*data).timeSignals[(*data).nTimes-1];
 	  flag = CVodeInit(cvode_mem,*rhsODE, ti, y);
-	 if ((&flag, "CVodeMalloc", 1,verbose))
+	 if (check_flag(&flag, "CVodeMalloc", 1,verbose))
 	 {
 		if(verbose)printf("\nSolver failed in CVodeInit(cvode_mem,*rhsODE, ti, y). . .\n");
 		  N_VDestroy_Serial(y);
@@ -130,7 +130,7 @@ int simulateODE
 
 	/* Set f_data */
 	 flag = CVodeSetUserData(cvode_mem, data);
-	 if((&flag, "CVodeSetFdata", 1,verbose))
+	 if(check_flag(&flag, "CVodeSetFdata", 1,verbose))
 	 {
 		 if(verbose)printf("\nSolver failed in flag = CVodeSetUserData(cvode_mem, data). . .\n");
 		  N_VDestroy_Serial(y);
@@ -140,7 +140,7 @@ int simulateODE
 	 }
 
 	 flag = CVodeSStolerances(cvode_mem,(realtype)reltol,(realtype)atol);
-	  if((&flag, "CVodeSStolerances", 1,verbose)) return(1);
+	  if(check_flag(&flag, "CVodeSStolerances", 1,verbose)) return(1);
 
 	  if(!verbose)
 	  {

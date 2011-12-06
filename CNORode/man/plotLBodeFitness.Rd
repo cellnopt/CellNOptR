@@ -5,7 +5,10 @@
 	Plot data against simulated values. 
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+	Plots the simulated values with the logic-based ODE against the the data contained
+	contained the data contained in the cnolist. The data values are represented with
+	a black line and the simulated values with a blue line. Additionally this functions
+	returns the the simulated values.
 }
 \usage{
 plotLBodeFitness(cnolist, model, ode_parameters = NULL, indices = NULL,
@@ -16,43 +19,47 @@ plotLBodeFitness(cnolist, model, ode_parameters = NULL, indices = NULL,
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{cnolist}{
-%%     ~~Describe \code{cnolist} here~~
+A list containing the experimental design and data.
 }
   \item{model}{
-%%     ~~Describe \code{model} here~~
+The logic model to be simulated.
 }
   \item{ode_parameters}{
-%%     ~~Describe \code{ode_parameters} here~~
+A list with the ODEs parameter information. Obtained with \code{\link{createLBodeContPars}}.
 }
   \item{indices}{
-%%     ~~Describe \code{indices} here~~
+Indices to map data in the model. Obtained with indexFinder function from CellNOptR. 
 }
   \item{adjMatrix}{
-%%     ~~Describe \code{adjMatrix} here~~
+Model representation in the form of an adjacency matrix. When not provided
+will be automatically computed based in the model.
 }
   \item{time}{
-%%     ~~Describe \code{time} here~~
+An integer with the index of the time point to start the simulation. Default is 1.
 }
   \item{verbose}{
-%%     ~~Describe \code{verbose} here~~
+A logical value that triggers a set of comments.
 }
   \item{transfer_function}{
-%%     ~~Describe \code{transfer_function} here~~
+The type of used transfer. Use 1 for no transfer function, 2 for Hill function and
+3 for normalized Hill function.
 }
   \item{reltol}{
-%%     ~~Describe \code{reltol} here~~
+Relative Tolerance for numerical integration.
 }
   \item{atol}{
-%%     ~~Describe \code{atol} here~~
+Absolute tolerance for numerical integration.
 }
   \item{maxStepSize}{
-%%     ~~Describe \code{maxStepSize} here~~
+The maximum step size allowed to ODE solver.
 }
   \item{maxNumSteps}{
-%%     ~~Describe \code{maxNumSteps} here~~
+	The maximum number of internal steps between two points being sampled before
+	the solver fails.
 }
   \item{maxErrTestsFails}{
-%%     ~~Describe \code{maxErrTestsFails} here~~
+Specifies the maximum number of error test failures permitted in attempting
+	 one step.
 }
   \item{plot_index_signals}{
 %%     ~~Describe \code{plot_index_signals} here~~
@@ -65,20 +72,17 @@ plotLBodeFitness(cnolist, model, ode_parameters = NULL, indices = NULL,
 }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+	Check \code{\link{CellNOptR}} for details about the cnolist and the model format.
+	For more details in the configuration of the ODE solver check the CVODES manual. 
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+	Returns a list with simulated data that has the same structure as the cnolist$valueSignals.
+	One matrix for each time-point.
 }
 \references{
-%% ~put references to the literature/web site here ~
 }
 \author{
-%%  ~~who you are~~
+David Henriques, Thomas Cokelaer
 }
 \note{
 %%  ~~further notes~~
@@ -87,17 +91,18 @@ plotLBodeFitness(cnolist, model, ode_parameters = NULL, indices = NULL,
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{CellNOptR}}
+\code{\link{createLBodeContPars}}
 }
 \examples{
 
 data("ToyCNOlist",package="CNORode");
 data("ToyModel",package="CNORode");
 data("ToyIndices",package="CNORode");
+ode_parameters=createLBodeContPars(model,random=TRUE);
 dataSimulation=plotLBodeFitness(cnolist, model,indices=indices);
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+

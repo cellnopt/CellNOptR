@@ -8,7 +8,7 @@ getLBodeModelSim<-function
 {
 	adjMat=incidence2Adjacency(model);
 	if(is.null(indices))indices <- indexFinder(cnolist,model,verbose=FALSE);
-	if(is.null(ode_parameters))ode_parameters=createLBodeContPars(adjMat,model$namesSpecies);
+	if(is.null(ode_parameters))ode_parameters=createLBodeContPars(model);
 	sim_function=getLBodeSimFunction(cnolist,model,adjMat,
 			indices, ode_parameters1$parValues, time,verbose,
 			transfer_function,reltol,atol,maxStepSize,

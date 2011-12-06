@@ -6,8 +6,9 @@
 CNORode-package
 }
 \description{
-More about what it does (maybe more than one line)
-~~ A concise (1-5 lines) description of the package ~~
+This package is used for the simulation and fitting of
+logic based ODE models. This package was developed to work 
+as an extension of CellNOptR.
 }
 \details{
 \tabular{ll}{
@@ -18,25 +19,49 @@ Date: \tab 2011-11-03\cr
 License: \tab What license is it under?\cr
 LazyLoad: \tab yes\cr
 }
-~~ An overview of how to use the package, including the most important ~~
-~~ functions ~~
+
 }
 \author{
-Who wrote it
+David Henriques, Thomas Cokelaer
 
-Maintainer: Who to complain to <yourfault@somewhere.net>
-~~ The author and/or maintainer of the package ~~
+Maintainer: David Henriques <dhenriques@ebi.ac.uk>
+
 }
+
 \references{
-~~ Literature or other references for background information ~~
+[1] Maria Rodriguez-Fernandez, Jose A. Egea, and Julio R. Banga. Novel
+    metaheuristic for parameter estimation in nonlinear dynamic biological
+    systems. BMC Bioinformatics, 7:483+, November 2006.
+
+[2] Dominik Wittmann, Jan Krumsiek, Julio S. Rodriguez, Douglas
+    Lauffenburger, Steffen Klamt, and Fabian Theis. Transforming boolean
+    models to continuous models: methodology and application to t-cell
+    receptor signaling. BMC Systems Biology, 3(1):98+, September 2009.
+
+[3] Jan Krumsiek, Sebastian Polsterl, Dominik Wittmann, and Fabian
+    Theis. Odefy - from discrete to continuous models. BMC
+    Bioinformatics, 11(1):233+, 2010.
+    
+[4] Alan C. Hindmarsh, Peter N. Brown, Keith E. Grant, Steven L. Lee,
+	Radu Serban, Dan E. Shumaker, and Carol S. Woodward. SUNDIALS:
+    Suite of nonlinear and differential/algebraic equation solvers. ACM
+    Trans. Math. Softw., 31(3):363-396, September 2005.
 }
-~~ Optionally other standard keywords, one per line, from file KEYWORDS in ~~
-~~ the R documentation directory ~~
-\keyword{ package }
+\keyword{CNORode}
 \seealso{
 ~~ Optional links to other man pages, e.g. ~~
 ~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
 }
 \examples{
-~~ simple examples of the most important functions ~~
+data("ToyCNOlist",package="CNORode");
+data("ToyModel",package="CNORode");
+data("ToyIndices",package="CNORode");
+
+ode_parameters=createLBodeContPars(model,random=TRUE);
+%Visualize intial simulation
+%simulatedData=plotLBodeFitness(cnolist, model,ode_parameters,indices=indices)
+ode_parameters=parEstimationLBodeSSm(cnolist,model,ode_parameters,
+	indices=indices,maxtime=10,ndiverse=10,dim_refset=6);
+%Visual solution after optimization
+%simulatedData=plotLBodeFitness(cnolist, model,indices=indices);
 }

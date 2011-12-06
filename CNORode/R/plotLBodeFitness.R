@@ -13,7 +13,7 @@ plotLBodeFitness <-function
     if(is.null(plot_index_signals))plot_index_signals=1:dim(cnolist$valueSignals[[1]])[2];
 	if(is.null(indices))indices=indexFinder(cnolist,model);
 	if(is.null(adjMatrix))adjMatrix=incidence2Adjacency(model);
-	if(is.null(ode_parameters))ode_parameters=createLBodeContPars(adjMatrix,model$namesSpecies);
+	if(is.null(ode_parameters))ode_parameters=createLBodeContPars(model);
 
 	sim_data=getLBodeDataSim(cnolist,model,
 			ode_parameters,indices,time,verbose,transfer_function,

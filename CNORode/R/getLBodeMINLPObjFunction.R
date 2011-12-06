@@ -1,15 +1,20 @@
 getLBodeMINLPObjFunction <-function
 (
 		cnolist,				model,					ode_parameters,
-		indices,				time=1,					verbose=0, 
+		indices=NULL,			time=1,					verbose=0, 
 		transfer_function=3,	reltol=1e-4,			atol=1e-3,
 		maxStepSize=Inf,		maxNumSteps=100000,		maxErrTestsFails=50,
 		nan_fac=1
 )
 {
+
 	adjMatrix=incidence2Adjacency(model);
-	n_cont=length(ode_parameters1$index_opt_pars);
+	
+	if(is.null(indices))indices=indexFinder(cnolist,model,verbose=FALSE);
+	
+	n_cont=length(ode_parameters$index_opt_pars);
 	n_int=dim(model$interMat)[2];
+	
 	sim_function<-getLBodeSimFunction(cnolist,model,adjMatrix1=adjMatrix,
 			indices1=indices,odeParameters1=ode_parameters$parValues, time1=time,verbose1=verbose,
 			transfer_function1=transfer_function,reltol1=reltol,atol1=atol,maxStepSize1=maxStepSize,
@@ -26,7 +31,7 @@ getLBodeMINLPObjFunction <-function
 		temp_model=model1;
 		x_cont=as.double(x[seq(1,n_cont1)]);
 		x_int=as.integer(x[seq((n_cont1+1),(n_cont1+n_int1))]);
-		if(length(which(as.logical(x_int1)))<2)return(1);
+		if(length(which(as.logical(x_int)))<2)return(1);
 		temp_model$interMat=model1$interMat[,which(as.logical(x_int))];
 		temp_model$notMat=model1$notMat[,which(as.logical(x_int))];
 		ode_parameters1$parValues[ode_parameters1$index_opt_pars]=x_cont;

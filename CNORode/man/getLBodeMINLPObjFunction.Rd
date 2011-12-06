@@ -2,71 +2,79 @@
 \alias{getLBodeMINLPObjFunction}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-	Get the objective function to perform parameter estimation.
+	Get the objective function to evaluate the fitness of a given
+	model structure and set of parameters.
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+	This function configures returns the objective function that can be used to evaluate
+	the fitness of a logic based ODE model using a particular set of parameters and model
+	structure. This function can be particular useful if you are planing to couple a
+	mixed integer nonlinear programming optimisation solver. The returned value of the 
+	objective function corresponds to the mean squared value.
 }
 \usage{
-getLBodeMINLPObjFunction(cnolist, model, ode_parameters, indices, time = 1, verbose = 0, transfer_function = 3, reltol = 1e-04, atol = 0.001, maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails = 50, nan_fac = 1)
+getLBodeMINLPObjFunction(cnolist, model, ode_parameters, indices=NULL, time = 1, 
+verbose = 0, transfer_function = 3, reltol = 1e-04, atol = 0.001, maxStepSize = Inf, 
+maxNumSteps = 1e+05, maxErrTestsFails = 50, nan_fac = 1)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{cnolist}{
-%%     ~~Describe \code{cnolist} here~~
+ \item{cnolist}{
+A list containing the experimental design and data.
 }
-  \item{model}{
-%%     ~~Describe \code{model} here~~
+ \item{model}{
+The logic model to be simulated.
 }
-  \item{ode_parameters}{
-%%     ~~Describe \code{ode_parameters} here~~
+ \item{ode_parameters}{
+A list with the ODEs parameter information. Obtained with \code{\link{createLBodeContPars}}.
 }
-  \item{indices}{
-%%     ~~Describe \code{indices} here~~
+ \item{indices}{
+Indices to map data in the model. Obtained with indexFinder function from CellNOptR. 
 }
-  \item{time}{
-%%     ~~Describe \code{time} here~~
+ \item{time}{
+An integer with the index of the time point to start the simulation. Default is 1.
 }
-  \item{verbose}{
-%%     ~~Describe \code{verbose} here~~
+ \item{verbose}{
+A logical value that triggers a set of comments.
 }
-  \item{transfer_function}{
-%%     ~~Describe \code{transfer_function} here~~
+ \item{transfer_function}{
+The type of used transfer. Use 1 for no transfer function, 2 for Hill function and
+3 for normalized Hill function.
 }
-  \item{reltol}{
-%%     ~~Describe \code{reltol} here~~
+ \item{reltol}{
+Relative Tolerance for numerical integration.
 }
-  \item{atol}{
-%%     ~~Describe \code{atol} here~~
+ \item{atol}{
+Absolute tolerance for numerical integration.
 }
-  \item{maxStepSize}{
-%%     ~~Describe \code{maxStepSize} here~~
+ \item{maxStepSize}{
+The maximum step size allowed to ODE solver.
 }
-  \item{maxNumSteps}{
-%%     ~~Describe \code{maxNumSteps} here~~
+\item{maxNumSteps}{
+	The maximum number of internal steps between two points being sampled before
+	the solver fails.
 }
-  \item{maxErrTestsFails}{
-%%     ~~Describe \code{maxErrTestsFails} here~~
+ \item{maxErrTestsFails}{
+Specifies the maximum number of error test failures permitted in attempting
+	 one step.
 }
-  \item{nan_fac}{
-%%     ~~Describe \code{nan_fac} here~~
+ \item{nan_fac}{
+A penalty for each data point the model is not able to simulate. We recommend higher than
+0 and smaller that 1.
 }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+	Check \code{\link{CellNOptR}} for details about the cnolist and the model format.
+	For more details in the configuration of the ODE solver check the CVODES manual. 
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+Returns a function to evaluate the model fitness. This function receives a continuous parameter
+vector.
 }
 \references{
-%% ~put references to the literature/web site here ~
 }
 \author{
-%%  ~~who you are~~
+David Henriques, Thomas Cokelaer
 }
 \note{
 %%  ~~further notes~~
@@ -75,56 +83,24 @@ getLBodeMINLPObjFunction(cnolist, model, ode_parameters, indices, time = 1, verb
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{CellNOptR}}
+\code{\link{createLBodeContPars}}
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (cnolist, model, ode_parameters, indices, time = 1, 
-    verbose = 0, transfer_function = 3, reltol = 1e-04, atol = 0.001, 
-    maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails = 50, 
-    nan_fac = 1) 
-{
-    adjMatrix = incidence2Adjacency(model)
-    n_cont = length(ode_parameters1$index_opt_pars)
-    n_int = dim(model$interMat)[2]
-    sim_function <- getLBodeSimFunction(cnolist, model, adjMatrix1 = adjMatrix, 
-        indices1 = indices, odeParameters1 = ode_parameters$parValues, 
-        time1 = time, verbose1 = verbose, transfer_function1 = transfer_function, 
-        reltol1 = reltol, atol1 = atol, maxStepSize1 = maxStepSize, 
-        maxNumSteps1 = maxNumSteps, maxErrTestsFails1 = maxErrTestsFails)
-    logic_ode_MINLP_objective_function <- function(x, cnolist1 = cnolist, 
-        model1 = model, adjMatrix1 = adjMatrix, n_cont1 = n_cont, 
-        n_int1 = n_int, indices1 = indices, ode_parameters1 = ode_parameters, 
-        sim_function1 = sim_function, nan_fac1 = nan_fac) {
-        temp_model = model1
-        x_cont = as.double(x[seq(1, n_cont1)])
-        x_int = as.integer(x[seq((n_cont1 + 1), (n_cont1 + n_int1))])
-        if (length(which(as.logical(x_int1))) < 2) 
-            return(1)
-        temp_model$interMat = model1$interMat[, which(as.logical(x_int))]
-        temp_model$notMat = model1$notMat[, which(as.logical(x_int))]
-        ode_parameters1$parValues[ode_parameters1$index_opt_pars] = x_cont
-        sim = sim_function1(cnolist1, temp_model, ode_parameters1$parValues)
-        sim <- as.vector(unlist(lapply(sim, function(x) x[, indices1$signals])))
-        measured_values <- as.vector(unlist(lapply(cnolist1$valueSignals, 
-            function(x) x)))
-        NaNs_sim = which(is.na(sim))
-        not_NaNs_data = which(!is.na(measured_values))
-        not_NaNs_sim = which(!is.na(sim))
-        not_NaNs = intersect(not_NaNs_sim, not_NaNs_data)
-        NaNs = intersect(not_NaNs_data, NaNs_sim)
-        error = sum((sim[not_NaNs] - measured_values[not_NaNs])^2)
-        res = (error + length(NaNs) * nan_fac1)/length(not_NaNs_data)
-        return(res)
-    }
-    return(logic_ode_MINLP_objective_function)
-  }
+data("ToyCNOlist",package="CNORode");
+data("ToyModel",package="CNORode");
+data("ToyIndices",package="CNORode");
+
+ode_parameters=createLBodeContPars(model,random=TRUE);
+minlp_obj_function=getLBodeMINLPObjFunction(cnolist, model,ode_parameters,indices);
+
+n_int_vars=dim(model$interMat)[2];
+x_int=round(runif(n_int_vars))
+x_cont=ode_parameters$parValues;
+x=c(x_cont,x_int);
+f=minlp_obj_function(x);
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+
