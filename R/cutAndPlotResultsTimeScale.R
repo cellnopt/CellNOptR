@@ -15,7 +15,7 @@ cutAndPlotResultsTimeScale <- function(Model, bString, SimList, CNOlist, indexLi
 	SimRes = SimRes[,indexList$signals,]
 	getFitData <- getFitTimeScale(SimList=SimListcut, CNOlist=CNOlist, Model=Modelcut, indexList=indexList, boolUpdates=boolUpdates, divTime=divTime)
 	AU <- getFitData$estimate
-	x.coords <- getFitData$x.coords
+	x.coords <- getFitData$xCoords
 	expResults <- CNOlist$valueSignals
 	
 	plotOptimResultsTimeScale(SimResults=SimRes, yInterpol=getFitData$yInter, xCoords=x.coords, expResults=expResults, times=CNOlist$timeSignals, namesCues=CNOlist$namesCues, namesSignals=CNOlist$namesSignals, valueCues=CNOlist$valueCues)

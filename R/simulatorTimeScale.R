@@ -122,9 +122,11 @@ simulatorTimeScale <- function(CNOlist, Model, SimList, indexList, boolUpdates) 
 		valueInhibitors <- 1-CNOlist$valueInhibitors
 		newInput[,indexList$inhibited] <- valueInhibitors * newInput[,indexList$inhibited]
 		# replace NAs with zeros to avoid having the NA penalty applying to unconnected species
-		newInput[is.na(newInput)] <- 0
-		outputPrev[is.na(outputPrev)] <- 0
-		yBool[,,count] = newInput		
+		readout <- newInput
+		readout[is.na(readout)] <- 0
+	#	newInput[is.na(newInput)] <- 0
+	#	outputPrev[is.na(outputPrev)] <- 0
+		yBool[,,count] = readout		
 	}
 
 	return(yBool)

@@ -124,6 +124,5 @@ cutAndPlotResultsTimeScale(
   SimList=fields4Sim,
   CNOlist=CNOlistToyFB,
   indexList=indexNONCcutComp,
-  plotPDF=FALSE,
   boolUpdates=boolUpdates)
 }
