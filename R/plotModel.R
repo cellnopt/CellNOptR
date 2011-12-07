@@ -307,7 +307,7 @@ plotModel <- function(model, optimRes=NA, indexIntegr=NA, signals=NULL, stimulis
     # ------------------ plotting
     recipEdges="distinct"
     if (is.null(clusters)){
-        plot(g,"dot",attrs=attrs,nodeAttrs=nodeAttrs,edgeAttrs=edgeAttrs,recipeEdges=recipeEdges)
+        plot(g,"dot",attrs=attrs,nodeAttrs=nodeAttrs,edgeAttrs=edgeAttrs,recipEdges=recipEdges)
         toDot(g, output_dot, nodeAttrs=nodeAttrs,edgeAttrs=edgeAttrs,attrs=attrs, recipEdges=recipEdges)
     }
     else{
