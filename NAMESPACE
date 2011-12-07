@@ -31,4 +31,5 @@ export("checkSignals",
        "writeDot",
        "writeNetwork",
        "writeReport",
-       "writeScaffold")
+       "writeScaffold", 
+        "plotModel")
