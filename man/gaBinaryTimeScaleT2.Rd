@@ -7,7 +7,7 @@ Genetic algorithm for optimizing models using multiple time-points with 1 or 2 s
 The genetic algorithm used to optimize a model by fitting to data containing multiple time points. The data can be fitted in 2 ways: applying a single scaling factor to the boolean simulation or, additionally, dividing the data with a user-provided time-point into 2 steady states (that signify early and late reactions).
 }
 \usage{
-gaBinaryTimeScale(CNOlist, Model, SimList, indexList, sizeFac = 1e-04, NAFac = 1, initBstring, PopSize = 50, Pmutation = 0.5, MaxTime = 60, maxGens = 500, StallGenMax = 100, SelPress = 1.2, elitism = 5, RelTol = 0.1, verbose=TRUE, boolUpdates, divTime=NULL)
+gaBinaryTimeScale(CNOlist, Model, SimList, indexList, sizeFac = 1e-04, NAPenFac = 1, initBstring, PopSize = 50, Pmutation = 0.5, MaxTime = 60, maxGens = 500, StallGenMax = 100, SelPress = 1.2, elitism = 5, RelTol = 0.1, verbose=TRUE, boolUpdates, divTime=NULL)
 }
 \arguments{
 \item{CNOlist}{
@@ -93,8 +93,8 @@ data(ToyModelFB, package="CNORdiscreteTime")
 
 # pre-process model
 
-indexOrig <- indexFinder(CNOlist=CNOlistToyFB, Model=ToyModelFB, verbose=T)
-indexNONC <- findNONC(Model=ToyModelFB, indexes=indexOrig, verbose=T)
+indexOrig <- indexFinder(CNOlist=CNOlistToyFB, Model=ToyModelFB, verbose=TRUE)
+indexNONC <- findNONC(Model=ToyModelFB, indexes=indexOrig, verbose=TRUE)
 ModelCut <- cutNONC(Model=ToyModelFB, NONCindexes=indexNONC)
 indexNONCcut <- indexFinder(CNOlist=CNOlistToyFB, Model=ModelCut)
 ModelCutCompress <- compressModel(Model=ModelCut, indexes=indexNONCcut)

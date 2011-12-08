@@ -7,7 +7,7 @@ Discrete time simulation of a boolean model
 Simulates multiple time points
 }
 \usage{
-simulatorTimeScale(CNOlist, Model, SimList, indexList, boolUpdates)
+simulatorTimeScaleT2(CNOlist, Model, SimList, indexList, boolUpdates)
 }
 \arguments{
 \item{CNOlist}{

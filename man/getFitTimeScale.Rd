@@ -26,7 +26,7 @@ a list of indexes of species stimulated/inhibited/signals, as produced by indexf
 \item{sizeFac}{
 the scaling factor for the size term in the objective function, default to 0.0001.
 }
-\item{NAFac}{
+\item{NAPenFac}{
 the scaling factor for the NA term in the objective function, default to 1.
 }
 \item{boolUpdates}{

@@ -49,8 +49,8 @@ data(ToyModelFB, package="CNORdiscreteTime")
 
 # pre-process model
 
-indexOrig <- indexFinder(CNOlist=CNOlistToyFB, Model=ToyModelFB, verbose=T)
-indexNONC <- findNONC(Model=ToyModelFB, indexes=indexOrig, verbose=T)
+indexOrig <- indexFinder(CNOlist=CNOlistToyFB, Model=ToyModelFB, verbose=TRUE)
+indexNONC <- findNONC(Model=ToyModelFB, indexes=indexOrig, verbose=TRUE)
 ModelCut <- cutNONC(Model=ToyModelFB, NONCindexes=indexNONC)
 indexNONCcut <- indexFinder(CNOlist=CNOlistToyFB, Model=ModelCut)
 ModelCutCompress <- compressModel(Model=ModelCut, indexes=indexNONCcut)
@@ -78,7 +78,6 @@ cutAndPlotResultsTimeScale(
   SimList=fields4Sim,
   CNOlist=CNOlistToyFB,
   indexList=indexNONCcutComp,
-  plotPDF=FALSE,
   boolUpdates=boolUpdates)
 }
 

@@ -7,7 +7,7 @@ Plot the data and simulated values for time course data
 This function is the equivalent of CNOPlotFits, it plots the data and the simulated values,  along with an image plot that tells which cues were present. The plots are colored according to the fit between data and simulated data.
 }
 \usage{
-plotOptimResults(SimResults = SimResults, yInterpol = yInterpol, xCoords = xCoords,
+plotOptimResultsTimeScale(SimResults = SimResults, yInterpol = yInterpol, xCoords = xCoords, expResults = expResults,
 times = times, namesCues = namesCues, namesSignals = namesSignals, valueCues = valueCues)
 }
 \arguments{
@@ -19,6 +19,12 @@ the interpolated experimental data returned by \code{getFitTimeScale}
 }
 \item{xCoords}{
 the x-coordinates of the data and simulation after the application of the optimized scaling factor
+}
+\item{times}{
+TOADD
+}
+\item{expResults{
+TOADD
 }
 \item{namesCues}{
 a vector of names, typically \code{CNOlist$namesCues}
