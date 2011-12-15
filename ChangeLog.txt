@@ -1,6 +1,22 @@
+14/7/Dev/2011 0.99.13
+-----------------------
+* make plotModel to work on Toy model and Liver data dealinbg with cnolist,
+  having both dot output and/or image output (e.g., PNG). bitString can also be
+  provided. 
+
+
+7/Dec/2011 0.99.12
+--------------------
+* add plotModel utility
+
+1/Dec/2011  0.99.11
+----------------------
+* fix bug report cno-21 in writeDot so that nodes that belongs to signal and
+inhibited classes are colored with 2 colors as in matlab version.
+
 28/Nov/2011 0.99.10
 -------------------
-*fix a bug in writeDot so that it still works when there is only one sink node
+* fix a bug in writeDot so that it still works when there is only one sink node
 
 20/Nov/2011 0.99.9
 -------------------
