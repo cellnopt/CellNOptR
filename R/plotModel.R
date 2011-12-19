@@ -195,11 +195,13 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexInteger=NA, signal
     # dot uses this value but the Rgraphviz plot arrowsize is done
     # automatically.
     arrowsize=2
+    fontsize=22
+    size="10,10"
     # size does not work in Rgraphviz version 1.32 wait and see for new version.
     attrs <-
-        list(node=list(fontsize=22,fontname="Helvetica",style="filled,bold"),
+        list(node=list(fontsize=fontsize,fontname="Helvetica",style="filled,bold"),
              edge=list(style="solid", penwidth=1,weight="1.0",arrowsize=arrowsize),
-             graph=list(splines=TRUE,size="8.5,11",bgcolor="white",ratio="fill",pad="0.5,0.5" ))
+             graph=list(splines=TRUE,size=size,bgcolor="white",ratio="fill",pad="0.5,0.5",dpi=72 ))
     # other options
     # in graph: pad="0.5,5"))
     # in graph, add a title with main="Model"))
@@ -219,25 +221,32 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexInteger=NA, signal
             fill=nodeAttrs$fillcolor, 
             col=nodeAttrs$color,
             style=nodeAttrs$style,
-            lty=nodeAttrs$lty,   # this does not work but works with the dot.
+#            lty=nodeAttrs$lty,   # does not work with Rgraphviz 1.32 can be used with patched version
             lwd=2,             # width of the nodes. IF provided, all nodes have the same width
             label=nodeAttrs$label,
             shape=nodeAttrs$shape,
-            cex=1,
+            cex=0.4,
+
+            fontsize=fontsize,
             iwidth=nodeAttrs$width,
-            iheight=nodeAttrs$height)
-            #,fixedsize=fixedsize)
+            iheight=nodeAttrs$height,
+            fixedsize=FALSE)
 
        # the arrowhead "normal" is buggy in Rgraphviz version 1.32 so switch to
        # "open" for now. However, the dot output keeps using the normal arrow. 
        arrowhead2 = edgeAttrs$arrowhead
        arrowhead2[arrowhead2=="normal"] = "open"
+
+       # once Rgraphviz is updated, one should be able to uncomment col and lwd
+       # which are buggy for the moment.
        edgeRenderInfo(g) <- list(
-            col=edgeAttrs$color,
+#can be used with Rgraphviz patch:          col=edgeAttrs$color,
             arrowhead=arrowhead2,
-#            head=v2,  tail=v1,
+            #head=v2,
+            #tail=v1,
             label=edgeAttrs$label,
-            lwd=edgeAttrs$penwidth,
+            lwd=2,
+#can be used with Rgraphviz patch:           lwd=edgeAttrs$penwidth,
             lty="solid"
         )
 
@@ -249,7 +258,7 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexInteger=NA, signal
         renderGraph(x)
         # and save into dot file.
         toDot(copyg,output_dot,nodeAttrs=nodeAttrs,edgeAttrs=edgeAttrs,subGList=clusters,attrs=attrs,recipEdges=recipEdges)
-        #try(system(paste("dot -Tsvg ",output_dot,"  -o temp.svg; mirage temp.svg", sep="")))
+#        try(system(paste("dot -Tsvg ",output_dot,"  -o temp.svg; mirage temp.svg", sep="")))
     }
     if (output != "STDOUT"){dev.off()}
     return(list(graph=g, attrs=attrs, nodeAttrs=nodeAttrs, edgeAttrs=edgeAttrs,clusters=clusters, v1=v1, v2=v2, edges=edges))
@@ -359,7 +368,7 @@ createNodeAttrs <- function(g, vertices, stimuli, signals, inhibitors, ncno, com
         label[s] <- s
         height[s] <- 1
         width[s] <- 2
-        fixedsize[s] <- TRUE
+        fixedsize[s] <- FALSE
         shape[s] <- "ellipse" 
     }
 
