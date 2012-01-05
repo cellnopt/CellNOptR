@@ -16,14 +16,18 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
 #that have the exact same values in all TR: and DA: columns
 	duplCond<-as.matrix(dataset$dataMatrix[,c(dataset$TRcol,dataset$DAcol)])
 	duplRows<-which(duplicated(duplCond) == TRUE)
-	
+    if (verbose == TRUE){
+        if (length(duplRows)>0){print("Cleaning duplicated rows")}
+    }
+
 	while(length(duplRows) != 0){
-		dupIndex<-apply(duplCond,MARGIN=1,function(x) all(x == duplCond[duplRows[1],]))
+        #dupIndex<-apply(duplCond,MARGIN=1,function(x) all(x == duplCond[duplRows[1],]))
+        dupIndex<-apply(duplCond,MARGIN=1,function(x)all(compareNA(x,duplCond[duplRows[1],])))
+
 		dupIndex<-which(dupIndex == TRUE)
 		dupMatrix<-dataset$dataMatrix[dupIndex,]
-		
 		#compute the new row as the average across duplicate rows
-		newRow<-colMeans(dupMatrix)
+		newRow<-colMeans(dupMatrix, na.rm=TRUE)
 		
 		#replace the first duplicated row by the summarised one
 		dataset$dataMatrix[dupIndex[1],]<-newRow
@@ -34,6 +38,9 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
 		duplCond<-as.matrix(dataset$dataMatrix[,c(dataset$TRcol,dataset$DAcol)])
 		duplRows<-which(duplicated(duplCond) == TRUE)
 		}
+      if (any(is.nan(as.matrix(dataset$dataMatrix)))){
+             dataset$dataMatrix[is.nan(as.matrix(dataset$dataMatrix))] <- NA
+         }
 #now extract the names of the cues, and the inhibitors/stimuli
 	namesCues<-colnames(dataset$dataMatrix)[dataset$TRcol]
 	
@@ -87,7 +94,7 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
 		
 #now extract the time signals
 	times<-as.factor(as.vector(as.character(as.matrix(dataset$dataMatrix[,dataset$DAcol]))))
-	timeSignals<-sort(as.integer(levels(times)))
+	timeSignals<-sort(as.double(levels(times)))
 	
 #Build the valueCues matrix (i.e. a matrix with nrows=nrows in dataMatrix and ncol=number of cues,
 #filled with 0/1 if the particular cue is present or not)
@@ -154,14 +161,13 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
 	ntimes<-length(timeSignals)
 	whereTimes<-rep(0,ntimes)
 	timesRows<-0
-	
 	for(i in 1:ntimes){
 		timesRows<-c(timesRows,which(times == timeSignals[i]))
 		whereTimes[i]<-length(which(times == timeSignals[i]))
 		}		
 		
 	timesRows<-timesRows[2:length(timesRows)]	
-	
+ 	
 #Check that we have data across all conditions for all time points except zero
 	if(length(unique(whereTimes[2:length(whereTimes)])) != 1){
 		warning("This program expects data across all conditions at all time points (except t=0) ")
@@ -172,53 +178,42 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
 #Do the t=0 matrix, and produce a new cues matrix, that does not contain duplicates 
 #(1 row per condition and different matrices will be build for the different times)
 	valueSignals<-list(t0=matrix(data=0,nrow=whereTimes[2],ncol=length(dataset$DVcol)))
-	
+
 #This vector tells me which columns of the cues matrix I should pay attention to when 
 #copying data across for time=0	
-	zerosCond<-apply(cues[timesRows[1:whereTimes[1]],],1,function(x) which(x == 1))
+    zerosCond<-apply(cues[timesRows[1:whereTimes[1]],],1,function(x) which(x == 1))
 	zerosCond<-unique(unlist(zerosCond))
 	count=1
 	newcues<-matrix(data=0,nrow=whereTimes[2],ncol=dim(cues)[2])
-	
+
 		for(i in timesRows[1]:timesRows[whereTimes[1]]){
 			present<-zerosCond[which(cues[timesRows[i],zerosCond] == 1)]
-			
+
 			if(length(present) == 0){
-			
 				for(n in timesRows[(whereTimes[1]+1):(whereTimes[1]+whereTimes[2])]){
-				
 						if(sum(cues[n,zerosCond]) == 0){
 							valueSignals$t0[count,]<-as.numeric(dataset$dataMatrix[i,dataset$DVcol])
 							newcues[count,]<-cues[n,]
 							count=count+1
 							}
-							
 						}
-						
 				}else{
-				
 					for(n in timesRows[(whereTimes[1]+1):(whereTimes[1]+whereTimes[2])]){
-					
 						if(length(zerosCond[which(cues[n,zerosCond] == 1)]) == length(present)){
-						
 							if(all(zerosCond[which(cues[n,zerosCond] == 1)] == present) && 
 								length(which(cues[n,zerosCond] == 1)) != 0){
 								valueSignals$t0[count,]<-as.numeric(dataset$dataMatrix[i,dataset$DVcol])
 								newcues[count,]<-cues[n,]
 								count=count+1
 								}
-								
-							}	
-							
+							}
 						}
-					}	
+					}
 			}
-			
-#Now build the matrices for the other time points
-	for(i in 2:length(timeSignals)){
-	
+
+    #Now build the matrices for the other time points
+    for(i in 2:length(timeSignals)){
 		valuesTi<-matrix(data=0,nrow=whereTimes[2],ncol=length(dataset$DVcol))
-		
 		for(n in 1:dim(newcues)[1]){
 			rowsMatchCues<-apply(cues,1,function(x) all(x == newcues[n,]))
 			rowsmatchTime<-times == timeSignals[i]
@@ -269,3 +264,11 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
 	
 	}
 
+
+compareNA <- function(v1,v2) {
+    # This function returns TRUE wherever elements are the same, including NA's,
+    # and false everywhere else.
+    same <- (v1 == v2)  |  (is.na(v1) & is.na(v2))
+    same[is.na(same)] <- FALSE
+    return(same)
+}
