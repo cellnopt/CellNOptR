@@ -47,10 +47,13 @@ according to the bistring value (between 0 and 1).
 }
 \value{
 a graph representation of the model
-\item{graph}{A graph representation of the model}
-\item{graph}{}
-\item{graph}{a vector of names of cues}
-\item{graph}{a vector of names of cues}
+\item{graph$g}{A graph representation of the model}
+\item{graph$attrs}{graph attributes}
+\item{graph$nodeAttrs}{nodes attributes}
+\item{graph$edgeAttrs}{edges attributes}
+\item{graph$clusters}{clusters of nodes}
+
+
 }
 %\references{
 %J. Saez-Rodriguez, L. G. Alexopoulos, J. Epperlein, R. Samaga, D. A. Lauffenburger, S. Klamt and P. K. Sorger. Discrete logic modeling as a means to link protein signaling networks with functional analysis of
