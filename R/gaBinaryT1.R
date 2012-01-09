@@ -73,7 +73,8 @@ gaBinaryT1<-function(
 			indexList=indexList,
 			timePoint="t1",
 			sizeFac=sizeFac,
-			NAFac=NAFac)
+			NAFac=NAFac,
+			nInTot=length(which(Model$interMat == -1)))
 		nDataP<-sum(!is.na(CNOlist$valueSignals[[2]]))
 		Score<-Score/nDataP
 		return(Score)

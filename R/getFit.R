@@ -5,7 +5,8 @@ getFit<-function(
 	indexList,
 	timePoint=c("t1","t2"),
 	sizeFac=0.0001,
-	NAFac=1){
+	NAFac=1,
+	nInTot){
 	
 	SimResults<-SimResults[,indexList$signals]
 	
@@ -21,11 +22,9 @@ getFit<-function(
 	
 	nDataPts<-dim(CNOlist$valueSignals[[tPt]])[1]*dim(CNOlist$valueSignals[[tPt]])[2]
 	
-	nReac<-length(Model$reacID)
-	
 	nInputs<-length(which(Model$interMat == -1))
 	
-	sizePen<-(nDataPts*sizeFac*nInputs)/nReac
+	sizePen<-(nDataPts*sizeFac*nInputs)/nInTot
 	
 	score<-deviationPen+NAPen+sizePen
 	

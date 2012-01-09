@@ -31,6 +31,9 @@ weights the penalty for the size of the model, default=0.0001
   \item{NAFac}{
 weights the penalty for the number of NAs
 }
+  \item{nInTot}{
+the number of inputs in the model prior to cutting, used to normalised the size penalty
+}
 }
 \details{
 BE AWARE: contrary to what is done in the Matlab version of CellNOpt, here the simulation results are computed beforehand and the Model that is input into this function is a model that has already been cut i.e. that only contains the reactions present in the optimised model (i.e.should be the same model as the one that you input into the simulator). Also, the SimResults matrix is the full one as output by the simulator, i.e. it contains results for all species in the model, not only the signals

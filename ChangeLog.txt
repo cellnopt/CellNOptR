@@ -1,3 +1,7 @@
+9/Jan/2012 0.99.14
+--------------------
+* change in getFit and corresponding changes in gaBinaryT1 and gaBinaryT2:  the sizePen should be divided by the total number of inputs in the model prior to cutting. This number is now passed to getFit as an additional parameter.
+
 14/7/Dev/2011 0.99.13
 -----------------------
 * make plotModel to work on Toy model and Liver data dealinbg with cnolist,
