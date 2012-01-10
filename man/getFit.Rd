@@ -7,7 +7,8 @@ Compute the score of a model
 This function computes the value of the objective function for a model and an associated data set, as a sum of a term that computes the fit of model to data, a term that penalises the NA values produced by the model, and a term that penalises increasing size of the model.
 }
 \usage{
-getFit(SimResults, CNOlist, Model, indexList, timePoint = c("t1", "t2"), sizeFac = 1e-04, NAFac = 1)
+getFit(SimResults, CNOlist, Model, indexList, timePoint = c("t1", "t2"), sizeFac
+= 1e-04, NAFac = 1, nInTot)
 }
 \arguments{
   \item{SimResults}{
@@ -70,5 +71,7 @@ Score<-getFit(
 	CNOlist=CNOlistToy,
 	Model=ToyModel,
 	indexList=indicesToy,
-	timePoint="t1")
+	timePoint="t1", 
+    nInTot=length(which(ToyModel$interMat == -1))
+    )
 }
