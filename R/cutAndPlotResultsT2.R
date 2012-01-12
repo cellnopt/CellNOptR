@@ -17,19 +17,15 @@ cutAndPlotResultsT2 <-function(
 	Modelcut$interMat<-Modelcut$interMat[,as.logical(bStringT1)]
 	Modelcut$notMat<-Modelcut$notMat[,as.logical(bStringT1)]
 	Modelcut$reacID<-Modelcut$reacID[as.logical(bStringT1)]
-	
-	SimListcut<-SimList
-	SimListcut$finalCube<-SimListcut$finalCube[as.logical(bStringT1),]
-	SimListcut$ixNeg<-SimListcut$ixNeg[as.logical(bStringT1),]
-	SimListcut$ignoreCube<-SimListcut$ignoreCube[as.logical(bStringT1),]
-	SimListcut$maxIx<-SimListcut$maxIx[as.logical(bStringT1)]
+
+    SimListCut<-cutSimList(SimList, bStringT1)
 	
 		#simulate
 		
 	SimT1<-simulatorT1(
 		CNOlist=CNOlist,
 		Model=Modelcut,
-		SimList=SimListcut,
+		SimList=SimListCut,
 		indexList=indexList)
 	SimResT1<-SimT1[,indexList$signals]
 	
@@ -47,18 +43,14 @@ cutAndPlotResultsT2 <-function(
 	Modelcut$reacID<-Modelcut$reacID[as.logical(bitString2)]
 	Modelcut$times<-BStimes[which(BStimes != 0)]
 	
-	SimListcut<-SimList
-	SimListcut$finalCube<-SimListcut$finalCube[as.logical(bitString2),]
-	SimListcut$ixNeg<-SimListcut$ixNeg[as.logical(bitString2),]
-	SimListcut$ignoreCube<-SimListcut$ignoreCube[as.logical(bitString2),]
-	SimListcut$maxIx<-SimListcut$maxIx[as.logical(bitString2)]
+    SimListCut<-cutSimList(SimList, bitString2)
 	
 		#Simulate
 	SimT2<-simulatorT2(
 		SimResultst1=SimT1,
 		CNOlist=CNOlist,
 		Model=Modelcut,
-		SimList=SimListcut,
+		SimList=SimListCut,
 		indexList=indexList)
 	SimResT2<-SimT2[,indexList$signals]
 	

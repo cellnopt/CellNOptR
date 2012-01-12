@@ -12,14 +12,12 @@ cutAndPlotResultsT1<-function(
 	Modelcut$interMat<-Modelcut$interMat[,as.logical(bString)]
 	Modelcut$notMat<-Modelcut$notMat[,as.logical(bString)]
 	Modelcut$reacID<-Modelcut$reacID[as.logical(bString)]
+
+
+    SimListCut<-cutSimList(SimList, bString)
+
 	
-	SimListcut<-SimList
-	SimListcut$finalCube<-SimListcut$finalCube[as.logical(bString),]
-	SimListcut$ixNeg<-SimListcut$ixNeg[as.logical(bString),]
-	SimListcut$ignoreCube<-SimListcut$ignoreCube[as.logical(bString),]
-	SimListcut$maxIx<-SimListcut$maxIx[as.logical(bString)]
-	
-	Sim<-simulatorT1(CNOlist=CNOlist,Model=Modelcut,SimList=SimListcut,indexList=indexList)
+	Sim<-simulatorT1(CNOlist=CNOlist,Model=Modelcut,SimList=SimListCut,indexList=indexList)
 	
 	SimRes<-Sim[,indexList$signals]
 	SimResults<-list(t0=matrix(data=0,nrow=dim(SimRes)[1],ncol=dim(SimRes)[2]),t1=SimRes)

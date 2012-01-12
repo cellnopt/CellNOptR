@@ -53,11 +53,10 @@ gaBinaryT2 <-function(
 		ModelCut$notMat<-ModelCut$notMat[,as.logical(bitString)]
 		ModelCut$reacID<-ModelCut$reacID[as.logical(bitString)]
 		ModelCut$times<-bStringtimes[which(bStringtimes != 0)]
-		SimListCut<-SimList
-		SimListCut$finalCube<-SimListCut$finalCube[as.logical(bitString),]
-		SimListCut$ixNeg<-SimListCut$ixNeg[as.logical(bitString),]
-		SimListCut$ignoreCube<-SimListCut$ignoreCube[as.logical(bitString),]
-		SimListCut$maxIx<-SimListCut$maxIx[as.logical(bitString)]
+
+
+		SimListCut<-cutSimList(SimList, bitString)
+
 		
 	#compute the simulated results	
 		SimResults<-simulatorT2(
