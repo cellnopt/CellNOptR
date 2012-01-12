@@ -47,11 +47,12 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
 	if(subfield == TRUE){
 		namesCues<-sub(pattern="(TR:)",x=namesCues, replacement="",perl=TRUE)
 		tagInhib<-grep(pattern="i:Inhibitor", x=namesCues)
+        # tagInhibL must be set now before namesCues is changed. See JIRA bug 27
+		tagInhibL<-grepl(pattern="i:Inhibitor", x=namesCues)
 		namesCues<-sub(pattern="(:\\w*$)",x=namesCues, replacement="",perl=TRUE)
 	 	namesCues[tagInhib]<-sub(pattern="(i$)",	x=namesCues[tagInhib],	replacement="",	perl=TRUE)
         # if no inhibitors, grep returns integer(0), so we now need to use grepl
         # (logical version of grep)
-		tagInhibL<-grepl(pattern="(i$)", x=namesCues, perl=TRUE,ignore.case=FALSE)
         namesStimuli<-namesCues[tagInhibL==FALSE]
         namesInhibitors<-namesCues[tagInhibL==TRUE]
 		}
@@ -59,10 +60,11 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
     if(subfield == FALSE){
 		namesCues<-sub(pattern="(TR:)",x=namesCues, replacement="",perl=TRUE)
 		tagInhib<-grep(pattern="(i$)", x=namesCues, perl=TRUE,ignore.case=FALSE)
+        # tagInhibL must be set now before namesCues is changed See JIRA bug 27
+		tagInhibL<-grepl(pattern="(i$)", x=namesCues, perl=TRUE,ignore.case=FALSE)
         namesCues[tagInhib]<-sub(pattern="(i$)", x=namesCues[tagInhib], replacement="", perl=TRUE)
         # if no inhibitors, grep returns integer(0), so we now need to use grepl
         # (logical version of grep)
-		tagInhibL<-grepl(pattern="(i$)", x=namesCues, perl=TRUE,ignore.case=FALSE)
         namesStimuli<-namesCues[tagInhibL==FALSE]
         namesInhibitors<-namesCues[tagInhibL==TRUE]
         
@@ -179,7 +181,8 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
 	valueSignals<-list(t0=matrix(data=0,nrow=whereTimes[2],ncol=length(dataset$DVcol)))
 #This vector tells me which columns of the cues matrix I should pay attention to when 
 #copying data across for time=0	
-    zerosCond<-apply(cues[timesRows[1:whereTimes[1]],],1,function(x) which(x == 1))
+
+        zerosCond<-apply(cues[timesRows[1:whereTimes[1]],],1,function(x) which(x == 1))
 	zerosCond<-unique(unlist(zerosCond))
 	count=1
 	newcues<-matrix(data=0,nrow=whereTimes[2],ncol=dim(cues)[2])
