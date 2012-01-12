@@ -6,7 +6,7 @@ getFit<-function(
 	timePoint=c("t1","t2"),
 	sizeFac=0.0001,
 	NAFac=1,
-	nInTot){
+	nInTot=nInTot){
 	
 	SimResults<-SimResults[,indexList$signals]
 	
