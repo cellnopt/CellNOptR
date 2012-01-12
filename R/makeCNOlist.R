@@ -48,27 +48,26 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
 		namesCues<-sub(pattern="(TR:)",x=namesCues, replacement="",perl=TRUE)
 		tagInhib<-grep(pattern="i:Inhibitor", x=namesCues)
 		namesCues<-sub(pattern="(:\\w*$)",x=namesCues, replacement="",perl=TRUE)
-		namesCues[tagInhib]<-sub(
-			pattern="(i$)",
-			x=namesCues[tagInhib],
-			replacement="",
-			perl=TRUE)
-		namesStimuli<-namesCues[-tagInhib]
-		namesInhibitors<-namesCues[tagInhib]
+	 	namesCues[tagInhib]<-sub(pattern="(i$)",	x=namesCues[tagInhib],	replacement="",	perl=TRUE)
+        # if no inhibitors, grep returns integer(0), so we now need to use grepl
+        # (logical version of grep)
+		tagInhibL<-grepl(pattern="(i$)", x=namesCues, perl=TRUE,ignore.case=FALSE)
+        namesStimuli<-namesCues[tagInhibL==FALSE]
+        namesInhibitors<-namesCues[tagInhibL==TRUE]
 		}
 		
-	if(subfield == FALSE){
+    if(subfield == FALSE){
 		namesCues<-sub(pattern="(TR:)",x=namesCues, replacement="",perl=TRUE)
 		tagInhib<-grep(pattern="(i$)", x=namesCues, perl=TRUE,ignore.case=FALSE)
-		namesCues[tagInhib]<-sub(
-			pattern="(i$)",
-			x=namesCues[tagInhib],
-			replacement="",
-			perl=TRUE)
-		namesStimuli<-namesCues[-tagInhib]
-		namesInhibitors<-namesCues[tagInhib]
-		}
-		
+        namesCues[tagInhib]<-sub(pattern="(i$)", x=namesCues[tagInhib], replacement="", perl=TRUE)
+        # if no inhibitors, grep returns integer(0), so we now need to use grepl
+        # (logical version of grep)
+		tagInhibL<-grepl(pattern="(i$)", x=namesCues, perl=TRUE,ignore.case=FALSE)
+        namesStimuli<-namesCues[tagInhibL==FALSE]
+        namesInhibitors<-namesCues[tagInhibL==TRUE]
+        
+    }
+
 	if(sum("NOCYTO" %in% namesCues) != 0){
 		namesCues<-namesCues[-grep(pattern="NOCYTO", namesCues)]
 		namesStimuli<-namesStimuli[-grep(pattern="NOCYTO", namesStimuli)]
@@ -178,7 +177,6 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
 #Do the t=0 matrix, and produce a new cues matrix, that does not contain duplicates 
 #(1 row per condition and different matrices will be build for the different times)
 	valueSignals<-list(t0=matrix(data=0,nrow=whereTimes[2],ncol=length(dataset$DVcol)))
-
 #This vector tells me which columns of the cues matrix I should pay attention to when 
 #copying data across for time=0	
     zerosCond<-apply(cues[timesRows[1:whereTimes[1]],],1,function(x) which(x == 1))
@@ -226,7 +224,6 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
 		}
 		
 #Build the valueInhibitors and valueStimuli  matrices, which are a subset of the cues one
-
 	if(subfield == TRUE){
 	
 		valueInhibitors<-newcues[,grep(
