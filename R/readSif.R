@@ -1,3 +1,4 @@
+# $Id: $
 readSif<-function(sifFile){
 
 #Read the sif file
