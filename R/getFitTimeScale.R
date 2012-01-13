@@ -77,7 +77,7 @@ getFitTimeScale <- function(SimList, CNOlist, Model, indexList, sizeFac=0.0001, 
 		}
 
 		seed.1 = 0.99
-		est.1 = optim(seed.1, taufinder, method="L-BFGS-B", lower=0.5, upper=1.5)
+		est.1 = optim(seed.1, taufinder, method="L-BFGS-B", lower=0.1, upper=50)
 	}
 
 	my.estimate = findTimeScale(yBool, spline.store)
