@@ -151,8 +151,20 @@ plotOptimResults<-function(
 				
 				
 			}
-#Plot the image plots that tell preseence/absence of cues			
-		image(t(matrix(as.numeric(valueCues[r,]),nrow=1)),col=c("white","black"),xaxt="n",yaxt="n")	
+    #Plot the image plots that tell preseence/absence of cues			
+    # 
+    data = t(matrix(as.numeric(valueCues[r,]),nrow=1))
+    if (all(data==1)==TRUE){
+        col=c("black")
+    }
+    else if (all(data==0)==TRUE){
+        col=c("white")
+    }
+    else{
+        col=c("white", "black")
+    }
+    image(data,col=col,xaxt="n",yaxt="n")
+
 		if(r == dim(expResults[[1]])[1]){
 			axis(
 				side=1,
