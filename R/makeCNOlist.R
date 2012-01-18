@@ -51,7 +51,7 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
         # tagInhibL must be set now before namesCues is changed. See JIRA bug 27
         tagInhibL<-grepl(pattern="i:Inhibitor", x=namesCues)
         namesCues<-sub(pattern="(:\\w*$)",x=namesCues, replacement="",perl=TRUE)
-         namesCues[tagInhib]<-sub(pattern="(i$)",    x=namesCues[tagInhib],    replacement="",    perl=TRUE)
+        namesCues[tagInhib]<-sub(pattern="(i$)", x=namesCues[tagInhib], replacement="", perl=TRUE)
         # if no inhibitors, grep returns integer(0), so we now need to use grepl
         # (logical version of grep)
         namesStimuli<-namesCues[tagInhibL==FALSE]
@@ -143,17 +143,16 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
 #2. Now I check that all the columns are tha same, i.e. that each row 
 #will contain data on the same time point    
 
-    check<-rep(FALSE,(length(dataset$DAcol)-1))
-    
-    for(i in 1:length(check)){
-        check[i]<-all.equal(times[,i],times[,(i+1)])
-        }
-        
-    if(sum(check) != length(check))    {
-        warning("Each row of your data file should contain measurements at the same time point. 
-            The times for the first DA column will be considered as the times for all measurements")
-        }
-        
+    if (length(dataset$DAcol)>1){
+        check<-rep(FALSE,(length(dataset$DAcol)-1))
+        for(i in 1:length(check)){
+            check[i]<-all.equal(times[,i],times[,(i+1)])
+            }
+        if(sum(check) != length(check))    {
+           warning("Each row of your data file should contain measurements at the same time point. 
+               The times for the first DA column will be considered as the times for all measurements")
+           }
+    }
 #3.Now I will only use the first column of times
 
 #First, I create a vector timeRows that contains the indexes of the rows that contain data 
@@ -169,9 +168,9 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
         timesRows<-c(timesRows,which(times == timeSignals[i]))
         whereTimes[i]<-length(which(times == timeSignals[i]))
         }        
-        
+
     timesRows<-timesRows[2:length(timesRows)]    
-     
+
 #Check that we have data across all conditions for all time points except zero
     if(length(unique(whereTimes[2:length(whereTimes)])) != 1){
         warning("This program expects data across all conditions at all time points (except t=0) ")
@@ -198,6 +197,8 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
     newcues<-matrix(data=0,nrow=whereTimes[2],ncol=dim(cues)[2])
 
     for(i in timesRows[1]:timesRows[whereTimes[1]]){
+
+    #for(i in timesRows[1]:whereTimes[1]){
         present<-zerosCond[which(cues[timesRows[i],zerosCond] == 1)]
 
         if(length(present) == 0){
