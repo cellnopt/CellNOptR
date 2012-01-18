@@ -196,9 +196,9 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
     count=1
     newcues<-matrix(data=0,nrow=whereTimes[2],ncol=dim(cues)[2])
 
-    for(i in timesRows[1]:timesRows[whereTimes[1]]){
-
-    #for(i in timesRows[1]:whereTimes[1]){
+    #fix bug report 38 to be able to have mixed times in a MIDAS file
+    #for(i in timesRows[1]:timesRows[whereTimes[1]]){
+    for(i in timesRows[1:whereTimes[1]]){
         present<-zerosCond[which(cues[timesRows[i],zerosCond] == 1)]
 
         if(length(present) == 0){
