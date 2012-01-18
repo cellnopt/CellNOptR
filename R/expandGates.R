@@ -21,7 +21,10 @@ expandGates<-function(Model){
 	SplitANDs<-list(initialReac=c("split1","split2"))
 	splitR<-1
 	initialReacN<-length(Model$reacID)
-	
+
+    if (initialReacN == 1){
+        Model$interMat <- as.matrix(Model$interMat)
+    } 
 	for(r in 1:initialReacN){
 		inNodes<-which(Model$interMat[,r] == -1)
 		
