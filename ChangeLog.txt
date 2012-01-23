@@ -1,3 +1,29 @@
+9/Jan/2012 to 23/Jan/2012 0.99.15
+-----------------------------------
+
+* rev412: Simplify gaBinaryT1/T2 cutAndPlotResultsT1/T2 and simularotT1/T2 to factorize
+  common code in sub-function
+* rev413: Fix bug report 26 to make gaBinaryT1 working for special model cases
+  (small ones when only 1 cue or 1 inhibitor or 1 signal)
+* rev414: Fix bug report 27 to make readMIDAS and makeCNOlist working with
+  special cases (e.g., no inhibitors)
+* rev415: fix bug 27 (similar to rev413 and rev 412)
+* rev416: add propset and Id in all source files.
+* rev417: readMIDAS now ignores extra columns at the end of each rows and checks
+  for row length consistencies throughout the MIDAS file.
+* rev419: fix bug report 31. Simple gaph such as A->B->C did not work in
+  makeCNOlist. 
+* rev422: fix bug report 32. makeCNOlist now handles cases with no inhibitors.
+  Fixed case of wrong colors in plotCNOlist when all cues are identical.
+* rev423: fix bug report 33. plotCNOlist now handles cases where are cues equal
+  1 which was interpreted as being all zeros...
+* rev436: fix bug report 36. makeCNOlist can now handle only 1 signal.
+* rev438: fix bug reprort 37. expandGates now works with a simple case such as
+A->B
+* rev440: fix bug report 38. readMIDAS allows to mix times
+* rev452: Fix plotModel after a new release of Rgraphviz (1.33.1)
+  Note that this version of Rgraphviz is a devel for now.
+
 9/Jan/2012 0.99.14
 --------------------
 * change in getFit and corresponding changes in gaBinaryT1 and gaBinaryT2:  the sizePen should be divided by the total number of inputs in the model prior to cutting. This number is now passed to getFit as an additional parameter.
