@@ -28,7 +28,7 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexInteger=NA, signal
 
     # Set the image format if any
     if (output %in% c("STDOUT", "PDF", "PNG", "SVG") != TRUE){ 
-        stop("wrong outputformat.Must be in PDF, PNG, SVG")
+        stop("wrong output format.Must be in PDF, PNG, SVG")
     }
     else{
        if (output=="PDF"){ 
@@ -144,7 +144,6 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexInteger=NA, signal
         stimuli <- cnolist$namesStimuli
         signals <- cnolist$namesSignals
         inhibitors <- cnolist$namesInhibitors
-        #inhibitors <- cnolist$namesInhibitors
     }
 
     # build the edges. IGraph does not use names for the vertices but ids 
@@ -221,7 +220,7 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexInteger=NA, signal
             fill=nodeAttrs$fillcolor, 
             col=nodeAttrs$color,
             style=nodeAttrs$style,
-#            lty=nodeAttrs$lty,   # does not work with Rgraphviz 1.32 can be used with patched version
+            lty=nodeAttrs$lty,   
             lwd=2,             # width of the nodes. IF provided, all nodes have the same width
             label=nodeAttrs$label,
             shape=nodeAttrs$shape,
@@ -240,13 +239,13 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexInteger=NA, signal
        # once Rgraphviz is updated, one should be able to uncomment col and lwd
        # which are buggy for the moment.
        edgeRenderInfo(g) <- list(
-#can be used with Rgraphviz patch:          col=edgeAttrs$color,
+            col=edgeAttrs$color,
             arrowhead=arrowhead2,
             #head=v2,
             #tail=v1,
             label=edgeAttrs$label,
-            lwd=2,
-#can be used with Rgraphviz patch:           lwd=edgeAttrs$penwidth,
+#            lwd=2,
+            lwd=edgeAttrs$penwidth,
             lty="solid"
         )
 
@@ -432,7 +431,7 @@ createNodeAttrs <- function(g, vertices, stimuli, signals, inhibitors, ncno, com
 createEdgeAttrs <- function(v1, v2, edges, BStimes ,Integer){
 
 
-    edgewidth_c = 4 # default edge width
+    edgewidth_c = 3 # default edge width
 
     # The edge attributes
     arrowhead <- list()
@@ -461,8 +460,12 @@ createEdgeAttrs <- function(v1, v2, edges, BStimes ,Integer){
         # BStimes contains the bistring. color the edges according to its value 
         v = (BStimes[i]*100)%/%1
         #print(c(BStimes[i], v))
+
+        # width of the edges
         if (v != 100){
             if (v == 0){
+              edgewidth[edgename]  = edgewidth_c*(10./100)
+              edgecolor[edgename] <- paste("grey", as.character(100.-10.), sep="")
                 if (length(grep("and", edgename))>=1){
                     toremove <- append(toremove, edgename)
                 }
@@ -477,7 +480,7 @@ createEdgeAttrs <- function(v1, v2, edges, BStimes ,Integer){
     }
 
     indexI<-intersect(which(Integer==1), which(BStimes==1))
-    edgecolor[indexI]<-"red"
+    edgecolor[indexI]<-"purple"
 
     edgeAttrs <- list(color=edgecolor,arrowhead=arrowhead, penwidth=edgewidth,label=label)
     return(list(toremove=toremove, edgeAttrs=edgeAttrs))
