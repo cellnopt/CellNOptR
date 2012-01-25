@@ -3,7 +3,7 @@
 #
 #  File author(s): Thomas Cokelaer <cokelaer@ebi.ac.uk>
 #
-# 
+# $Id$
 cutSimList <- function(SimList, bitString)
 {
     SimListCut<-SimList
