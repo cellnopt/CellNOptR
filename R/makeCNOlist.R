@@ -1,6 +1,21 @@
+#
+#  This file is part of the CNO software
+#
+#  Copyright (c) 2011-2012 - EBI
+#
+#  File author(s): CNO developers (cno-dev@ebi.ac.uk)
+#
+#  Distributed under the GPLv2 License.
+#  See accompanying file LICENSE.txt or copy at
+#      http://www.gnu.org/licenses/gpl-2.0.html
+#
+#  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
+#
+##############################################################################
+# $Id: $
 makeCNOlist<-function(dataset,subfield, verbose=TRUE){
 
-#check that all the needed elements are present
+    #check that all the needed elements are present
     if(!is.list(dataset)){
         stop("The input to this function should be a list with elements 'dataMatrix', 'TRcol','DAcol',and 'DVcol'")
         }
@@ -12,12 +27,15 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
     if(sum(c("dataMatrix","TRcol","DAcol","DVcol") %in% names(dataset))!=4){
         stop("The input to this function should be a list with elements 'dataMatrix', 'TRcol','DAcol',and 'DVcol'")
         }
-#first, we summarise the replicates in the dataMatrix: replicates are rows in the dataset$dataMatrix
-#that have the exact same values in all TR: and DA: columns
+
+    # first, we summarise the replicates in the dataMatrix: replicates are rows in the dataset$dataMatrix
+    # that have the exact same values in all TR: and DA: columns
     duplCond<-as.matrix(dataset$dataMatrix[,c(dataset$TRcol,dataset$DAcol)])
     duplRows<-which(duplicated(duplCond) == TRUE)
     if (verbose == TRUE){
-        if (length(duplRows)>0){print("Cleaning duplicated rows")}
+        if (length(duplRows)>0){
+            print("Cleaning duplicated rows")
+        }
     }
 
     while(length(duplRows) != 0){
@@ -162,6 +180,9 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
 
     times<-times[,1]
     ntimes<-length(timeSignals)
+    if (ntimes <2){
+        stop("Error while parsing the data. Only one time was found.")
+    }
     whereTimes<-rep(0,ntimes)
     timesRows<-0
     for(i in 1:ntimes){
@@ -184,9 +205,15 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
 #This vector tells me which columns of the cues matrix I should pay attention to when 
 #copying data across for time=0    
 
-    # bug report 31
+    # bug report 31 and 
     if (dim(cues)[2] >1){
-        zerosCond<-apply(cues[timesRows[1:whereTimes[1]],],1,function(x) which(x == 1))
+        # bug report 44
+        if (whereTimes[1] == 1){
+            zerosCond <- 0 
+        }
+        else{
+            zerosCond<-apply(cues[timesRows[1:whereTimes[1]],],1,function(x) which(x == 1))
+        }
     }
     else{
         warning("unusual case with 1 dimension in cues")
