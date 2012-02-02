@@ -1,3 +1,18 @@
+#
+#  This file is part of the CNO software
+#
+#  Copyright (c) 2011-2012 - EBI
+#
+#  File author(s): CNO developers (cno-dev@ebi.ac.uk)
+#
+#  Distributed under the GPLv2 License.
+#  See accompanying file LICENSE.txt or copy at
+#      http://www.gnu.org/licenses/gpl-2.0.html
+#
+#  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
+#
+##############################################################################
+# $Id$
 #the global function will still be called writeScaffold and will still need the same arguments 
 #(ModelComprExpanded,optimResT1,optimResT2,ModelOriginal=ToyModel,CNOlist), but it will be divided into a function writeScaffoldW that does 
 #the actual writing to files, 
