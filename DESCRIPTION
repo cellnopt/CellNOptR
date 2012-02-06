@@ -1,11 +1,11 @@
-Package: CNORdiscreteTime
+Package: CNORdt
 Type: Package
 Title: Add-on to CellNOptR: Discretized time treatments
 Version: 0.1
-Date: 2011-10-27
+Date: 2012-02-06
 Author: A. MacNamara
 Maintainer: A. MacNamara <aidan.macnamara@ebi.ac.uk>
-Description: This add-on to the package CellNOptR handles time-course data, as opposed to steady state data in CellNOptR. It uses a number of approaches to allow the comparison of logic simulation and data: scaling the simulation step, calculating 2 steady states for early and late edges in the model (reactions) and optimizing delays on each edge.
+Description: This add-on to the package CellNOptR handles time-course data, as opposed to steady state data in CellNOptR. It uses a number of approaches to allow the comparison of logic simulation and data: scaling the simulation step, calculating 2 steady states for early and late edges in the model and optimizing delays on each edge.
 License: Artistic-2.0
 Depends: R (>= 1.8.0), CellNOptR (>= 0.99), abind
 LazyLoad: yes
