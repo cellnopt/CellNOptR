@@ -230,18 +230,28 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexInteger=NA, signal
         copyg <- g
 #        plot(g,"dot",attrs=attrs,nodeAttrs=nodeAttrs,edgeAttrs=edgeAttrs,subGList=clusters,recipEdges=recipEdges)
 
+        if (installed.packages()[,"Version"]["Rgraphviz"] <= "1.33.0"){
+            #nodeAttrs$lty = "solid" 
+            print("plotModel: please upgrade to Rgraphviz >1.33.0 for best output")
+            edgelwd = 2
+            nodelty = "solid" 
+        }
+        else{
+            edgelwd=edgeAttrs$penwidth
+            nodelty=nodeAttrs$lty
+        }
+
         nodeRenderInfo(g) <- list(
             fill=nodeAttrs$fillcolor, 
             col=nodeAttrs$color,
             style=nodeAttrs$style,
-            lty=nodeAttrs$lty,   
+            lty=nodelty,   
             lwd=2,             # width of the nodes. IF provided, all nodes have the same width
             label=nodeAttrs$label,
             shape=nodeAttrs$shape,
             cex=0.4,
-
             fontsize=fontsize,
-            iwidth=nodeAttrs$width,
+            iwidth=nodeAttrs$width,  
             iheight=nodeAttrs$height,
             fixedsize=FALSE)
 
@@ -258,8 +268,7 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexInteger=NA, signal
             #head=v2,
             #tail=v1,
             label=edgeAttrs$label,
-#            lwd=2,
-            lwd=edgeAttrs$penwidth,
+            lwd=edgelwd,
             lty="solid"
         )
 
