@@ -260,18 +260,16 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexInteger=NA, signal
        arrowhead2 = edgeAttrs$arrowhead
        arrowhead2[arrowhead2=="normal"] = "open"
 
-       # once Rgraphviz is updated, one should be able to uncomment col and lwd
-       # which are buggy for the moment.
+
        edgeRenderInfo(g) <- list(
             col=edgeAttrs$color,
             arrowhead=arrowhead2,
-            #head=v2,
-            #tail=v1,
+#            head=v2,
+#            tail=v1,
             label=edgeAttrs$label,
-            lwd=edgelwd,
-            lty="solid"
+            lwd=edgelwd
+#            lty="solid"    #this fails in some cases even with version >=1.33.1
         )
-
         # graphRenderInfo is not used. Uses attrs instead.
         # graphRenderInfo(g) <-  list()
 
@@ -462,10 +460,13 @@ createEdgeAttrs <- function(v1, v2, edges, BStimes ,Integer){
     edgewidth <- list()
     label <- list()
     toremove <- list()
+    lty <- list() # not used yet.
     for (i in 1:length(edges)){
         edgename = paste(v1[i], "~", v2[i], sep="")
         edgewidth[edgename] = edgewidth_c    # default edgewidth
         label[edgename] = ""                 # no label on the edge by default
+        lty[edgename] = "solid"
+        edgecolor[edgename] = "black"        # set a default (useless but safe)
 
         if (edges[i] == 1){
            arrowhead[edgename] <- "normal"
@@ -480,10 +481,8 @@ createEdgeAttrs <- function(v1, v2, edges, BStimes ,Integer){
            edgecolor[edgename] <- "blue"
         }
 
-        # BStimes contains the bistring. color the edges according to its value 
+        # BStimes contains the bitstring. color the edges according to its value 
         v = (BStimes[i]*100)%/%1
-        #print(c(BStimes[i], v))
-
         # width of the edges
         if (v != 100){
             if (v == 0){
@@ -492,19 +491,24 @@ createEdgeAttrs <- function(v1, v2, edges, BStimes ,Integer){
                 if (length(grep("and", edgename))>=1){
                     toremove <- append(toremove, edgename)
                 }
-                edgecolor[edgename] = "transparent"
+                #edgecolor[edgename] = "transparent"
             }
             else{
               edgecolor[edgename] <- paste("grey", as.character(100-v), sep="")
-              edgewidth[edgename]  = edgewidth_c*(v/100)
+              edgewidth[edgename] = edgewidth_c*(v/100)
               label[edgename] = as.character(v)
             }
+        }
+        else {
+              #already set at the beginning of the loop: width = edgewidth_c
         }
     }
 
     indexI<-intersect(which(Integer==1), which(BStimes==1))
     edgecolor[indexI]<-"purple"
 
-    edgeAttrs <- list(color=edgecolor,arrowhead=arrowhead, penwidth=edgewidth,label=label)
+    edgeAttrs <- list(color=edgecolor,arrowhead=arrowhead,
+        penwidth=edgewidth,label=label, lty=lty)
+
     return(list(toremove=toremove, edgeAttrs=edgeAttrs))
 }
