@@ -80,12 +80,12 @@ writeScaffoldW<-function(
 		dotMatrix=dM,
 		Model=ModelComprExpanded,
 		filename=create_filename("Scaffold.dot", tag=tag))
-			
+
 	write.table(
 		sifFile[,1:3],
 		file=create_filename("Scaffold.sif", tag=tag),
 		row.names=FALSE,col.names=FALSE,quote=FALSE,sep="\t")
-		
+
 	write.table(
 		EApresent,
 		file=create_filename("TimesScaffold.EA", tag=tag),
@@ -203,79 +203,72 @@ getSifInfo<-function(ModelComprExpanded,
 		}
 		
 #if the class of reacInput is not a list, then there are no AND gates
-	if(class(reacInput) != "list"){
-	
-		isNeg<-function(x){
-			isNegI<-any(x == 1)
-			return(isNegI)
-			}
-			
-		inpSign<-apply(ModelComprExpanded$notMat,2,isNeg)
-		inpSign<-!inpSign
-		inpSign[inpSign]<-1
-		inpSign[!inpSign]<--1
-		sifFile<-cbind(reacInput,inpSign,reacOutput)
-		EApresent<-apply(sifFile,1,createReac)
-		EApresent<-cbind(EApresent,BStimes)
-		EAweights<-cbind(EApresent,weightsE)
-		
-		}else{
-		
-#in this case there are AND gates and so we need to create dummy "and#" nodes
-			sifFile<-matrix(0,nrow=4*length(reacOutput),ncol=5)
-			nR<-1
-			nANDs<-1
-			
-			for(i in 1:length(reacOutput)){
-			
-				if(length(reacInput[[i]]) == 1){
-					sifFile[nR,1]<-reacInput[[i]]
-					sifFile[nR,3]<-reacOutput[i]
-                    sifFile[nR,2]<-ifelse(any(ModelComprExpanded$notMat[,i] == 1),-1,1) 
-					sifFile[nR,4]<-BStimes[i]
-					sifFile[nR,5]<-weightsE[i]
-					nR<-nR+1
-					
-					}else{
-					
-						for(inp in 1:length(reacInput[[i]])){
-							sifFile[nR,1]<-reacInput[[i]][inp]
-							sifFile[nR,3]<-paste("and",nANDs,sep="")
-                            temp_indices = which(reacInput[[i]][inp]==rownames(ModelComprExpanded$notMat))
-                            print(c(temp_indices, i))
-                            sifFile[nR,2]<-ifelse(ModelComprExpanded$notMat[temp_indices, i]==1,-1,1)
-							sifFile[nR,4]<-BStimes[i]
-							sifFile[nR,5]<-weightsE[i]
-							nR<-nR+1
-							}
-							
-						sifFile[nR,1]<-paste("and",nANDs,sep="")
-						sifFile[nR,3]<-reacOutput[i]
-						sifFile[nR,2]<-1
-						sifFile[nR,4]<-BStimes[i]
-						sifFile[nR,5]<-weightsE[i]
-						nANDs<-nANDs+1	
-						nR<-nR+1
-						}
-						
+    if(class(reacInput) != "list"){
+        isNeg<-function(x){
+            isNegI<-any(x == 1)
+            return(isNegI)
+        }
+        inpSign<-apply(ModelComprExpanded$notMat,2,isNeg)
+        inpSign<-!inpSign
+        inpSign[inpSign]<-1
+        inpSign[!inpSign]<--1
+        sifFile<-cbind(reacInput,inpSign,reacOutput)
+        EApresent<-apply(sifFile,1,createReac)
+        EApresent<-cbind(EApresent,BStimes)
+        EAweights<-cbind(EApresent,weightsE)
+
+        # add a fourth and fifth column as expected in writeDot (bug report 39) 
+        sifFile<-cbind(sifFile,BStimes)
+        sifFile<-cbind(sifFile,weightsE)
+        }
+    else{
+        #in this case there are AND gates and so we need to create dummy "and#" nodes
+        sifFile<-matrix(0,nrow=4*length(reacOutput),ncol=5)
+        nR<-1
+        nANDs<-1
+
+        for(i in 1:length(reacOutput)){
+            if(length(reacInput[[i]]) == 1){
+                sifFile[nR,1]<-reacInput[[i]]
+                sifFile[nR,3]<-reacOutput[i]
+                sifFile[nR,2]<-ifelse(any(ModelComprExpanded$notMat[,i] == 1),-1,1) 
+                sifFile[nR,4]<-BStimes[i]
+                sifFile[nR,5]<-weightsE[i]
+                nR<-nR+1
+                }
+            else{
+                for(inp in 1:length(reacInput[[i]])){
+                    sifFile[nR,1]<-reacInput[[i]][inp]
+                    sifFile[nR,3]<-paste("and",nANDs,sep="")
+                    temp_indices = which(reacInput[[i]][inp]==rownames(ModelComprExpanded$notMat))
+                    sifFile[nR,2]<-ifelse(ModelComprExpanded$notMat[temp_indices, i]==1,-1,1)
+                    sifFile[nR,4]<-BStimes[i]
+                    sifFile[nR,5]<-weightsE[i]
+                    nR<-nR+1
+                }
+                sifFile[nR,1]<-paste("and",nANDs,sep="")
+                sifFile[nR,3]<-reacOutput[i]
+                sifFile[nR,2]<-1
+                sifFile[nR,4]<-BStimes[i]
+                sifFile[nR,5]<-weightsE[i]
+                nANDs<-nANDs+1	
+                nR<-nR+1
 				}
-				
-			sifFile<-sifFile[1:(nR-1),]
-			EApresent<-apply(sifFile[,1:3],1,createReac)
-			EAweights<-cbind(EApresent,sifFile[,5])
-			EApresent<-cbind(EApresent,sifFile[,4])
-			
 			}
+        sifFile<-sifFile[1:(nR-1),]
+        EApresent<-apply(sifFile[,1:3],1,createReac)
+        EAweights<-cbind(EApresent,sifFile[,5])
+        EApresent<-cbind(EApresent,sifFile[,4])
+    }
 	#this mini function makes edge attributes in the format e1 (sign) e2 = attr	
 	
 	makeEA<-function(x){
 		ea<-paste(x[1],"=",x[2])
 		return(ea)
 		}
-		
 	EApresent<-apply(EApresent,1,makeEA)
 	EAweights<-apply(EAweights,1,makeEA)
-	
+
 #this is the edge attribute matrix that contains, for each edge, whether it is
 #absent from the model (0), present at t1(1) or present at t2(2)
 	return(list(EApresent=EApresent,EAweights=EAweights,sifFile=sifFile))
