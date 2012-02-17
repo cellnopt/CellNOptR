@@ -1,6 +1,7 @@
-25/Jan/012 to 17/Feb/2012 0.99.19
+25/Jan/012 to 17/Feb/2012 0.99.20
 ------------------------------------------------
 
+* rev550 writeScaffold (bug 39) if no and gates, this function was failing.
 * rev548 writeScaffold (bug 39) reaction with not specy were wrongly 
   interpreted as edge 1 in the sif file (instead of -1).
 * rev546 writeDot (bug 53) The output dot file is not in append mode anymore.
