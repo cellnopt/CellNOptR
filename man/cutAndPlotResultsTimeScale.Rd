@@ -44,8 +44,8 @@ A. MacNamara
 plotOptimResultsTimeScale
 }
 \examples{
-data(CNOlistToyFB, package="CNORdiscreteTime")
-data(ToyModelFB, package="CNORdiscreteTime")
+data(CNOlistToyFB, package="CNORdt")
+data(ToyModelFB, package="CNORdt")
 
 # pre-process model
 

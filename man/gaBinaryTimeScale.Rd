@@ -89,9 +89,9 @@ getFitTimeScale, simulatorTimeScale
 }
 \examples{
 library(CellNOptR)
-library(CNORdiscreteTime)
-data(CNOlistToyFB, package="CNORdiscreteTime")
-data(ToyModelFB, package="CNORdiscreteTime")
+library(CNORdt)
+data(CNOlistToyFB, package="CNORdt")
+data(ToyModelFB, package="CNORdt")
 
 # pre-process model
 

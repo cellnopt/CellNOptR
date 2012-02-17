@@ -1,4 +1,19 @@
-# boolsync simulator
+#
+#  This file is part of the CNO software
+#
+#  Copyright (c) 2011-2012 - EBI
+#
+#  File author(s): CNO developers (cno-dev@ebi.ac.uk)
+#
+#  Distributed under the GPLv2 License.
+#  See accompanying file LICENSE.txt or copy at
+#      http://www.gnu.org/licenses/gpl-2.0.html
+#
+#  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
+#
+##############################################################################
+# $Id: $
+
 simulatorTimeScale <- function(CNOlist, Model, SimList, indexList, boolUpdates) {
 
 	nSp <- dim(Model$interMat)[1]
@@ -121,11 +136,10 @@ simulatorTimeScale <- function(CNOlist, Model, SimList, indexList, boolUpdates) 
 		
 		valueInhibitors <- 1-CNOlist$valueInhibitors
 		newInput[,indexList$inhibited] <- valueInhibitors * newInput[,indexList$inhibited]
+	
 		# replace NAs with zeros to avoid having the NA penalty applying to unconnected species
 		readout <- newInput
 		readout[is.na(readout)] <- 0
-	#	newInput[is.na(newInput)] <- 0
-	#	outputPrev[is.na(outputPrev)] <- 0
 		yBool[,,count] = readout		
 	}
 

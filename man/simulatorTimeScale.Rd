@@ -30,7 +30,7 @@ The number of update rounds the simulator should run for.
 To simulate a particular model according to a user-defined bit string, use cutModel() and then simulate from the output.
 }
 \value{
-A 3-dimensional array that gives the value of all species under each condition at each update ([conditions, species, update].
+A 3-dimensional array that gives the value of all species under each condition at each update (conditions, species, update).
 }
 \references{
 }
@@ -47,9 +47,9 @@ gaBinaryTimeScale, getFitTimeScale
 # its output compared to your data, then this is what you should do.
 
 library(CellNOptR)
-library(CNORdiscreteTime)
-data(CNOlistToyFB, package="CNORdiscreteTime")
-data(ToyModelFB, package="CNORdiscreteTime")
+library(CNORdt)
+data(CNOlistToyFB, package="CNORdt")
+data(ToyModelFB, package="CNORdt")
 
 indexOrig <- indexFinder(CNOlistToyFB, ToyModelFB, verbose=TRUE)
 fields4Sim <- prep4Sim(ToyModelFB)

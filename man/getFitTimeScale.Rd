@@ -64,9 +64,9 @@ gaBinaryTimeScale, simulatorTimeScale
 # but the output can be viewed as follows:
 
 library(CellNOptR)
-library(CNORdiscreteTime)
-data(CNOlistToyFB, package="CNORdiscreteTime")
-data(ToyModelFB, package="CNORdiscreteTime")
+library(CNORdt)
+data(CNOlistToyFB, package="CNORdt")
+data(ToyModelFB, package="CNORdt")
 
 indexOrig <- indexFinder(CNOlistToyFB, ToyModelFB, verbose=TRUE)
 fields4Sim <- prep4Sim(ToyModelFB)

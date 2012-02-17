@@ -1,3 +1,19 @@
+#
+#  This file is part of the CNO software
+#
+#  Copyright (c) 2011-2012 - EBI
+#
+#  File author(s): CNO developers (cno-dev@ebi.ac.uk)
+#
+#  Distributed under the GPLv2 License.
+#  See accompanying file LICENSE.txt or copy at
+#      http://www.gnu.org/licenses/gpl-2.0.html
+#
+#  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
+#
+##############################################################################
+# $Id: $
+
 gaBinaryTimeScale <- function(CNOlist, Model, SimList, indexList, sizeFac=0.0001, NAPenFac=1, initBstring, PopSize=50, Pmutation=0.5, MaxTime=60, maxGens=500, StallGenMax=100, SelPress=1.2, elitism=5, RelTol=0.1, verbose=TRUE, boolUpdates, divTime=NULL) {
 	
 	# initialise
