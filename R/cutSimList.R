@@ -24,7 +24,7 @@ cutSimList <- function(SimList, bitString)
     # need to convert back to a matrix. Happens for simple models only hence
     # the warning.
     if (is.matrix(finalCube) == FALSE){
-        warning("converting back to matrix in prep4sim")
+        #warning("converting back to matrix in prep4sim")
         SimListCut$finalCube<-matrix(finalCube,
             dimnames=list(names(finalCube), 1))
         SimListCut$ixNeg<-matrix(ixNeg, dimnames=list(names(ixNeg), 1))
