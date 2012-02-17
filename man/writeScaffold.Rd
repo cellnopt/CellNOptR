@@ -4,7 +4,7 @@
 Writes the scaffold network to a sif file (with attributes) and to a dot file
 }
 \description{
-This function writes a cityscape sif file for the scaffold network, with an associated edge attribute file that holds whether the edge is present at t1,t2 or not present at all and another associated edge attribute file that holds the weights of the edges. This function also writes a dot file that contains the same information (see \code{writeDot} for more information about the dot file conventions).
+This function writes a cytoscape SIF file for the scaffold network, with an associated edge attribute file that holds whether the edge is present at t1,t2 or not present at all and another associated edge attribute file that holds the weights of the edges. This function also writes a dot file that contains the same information (see \code{writeDot} for more information about the dot file conventions).
 }
 \usage{
 writeScaffold(ModelComprExpanded, optimResT1, optimResT2, ModelOriginal,
