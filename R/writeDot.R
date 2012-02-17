@@ -56,10 +56,7 @@ writeDot<-function(dotNodes,dotMatrix,Model,filename){
 	        }
         }
     }	
-    print(dotNodes)
-    print(nodes)
-    print(nClass)
-		
+
 	AndNodes<-grep(pattern="(and\\d+$)",nodes,perl=TRUE,ignore.case=FALSE)	
 	
 	if(length(AndNodes) != 0){
@@ -167,6 +164,13 @@ writeDot<-function(dotNodes,dotMatrix,Model,filename){
 	
 #3.Write the header and nodes part of the dot file
 #Write the header
+    # if this function is called manually outside of CNOWrap, then the file may
+    # not be empty and therefore the final content canot be interpreted by dot
+    # executable. 
+    f = file(filename, "w")
+    close(f)
+
+    # now we can concatenate safely
 	cat('digraph G{\nsize="8.5,11";\n{rank=source;',file=filename,append=TRUE,sep="")
 	cat(which(rankNodes == "source"),file=filename,append=TRUE,sep=";")
 	cat(';}\n{rank=same;',file=filename,append=TRUE,sep="")
