@@ -23,23 +23,23 @@ writeScaffold<-function(
 	optimResT1,
 	optimResT2,
 	ModelOriginal,
-	CNOlist, 
+	CNOlist,
     tag=NULL){
-	
+
 #get the stuff that I need for the sif file
 	sif<-getSifInfo(ModelComprExpanded=ModelComprExpanded,
 		optimResT1=optimResT1,
 		optimResT2=optimResT2,
 		ModelOriginal=ModelOriginal,
 		CNOlist=CNOlist)
-		
+
 #get the stuff that I need for the dot file
 	dot<-getDotInfo(
 		ModelComprExpanded=ModelComprExpanded,
 		ModelOriginal=ModelOriginal,
 		CNOlist=CNOlist,
 		sifFile=sif$sifFile)
-		
+
 #this bit writes the dot, the sif and the sif edges attributes
 	writeScaffoldW(
 		dN=dot$dN,
@@ -49,7 +49,7 @@ writeScaffold<-function(
 		EApresent=sif$EApresent,
 		EAweights=sif$EAweights, 
         tag=tag)
-		
+
 	}
 
 
@@ -65,7 +65,7 @@ writeScaffoldW<-function(
 	EApresent,
 	EAweights, 
     tag=NULL){
-	
+
     create_filename<-function(x, tag=NULL){
         if (is.null(tag)){
             return(x)
@@ -90,14 +90,14 @@ writeScaffoldW<-function(
 		EApresent,
 		file=create_filename("TimesScaffold.EA", tag=tag),
 		row.names=FALSE,col.names="Times",quote=FALSE,sep="\t")
-		
+
 	write.table(
 		EAweights,
 		file=create_filename("weightsScaffold.EA", tag=tag),
 		row.names=FALSE,col.names="Weights",quote=FALSE,sep="\t")
-		
+
 	}
-	
+
 ######
 #this function computes the stuff that is needed for the dot file
 
@@ -231,9 +231,7 @@ getSifInfo<-function(ModelComprExpanded,
 				if(length(reacInput[[i]]) == 1){
 					sifFile[nR,1]<-reacInput[[i]]
 					sifFile[nR,3]<-reacOutput[i]
-					sifFile[nR,2]<-ifelse(
-						any(ModelComprExpanded$notMat[,i] == 1),
-						-1,1) 
+                    sifFile[nR,2]<-ifelse(any(ModelComprExpanded$notMat[,i] == 1),-1,1) 
 					sifFile[nR,4]<-BStimes[i]
 					sifFile[nR,5]<-weightsE[i]
 					nR<-nR+1
@@ -243,9 +241,9 @@ getSifInfo<-function(ModelComprExpanded,
 						for(inp in 1:length(reacInput[[i]])){
 							sifFile[nR,1]<-reacInput[[i]][inp]
 							sifFile[nR,3]<-paste("and",nANDs,sep="")
-							sifFile[nR,2]<-ifelse(
-								ModelComprExpanded$notMat[inp,i] == 1,
-								-1,1)
+                            temp_indices = which(reacInput[[i]][inp]==rownames(ModelComprExpanded$notMat))
+                            print(c(temp_indices, i))
+                            sifFile[nR,2]<-ifelse(ModelComprExpanded$notMat[temp_indices, i]==1,-1,1)
 							sifFile[nR,4]<-BStimes[i]
 							sifFile[nR,5]<-weightsE[i]
 							nR<-nR+1
