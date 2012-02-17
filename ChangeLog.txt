@@ -1,3 +1,28 @@
+25/Jan/012 to 17/Feb/2012 0.99.19
+------------------------------------------------
+
+* rev548 writeScaffold (bug 39) reaction with not specy were wrongly 
+  interpreted as edge 1 in the sif file (instead of -1).
+* rev546 writeDot (bug 53) The output dot file is not in append mode anymore.
+
+25/Jan/012 to 17/Feb/2012 0.99.18
+-----------------------------------   
+* rev546 writeDot (bug 53) The output dot file is not in append mode anymore.
+* rev525 plotCNOLargeList uses different device under Linux platform (not 
+  changed for other platform)
+* rev523 add feature height and width in plotCNOLargeListPDF
+* rev519 make plotModel more robust
+* rev500 improve plotModel to check rgraphviz version
+* rev492 add headers in all files
+* rev491 add properties in all files
+* rev486 fix bug in makeCNOlist for the special cases (only one time at t=0)
+
+
+25/Jan/2012 0.99.16
+---------------------
+
+add cutSimList function used now by several other functions (refactoring)
+
 9/Jan/2012 to 23/Jan/2012 0.99.15
 -----------------------------------
 
@@ -18,15 +43,16 @@
 * rev423: fix bug report 33. plotCNOlist now handles cases where are cues equal
   1 which was interpreted as being all zeros...
 * rev436: fix bug report 36. makeCNOlist can now handle only 1 signal.
-* rev438: fix bug reprort 37. expandGates now works with a simple case such as
-A->B
+* rev438: fix bug reprort 37. expandGates now works with a simple case such as A->B
 * rev440: fix bug report 38. readMIDAS allows to mix times
 * rev452: Fix plotModel after a new release of Rgraphviz (1.33.1)
   Note that this version of Rgraphviz is a devel for now.
 
 9/Jan/2012 0.99.14
 --------------------
-* change in getFit and corresponding changes in gaBinaryT1 and gaBinaryT2:  the sizePen should be divided by the total number of inputs in the model prior to cutting. This number is now passed to getFit as an additional parameter.
+* change in getFit and corresponding changes in gaBinaryT1 and gaBinaryT2:  
+  the sizePen should be divided by the total number of inputs in the model 
+  prior to cutting. This number is now passed to getFit as an additional parameter.
 
 14/7/Dev/2011 0.99.13
 -----------------------
@@ -52,9 +78,9 @@ inhibited classes are colored with 2 colors as in matlab version.
 -------------------
 
 * Fix bug http://www.ebi.ac.uk/panda/jira/browse/CNO-22 reported by Inna related
-  to 2 steady states. (typo in filename argument in cutAndPlotResultsT2). Similarly to  cutAndPlotResultsT1, 
-  an if statement was added to provide a tag for the filename instead of the
-  model name.
+  to 2 steady states. (typo in filename argument in cutAndPlotResultsT2). Similarly to  
+  cutAndPlotResultsT1, an if statement was added to provide a tag for the filename 
+  instead of the model name.
 * Updated Rd files where needed
 
 
