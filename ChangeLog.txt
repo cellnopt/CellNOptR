@@ -1,3 +1,10 @@
+21/Feb/2012 0.99.21
+-----------------------
+ 
+* rev559 when looking at cues, makeCNOlist uses a logic that is now more
+  generalised and can therefore be used by fuuzy logic (cues different from 0 or
+  1).
+
 25/Jan/012 to 17/Feb/2012 0.99.20
 ------------------------------------------------
 
