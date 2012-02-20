@@ -56,11 +56,13 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
 
         duplCond<-as.matrix(dataset$dataMatrix[,c(dataset$TRcol,dataset$DAcol)])
         duplRows<-which(duplicated(duplCond) == TRUE)
-        }
-      if (any(is.nan(as.matrix(dataset$dataMatrix)))){
-             dataset$dataMatrix[is.nan(as.matrix(dataset$dataMatrix))] <- NA
-         }
-#now extract the names of the cues, and the inhibitors/stimuli
+    }
+
+    if (any(is.nan(as.matrix(dataset$dataMatrix)))){
+        dataset$dataMatrix[is.nan(as.matrix(dataset$dataMatrix))] <- NA
+    }
+
+    #now extract the names of the cues, and the inhibitors/stimuli
     namesCues<-colnames(dataset$dataMatrix)[dataset$TRcol]
 
     if(subfield == TRUE){
@@ -99,7 +101,7 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
         namesStimuli<-namesStimuli[-grep(pattern="NOINHIB", namesStimuli)]
         }
 
-#now extract the names of the signals
+    #now extract the names of the signals
     namesSignals<-colnames(dataset$dataMatrix)[dataset$DAcol]
     namesSignals<-sub(
         pattern="(DA:p-)",
@@ -112,12 +114,12 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
         replacement="",
         perl=TRUE)
 
-#now extract the time signals
+    #now extract the time signals
     times<-as.factor(as.vector(as.character(as.matrix(dataset$dataMatrix[,dataset$DAcol]))))
     timeSignals<-sort(as.double(levels(times)))
 
-#Build the valueCues matrix (i.e. a matrix with nrows=nrows in dataMatrix and ncol=number of cues,
-#filled with 0/1 if the particular cue is present or not)
+    #Build the valueCues matrix (i.e. a matrix with nrows=nrows in dataMatrix and ncol=number of cues,
+    #filled with 0/1 if the particular cue is present or not)
 
 #1.I create a matrix that is a subset of the data, and only contains the TR columns 
 #(the cellLine TR column was removed previously)
@@ -184,7 +186,7 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
         stop("Error while parsing the data. Only one time was found.")
     }
     whereTimes<-rep(0,ntimes)
-    timesRows<-0
+    timesRows<-0  # Melody uses timesRows <- rep(0,1)
     for(i in 1:ntimes){
         timesRows<-c(timesRows,which(times == timeSignals[i]))
         whereTimes[i]<-length(which(times == timeSignals[i]))
@@ -202,6 +204,7 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
 #Do the t=0 matrix, and produce a new cues matrix, that does not contain duplicates 
 #(1 row per condition and different matrices will be build for the different times)
     valueSignals<-list(t0=matrix(data=0,nrow=whereTimes[2],ncol=length(dataset$DVcol)))
+    
 #This vector tells me which columns of the cues matrix I should pay attention to when 
 #copying data across for time=0    
 
@@ -212,12 +215,12 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
             zerosCond <- 0 
         }
         else{
-            zerosCond<-apply(cues[timesRows[1:whereTimes[1]],],1,function(x) which(x == 1))
+            zerosCond<-apply(cues[timesRows[1:whereTimes[1]],],1,function(x) which(x > 0))
         }
     }
     else{
         warning("unusual case with 1 dimension in cues")
-        zerosCond<-which(cues[timesRows[1:whereTimes[1]],] == 1)
+        zerosCond<-which(cues[timesRows[1:whereTimes[1]],] > 0)
     }
     zerosCond<-unique(unlist(zerosCond))
     count=1
@@ -226,7 +229,7 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
     #fix bug report 38 to be able to have mixed times in a MIDAS file
     #for(i in timesRows[1]:timesRows[whereTimes[1]]){
     for(i in timesRows[1:whereTimes[1]]){
-        present<-zerosCond[which(cues[timesRows[i],zerosCond] == 1)]
+        present<-zerosCond[which(cues[timesRows[i],zerosCond] > 0)]
 
         if(length(present) == 0){
             for(n in timesRows[(whereTimes[1]+1):(whereTimes[1]+whereTimes[2])]){
@@ -238,9 +241,9 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
                     }
         }else{
             for(n in timesRows[(whereTimes[1]+1):(whereTimes[1]+whereTimes[2])]){
-                if(length(zerosCond[which(cues[n,zerosCond] == 1)]) == length(present)){
-                    if(all(zerosCond[which(cues[n,zerosCond] == 1)] == present) && 
-                        length(which(cues[n,zerosCond] == 1)) != 0){
+                if(length(zerosCond[which(cues[n,zerosCond] > 0)]) == length(present)){
+                    if(all(zerosCond[which(cues[n,zerosCond] > 0)] == present) && 
+                        length(which(cues[n,zerosCond] > 0)) != 0){
                         valueSignals$t0[count,]<-as.numeric(dataset$dataMatrix[i,dataset$DVcol])
                         newcues[count,]<-cues[n,]
                         count=count+1
@@ -265,6 +268,7 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
         }
 
 #Build the valueInhibitors and valueStimuli  matrices, which are a subset of the cues one
+
     if(subfield == TRUE){
         valueInhibitors<-newcues[,grep(
             pattern="Inhibitor",x=colnames(cues),ignore.case=TRUE)]
