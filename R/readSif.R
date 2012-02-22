@@ -13,7 +13,7 @@
 #  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
 #
 ##############################################################################
-# $Id: $
+# $Id$
 readSif<-function(sifFile){
 
 #Read the sif file
