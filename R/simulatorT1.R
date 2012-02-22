@@ -12,7 +12,7 @@
 #  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
 #
 ##############################################################################
-# $Id: $
+# $Id$
 simulatorT1<-function(CNOlist,Model,SimList,indexList){
 	nSp<-dim(Model$interMat)[1]
 	nReacs<-dim(Model$interMat)[2]	

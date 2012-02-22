@@ -12,7 +12,7 @@
 #  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
 #
 ##############################################################################
-# $Id: $
+# $Id$
 ##the global function is still called writeNetwork and still needs the same arguments 
 #(ModelComprExpanded, optimResT1, optimResT2, ModelOriginal, CNOlist), but it is divided into: 
 #	-a function writeSNetworkW that does the actual writing to files, 

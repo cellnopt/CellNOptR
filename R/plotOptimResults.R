@@ -12,7 +12,7 @@
 #  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
 #
 ##############################################################################
-# $Id: $
+# $Id$
 plotOptimResults<-function(
 	SimResults=SimResults,
 	expResults=expResults,
