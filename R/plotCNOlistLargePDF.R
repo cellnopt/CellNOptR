@@ -12,7 +12,7 @@
 #  CNO website: http://www.ebi.ac.uk/saezrodriguez/cno
 #
 ##############################################################################
-# $Id: $
+# $Id$
 plotCNOlistLargePDF <-
 function(CNOlist,filename,nsplit, width=14, height=7){
 	pdf(file=filename,width=width,height=height)

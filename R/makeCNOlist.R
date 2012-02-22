@@ -12,7 +12,7 @@
 #  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
 #
 ##############################################################################
-# $Id: $
+# $Id$
 makeCNOlist<-function(dataset,subfield, verbose=TRUE){
 
     #check that all the needed elements are present
