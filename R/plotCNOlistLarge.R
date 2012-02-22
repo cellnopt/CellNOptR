@@ -12,7 +12,7 @@
 #  CNO website: http://www.ebi.ac.uk/saezrodriguez/cno
 #
 ##############################################################################
-# $Id: $
+# $Id$
 #This function is a variant of plotCNOlist that works for bigger datasets and allows one 
 #to split the plots into n=nsplit plots (across the conditions dimension)
 

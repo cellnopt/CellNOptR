@@ -9,7 +9,7 @@
 #  See accompanying file LICENSE.txt or copy at
 #      http://www.gnu.org/licenses/gpl-2.0.html
 #
-#  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
+#  CNO website: http://www.ebi.ac.uk/saezrodriguez/cno
 #
 ##############################################################################
 # $Id$

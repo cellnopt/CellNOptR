@@ -12,7 +12,7 @@
 #  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
 #
 ##############################################################################
-# $Id: $
+# $Id$
 normaliseCNOlist<-function(
 	CNOlist,
 	EC50Data=0.5,

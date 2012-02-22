@@ -12,7 +12,7 @@
 #  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
 #
 ##############################################################################
-# $Id: $
+# $Id$
 getFit<-function(
 	SimResults,
 	CNOlist,
@@ -27,7 +27,7 @@ getFit<-function(
 	
 	if(timePoint == "t1") tPt<-2
 	if(timePoint == "t2") tPt<-3
-	
+
 	Diff<-SimResults-CNOlist$valueSignals[[tPt]]
 	r<-Diff^2
 	

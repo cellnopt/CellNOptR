@@ -12,7 +12,7 @@
 #  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
 #
 ##############################################################################
-# $Id: $
+# $Id$
 findNONC<-function(Model,indexes,verbose=FALSE){
 
 #use the floyd warshall algorithm implemented in the package RBGL

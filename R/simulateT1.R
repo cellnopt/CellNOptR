@@ -12,7 +12,7 @@
 #  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
 #
 ##############################################################################
-# $Id: $
+# $Id$
 simulateT1<-function(CNOlist,Model,bStringT1,SimList,indexList){
 
 	Modelcut<-Model

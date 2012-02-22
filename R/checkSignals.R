@@ -12,7 +12,7 @@
 #  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
 #
 ##############################################################################
-# $Id: $
+# $Id$
 checkSignals<-function(CNOlist, Model){
 
 #check that CNOlist is a CNOlist
