@@ -7,11 +7,15 @@ Expand the gates of a model
 This function takes in a model and splits all AND gates into ORs.  In addition, wherever there are more than one and up to 5 reactions coming into one node, it creates all possible ANDs combinations of them, but considering only ANDs with 2 and 3 inputs
 }
 \usage{
-expandGates(Model)
+expandGates(Model, ignoreList=NA)
 }
 \arguments{
   \item{Model}{
 a model structure
+}
+  \item{ignoreList}
+{
+
 }
 }
 \details{
