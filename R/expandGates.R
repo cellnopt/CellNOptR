@@ -12,7 +12,7 @@
 #  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
 #
 ##############################################################################
-# $Id: $
+# $Id$
 expandGates<-function(Model, ignoreList=NA){
 
 	# check that Model is a Model list
