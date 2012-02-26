@@ -1,18 +1,15 @@
-\name{parEstimationLBodeSSm}
-\alias{parEstimationLBodeSSm}
+\name{parEstimationLBodeGA}
+\alias{parEstimationLBodeGA}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-		Perform parameter estimation using essR.
+Perform parameter estimation using a genetic algorithm (package genalg).
 }
 \description{
-	This function uses ssmR to perform parameter estimation. The objective function
+	This function uses a genetic algorithm (package genalg) to perform parameter estimation. The objective function
 	is the same as the one provided by \code{\link{getLBodeContObjFunction}}.
 }
 \usage{
-parEstimationLBodeSSm(cnolist, model, ode_parameters = NULL, indices = NULL, 
-maxeval = Inf, maxtime = 100, ndiverse = NULL, dim_refset = NULL, local_solver = NULL,
-time = 1, verbose = 0, transfer_function = 3, reltol = 1e-04, atol = 0.001, 
-maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails = 50, nan_fac = 1)
+parEstimationLBodeGA(cnolist, model, ode_parameters = NULL, indices = NULL, mutationChance = NA, popSize = 200, iters = 100, elitism = NA, time = 1, monitor = TRUE, verbose = 0, transfer_function = 3, reltol = 1e-04, atol = 0.001, maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails = 50, nan_fac = 1)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -28,24 +25,32 @@ A list with the ODEs parameter information. Obtained with \code{\link{createLBod
   \item{indices}{
 Indices to map data in the model. Obtained with indexFinder function from CellNOptR. 
 }
-  \item{maxeval}{
-Maximum number of evaluation in the optimization procedure.
+  \item{mutationChance}{
+the chance that a gene in the chromosome mutates. By default 1/(size+1). It affects
+the convergence rate and the probing of search space: a low chance results
+in quicker convergence, while a high chance increases the span of the search
+space.
 }
-  \item{maxtime}{
-Duration of the optimization procedure.
+  \item{popSize}{
+the population size.	
 }
-  \item{ndiverse}{
-Number of diverse initial solutions.
+  \item{iters}{
+the number of iterations.
 }
-  \item{dim_refset}{
-Size of the reference set.
+  \item{elitism}{
+the number of chromosomes that are kept into the next generation. By default is
+about 20\% of the population size
 }
-  \item{local_solver}{
-Local solver to be used in SSm.
+  \item{verbose}{
+A logical value that triggers a set of comments.
 }
 
 \item{time}{
 An integer with the index of the time point to start the simulation. Default is 1.
+}
+
+ \item{monitor}{
+ If TRUE a plot will be generated to monitor the objective function
 }
   \item{verbose}{
 A logical value that triggers a set of comments.
@@ -77,8 +82,7 @@ A penalty for each data point the model is not able to simulate. We recommend hi
 }
 }
 \details{
-	Check \code{\link{CellNOptR}} for details about the cnolist and the model format.
-	For more details in the configuration of the ODE solver check the CVODES manual. 
+%%  ~~ If necessary, more details than the description above ~~
 }
 \value{
  \item{LB_n}{
@@ -135,7 +139,7 @@ A logical value that determines that a random solution is for the parameters
 to be optimized.
 }
 
-\item{smm_results}{A list containing the information provided by the nonlinear optimization solver.}
+\item{res}{A list containing the information provided by the nonlinear optimization solver (genalg).}
 
 }
 
@@ -159,6 +163,7 @@ to be optimized.
     Trans. Math. Softw., 31(3):363-396, September 2005.
 }
 
+
 \author{
 David Henriques, Thomas Cokelaer
 }
@@ -171,7 +176,9 @@ David Henriques, Thomas Cokelaer
 \seealso{
 \code{\link{CellNOptR}}
 \code{\link{createLBodeContPars}}
+\code{\link{rbga}}
 }
+
 \examples{
 data("ToyCNOlist",package="CNORode");
 data("ToyModel",package="CNORode");
@@ -180,12 +187,16 @@ data("ToyIndices",package="CNORode");
 ode_parameters=createLBodeContPars(model,random=TRUE);
 %Visualize intial simulation
 %simulatedData=plotLBodeFitness(cnolist, model,ode_parameters,indices=indices)
-ode_parameters=parEstimationLBodeSSm(cnolist,model,ode_parameters,
-	indices=indices,maxtime=10,ndiverse=10,dim_refset=6);
+ode_parameters=parEstimationLBodeGA(cnolist,model,ode_parameters=ode_parameters,
+indices=indices,maxStepSize=1,atol=1e-3,reltol=1e-5,transfer_function=2,popSize=20,iter=50);
 
 %Visual solution after optimization
 %simulatedData=plotLBodeFitness(cnolist, model,indices=indices,ode_parameters=ode_parameters);
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-
+\keyword{genetic}
+\keyword{algorithm}% __ONLY ONE__ keyword per line
+\keyword{CellNOptR}
+\keyword{logic}
+\keyword{model}

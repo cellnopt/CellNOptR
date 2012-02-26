@@ -5,7 +5,7 @@
 	Search for the best combination of continuous parameters and logic gates.
 }
 \description{
-	This function uses ssmR to search for the best set of continuous parameters and model structure. 
+	This function uses essR to search for the best set of continuous parameters and model structure. 
 	The objective function is the same as the one provided by \code{\link{getLBodeMINLPObjFunction}}.
 }
 \usage{
@@ -29,10 +29,10 @@ A list with the ODEs parameter information. Obtained with \code{\link{createLBod
 Indices to map data in the model. Obtained with indexFinder function from CellNOptR. 
 }
   \item{maxeval}{
-Maximum number of evaluation in the optimisation procedure.
+Maximum number of evaluation in the optimization procedure.
 }
   \item{maxtime}{
-Maximum number of evaluation spent in optimisation procedure.
+Maximum number of evaluation spent in optimization procedure.
 }
   \item{ndiverse}{
 Duration of the optinisation procedure.
@@ -135,15 +135,34 @@ A logical value that determines that a random solution is for the parameters
 to be optimised.
 }
 \item{model}{
-The best fitting found model structurez
+The best fitting found model structure.
 }
 \item{smm_results}{
 A list containing the information provided by the nonlinear optimization solver.
 }
 
 }
+
 \references{
+[1] Maria Rodriguez-Fernandez, Jose A. Egea, and Julio R. Banga. Novel
+    metaheuristic for parameter estimation in nonlinear dynamic biological
+    systems. BMC Bioinformatics, 7:483+, November 2006.
+
+[2] Dominik Wittmann, Jan Krumsiek, Julio S. Rodriguez, Douglas
+    Lauffenburger, Steffen Klamt, and Fabian Theis. Transforming boolean
+    models to continuous models: methodology and application to t-cell
+    receptor signaling. BMC Systems Biology, 3(1):98+, September 2009.
+
+[3] Jan Krumsiek, Sebastian Polsterl, Dominik Wittmann, and Fabian
+    Theis. Odefy - from discrete to continuous models. BMC
+    Bioinformatics, 11(1):233+, 2010.
+    
+[4] Alan C. Hindmarsh, Peter N. Brown, Keith E. Grant, Steven L. Lee,
+	Radu Serban, Dan E. Shumaker, and Carol S. Woodward. SUNDIALS:
+    Suite of nonlinear and differential/algebraic equation solvers. ACM
+    Trans. Math. Softw., 31(3):363-396, September 2005.
 }
+
 \author{
 David Henriques, Thomas Cokelaer
 }
@@ -156,6 +175,7 @@ David Henriques, Thomas Cokelaer
 \seealso{
 \code{\link{CellNOptR}}
 \code{\link{createLBodeContPars}}
+\code{\link{essR}}
 }
 \examples{
 

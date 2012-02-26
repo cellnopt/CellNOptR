@@ -73,12 +73,12 @@ one step.
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+
+	Returns a list with simulated Model values.
+	One matrix of size number of species by number of experimental conditions for each time-point.
+
 }
+
 \references{
 [1] Maria Rodriguez-Fernandez, Jose A. Egea, and Julio R. Banga. Novel
     metaheuristic for parameter estimation in nonlinear dynamic biological
@@ -96,8 +96,9 @@ one step.
 [4] Alan C. Hindmarsh, Peter N. Brown, Keith E. Grant, Steven L. Lee,
 	Radu Serban, Dan E. Shumaker, and Carol S. Woodward. SUNDIALS:
     Suite of nonlinear and differential/algebraic equation solvers. ACM
-    Trans. Math. Softw., 31(3):363–396, September 2005.
+    Trans. Math. Softw., 31(3):363-396, September 2005.
 }
+
 \author{
 David Henriques, Thomas Cokelaer
 }
@@ -105,16 +106,15 @@ David Henriques, Thomas Cokelaer
 %%  ~~further notes~~
 }
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{CellNOptR}}
+\code{\link{createLBodeContPars}}
 }
 \examples{
-data("ToyCNOlist",package="CNORode");
-data("ToyModel",package="CNORode");
-data("ToyIndices",package="CNORode");
-modelSimulation=plotLBodeModelSim(cnolist, model,indices=indices);
-
+	data("ToyCNOlist",package="CNORode");
+	data("ToyModel",package="CNORode");
+	data("ToyIndices",package="CNORode");
+	modelSimulation=plotLBodeModelSim(cnolist, model,indices=indices);
+}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

@@ -9,7 +9,7 @@
 	This function configures returns the objective function that can be used to evaluate
 	the fitness of a logic based ODE model using a particular set of parameters and model
 	structure. This function can be particular useful if you are planing to couple a
-	mixed integer nonlinear programming optimisation solver. The returned value of the 
+	mixed integer nonlinear programming optimization solver. The returned value of the 
 	objective function corresponds to the mean squared value.
 }
 \usage{
@@ -71,11 +71,31 @@ A penalty for each data point the model is not able to simulate. We recommend hi
 Returns a function to evaluate the model fitness. This function receives a continuous parameter
 vector.
 }
+
 \references{
+[1] Maria Rodriguez-Fernandez, Jose A. Egea, and Julio R. Banga. Novel
+    metaheuristic for parameter estimation in nonlinear dynamic biological
+    systems. BMC Bioinformatics, 7:483+, November 2006.
+
+[2] Dominik Wittmann, Jan Krumsiek, Julio S. Rodriguez, Douglas
+    Lauffenburger, Steffen Klamt, and Fabian Theis. Transforming boolean
+    models to continuous models: methodology and application to t-cell
+    receptor signaling. BMC Systems Biology, 3(1):98+, September 2009.
+
+[3] Jan Krumsiek, Sebastian Polsterl, Dominik Wittmann, and Fabian
+    Theis. Odefy - from discrete to continuous models. BMC
+    Bioinformatics, 11(1):233+, 2010.
+    
+[4] Alan C. Hindmarsh, Peter N. Brown, Keith E. Grant, Steven L. Lee,
+	Radu Serban, Dan E. Shumaker, and Carol S. Woodward. SUNDIALS:
+    Suite of nonlinear and differential/algebraic equation solvers. ACM
+    Trans. Math. Softw., 31(3):363-396, September 2005.
 }
+
 \author{
 David Henriques, Thomas Cokelaer
 }
+
 \note{
 %%  ~~further notes~~
 }

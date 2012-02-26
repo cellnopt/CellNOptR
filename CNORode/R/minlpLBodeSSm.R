@@ -52,7 +52,7 @@ function
 	opts$maxtime=maxtime;
 	if(!is.null(ndiverse))opts$ndiverse=ndiverse;      
 	if(!is.null(dim_refset))opts$dim_refset=dim_refset;
-	optimization_res=essR(problem,opts);
+	optimization_res=essR_optim(problem,opts);
 	
 	ode_parameters$bitString=optimization_res$xbest[(n_cont+1):(n_cont+n_int)];
 	index_reactions=which(as.logical(ode_parameters$bitString));
