@@ -56,10 +56,10 @@ data("ToyModel",package="CNORode");
 data("ToyIndices",package="CNORode");
 
 ode_parameters=createLBodeContPars(model,random=TRUE);
-%Visualize intial simulation
-%simulatedData=plotLBodeFitness(cnolist, model,ode_parameters,indices=indices)
+#Visualize intial simulation
+#simulatedData=plotLBodeFitness(cnolist, model,ode_parameters,indices=indices)
 ode_parameters=parEstimationLBodeSSm(cnolist,model,ode_parameters,
 	indices=indices,maxtime=10,ndiverse=10,dim_refset=6);
-%Visual solution after optimization
-%simulatedData=plotLBodeFitness(cnolist, model,indices=indices);
+#Visual solution after optimization
+#simulatedData=plotLBodeFitness(cnolist, model,indices=indices);
 }
