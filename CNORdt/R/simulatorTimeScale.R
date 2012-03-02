@@ -1,52 +1,64 @@
-simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, delayThresh) {
+#
+#  This file is part of the CNO software
+#
+#  Copyright (c) 2011-2012 - EBI
+#
+#  File author(s): CNO developers (cno-dev@ebi.ac.uk)
+#
+#  Distributed under the GPLv2 License.
+#  See accompanying file LICENSE.txt or copy at
+#      http://www.gnu.org/licenses/gpl-2.0.html
+#
+#  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
+#
+##############################################################################
+# $Id: $
+
+simulatorTimeScale <- function(CNOlist, Model, SimList, indexList, boolUpdates) {
 
 	nSp <- dim(Model$interMat)[1]
 	nReacs <- dim(Model$interMat)[2]	
 	nCond <- dim(CNOlist$valueStimuli)[1]
-
 	yBool = array(dim=c(nCond, nSp, boolUpdates))
-#	yBool[,,1] = 0
+	yBool[,,1] = 0
 
 	if(is.null(dim(Model$interMat))) { 
 		nSp <- length(Model$interMat)
 		nReacs <- 1
 	}
-		
+
+	# this holds, for each sp, how many reactions have that sp as output
+	# + other function definitions here
 	endIx <- rep(NA,nSp)
-	for(i in 1:nSp){
-		endIx[i] <- length(which(SimList$maxIx == i))
-	}
-		
-	############################## FUNCTIONS ##############################
-		
-	compOR <- function(x){
-		if(all(is.na(x[which(SimList$maxIx == s)]))){
-			res <- NA
-		} else {
-			res <- max(x[which(SimList$maxIx == s)], na.rm=TRUE)
+		for(i in 1:nSp){
+			endIx[i] <- length(which(SimList$maxIx == i))
 		}
-			return(res)
-	}
-	
-	minNA <- function(x){
-		if(all(is.na(x))){
-			return(NA)
-		} else {
-			return(min(x, na.rm=TRUE))
-		}
-	}
-	
-	maxNA <- function(x){
-		return(max(x, na.rm=TRUE))
-	}
 	
 	filltempCube <- function(x) {
 		cMatrix <- matrix(data=x, nrow=nReacs, ncol=nCond)
 		cVector <- apply(cMatrix, 1, function(x){return(x)})
 		return(cVector)
 	}
+		
+	minNA <- function(x) {
+		if(all(is.na(x))) {
+			return(NA)
+		} else {
+			return(min(x, na.rm=TRUE))
+		}
+	}
+				
+	compOR <- function(x) {
+		if(all(is.na(x[which(SimList$maxIx == s)]))) {
+			res <- NA
+		} else {
+			res <- max(x[which(SimList$maxIx == s)], na.rm=TRUE)
+		}
+		return(res)
+	}
 	
-	############################## FUNCTIONS ##############################
+	# this value is used to test the stop condition for difference between 2 iterations
+	testVal <- 1E-3
 
 	# create an initial values matrix	
 	initValues <- matrix(data=NA, nrow=nCond, ncol=nSp)
@@ -61,25 +73,13 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 
 	# set the initial values of the inhibited species: 0 if inhibited, untouched if not inhibited
 	initValues[,indexList$inhibited] <- valueInhibitors
-	
-	# set everything else = 0 (necessary for time-course data)
-	initValues[is.na(initValues)] = 0
 
 	# initialise main loop
 	newInput <- initValues
 
-	############################## TIME DELAY ##############################
-	
-	# better way to do below (faster, without loop)? i.e. c(1,2,3) -> c(1,1...,2,2...,3,3...)
-	delayThreshTot = rep(delayThresh, nReacs*nCond, each=nCond)
-#	strongWeakTot = rep(strongWeak, nReacs*nCond, each=nReacs)
-	
-	# make a matrix to store outputCubes
-	allCubes = matrix(NA, nrow=nReacs*nCond, ncol=boolUpdates)
-	############################## MAIN LOOP ##############################
-	
 	# main loop
-	for(count.aidan in 1:boolUpdates) {
+
+	for(count in 2:boolUpdates) {
 		
 		outputPrev <- newInput
 		# this is now a 2 column matrix that has a column for each input (column in finalCube)
@@ -99,7 +99,7 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 		# set to NA the values that are "dummies", so they won't influence the min
 		tempStore[tempIgnore] <- NA
 
-		# flip the values that enter with a negative sign
+		# Flip the values that enter with a negative sign
 		tempStore[tempIxNeg] <- 1-tempStore[tempIxNeg]
 	
 		# compute all the ands by taking, for each gate, the min value across the inputs of that gate
@@ -107,54 +107,18 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 			
 			outputCube <- apply(tempStore, 1, minNA)
 
-			########## DELAY ##########
-			
-			#na.count = which(is.na(allCubes[,count.aidan]))
-			#strongWeak.count = which(strongWeakTot==1)
-			output.on = which(!is.na(outputCube))
-			delay.count = which(delayThreshTot > 0)
-			delay.on = intersect(output.on, delay.count)
-
-			if(length(delay.on)) {
-				for(a in delay.on) {
-					toAdd = count.aidan:(count.aidan+delayThreshTot[a])
-					if(toAdd[length(toAdd)] > boolUpdates) {
-						toAdd = count.aidan:boolUpdates
-					}				
-					futureData = c(rep(0.5,delayThreshTot[a]), outputCube[a])[1:length(toAdd)]
-					futureCheck = which(is.na(allCubes[a, toAdd]))
-					if(length(futureCheck)) {
-						allCubes[a, toAdd][futureCheck] = futureData[futureCheck]
-					}
-				}
-			}
-			as.normal = which(is.na(allCubes[,count.aidan]))
-			allCubes[as.normal,count.aidan] = outputCube[as.normal]
-			
-			########## DELAY ##########
-			
 			# outputCube is now a vector of length (nCond*nReacs) that contains the input of each reaction in
-			# each condition, concatenated as such allcond4reac1,allcond4reac2,etc...
-			# this is transformed into a matrix with a column for each reac and a row for each cond
-			
-			outputCube <- matrix(allCubes[,count.aidan], nrow=nCond, ncol=nReacs)
-				
+			# each condition, concatenated as such allcond4reac1, allcond4reac2, etc...			# this is transformed into a matrix with a column for each reac and a row for each cond		
+			outputCube <- matrix(outputCube, nrow=nCond, ncol=nReacs)
 			# go through each species, and if it has inputs, then take the max across those input reactions
 			# i.e. compute the ORs
 		
-			for(s in 1:nSp) {
-				if(endIx[s] != 0) {	
+			for(s in 1:nSp){
+				if(endIx[s] != 0){
 					newInput[,s] <- apply(outputCube, 1, compOR)
-					for(p in 1:length(newInput[,s])) {
-						if(!is.na(newInput[p,s])) {
-							if(newInput[p,s] == 0.5) {
-								newInput[p,s] = outputPrev[p,s]
-							}	
-						}
-					}
 				}
 			}
-							
+		
 		} else {
 			outputCube <- ifelse(all(is.na(tempStore)), NA, min(tempStore,na.rm=TRUE))
 			newInput[,SimList$maxIx] <- outputCube
@@ -163,23 +127,21 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 		# reset the inhibitors and stimuli
 		for(stim in 1:length(indexList$stimulated)) {
 			stimM <- cbind(CNOlist$valueStimuli[,stim], newInput[,indexList$stimulated[stim]])
+			maxNA <- function(x) {
+				return(max(x, na.rm=TRUE))
+			}
 			stimV <- apply(stimM, 1, maxNA)
 			newInput[,indexList$stimulated[stim]] <- stimV
 		}
 		
 		valueInhibitors <- 1-CNOlist$valueInhibitors
 		newInput[,indexList$inhibited] <- valueInhibitors * newInput[,indexList$inhibited]
-
+	
 		# replace NAs with zeros to avoid having the NA penalty applying to unconnected species
 		readout <- newInput
 		readout[is.na(readout)] <- 0
-		#outputPrev[is.na(outputPrev)] <- 0
-		yBool[,,count.aidan] = readout
-		count.aidan = count.aidan+1
-
+		yBool[,,count] = readout		
 	}
-
-	############################## MAIN LOOP ##############################
 
 	return(yBool)
 }
