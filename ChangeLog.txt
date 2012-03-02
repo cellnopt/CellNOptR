@@ -1,3 +1,12 @@
+1/March/2012 0.99.23
+-------------------------
+
+* rev652: add defaultParameter function.
+* rev651: cutAndPlotResultsT family fixed to handle special case of a  single
+  measurement.
+
+
+
 22/Feb/2012 0.99.22
 ---------------------------
 
