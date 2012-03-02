@@ -33,8 +33,8 @@ cutAndPlotResultsT1<-function(
 
 	
 	Sim<-simulatorT1(CNOlist=CNOlist,Model=Modelcut,SimList=SimListCut,indexList=indexList)
-	
-	SimRes<-Sim[,indexList$signals]
+	SimRes<-as.matrix(Sim[,indexList$signals])
+
 	SimResults<-list(t0=matrix(data=0,nrow=dim(SimRes)[1],ncol=dim(SimRes)[2]),t1=SimRes)
 	expResults<-list(t0=CNOlist$valueSignals[[1]],t1=CNOlist$valueSignals[[2]])
 	

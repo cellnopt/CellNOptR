@@ -42,7 +42,7 @@ cutAndPlotResultsT2 <-function(
 		Model=Modelcut,
 		SimList=SimListCut,
 		indexList=indexList)
-	SimResT1<-SimT1[,indexList$signals]
+	SimResT1<-as.matrix(SimT1[,indexList$signals])
 	
 	#Simulate T2
 	
