@@ -39,6 +39,8 @@ getFit<-function(
 	
 	nInputs<-length(which(Model$interMat == -1))
 	
+	# nInTot: number of inputs of expanded model
+	# nInputs: number of inputs of cut model
 	sizePen<-(nDataPts*sizeFac*nInputs)/nInTot
 	
 	score<-deviationPen+NAPen+sizePen
