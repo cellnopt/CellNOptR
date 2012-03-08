@@ -1,4 +1,4 @@
-model2sif<-function(Model,optimRes=NA,writeSif=FALSE){
+model2sif<-function(Model,optimRes=NA,writeSif=FALSE, filename="Model"){
 	
   if (is.na(optimRes[1])){
     BStimes<-rep(1,length(Model$reacID))
@@ -83,7 +83,8 @@ model2sif<-function(Model,optimRes=NA,writeSif=FALSE){
 #this is the edge attribute matrix that contains, for each edge, whether it is
 #absent from the model (0), present at t1(1) or present at t2(2)
   if (writeSif==TRUE){
-    write.table(sifFile, file="Model.sif", row.names=FALSE,col.names=FALSE,quote=FALSE,sep="\t")
+	filename<-paste(filename, ".sif", sep="")
+    write.table(sifFile, file=filename, row.names=FALSE,col.names=FALSE,quote=FALSE,sep="\t")
   }
 
   return(sifFile)
