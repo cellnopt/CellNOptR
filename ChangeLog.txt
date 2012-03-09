@@ -1,3 +1,10 @@
+9/March/2012 0.99.24
+-----------------------
+
+* rev681: add preprocessing function
+* rev680: update all documentatin, fixing errors, completing missing fields or
+  manual entries
+
 1/March/2012 0.99.23
 -------------------------
 
