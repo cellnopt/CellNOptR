@@ -11,7 +11,8 @@ pre-processing steps (compression, NONC nodes, expansion gates).
 It can also be used to plot optimised model given the optimisation bitstring.}
 \usage{
 plotModel(model, cnolist=NULL, bString=NULL, indexInteger=NA, signals=NULL, stimuli=NULL,
-inhibitors=NULL, ncno=NULL, compressed=NULL, output="STDOUT",filename=NULL, graphvizParams=list())
+inhibitors=NULL, ncno=NULL, compressed=NULL, output="STDOUT",filename=NULL, 
+graphvizParams=list())
 
 }
 \arguments{
@@ -63,16 +64,17 @@ a graph representation of the model
 T. Cokelaer
 }
 \seealso{
-readMIDAS
-readSif
-makeCNOlist
-writeNetwork
-writeDot
-gaBinary}
+\link{readMIDAS}, \link{readSif}, \link{makeCNOlist}, \link{writeNetwork},
+\link{writeDot}, and \link{gaBinaryT1}
+}
+
+\note{This function depends on the Rgraphviz package.}
+
 \examples{
-library(CellNOptR)
-data(CNOlistToy,package="CellNOptR")
-data(ToyModel,package="CellNOptR")
-res<-plotModel(ToyModel, cnolist=CNOlistToy, compressed=c("TRAF6", "p38"))
+    \dontrun{library(CellNOptR)
+    data(CNOlistToy,package="CellNOptR")
+    data(ToyModel,package="CellNOptR")
+    res<-plotModel(ToyModel, cnolist=CNOlistToy, compressed=c("TRAF6", "p38"))
+    }
 }
 

@@ -10,13 +10,8 @@ This function takes in a model and splits all AND gates into ORs.  In addition, 
 expandGates(Model, ignoreList=NA)
 }
 \arguments{
-  \item{Model}{
-a model structure
-}
-  \item{ignoreList}
-{
-
-}
+  \item{Model}{a model structure}
+  \item{ignoreList}{a list of reactions indices to ignore}
 }
 \details{
 This function returns a model with additional fields that help keep track of the processing done on the network.  I would advice not to overwrite on the initial model but rather to assign the result of this function to a variable with a different name.

@@ -19,7 +19,9 @@ LazyLoad: \tab yes\cr
 }
 }
 \author{
-C.Terfve
+C.Terfve, T.Cokelaer
+
+
 Maintainer: C.Terfve <terfve@ebi.ac.uk>
 }
 \references{
