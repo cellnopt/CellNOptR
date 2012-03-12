@@ -190,6 +190,7 @@ expandGates<-function(Model, ignoreList=NA){
                             if (newcolname %in% colnames(Model$interMat)){
                                 next() # skip if exist already
                             }
+                            Model$reacID <- c(Model$reacID,newcolname)
 
                             # fill the interMat (-1 if in lhs, 1 if in rhs)
                             values = as.matrix(rep(0, length(Model$namesSpecies)))
@@ -226,6 +227,7 @@ expandGates<-function(Model, ignoreList=NA){
                     if (newcolname %in% colnames(Model$interMat)){
                         next() # skip if exist already
                     }
+                    Model$reacID <- c(Model$reacID,newcolname)
 
                     # intermat first
                     values = as.matrix(rep(0, length(Model$namesSpecies)))
