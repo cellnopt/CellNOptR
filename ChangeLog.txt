@@ -1,3 +1,10 @@
+12/March/2012 0.99.25
+-------------------------
+
+* rev691: and gates properly handled in the case of 3 inputs amongst which 2
+  links have the same input (differening only ny the lnk being inhbitor or
+  not). See bug report 79.
+
 9/March/2012 0.99.24
 -----------------------
 
