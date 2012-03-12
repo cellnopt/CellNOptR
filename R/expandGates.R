@@ -198,17 +198,17 @@ expandGates<-function(Model, ignoreList=NA){
 						# 3: create the new names
 						newNames <- rep("a",4)
 						newName1 <- ifelse((newNots[inSp[1],1]==1),paste("!",Model$namesSpecies[inSp[1]],sep=""),Model$namesSpecies[inSp[1]])
-						newName2 <- ifelse((newNots[inSp[2],1]==1),paste("!",Model$namesSpecies[inSp[2]],sep=""),Model$namesSpecies[inSp[2]])
+						newName2 <- ifelse((newNots[inSp[2],2]==1),paste("!",Model$namesSpecies[inSp[2]],sep=""),Model$namesSpecies[inSp[2]])
 						newNames[1] <- paste(newName1,"+",newName2,"=",Model$namesSpecies[sp],sep="")
-						newName1 <- ifelse((newNots[inSp[2],1]==1),paste("!",Model$namesSpecies[inSp[2]],sep=""),Model$namesSpecies[inSp[2]])
-						newName2 <- ifelse((newNots[inSp[3],1]==1),paste("!",Model$namesSpecies[inSp[3]],sep=""),Model$namesSpecies[inSp[3]])
+						newName1 <- ifelse((newNots[inSp[2],2]==1),paste("!",Model$namesSpecies[inSp[2]],sep=""),Model$namesSpecies[inSp[2]])
+						newName2 <- ifelse((newNots[inSp[3],3]==1),paste("!",Model$namesSpecies[inSp[3]],sep=""),Model$namesSpecies[inSp[3]])
 						newNames[2] <- paste(newName1,"+",newName2,"=",Model$namesSpecies[sp],sep="")
 						newName1 <- ifelse((newNots[inSp[1],1]==1),paste("!",Model$namesSpecies[inSp[1]],sep=""),Model$namesSpecies[inSp[1]])
-						newName2 <- ifelse((newNots[inSp[3],1]==1),paste("!",Model$namesSpecies[inSp[3]],sep=""),Model$namesSpecies[inSp[3]])
+						newName2 <- ifelse((newNots[inSp[3],3]==1),paste("!",Model$namesSpecies[inSp[3]],sep=""),Model$namesSpecies[inSp[3]])
 						newNames[3] <- paste(newName1,"+",newName2,"=",Model$namesSpecies[sp],sep="")
 						newName1 <- ifelse((newNots[inSp[1],1]==1),paste("!",Model$namesSpecies[inSp[1]],sep=""),Model$namesSpecies[inSp[1]])
-						newName2 <- ifelse((newNots[inSp[2],1]==1),paste("!",Model$namesSpecies[inSp[2]],sep=""),Model$namesSpecies[inSp[2]])
-						newName3 <- ifelse((newNots[inSp[3],1]==1),paste("!",Model$namesSpecies[inSp[3]],sep=""),Model$namesSpecies[inSp[3]])
+						newName2 <- ifelse((newNots[inSp[2],2]==1),paste("!",Model$namesSpecies[inSp[2]],sep=""),Model$namesSpecies[inSp[2]])
+						newName3 <- ifelse((newNots[inSp[3],3]==1),paste("!",Model$namesSpecies[inSp[3]],sep=""),Model$namesSpecies[inSp[3]])
 						newNames[4]<-paste(newName1,"+",newName2,"+",newName3,"=",Model$namesSpecies[sp],sep="")
 						newNames <- newNames[which(rexist == FALSE)]
 						colnames(Model$notMat)[grep("newNot",colnames(Model$notMat))] <- newNames
