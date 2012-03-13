@@ -36,11 +36,11 @@ indices <- indexFinder(cnolist, model)
 #results=logic_based_ode_parameters_estimation_eSSm(cnolist,s)
 #logic_based_ode_MINLP_SSm(cnolist,s,ndiverse=10,dim_refset=6)
 
-adjMat=incidence2Adjacency(model);
-ode_parameters=makeParameterList(adjMat,model$namesSpecies,default_n=3,random=TRUE);
-simulate_and_plot_ode_fitness(cnolist,model,ode_parameters,indices,transfer_function=3);
-res=logic_based_ode_parameters_estimation_SSm(cnolist,model,ode_parameters,dim_refset=20,maxtime=1000);
-ode_parameters$parValues[ode_parameters$index_opt_pars]=res$xbest;
+ode_parameters = createLBodeContPars(model,default_n=3,random=TRUE);
+
+ode_parameters = parEstimationLBodeGA(cnolist,model,ode_parameters,indices,
+    transfer_function=3)#,maxtime=100)
+
 dev.new();
-simulate_and_plot_ode_fitness(cnolist,model,ode_parameters,indices,transfer_function=3);
-                                           
+plotLBodeFitness(cnolist,model,ode_parameters,indices)
+ 
