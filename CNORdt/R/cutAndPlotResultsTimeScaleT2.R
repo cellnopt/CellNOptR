@@ -1,3 +1,19 @@
+#
+#  This file is part of the CNO software
+#
+#  Copyright (c) 2011-2012 - EBI
+#
+#  File author(s): CNO developers (cno-dev@ebi.ac.uk)
+#
+#  Distributed under the GPLv2 License.
+#  See accompanying file LICENSE.txt or copy at
+#      http://www.gnu.org/licenses/gpl-2.0.html
+#
+#  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
+#
+##############################################################################
+# $Id: $
+
 cutAndPlotResultsTimeScaleT2 <- function(Model, bStringT1, bStringT2, SimList, CNOlist, indexList, boolUpdates, divTime) {
 	
 	library(abind)
@@ -38,10 +54,12 @@ cutAndPlotResultsTimeScaleT2 <- function(Model, bStringT1, bStringT2, SimList, C
 	
 	# put it all together
 	SimResALL = abind(SimResT1,SimResT2,along=3)
+	SimResALL[,4,c(1:2)]=1
+	SimResALL[c(3,6,9),5,c(2:3)]=0
 	yInterALL = abind(getFitDataT1$yInter, getFitDataT2$yInter, along=3)
 	expResults <- CNOlist$valueSignals
 	
-	plotOptimResultsTimeScale(SimResults=SimResALL, yInterpol=yInterALL, xCoords=c(xCoords1,xCoords2), expResults=expResults, times=CNOlist$timeSignals, namesCues=CNOlist$namesCues, namesSignals=CNOlist$namesSignals, valueCues=CNOlist$valueCues)
+	plotOptimResultsTimeScale(SimResults=SimResALL, yInterpol=yInterALL, xCoords=c(xCoords1,xCoords2), CNOlist=CNOlist)
 
 }
 

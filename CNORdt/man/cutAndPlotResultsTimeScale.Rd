@@ -1,7 +1,7 @@
 \name{cutAndPlotResultsTimeScale}
 \alias{cutAndPlotResultsTimeScale}
 \title{
-Plot the results of a time-course optimisation
+Plot the results of a time-course optimization
 }
 \description{
 This function takes the optimized bit string, cuts the model according to the string and then finds the optimized scaling factor to pass on to plotOptimResultsTimeScale for visualization.

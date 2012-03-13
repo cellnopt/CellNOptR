@@ -1,4 +1,4 @@
-simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, delayThresh) {
+simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, delayThresh, strongWeak) {
 
 	nSp <- dim(Model$interMat)[1]
 	nReacs <- dim(Model$interMat)[2]	
@@ -63,7 +63,7 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 	initValues[,indexList$inhibited] <- valueInhibitors
 	
 	# set everything else = 0 (necessary for time-course data)
-	initValues[is.na(initValues)] = 0
+	initValues[is.na(initValues)] = NA
 
 	# initialise main loop
 	newInput <- initValues
@@ -71,11 +71,17 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 	############################## TIME DELAY ##############################
 	
 	# better way to do below (faster, without loop)? i.e. c(1,2,3) -> c(1,1...,2,2...,3,3...)
-	delayThreshTot = rep(delayThresh, nReacs*nCond, each=nCond)
+	sw = rep(0,nReacs)
+	sw[11]=1
+	delayThreshTot = rep(delayThresh, 1, each=nCond)
+	swTot = rep(sw, 1, each=nCond)
 #	strongWeakTot = rep(strongWeak, nReacs*nCond, each=nReacs)
+	delay.count = which(delayThreshTot > 0)
+	sw.count = which(swTot==1)	
 	
 	# make a matrix to store outputCubes
 	allCubes = matrix(NA, nrow=nReacs*nCond, ncol=boolUpdates)
+
 	############################## MAIN LOOP ##############################
 	
 	# main loop
@@ -109,11 +115,9 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 
 			########## DELAY ##########
 			
-			#na.count = which(is.na(allCubes[,count.aidan]))
-			#strongWeak.count = which(strongWeakTot==1)
 			output.on = which(!is.na(outputCube))
-			delay.count = which(delayThreshTot > 0)
 			delay.on = intersect(output.on, delay.count)
+			sw.on = intersect(output.on, sw.count)
 
 			if(length(delay.on)) {
 				for(a in delay.on) {
@@ -128,6 +132,16 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 					}
 				}
 			}
+			
+			if(length(sw.on)) {
+				for(b in sw.on) {
+					if(any(is.na(allCubes[b, count.aidan:boolUpdates])) {
+						swAdd = which(is.na(allCubes[b, count.aidan:boolUpdates])
+							allCubes[b,swAdd] = 1
+					}	
+				}
+			}
+
 			as.normal = which(is.na(allCubes[,count.aidan]))
 			allCubes[as.normal,count.aidan] = outputCube[as.normal]
 			
