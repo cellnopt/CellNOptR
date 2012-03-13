@@ -233,10 +233,8 @@ expandGates<-function(Model, ignoreList=NA){
                     values = as.matrix(rep(0, length(Model$namesSpecies)))
                     colnames(values)<-newcolname
                     for (name in inSpecies){
-                        if (substr(name,1,1) == "!"){
-                            realname = ifelse(substr(name, 1,1) =="!",substr(name,2,10000), inSpecies)
+                            realname = ifelse(substr(name, 1,1)=="!",substr(name,2,10000), name)
                             values[which(myrownames == realname)]<- -1 
-                        }
                     }
                     values[which(myrownames == outname)]<- 1 
                     Model$interMat= cbind(Model$interMat, values)
