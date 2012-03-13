@@ -1,0 +1,4 @@
+\contentsline {section}{\numberline {1}Background}{1}
+\contentsline {section}{\numberline {2}CNORdt}{1}
+\contentsline {section}{\numberline {3}Load Data}{1}
+\contentsline {section}{\numberline {4}Preprocessing}{2}
