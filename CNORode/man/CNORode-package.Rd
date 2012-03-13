@@ -14,7 +14,7 @@ Package: \tab CNORode\cr
 Type: \tab Package\cr
 Version: \tab 1.0\cr
 Date: \tab 2011-11-03\cr
-License: \tab What license is it under?\cr
+License: \tab GPL-2\cr
 LazyLoad: \tab yes\cr
 }
 

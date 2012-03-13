@@ -6,7 +6,8 @@ Date: 2011-11-03
 Author: Who wrote it
 Maintainer: Who to complain to <yourfault@somewhere.net>
 Description: More about what it does (maybe more than one line)
-License: GPLv2
+License: GPL-2
 LazyLoad: yes
-Depends: CellNOptR, essR, genalg
+Depends: CellNOptR, genalg
+Suggests: essR
 
