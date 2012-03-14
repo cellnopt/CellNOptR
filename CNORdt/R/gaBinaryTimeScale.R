@@ -14,7 +14,7 @@
 ##############################################################################
 # $Id: $
 
-gaBinaryTimeScale <- function(CNOlist, Model, SimList, indexList, sizeFac=0.0001, NAPenFac=1, initBstring, PopSize=50, Pmutation=0.5, MaxTime=60, maxGens=500, StallGenMax=100, SelPress=1.2, elitism=5, RelTol=0.1, verbose=TRUE, boolUpdates, divTime=NULL) {
+gaBinaryTimeScale <- function(CNOlist, Model, SimList, indexList, sizeFac=0.0001, NAPenFac=1, initBstring, PopSize=50, Pmutation=0.5, MaxTime=60, maxGens=500, StallGenMax=100, SelPress=1.2, elitism=5, RelTol=0.1, verbose=TRUE, boolUpdates, divTime=NULL, lowerB=lowerB, upperB=upperB) {
 	
 	# initialise
 	bLength <- length(initBstring)
@@ -48,7 +48,7 @@ gaBinaryTimeScale <- function(CNOlist, Model, SimList, indexList, sizeFac=0.0001
 		SimListCut$maxIx <- SimListCut$maxIx[as.logical(bitString)]
 		
 		# compute the score	
-		getFitData <- getFitTimeScale(SimList=SimListCut, CNOlist=CNOlist, Model=ModelCut, indexList=indexList, sizeFac=sizeFac, NAPenFac=NAPenFac, boolUpdates, timeSplit="early", divTime)
+		getFitData <- getFitTimeScale(SimList=SimListCut, CNOlist=CNOlist, Model=ModelCut, indexList=indexList, sizeFac=sizeFac, NAPenFac=NAPenFac, boolUpdates, timeSplit="early", divTime, lowerB=lowerB, upperB=upperB)
 		Score = getFitData$score
 		nDataP <- sum(!is.na(CNOlist$valueSignals[[2]]))
 		Score <- Score/nDataP

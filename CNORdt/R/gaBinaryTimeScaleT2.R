@@ -14,7 +14,7 @@
 ##############################################################################
 # $Id: $
 
-gaBinaryTimeScaleT2 <- function(CNOlist, Model, SimList, indexList, bStringT1, SimResT1, sizeFac=0.0001, NAPenFac=1, PopSize=50, Pmutation=0.5, MaxTime=60, maxGens=500, StallGenMax=100, SelPress=1.2, elitism=5, RelTol=0.1, verbose=TRUE, boolUpdates, divTime) {
+gaBinaryTimeScaleT2 <- function(CNOlist, Model, SimList, indexList, bStringT1, SimResT1, sizeFac=0.0001, NAPenFac=1, PopSize=50, Pmutation=0.5, MaxTime=60, maxGens=500, StallGenMax=100, SelPress=1.2, elitism=5, RelTol=0.1, verbose=TRUE, boolUpdates, divTime, lowerB=lowerB, upperB=upperB) {
 
 	# find the bits to optimise
 	bits2optimise <- which(bStringT1==0)
@@ -54,7 +54,7 @@ gaBinaryTimeScaleT2 <- function(CNOlist, Model, SimList, indexList, bStringT1, S
 		SimListCut$maxIx <- SimListCut$maxIx[as.logical(bitString)]
 	
 		# compute the score	
-		getFitData <- getFitTimeScale(SimList=SimListCut, CNOlist=CNOlist, Model=ModelCut, indexList=indexList, boolUpdates, sizeFac=sizeFac, NAPenFac=NAPenFac, timeSplit="late", divTime, SimResultsT1=SimResT1)
+		getFitData <- getFitTimeScale(SimList=SimListCut, CNOlist=CNOlist, Model=ModelCut, indexList=indexList, boolUpdates, sizeFac=sizeFac, NAPenFac=NAPenFac, timeSplit="late", divTime, SimResultsT1=SimResT1, lowerB=lowerB, upperB=upperB)
 		Score = getFitData$score
 		# ***** FIX nDataP *****
 		nDataP <- sum(!is.na(CNOlist$valueSignals[[2]]))

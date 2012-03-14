@@ -39,8 +39,6 @@ plotOptimResultsTimeScale <- function(SimResults=SimResults, yInterpol=yInterpol
 	CNOlistOriginal <- CNOlist
 	SimResultsOriginal <- SimResults
 	yInterpolOriginal <- yInterpol
-	#plot.new()
-	#split.screen(matrix(c(0,0.9,0,1,0.9,1,0,1), byrow=T, ncol=4))
 	
 	for(i in 1:nsplit) {
 		
@@ -67,7 +65,6 @@ plotOptimResultsTimeScale <- function(SimResults=SimResults, yInterpol=yInterpol
 		}
 		
 		# set graphical parameters
-		namesEdit = list("Raf-1", "ERK", "AP1", "GSK-3", "p38", expression(paste("NF",kappa,"B")))
 		par(
 			mfrow=c(nr=dim(CNOlist$valueSignals[[1]])[1]+1,nc=dim(CNOlist$valueSignals[[1]])[2]+2),
 			cex=1,
@@ -75,7 +72,6 @@ plotOptimResultsTimeScale <- function(SimResults=SimResults, yInterpol=yInterpol
 			mar=c(0.5,0.5,0,0),
 			oma=c(3,2,2,2), family="Times", mgp=c(3,0.9,0))
 		heatCols = heat.colors(1000)
-	#	screen(1)
 		
 		yMax<-max(unlist(lapply(CNOlist$valueSignals,function(x) max(x, na.rm=TRUE))))
 		yMin<-min(unlist(lapply(CNOlist$valueSignals,function(x) min(x, na.rm=TRUE))))
@@ -95,10 +91,10 @@ plotOptimResultsTimeScale <- function(SimResults=SimResults, yInterpol=yInterpol
 			par(fg="blue",mar=c(0.5,0.5,0.7,0))
 			plot(x=xVal, y=rep(-5,length(xVal)), ylim=c(yMin, yMax),xlab=NA,ylab=NA,xaxt="n",yaxt="n")
 			text(
-				labels=namesEdit[[c]],
+				labels=CNOlist$namesSignals[c],
 				x = ((xVal[length(xVal)]-xVal[1])/2),
 				y = (yMin+((yMax-yMin)/2)),
-				cex = 2.5)
+				cex = 2)
 		}
 		plot(
 			x = xVal, 
@@ -106,7 +102,7 @@ plotOptimResultsTimeScale <- function(SimResults=SimResults, yInterpol=yInterpol
 			ylim = c(yMin, yMax),
 			xlab = NA,ylab=NA,xaxt="n",yaxt="n")
 		text(
-			labels = "Stim",
+			labels = "stim",
 			x = ((xVal[length(xVal)]-xVal[1])/2),
 			y = (yMin+((yMax-yMin)/2)),cex=2.5)
 		plot(
@@ -114,9 +110,9 @@ plotOptimResultsTimeScale <- function(SimResults=SimResults, yInterpol=yInterpol
 			ylim = c(yMin, yMax),
 			xlab = NA,ylab=NA,xaxt="n",yaxt="n")
 		text(
-			labels="Inh",
+			labels="inh",
 			x=((xVal[length(xVal)]-xVal[1])/2),
-			y=(yMin+((yMax-yMin)/2)),cex=2.5)
+			y=(yMin+((yMax-yMin)/2)),cex=2)
 		par(fg="black",mar=c(0.5,0.5,0,0))
 					
 		for(r in 1:dim(CNOlist$valueSignals[[1]])[1]) {
@@ -145,7 +141,7 @@ plotOptimResultsTimeScale <- function(SimResults=SimResults, yInterpol=yInterpol
 					
 				# add the axis annotations: if we're on the last row, add the x axis
 				if(r == dim(CNOlist$valueSignals[[1]])[1]) {
-					axis(side=1,at=c(0,10,30), labels=c("0","10","30"),cex.axis=1.5)
+					axis(side=1,at=CNOlist$timeSignals,cex.axis=1)
 				}	
 					
 				# add the axis annotations: if we're on the first column, add the y axis

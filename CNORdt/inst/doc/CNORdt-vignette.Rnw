@@ -1,6 +1,6 @@
-\VignetteIndexEntry{Using multiple time points to train logic models to data}
-\VignetteKeywords{}
-\VignettePackage{CNORdt}
+%\VignetteIndexEntry{Using multiple time points to train logic models to data}
+%\VignetteKeywords{}
+%\VignettePackage{CNORdt}
 
 \documentclass{article}
 \usepackage{Sweave, fullpage}
@@ -18,111 +18,127 @@
 
 This software is written in the R language, so in order to use it you will need to have R installed on your computer. For more information, please refer to \url{http://www.r-project.org/}.  For more information about how to install R packages, please refer to \url{http://cran.r-project.org/doc/manuals/R-admin.html#Installing-packages}.
 
-CNORdt is an add-on to CellNOptR. CellNOptR trains logic models to data, more details and the package itself can be found using the following command to install:
+CNORdt is an add-on to CellNOptR, a software package that trains logic models to data. More details and the package itself can be found using the following command to install:
 
-<<installPackage, eval=FALSE>>=
-install.packages("path_to_CellNOptR/CellNOptR_1.0.0.tar.gz", repos=NULL)
-@
+%<<installPackage, eval=FALSE>>=
+%install.packages("path_to_CellNOptR/CellNOptR_1.0.0.tar.gz", repos=NULL)
+%@
 
 CNORdt can be installed by:
 
-<<installPackage, eval=FALSE>>=
-install.packages("path_to_CNORdt/CNORdt_1.0.0.tar.gz", repos=NULL)
-@
+%<<installPackage, eval=FALSE>>=
+%install.packages("path_to_CNORdt/CNORdt_1.0.0.tar.gz", repos=NULL)
+%@
 
-Or, using the R GUI, click on 'Packages \& Data', then 'Package installer' and choose local source from the dropdown menu. Then click 'install', choosing \emph{CNORdt\_1.0.0.tar.gz} and finally clicking 'open'.
+Or, using the R GUI, click on `Packages \& Data', then `Package installer' and choose local source from the dropdown menu. Then click `install', choosing \emph{CNORdt\_1.0.0.tar.gz} and finally clicking `open'.
 
 \section{CNORdt}
 
-CNORdt introduces a scaling parameter that defines the time scale of the Boolean synchronous simulation. Where each 'tick' ($t$) (or simulation step) is the synchronous updating of all nodes in the model according to their inputs at $t-1$, the scaling parameter defines the tick frequency relative to the time scale of the real data. Although this is a crude approach (i.e. it implies a single rate across all reactions), it allows us to fit a synchronous Boolean simulation to data. Hence, all data points can be fitted to the model and hyperedges that cause feedback in the model can be included, which allows the model to reveal more complex dynamics such as oscillations.
+CNORdt introduces a scaling parameter that defines the time scale of the Boolean synchronous simulation. Where each `tick' ($t$) (or simulation step) is the synchronous updating of all nodes in the model according to their inputs at $t-1$, the scaling parameter defines the tick frequency relative to the time scale of the real data. Although this is a crude approach (i.e.~it implies a single rate across all reactions), it allows us to fit a synchronous Boolean simulation to data. Hence, all data points can be fitted to the model and hyperedges that cause feedback in the model can be included, which allows the model to reveal more complex dynamics such as oscillations.
 
 \section{Load Data}
 
 The first step of the analysis with \emph{CNORdt} is to load the necessary libraries and the data:
 
-<<Ropts, echo=FALSE, results=hide>>=
-options(width=70)
-@ 
+%<<Ropts, echo=FALSE, results=hide>>=
+%options(width=70)
+%@ 
 
-<<loadLib, eval=TRUE>>=
-library(CellNOptR)
-library(CNORdt
-@
+%<<loadLib, eval=TRUE>>=
+%library(CellNOptR)
+%library(CNORdt
+%@
 
-The model and data are then loaded:
+The model and data are then loaded. These are taken from MacNamara et al.~REF and consist of a biologically realistic toy model based on the EGFR signaling pathway and \emph{in silico}-generated data:
 
-<<getData, eval=TRUE>>=
-data(CNOlistPhysBiol, package="CNORdt")
-data(ModelPhysBiol, package="CNORdt")
-@
+%<<getData, eval=TRUE>>=
+%data(CNOlistPB, package="CNORdt")
+%data(ModelPB, package="CNORdt")
+%@
 
 \section{Preprocessing}
 
-The full details of preprocessing the model can be found in the CellNOptR pacakge. The following steps are taken:
+The full details of preprocessing the model can be found in the CellNOptR package (the vignette gives a comprehensive explanation). The following steps are taken:
 
-<<getData, eval=TRUE>>=
-# processing the model (indexing, compression and expansion)
-# index the stimuli, readouts and inhibitors
-indexOrig <- indexFinder(CNOlist=CNOlist, Model=Model, verbose=T)
-
-# find the indexes of the non-observables and the non-controllable species
-indexNONC <- findNONC(Model=Model, indexes=indexOrig, verbose=T)
-
-# cut the data according to 'indexNONC'
-ModelCut <- cutNONC(Model=Model, NONCindexes=indexNONC)
-
-# find the indexes again as model may have changed
-indexNONCcut <- indexFinder(CNOlist=CNOlist, Model=ModelCut)
-
-# compress the model
-ModelCutCompress <- compressModel(Model=ModelCut, indexes=indexNONCcut)
-
-# find the indexes again
-indexNONCcutComp <- indexFinder(CNOlist=CNOlist, Model=ModelCutCompress)
-
-# expand
-ModelCutCompressExpand <- expandGates(Model=ModelCutCompress)
-
-# extract information for simulation
-fields4Sim <- prep4Sim(Model=ModelCutCompressExpand)
-initBstring <- rep(1, length(ModelCutCompressExpand$reacID))
-@
+%<<getData, eval=TRUE>>=
+%# processing the model (indexing, compression and expansion)
+%# index the stimuli, readouts and inhibitors
+%indexOrig <- indexFinder(CNOlist=CNOlist, Model=Model, verbose=T)
+%
+%# find the indexes of the non-observables and the non-controllable species
+%indexNONC <- findNONC(Model=Model, indexes=indexOrig, verbose=T)
+%
+%# cut the data according to 'indexNONC'
+%ModelCut <- cutNONC(Model=Model, NONCindexes=indexNONC)
+%
+%# find the indexes again as model may have changed
+%indexNONCcut <- indexFinder(CNOlist=CNOlist, Model=ModelCut)
+%
+%# compress the model
+%ModelCutCompress <- compressModel(Model=ModelCut, indexes=indexNONCcut)
+%
+%# find the indexes again
+%indexNONCcutComp <- indexFinder(CNOlist=CNOlist, Model=ModelCutCompress)
+%
+%# expand
+%ModelCutCompressExpand <- expandGates(Model=ModelCutCompress)
+%
+%# extract information for simulation
+%fields4Sim <- prep4Sim(Model=ModelCutCompressExpand)
+%initBstring <- rep(1, length(ModelCutCompressExpand$reacID))
+%@
 
 
 \section{Optimization}
 
-# PART 3 DUAL STEADY STATE VERSION
-# the 'switch' time between the 2 steady states needs to be known
-source("functions/CNORdiscreteTimeSandBox/getFitTimeScale.R")
-optPart3 <- gaBinaryTimeScale(CNOlist=CNOlist, Model=ModelCutCompressExpand,
-SimList=fields4Sim, indexList=indexNONCcutComp,
-initBstring=initBstring, verbose=TRUE, boolUpdates=c(10,20), divTime=10, MaxTime=600)
+This is where the difference between CNORdt and its parent package CellNOptR becomes visible. CellNOptR fits the model to data at steady state~i.e. the simulation runs until all species are static. This gives a robust overview of the model behaviour but this formalism cannot model more complex dynamics such as oscillations. CNORdt uses full time course data by scaling the boolean simulation. Hence the difference betweeen model and data can be calculated and optimized across all data points at not just a single one or two.
 
-cutAndPlotResultsTimeScale(Model=ModelCutCompressExpand, bString=optPart3$bString, SimList=fields4Sim,
-CNOlist=CNOlist, indexList=indexNONCcutComp, boolUpdates=c(10,20), divTime=10)
+An additional feature from CellNOptR can also be implemented in CNORdt: the model fitting can be carried out in 2 stages if the user has sufficient knowledge that the data represents early and late reactions (for example, an early phosphoprotein activation followed by later deactivation). This feature is controlled by supplying the division time (`divTime') - the experimental time point where the late reactions start to occur. If no such value is supplied, divTime is set to NULL and the model fitting is not divided into early and late. In the case of this model below, a division time is set at 10 (minutes) as there is a delayed deactivation of phosphoproteins in the data (see REF for more details).
 
-# simulate the above model to get the starting point for second steady state
-dataStartPoint = cutModel(Model=ModelCutCompressExpand, SimList=fields4Sim, bitString=optPart3$bString)
-simT1 = simulatorTimeScale(CNOlist=CNOlist, Model=dataStartPoint[[1]], SimList=dataStartPoint[[2]],
-indexList=indexNONCcutComp, boolUpdates=10)
+The other data that currently needs to be supplied in addition to the optimization parameteres descrived  are `boolUpdates' and the upper and lower bounds for the optimization of the scaling factor (`upperB' and `lowerB'). The variable `boolUpdates' controls the number of simulation steps (`ticks') and is either 1 or 2 values depending whether `divTime' has been set. This will be set to an intelligent default value in future releases (it can be viewed as a function of model size and experimental time) but it is currently a manual entry.
+The upper and lower bounds control the range of values for the optimization of the scaling factor.
 
-# optimize the 'second' network then stitch the results together
-optPart4 <- gaBinaryTimeScaleT2(CNOlist=CNOlist, Model=ModelCutCompressExpand,
-SimList=fields4Sim, indexList=indexNONCcutComp,
-bStringT1=optPart3$bString, SimResT1=simT1, verbose=TRUE, boolUpdates=c(10,20), divTime=10)
+%<<getData, eval=TRUE>>=
+%# the 'switch' time between the 2 steady states needs to be known
+%opt1 <- gaBinaryTimeScale(CNOlist=CNOlist, Model=ModelCutCompressExpand,
+%SimList=fields4Sim, indexList=indexNONCcutComp,
+%initBstring=initBstring, verbose=TRUE, boolUpdates=c(10,20), divTime=10, MaxTime=100, lowerB=0.8, upperB=10)
+%@
 
-optPart3 = list()
-optPart4 = list()
-optPart3$bString = c(0,1,1,1,1,0,0,0,1,0,1,1,1,1,1,1,1,0,0,0,0,0)
-optPart4$bString = c(0,0,0,0,0,0,0,0,1,0)
+Here you can visualize the `early' fit of the data:
 
-# visualize total result
-source("functions/CNORdiscreteTimeSandBox/cutAndPlotResultsTimeScaleT2.R")
-source("functions/CNORdiscreteTimeSandBox/plotOptimResultsTimeScale.R")
-pdf(file="out.pdf",width=14.5,height=11)
-cutAndPlotResultsTimeScaleT2(Model=ModelCutCompressExpand, bStringT1=optPart3$bString, bStringT2=optPart4$bString,
-SimList=fields4Sim, CNOlist=CNOlist, indexList=indexNONCcutComp, boolUpdates=c(10,20),
-divTime=10)
-dev.off()
+%<<getData, eval=TRUE>>=
+%cutAndPlotResultsTimeScale(Model=ModelCutCompressExpand, bString=opt1$bString, SimList=fields4Sim,
+%CNOlist=CNOlist, indexList=indexNONCcutComp, boolUpdates=c(10,20), divTime=10)
+%@
+
+Simulate the above model to get the starting point for second steady state:
+
+%<<getData, eval=TRUE>>=
+%dataStartPoint = cutModel(Model=ModelCutCompressExpand, SimList=fields4Sim, bitString=opt1$bString)
+%simT1 = simulatorTimeScale(CNOlist=CNOlist, Model=dataStartPoint[[1]], SimList=dataStartPoint[[2]],
+%indexList=indexNONCcutComp, boolUpdates=10)
+%@
+
+Optimize the `late' network, then stitch the results together:
+
+%<<getData, eval=TRUE>>=
+%opt2 <- gaBinaryTimeScaleT2(CNOlist=CNOlist, Model=ModelCutCompressExpand,
+%SimList=fields4Sim, indexList=indexNONCcutComp,
+%bStringT1=opt1$bString, SimResT1=simT1, verbose=TRUE, boolUpdates=c(10,20), divTime=10, lowerB=0.8, upperB=10)
+%@
+
+Visualize total result:
+
+%<<getData, eval=TRUE>>=
+%cutAndPlotResultsTimeScaleT2(Model=ModelCutCompressExpand, bStringT1=opt1$bString, bStringT2=opt2$bString,
+%SimList=fields4Sim, CNOlist=CNOlist, indexList=indexNONCcutComp, boolUpdates=c(10,20),
+%divTime=10)
+%@
+
+\section{Post-Optimization}
+
+
+
 
 \end{document}
