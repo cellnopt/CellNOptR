@@ -133,14 +133,14 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 				}
 			}
 			
-			if(length(sw.on)) {
-				for(b in sw.on) {
-					if(any(is.na(allCubes[b, count.aidan:boolUpdates])) {
-						swAdd = which(is.na(allCubes[b, count.aidan:boolUpdates])
-							allCubes[b,swAdd] = 1
-					}	
-				}
-			}
+			# if(length(sw.on)) {
+				# for(b in sw.on) {
+					# if(any(is.na(allCubes[b, count.aidan:boolUpdates])) {
+						# swAdd = which(is.na(allCubes[b, count.aidan:boolUpdates])
+							# allCubes[b,swAdd] = 1
+					# }	
+				# }
+			# }
 
 			as.normal = which(is.na(allCubes[,count.aidan]))
 			allCubes[as.normal,count.aidan] = outputCube[as.normal]
