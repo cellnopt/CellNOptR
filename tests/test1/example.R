@@ -10,17 +10,13 @@
 
 
 # First read the MIDAS and SIF file to get some data
-
-
 library(CellNOptR)
-#install.packages("CNORode_1.0.zip",repos=NULL);
-#setwd("tests/test1");
-library("CNORode");
+library(CNORode)
 #m = readMIDAS('initialData.csv')
 #cnolist = makeCNOlist(m, subfield=FALSE)
 
-load("CNOlistToyFB.RData");
-cnolist=CNOlistToyFB;
+load("CNOlistToyFB.RData")
+cnolist=CNOlistToyFB
 
 
 model = readSif('ToyModelFeedbackDataGenerator.sif')
@@ -33,13 +29,17 @@ indices <- indexFinder(cnolist, model)
 #indices<- indexFinder(cnolist, model)
 
 
-#results=logic_based_ode_parameters_estimation_eSSm(cnolist,s)
-#logic_based_ode_MINLP_SSm(cnolist,s,ndiverse=10,dim_refset=6)
+ode_parameters = createLBodeContPars(model,default_n=3,random=TRUE)
 
-ode_parameters = createLBodeContPars(model,default_n=3,random=TRUE);
+# by default, use GA algorithm with default parameters.
+# to overwrite default parameters, use params=defaultParametersGA()
+paramsGA = defaultParametersGA()
+paramsGA.transfert_functions = 3
+ode_parameters = parEstimationLBode(cnolist,model,
+    ode_parameters=ode_parameters,indices=indices, paramsGA=paramsGA)
 
-ode_parameters = parEstimationLBodeGA(cnolist,model,ode_parameters,indices,
-    transfer_function=3)#,maxtime=100)
+
+#,maxtime=100)
 
 dev.new();
 plotLBodeFitness(cnolist,model,ode_parameters,indices)
