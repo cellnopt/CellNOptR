@@ -14,7 +14,6 @@
 
 library(CellNOptR)
 #install.packages("CNORode_1.0.zip",repos=NULL);
-setwd("C:/Users/David/Desktop/stuff/CNOR_ode/tests/test5");
 library("CNORode")
 
 s = readSif('model.sif')
@@ -23,9 +22,11 @@ cnolist = makeCNOlist(m, subfield=FALSE)
 
 indices <- indexFinder(cnolist, s, verbose = TRUE)
 
-#results=logic_based_ode_parameters_estimation_SSm(cnolist,s)
-#logic_based_ode_MINLP_SSm(cnolist,s,ndiverse=10,dim_refset=6)
 
-adjMat=incidence2Adjacency(s);
-ode_parameters=makeParameterList(adjMat,s$namesSpecies,default_n=3);
-simulate_and_plot_ode_fitness(cnolist,s,ode_parameters,indices,transfer_function=3);
+ode_parameters = createLBodeContPars(s, default_n=3);
+
+paramsGA = defaultParametersGA()
+paramsGA.transfert_functions = 3
+ode_parameters = parEstimationLBode(cnolist,s,method="ga",
+    ode_parameters=ode_parameters,indices=indices, paramsGA=paramsGA)
+
