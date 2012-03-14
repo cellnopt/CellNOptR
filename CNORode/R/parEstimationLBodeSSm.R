@@ -24,7 +24,9 @@ parEstimationLBodeSSm <-function
 )
 {
 
-    library(essR)
+    tryCatch({library(essR)}, error=function(e){stop("essR package not found.
+SSm not available. Try the Genetic Algorithm optimiser instead.")})
+
 	adjMat=incidence2Adjacency(model);
 	if(is.null(ode_parameters)){
 		ode_parameters=createLBodeContPars(model,random=TRUE);
