@@ -94,9 +94,6 @@ should be kept in the model.
 \author{
 David Henriques, Thomas Cokelaer
 }
-\note{
-%%  ~~further notes~~
-}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
@@ -105,6 +102,7 @@ David Henriques, Thomas Cokelaer
 \code{\link{createLBodeContPars}}
 }
 \examples{
+ library(CNORode)
 
 	data("ToyCNOlist",package="CNORode");
 	data("ToyModel",package="CNORode");

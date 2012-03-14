@@ -69,9 +69,6 @@ one step.
 %%     ~~Describe \code{nsplit} here~~
 }
 }
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
 \value{
 
 	Returns a list with simulated Model values.
@@ -102,15 +99,13 @@ one step.
 \author{
 David Henriques, Thomas Cokelaer
 }
-\note{
-%%  ~~further notes~~
-}
 
 \seealso{
 \code{\link{CellNOptR}}
 \code{\link{createLBodeContPars}}
 }
 \examples{
+    library(CNORode)
 	data("ToyCNOlist",package="CNORode");
 	data("ToyModel",package="CNORode");
 	data("ToyIndices",package="CNORode");

@@ -103,9 +103,6 @@ Specifies the maximum number of error test failures permitted in attempting
 \author{
 David Henriques, Thomas Cokelaer
 }
-\note{
-%%  ~~further notes~~
-}
 
 
 \seealso{
@@ -113,7 +110,7 @@ David Henriques, Thomas Cokelaer
 \code{\link{createLBodeContPars}}
 }
 \examples{
-
+library(CNORode)
 data("ToyCNOlist",package="CNORode");
 data("ToyModel",package="CNORode");
 data("ToyIndices",package="CNORode");

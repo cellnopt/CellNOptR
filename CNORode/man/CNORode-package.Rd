@@ -51,6 +51,7 @@ Maintainer: David Henriques <dhenriques@ebi.ac.uk>
 ~~ \code{\link{CellNOptR}} ~~
 }
 \examples{
+library(CNORode)
 data("ToyCNOlist",package="CNORode");
 data("ToyModel",package="CNORode");
 data("ToyIndices",package="CNORode");
@@ -58,8 +59,12 @@ data("ToyIndices",package="CNORode");
 ode_parameters=createLBodeContPars(model,random=TRUE);
 #Visualize intial simulation
 #simulatedData=plotLBodeFitness(cnolist, model,ode_parameters,indices=indices)
-ode_parameters=parEstimationLBodeSSm(cnolist,model,ode_parameters,
-	indices=indices,maxtime=10,ndiverse=10,dim_refset=6);
+params = defaultParametersGA()
+params$maxtime = 10
+params$ndiverse = 10
+params$dim_refset = 6
+ode_parameters=parEstimationLBode(cnolist,model,ode_parameters=ode_parameters,
+	indices=indices,paramsGA=params);
 #Visual solution after optimization
 #simulatedData=plotLBodeFitness(cnolist, model,indices=indices);
 }

@@ -41,9 +41,6 @@ the number of iterations.
 the number of chromosomes that are kept into the next generation. By default is
 about 20\% of the population size
 }
-  \item{verbose}{
-A logical value that triggers a set of comments.
-}
 
 \item{time}{
 An integer with the index of the time point to start the simulation. Default is 1.
@@ -80,9 +77,6 @@ Specifies the maximum number of error test failures permitted in attempting
 A penalty for each data point the model is not able to simulate. We recommend higher than
 0 and smaller that 1.
 }
-}
-\details{
-%%  ~~ If necessary, more details than the description above ~~
 }
 \value{
  \item{LB_n}{
@@ -167,10 +161,6 @@ to be optimized.
 \author{
 David Henriques, Thomas Cokelaer
 }
-\note{
-%%  ~~further notes~~
-}
-
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{

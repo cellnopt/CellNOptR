@@ -162,9 +162,6 @@ to be optimized.
 \author{
 David Henriques, Thomas Cokelaer
 }
-\note{
-%%  ~~further notes~~
-}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
@@ -173,7 +170,7 @@ David Henriques, Thomas Cokelaer
 \code{\link{createLBodeContPars}}
 }
 \examples{
-data("ToyCNOlist",package="CNORode");
+\dontrun{data("ToyCNOlist",package="CNORode");
 data("ToyModel",package="CNORode");
 data("ToyIndices",package="CNORode");
 
@@ -185,7 +182,7 @@ ode_parameters=parEstimationLBodeSSm(cnolist,model,ode_parameters,
 
 %Visual solution after optimization
 %simulatedData=plotLBodeFitness(cnolist, model,indices=indices,ode_parameters=ode_parameters);
-}
+}}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 

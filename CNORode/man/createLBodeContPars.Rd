@@ -73,9 +73,6 @@ A logical value that determines that a random solution is for the parameters
 to be optimized.
 }
 }
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
 \value{
 
 \item{parNames}{An array containing the names of the parameters.}
@@ -114,7 +111,7 @@ David Henriques, Thomas Cokelaer
 }
 
 \examples{
-
+library(CNORode)
 data("ToyCNOlist",package="CNORode");
 data("ToyModel",package="CNORode");
 data("ToyIndices",package="CNORode");

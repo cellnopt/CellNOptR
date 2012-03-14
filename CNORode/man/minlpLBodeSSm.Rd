@@ -25,6 +25,9 @@ The logic model to be simulated.
   \item{ode_parameters}{
 A list with the ODEs parameter information. Obtained with \code{\link{createLBodeContPars}}.
 }
+\item{int_x0}{
+
+}
   \item{indices}{
 Indices to map data in the model. Obtained with indexFinder function from CellNOptR. 
 }
@@ -166,19 +169,16 @@ A list containing the information provided by the nonlinear optimization solver.
 \author{
 David Henriques, Thomas Cokelaer
 }
-\note{
-%%  ~~further notes~~
-}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
 \code{\link{CellNOptR}}
 \code{\link{createLBodeContPars}}
-\code{\link{essR}}
+\code{essR}
 }
 \examples{
-
+\dontrun{library(CNORode)
 data("ToyCNOlist",package="CNORode");
 data("ToyModel",package="CNORode");
 data("ToyIndices",package="CNORode");
@@ -194,7 +194,7 @@ model=ode_parameters$model;
 
 #Visual solution after optimization
 #simulatedData=plotLBodeFitness(cnolist,model,indices=indices);
-}
+}}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 
