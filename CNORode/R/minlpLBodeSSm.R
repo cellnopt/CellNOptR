@@ -25,6 +25,8 @@ function
 	nan_fac=1
 )
 {	
+
+    library(essR)
 	adjMat=incidence2Adjacency(model);
 	if(is.null(ode_parameters))
 	{

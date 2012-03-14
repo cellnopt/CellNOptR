@@ -23,6 +23,8 @@ parEstimationLBodeSSm <-function
 		maxNumSteps=100000,		maxErrTestsFails=50,	nan_fac=1
 )
 {
+
+    library(essR)
 	adjMat=incidence2Adjacency(model);
 	if(is.null(ode_parameters)){
 		ode_parameters=createLBodeContPars(model,random=TRUE);
