@@ -13,17 +13,28 @@
 #
 ##############################################################################
 # $Id$
-plotModel <- function(model, cnolist=NULL, bString=NULL, indexInteger=NA, signals=NULL, stimuli=NULL, inhibitors=NULL,
-    ncno=NULL, compressed=NULL, output="STDOUT", filename=NULL,graphvizParams=list()){
-
+plotModel <- function(model, cnolist=NULL, bString=NULL, indexInteger=NA, 
+    signals=NULL, stimuli=NULL, inhibitors=NULL, ncno=NULL, compressed=NULL, 
+    output="STDOUT", filename=NULL,graphvizParams=list()){
 # Quick example:
 # ---------------
 #   filename = "ToyPKNMMB.sif"
 #   g = plotModel(model, cnolist=cnolist)
 #   # g$graph contains the model transformed into a graph object
 
-# For optimal rendering, required a hacked version of renderGraph.R from
-# Rgraphviz (v1.32).
+
+
+  if (is.null(graphvizParams$arrowsize)==TRUE) {
+    graphvizParams$arrowsize=2
+    }
+  if (is.null(graphvizParams$size)==TRUE) {
+    graphvizParams$size="15,15"
+  }
+  if (is.null(graphvizParams$fontsize)==TRUE) {
+    graphvizParams$fontsize=22
+  }
+
+
 
 
     # Some required library to build the graph and plot the results using
@@ -160,6 +171,16 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexInteger=NA, signal
         inhibitors <- cnolist$namesInhibitors
     }
 
+    # check that the signal and stimuli are indeed in the list of vertices
+    # otherwise they will be failures later.
+    if (all(signals %in% vertices)==FALSE){
+        msg = signals[signals %in% vertices == FALSE]
+        print("Those signals were not found in the vertices: ")
+        print(msg)
+        stop("Check that the data and network are in agreement.")
+    }
+
+
     # build the edges. IGraph does not use names for the vertices but ids 
     # that starts at zero. Let us build a data.frame to store the correspondence
     # between the ids and names.
@@ -195,6 +216,11 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexInteger=NA, signal
     for (x in orphans){
         g = removeNode(x, g)
     }
+    #nodeAttrs = createNodeAttrs(g, vertices, stimuli, signals, inhibitors, ncno, compressed)
+    #res = createEdgeAttrs(v1, v2, edges, BStimes, Integr)
+
+    # todo : what about and gates that have either no inputs or no outputs.
+    # Shall we remove them ? 
 
     edgeAttrs = res$edgeAttrs
     # --------------------------- the ranks computation for the layout
@@ -205,83 +231,95 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexInteger=NA, signal
     # is then overwritten by nodesAttrs$style later on otherwise the output.dot
     # does not contain any style option
 
-    # dot uses this value but the Rgraphviz plot arrowsize is done
-    # automatically.
-    arrowsize=2
-    fontsize=22
-    size="10,10"
-    # size does not work in Rgraphviz version 1.32 wait and see for new version.
-    attrs <-
-        list(node=list(fontsize=fontsize,fontname="Helvetica",style="filled,bold"),
-             edge=list(style="solid", penwidth=1,weight="1.0",arrowsize=arrowsize),
-             graph=list(splines=TRUE,size=size,bgcolor="white",ratio="fill",pad="0.5,0.5",dpi=72 ))
+    # size does not seem to work in Rgraphviz version 1.32 wait and see for new version.
+    fontsize=graphvizParams$fontsize
+    attrs <- list(
+        node=list(fontsize=fontsize,fontname="Helvetica",style="filled,bold"),
+        edge=list(style="solid",penwidth=1,weight="1.0",arrowsize=graphvizParams$arrowsize),
+        graph=list(splines=TRUE,size=graphvizParams$size,bgcolor="white",ratio="fill", pad="0.5,0.5",dpi=72)
+        )
+
     # other options
     # in graph: pad="0.5,5"))
     # in graph, add a title with main="Model"))
 
-    # ------------------ plotting
-    #clusters = NULL
-    if (is.null(clusters)){
-        plot(g,"dot",attrs=attrs,nodeAttrs=nodeAttrs,edgeAttrs=edgeAttrs,recipEdges=recipEdges)
-        toDot(g, output_dot, nodeAttrs=nodeAttrs,edgeAttrs=edgeAttrs,attrs=attrs, recipEdges=recipEdges)
-        #system(paste("dot -Tsvg ",output_dot," -o temp.svg; mirage temp.svg", sep=""))
+    copyg <- g
+#   plot(g,"dot",attrs=attrs,nodeAttrs=nodeAttrs,edgeAttrs=edgeAttrs,subGList=clusters,recipEdges=recipEdges)
+
+    # current version of Rgraphviz (1.32 feb 2012) does not handle edgewidth
+    # properly. Anyway, using various edges decrease the lisibilty when
+    # width are small and color light, so for all edges have the same width
+    # of 3
+    if (installed.packages()[,"Version"]["Rgraphviz"] <= "1.33.0"){
+        #nodeAttrs$lty = "solid" 
+        print("plotModel: please upgrade to Rgraphviz >1.33.0 for best output")
+        edgelwd = 3
+        nodelty = "solid" 
     }
     else{
-        copyg <- g
-#        plot(g,"dot",attrs=attrs,nodeAttrs=nodeAttrs,edgeAttrs=edgeAttrs,subGList=clusters,recipEdges=recipEdges)
+        #edgelwd=edgeAttrs$penwidth
+        edgelwd = 3
+        nodelty=nodeAttrs$lty
+    }
 
-        if (installed.packages()[,"Version"]["Rgraphviz"] <= "1.33.0"){
-            #nodeAttrs$lty = "solid" 
-            print("plotModel: please upgrade to Rgraphviz >1.33.0 for best output")
-            edgelwd = 2
-            nodelty = "solid" 
-        }
-        else{
-            edgelwd=edgeAttrs$penwidth
-            nodelty=nodeAttrs$lty
-        }
+    # Set the node Rendering in Rgraphviz
+    # triangle shape does not exist in Rgraphviz. Switch them back to circle
+    shapes= nodeAttrs$shape
+    shapes[shapes=="triangle"] = "circle"
 
-        nodeRenderInfo(g) <- list(
-            fill=nodeAttrs$fillcolor, 
-            col=nodeAttrs$color,
-            style=nodeAttrs$style,
-            lty=nodelty,   
-            lwd=2,             # width of the nodes. IF provided, all nodes have the same width
-            label=nodeAttrs$label,
-            shape=nodeAttrs$shape,
-            cex=0.4,
-            fontsize=fontsize,
-            iwidth=nodeAttrs$width,  
-            iheight=nodeAttrs$height,
-            fixedsize=FALSE)
+    nodeRenderInfo(g) <- list(
+        fill=nodeAttrs$fillcolor, 
+        col=nodeAttrs$color,
+        style=nodeAttrs$style,
+        lty=nodelty,
+        lwd=2,             # width of the nodes. IF provided, all nodes have the same width
+        label=nodeAttrs$label,
+        shape=shapes,
+        cex=0.4,
+        fontsize=fontsize,
+        iwidth=nodeAttrs$width,  
+        iheight=nodeAttrs$height,
+        fixedsize=FALSE)
 
-       # the arrowhead "normal" is buggy in Rgraphviz version 1.32 so switch to
-       # "open" for now. However, the dot output keeps using the normal arrow. 
-       arrowhead2 = edgeAttrs$arrowhead
-       arrowhead2[arrowhead2=="normal"] = "open"
+   # the arrowhead "normal" is buggy in Rgraphviz version 1.32 so switch to
+   # "open" for now. However, the dot output keeps using the normal arrow. 
+   arrowhead2 = edgeAttrs$arrowhead
+   arrowhead2[arrowhead2=="normal"] = "open"
+
+   # this statement must set recipEdges before calling edgeRenderInfo
+   # otherwise feedback loops are not shown properly.
+   graphRenderInfo(g) <-  list(recipEdges=recipEdges)
+
+   # Set the edge Rendering in Rgraphviz
+   edgeRenderInfo(g) <- list(
+        col=edgeAttrs$color,
+        arrowhead=arrowhead2,
+        head=v2,
+        tail=v1,
+        label=edgeAttrs$label,
+        lwd=edgelwd,
+        lty="solid"    #this fails in some cases even with version >=1.33.1
+    )
 
 
-       edgeRenderInfo(g) <- list(
-            col=edgeAttrs$color,
-            arrowhead=arrowhead2,
-#            head=v2,
-#            tail=v1,
-            label=edgeAttrs$label,
-            lwd=edgelwd
-#            lty="solid"    #this fails in some cases even with version >=1.33.1
-        )
-        # graphRenderInfo is not used. Uses attrs instead.
-        # graphRenderInfo(g) <-  list()
-
+    if (is.null(clusters)==TRUE){
+        # finally, the layout for a R plot
+        x <- layoutGraph(g,layoutType="dot",recipEdges=recipEdges,attrs=attrs)
+        renderGraph(x)
+        #plot(g,"dot",attrs=attrs,nodeAttrs=nodeAttrs,edgeAttrs=edgeAttrs, recipEdges=recipEdges)
+        edgeAttrs$lty=NULL    # why ? 
+        toDot(copyg, output_dot, nodeAttrs=nodeAttrs,edgeAttrs=edgeAttrs,attrs=attrs, recipEdges=recipEdges)
+    }
+    else{
         # finally, the layout for a R plot
         x <- layoutGraph(g,layoutType="dot",subGList=clusters,recipEdges=recipEdges,attrs=attrs)
         renderGraph(x)
         # and save into dot file.
-        toDot(copyg,output_dot,nodeAttrs=nodeAttrs,edgeAttrs=edgeAttrs,subGList=clusters,attrs=attrs,recipEdges=recipEdges)
-#        try(system(paste("dot -Tsvg ",output_dot,"  -o temp.svg; mirage temp.svg", sep="")))
+        toDot(copyg,output_dot,nodeAttrs=nodeAttrs,subGList=clusters,attrs=attrs,recipEdges=recipEdges,edgeAttrs=edgeAttrs)
     }
+
     if (output != "STDOUT"){dev.off()}
-    return(list(graph=g, attrs=attrs, nodeAttrs=nodeAttrs, edgeAttrs=edgeAttrs,clusters=clusters, v1=v1, v2=v2, edges=edges))
+    output = list(graph=g, attrs=attrs, nodeAttrs=nodeAttrs, edgeAttrs=edgeAttrs,clusters=clusters, v1=v1, v2=v2, edges=edges)
 }
 
 
@@ -292,8 +330,8 @@ create_layout <- function(g, signals, stimuli){
     # this algo will tell us the distance between vertices
     # distMatrix columns contains the distance from a vertex to the others
     distMatrix <- floyd.warshall.all.pairs.sp(g)
-    distMatrix[is.infinite(distMatrix) == TRUE] <- -Inf # convert Inf to be able
-                         
+    #distMatrix <- johnson.all.pairs.sp(g)
+    distMatrix[is.infinite(distMatrix) == TRUE] <- -Inf # convert -Inf to be able to grep numbers
 
     # if signals provided by the user is empty, let us find ourself the nodes
     # with input degrees set to zero:
@@ -301,12 +339,23 @@ create_layout <- function(g, signals, stimuli){
         stimuli = nodes(g)[degree(g)$inDegree==0]
     }
 
-    # we will need to know the sinks
-    sinks  <- signals[degree(g, signals)$outDegree == 0]
+    # we will need to know the sinks, which are defined by an outDegree equal to
+    # zero. Yet, if signals are already provided, we want to restrict the sinks
+    # to this subsets.
+    if (is.null(signals)==TRUE){
+        sinks  <- nodes(g)[degree(g)$outDegree == 0]
+    }
+    else{
+        sinks  <- signals[degree(g, signals)$outDegree == 0]
+    }
 
     # compute max rank for each column
     ranks <- apply(distMatrix, 2, max)
     mrank = max(ranks, na.rm=TRUE)-1  # -1 because we already know the sinks
+    if (mrank == -Inf){
+        print("Issue while computing max rank. Skipping the clustering step"); 
+        return (NULL) 
+    }
 
     clusters <- list()
     if (mrank >= 1){ # otherwise, nothing to do. 
@@ -337,27 +386,27 @@ create_layout <- function(g, signals, stimuli){
         {
             clusterSource <- subGraph(stimuli, g)
             clusterSource<-list(graph=clusterSource,cluster=FALSE,attrs=c(rank="source"))
+            tryCatch(
+                {clusters[[length(clusters)+1]] = clusterSource},
+                 error=function(e){print("error in clusters2. should never be here")}
+            )
+    
         },
-        error=function(e){}
+        error=function(e){print("warning: clustering the source/stimuli failed. carry on...")}
     )
 
     # then the signals keeping only those with outDegree==0
     tryCatch(
         {
-            clusterSink <- subGraph(signals[degree(g, signals)$outDegree == 0], g)
-            clusterSink <- list(graph=clusterSink, cluster=FALSE,
-            attrs=c(rank="sink"))
-        }, error=function(e){}
+            clusterSink <- subGraph(sinks, g)
+            clusterSink <- list(graph=clusterSink, cluster=FALSE,  attrs=c(rank="sink"))
+            tryCatch(
+                {clusters[[length(clusters)+1]] = clusterSink}, 
+                error=function(e){print("error in clusters3. should never be here")}
+            )
+        }, error=function(e){print("warning: clustering the sink failed. carry on...")}
     )
 
-    tryCatch(
-        {clusters[[length(clusters)+1]] = clusterSource},
-         error=function(e){}
-    )
-    tryCatch(
-        {clusters[[length(clusters)+1]] = clusterSink}, 
-        error=function(e){}
-    )
 
     return(clusters)
 }
@@ -438,6 +487,16 @@ createNodeAttrs <- function(g, vertices, stimuli, signals, inhibitors, ncno, com
             fixedsize[s]=FALSE
             shape[s]="circle"
             label[s] = ""
+
+        if (degree(g)$inDegree[s]==3){
+            fillcolor[s] = "blue"
+            shape[s]="triangle"
+        }
+        if (degree(g)$inDegree[s]==4){
+            fillcolor[s] = "red"
+            shape[s]="rectangle"
+        }
+            
         }
     }
     nodeAttrs <- list(fillcolor=fillcolor, color=color, label=label, width=width, height=height,
