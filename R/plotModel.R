@@ -384,8 +384,10 @@ create_layout <- function(g, signals, stimuli){
     # first the stimulis
     tryCatch(
         {
-            clusterSource <- subGraph(stimuli, g)
-            clusterSource<-list(graph=clusterSource,cluster=FALSE,attrs=c(rank="source"))
+            tryCatch({clusterSource <- subGraph(stimuli, g);
+            clusterSource<-list(graph=clusterSource,cluster=FALSE,attrs=c(rank="source"))},
+                 error=function(e){print("error during clustering in
+subGraph(stimuli, g)? ")})
             tryCatch(
                 {clusters[[length(clusters)+1]] = clusterSource},
                  error=function(e){print("error in clusters2. should never be here")}
