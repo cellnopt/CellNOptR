@@ -14,7 +14,7 @@
 ##############################################################################
 
 preprocessing<-function(Data, Model, cutnonc=TRUE, compression=TRUE,
-expansion=TRUE, ignoreList=NA, verbose=TRUE){
+expansion=TRUE, ignoreList=NA, maxInputsPerGate=2,verbose=TRUE){
 
     # why not doing this check here ? Does not cost too much
 	checkSignals(CNOlist=Data,Model=Model)
@@ -46,7 +46,7 @@ expansion=TRUE, ignoreList=NA, verbose=TRUE){
 
     # Expand the gates	
     if (expansion == TRUE){
-        cutmodel <- expandGates(Model=cutmodel, ignoreList=ignoreList)
+        cutmodel <- expandGates(Model=cutmodel, ignoreList=ignoreList,maxInputsPerGate=maxInputsPerGate)
     }
 
     return( list(model=cutmodel, indices=indices))
