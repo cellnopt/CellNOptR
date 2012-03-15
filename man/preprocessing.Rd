@@ -13,7 +13,7 @@ This function performs any of the following preprocessing steps:
 }
 \usage{
 preprocessing(Data, Model, cutnonc=TRUE, compression=TRUE,
-expansion=TRUE,ignoreList=NA, verbose=TRUE)
+expansion=TRUE,ignoreList=NA, maxInputsPerGates=2, verbose=TRUE)
 }
 
 \arguments{
@@ -34,6 +34,9 @@ expansion=TRUE,ignoreList=NA, verbose=TRUE)
   }
   \item{ignoreList}{
     list of reactions indices to ignore in the expansion step.
+  }
+  \item{maxInputsPerGate}{
+    used by the \link{expandGates} function to set maximum inputs per and gates.
   }
   \item{verbose}{
     verbose option (Default is TRUE).
