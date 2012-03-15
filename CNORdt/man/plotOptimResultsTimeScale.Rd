@@ -7,8 +7,7 @@ Plot the data and simulated values for time course data
 This function is the equivalent of CNOPlotFits, it plots the data and the simulated values,  along with an image plot that tells which cues were present. The plots are colored according to the fit between data and simulated data.
 }
 \usage{
-plotOptimResultsTimeScale(SimResults = SimResults, yInterpol = yInterpol, xCoords = xCoords, expResults = expResults,
-times = times, namesCues = namesCues, namesSignals = namesSignals, valueCues = valueCues)
+plotOptimResultsTimeScale(SimResults, yInterpol, xCoords, CNOlist, nsplit=1)
 }
 \arguments{
 \item{SimResults}{
@@ -20,24 +19,15 @@ the interpolated experimental data returned by \code{getFitTimeScale}
 \item{xCoords}{
 the x-coordinates of the data and simulation after the application of the optimized scaling factor
 }
-\item{times}{
-TOADD
+\item{CNOlist}{
+a CNOlist on which the score is based (based on all valueSignals).
 }
-\item{expResults{
-TOADD
-}
-\item{namesCues}{
-a vector of names, typically \code{CNOlist$namesCues}
-}
-\item{namesSignals}{
-a vector of names, typically \code{CNOlist$namesSignals}
-}
-\item{valueCues}{
-a matrix of dimensions (number of conditions) * (number of cues), typically \code{CNOlist$valueCues}
+\item{nsplit}{
+a value that splits the plot 'nsplit' times.
 }
 }
 \details{
-A single coloring denotes the goodness of fit between simulation and experiment, this needs to be looked at again.
+The fit is colored using a heatmap from white (perfect fit) to red.
 }
 \value{
 This function doesn't return anything, it just produces a plot in your graphics window.
@@ -57,38 +47,38 @@ cutAndPlotResultsTimeScale
 
 library(CellNOptR)
 library(CNORdiscreteTime)
-data(CNOlistToyFB, package="CNORdiscreteTime")
-data(ToyModelFB, package="CNORdiscreteTime")
+data(CNOlistToyPB, package="CNORdiscreteTime")
+data(ToyModelPB, package="CNORdiscreteTime")
 boolUpdates=20
 
-indexOrig <- indexFinder(CNOlistToyFB, ToyModelFB, verbose=TRUE)
-fields4Sim <- prep4Sim(ToyModelFB)
+indexOrig <- indexFinder(CNOlist, Model, verbose=TRUE)
+fields4Sim <- prep4Sim(Model)
 
 SimRes <- simulatorTimeScale(
-  CNOlist=CNOlistToyFB,
-  Model=ToyModelFB,
-  SimList=fields4Sim,
-  indexList=indexOrig,
-  boolUpdates=boolUpdates
+   CNOlist=CNOlist,
+   Model=Model,
+   SimList=fields4Sim,
+   indexList=indexOrig,
+   boolUpdates=boolUpdates
 )
 
 SimRes <- SimRes[,indexOrig$signals,]
 
 getFitRes <- getFitTimeScale(
- SimList=fields4Sim,
- CNOlist=CNOlistToyFB,
- Model=ToyModelFB,
- indexList=indexOrig,
- boolUpdates=boolUpdates
+  SimList=fields4Sim,
+  CNOlist=CNOlist,
+  Model=Model,
+  indexList=indexOrig,
+  boolUpdates=boolUpdates,
+  lowerB=0.8,
+  upperB=10
 )
 
 plotOptimResultsTimeScale(
-  SimResults=SimRes,
-  yInterpol=getFitRes$yInter,
-  xCoords=getFitRes$xCoords,
-  expResults=CNOlistToyFB$valueSignals,
-  times=CNOlistToyFB$timeSignals,
-  namesCues=CNOlistToyFB$namesCues,
-  namesSignals=CNOlistToyFB$namesSignals,
-  valueCues=CNOlistToyFB$valueCues)
+   SimResults=SimRes,
+   yInterpol=getFitRes$yInter,
+   xCoords=getFitRes$xCoords,
+   CNOlist=CNOlist,
+   nsplit=1
+)
 }

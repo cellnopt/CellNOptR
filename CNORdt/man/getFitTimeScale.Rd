@@ -8,7 +8,7 @@ This function is called from gaBinaryTimeScale. Using the model passed as input,
 }
 \usage{
 getFitTimeScale(SimList, CNOlist, Model, indexList, sizeFac=0.0001,
-NAPenFac=1, boolUpdates, timeSplit="early", divTime=NULL, SimResultsT1)
+NAPenFac=1, boolUpdates, timeSplit="early", divTime=NULL, SimResultsT1, lowerB=lowerB, upperB=upperB)
 }
 \arguments{
 \item{SimList}{
@@ -41,9 +41,15 @@ the experimental time point that divides the early and late steady states, if us
 \item{SimResultsT1}{
 the results of optimization at the first steady state (i.e. the whole list as output by gaBinaryTimeScale).
 }
+\item{lowerB}{
+The lower bound for the optimized value of the scaling factor.
+}
+\item{upperB}{
+The upper bound for the optimized value of the scaling factor.
+}
 }
 \details{
-The function optim() is used to find the optimal scaling factor. Still to do: sensible values for the lower and upper bounds for the scaling factor. 
+The function optim() is used to find the optimal scaling factor.
 }
 \value{
 This function returns a list with elements:
@@ -65,17 +71,20 @@ gaBinaryTimeScale, simulatorTimeScale
 
 library(CellNOptR)
 library(CNORdt)
-data(CNOlistToyFB, package="CNORdt")
-data(ToyModelFB, package="CNORdt")
+data(CNOlistToyPB, package="CNORdt")
+data(ToyModelPB, package="CNORdt")
 
-indexOrig <- indexFinder(CNOlistToyFB, ToyModelFB, verbose=TRUE)
-fields4Sim <- prep4Sim(ToyModelFB)
+# pre-processing
+indexOrig <- indexFinder(CNOlist=CNOlist, Model=Model, verbose=T)
+fields4Sim <- prep4Sim(Model=Model)
 
 getFitRes <- getFitTimeScale(
- SimList=fields4Sim,
- CNOlist=CNOlistToyFB,
- Model=ToyModelFB,
- indexList=indexOrig,
- boolUpdates=20
+  SimList=fields4Sim,
+  CNOlist=CNOlist,
+  Model=Model,
+  indexList=indexOrig,
+  boolUpdates=30,
+  lowerB=0.8,
+  upperB=10
 )
 }

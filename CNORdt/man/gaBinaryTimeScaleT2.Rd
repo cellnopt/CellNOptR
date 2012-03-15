@@ -4,10 +4,13 @@
 Genetic algorithm for optimizing models using multiple time-points with 1 or 2 steady states
 }
 \description{
-The genetic algorithm used to optimize a model by fitting to data containing multiple time points. The data can be fitted in 2 ways: applying a single scaling factor to the boolean simulation or, additionally, dividing the data with a user-provided time-point into 2 steady states (that signify early and late reactions).
+The genetic algorithm used to optimize a model by fitting to data containing multiple time points. The data can be fitted in 2 ways: applying a single scaling factor to the boolean simulation or, additionally, dividing the data with a user-provided time-point into 2 time phases (that signify early and late reactions).
 }
 \usage{
-gaBinaryTimeScale(CNOlist, Model, SimList, indexList, sizeFac = 1e-04, NAPenFac = 1, initBstring, PopSize = 50, Pmutation = 0.5, MaxTime = 60, maxGens = 500, StallGenMax = 100, SelPress = 1.2, elitism = 5, RelTol = 0.1, verbose=TRUE, boolUpdates, divTime=NULL)
+gaBinaryTimeScale(CNOlist, Model, SimList, indexList, sizeFac = 1e-04, NAPenFac = 1,
+initBstring, PopSize = 50, Pmutation = 0.5, MaxTime = 60, maxGens = 500, StallGenMax = 100,
+SelPress = 1.2, elitism = 5, RelTol = 0.1, verbose=TRUE, boolUpdates, divTime=NULL,
+lowerB=lowerB, upperB=upperB)
 }
 \arguments{
 \item{CNOlist}{
@@ -64,9 +67,15 @@ the number of synchronous updates performed by the boolean simulator.
 \item{divTime}{
 the experimental time point that divides the early and late steady states, if using the 2-steady state version.
 }
+\item{lowerB}{
+The lower bound for the optimized value of the scaling factor.
+}
+\item{upperB}{
+The upper bound for the optimized value of the scaling factor.
+}
 }
 \details{
-This is the modified version of gaBinaryT1 from the CellNOptR package, which is able to use all data from CNOlist$valueSignals.
+This is the modified version of gaBinaryT2 from the CellNOptR package, which is able to use all data from CNOlist$valueSignals.
 }
 \value{
 This function returns a list with elements:
@@ -88,79 +97,42 @@ getFitTimeScale, simulatorTimeScale
 \examples{
 library(CellNOptR)
 library(CNORdiscreteTime)
-data(CNOlistToyFB, package="CNORdiscreteTime")
-data(ToyModelFB, package="CNORdiscreteTime")
+data(CNOlistToyPB, package="CNORdiscreteTime")
+data(ToyModelPB, package="CNORdiscreteTime")
 
 # pre-process model
-
-indexOrig <- indexFinder(CNOlist=CNOlistToyFB, Model=ToyModelFB, verbose=TRUE)
-indexNONC <- findNONC(Model=ToyModelFB, indexes=indexOrig, verbose=TRUE)
-ModelCut <- cutNONC(Model=ToyModelFB, NONCindexes=indexNONC)
-indexNONCcut <- indexFinder(CNOlist=CNOlistToyFB, Model=ModelCut)
+indexOrig <- indexFinder(CNOlist=CNOlist, Model=Model, verbose=T)
+indexNONC <- findNONC(Model=Model, indexes=indexOrig, verbose=T)
+ModelCut <- cutNONC(Model=Model, NONCindexes=indexNONC)
+indexNONCcut <- indexFinder(CNOlist=CNOlist, Model=ModelCut)
 ModelCutCompress <- compressModel(Model=ModelCut, indexes=indexNONCcut)
-indexNONCcutComp <- indexFinder(CNOlist=CNOlistToyFB, Model=ModelCutCompress)
+indexNONCcutComp <- indexFinder(CNOlist=CNOlist, Model=ModelCutCompress)
 ModelCutCompressExpand <- expandGates(Model=ModelCutCompress)
 fields4Sim <- prep4Sim(Model=ModelCutCompressExpand)
 initBstring <- rep(1, length(ModelCutCompressExpand$reacID))
 
 # define boolUpdates and divTime
-
-boolUpdates = c(10, 12)
-divTime = 11
+boolUpdates=c(10,20)
+divTime=10
 
 # optimize T1
+opt1 <- gaBinaryTimeScale(CNOlist=CNOlist, Model=ModelCutCompressExpand,
+SimList=fields4Sim, indexList=indexNONCcutComp, initBstring=initBstring,
+verbose=TRUE, boolUpdates=boolUpdates, divTime=divTime, MaxTime=100,
+lowerB=0.8, upperB=10)
 
-optFBT1 <- gaBinaryTimeScale(
-  CNOlist=CNOlistToyFB,
-  Model=ModelCutCompressExpand,
-  SimList=fields4Sim,
-  indexList=indexNONCcutComp,
-  initBstring=initBstring,
-  verbose=TRUE,
-  boolUpdates=boolUpdates,
-  divTime=divTime
-)
-
-# optimise T2
-
-ssT1 <- cutModel(
-  Model=ModelCutCompressExpand,
-  SimList=fields4Sim,
-  bitString=optFBT1$bString
-)
-
-simT1 <- simulatorTimeScale(
-  CNOlist=CNOlistToyFB,
-  Model=ssT1[[1]],
-  SimList=ssT1[[2]],
-  indexList=indexNONCcutComp,
-  boolUpdates=boolUpdates[1]
-)
+# simulate the above model to get the starting point for second time phase
+dataStartPoint = cutModel(Model=ModelCutCompressExpand, SimList=fields4Sim, bitString=opt1$bString)
+simT1 = simulatorTimeScale(CNOlist=CNOlist, Model=dataStartPoint[[1]], SimList=dataStartPoint[[2]],
+indexList=indexNONCcutComp, boolUpdates=boolUpdates[1])
 
 # optimize the 'second' network then stitch the results together
-
-optFBT2 <- gaBinaryTimeScaleT2(
-  CNOlist=CNOlistToyFB,
-  Model=ModelCutCompressExpand,
-  SimList=fields4Sim,
-  indexList=indexNONCcutComp,
-  bStringT1=optFBT1$bString,
-  SimResT1=simT1,
-  verbose=TRUE,
-  boolUpdates=boolUpdates,
-  divTime=divTime
-)
+opt2 <- gaBinaryTimeScaleT2(CNOlist=CNOlist, Model=ModelCutCompressExpand,
+SimList=fields4Sim, indexList=indexNONCcutComp,
+bStringT1=opt1$bString, SimResT1=simT1, verbose=TRUE, boolUpdates=boolUpdates, divTime=divTime, lowerB=0.8, upperB=10)
 
 # visualize total result
-
-cutAndPlotResultsTimeScaleT2(
-  Model=ModelCutCompressExpand,
-  bStringT1=optFBT1$bString,
-  bStringT2=optFBT2$bString,
-  SimList=fields4Sim,
-  CNOlist=CNOlistToyFB,
-  indexList=indexNONCcutComp,
-  boolUpdates=boolUpdates,
-  divTime=divTime
-)
+cutAndPlotResultsTimeScaleT2(Model=ModelCutCompressExpand, bStringT1=opt1$bString, bStringT2=opt2$bString,
+SimList=fields4Sim, CNOlist=CNOlist, indexList=indexNONCcutComp, boolUpdates=boolUpdates,
+divTime=divTime)
 }

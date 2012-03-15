@@ -8,29 +8,29 @@ This function takes the optimized bit string, cuts the model according to the st
 }
 \usage{
 cutAndPlotResultsTimeScale(Model, bString, SimList, CNOlist,
-indexList, boolUpdates=boolUpdates, divTime=NULL)
+indexList, boolUpdates=boolUpdates, divTime=NULL, lowerB=lowerB, upperB=upperB)
 }
 \arguments{
 \item{Model}{
-a model (the full one that was used for optimisation)
+the expanded model used as input for gaBinaryTimeScale.
 }
 \item{bString}{
-a bit string for T1 as output by gabinaryT1 (i.e. a vector of 1s and 0s)
+a bit string for T1 as output by gabinaryTimeScale (i.e. a vector of 1s and 0s).
 }
 \item{SimList}{
-a simlist corresponding to the model, as output by prep4Sim
+a simlist corresponding to the model, as output by prep4Sim.
 }
 \item{CNOlist}{
-the CNOlist used in optimization
+the CNOlist used in optimization.
 }
 \item{indexList}{
-an indexList, produced by indexFinder run on the model and the CNOlist above
+an indexList, produced by indexFinder run on the model and the CNOlist above.
 }
 \item{boolUpdates}{
 the number of synchronous updates performed by the boolean simulator.
 }
 \item{divTime}{
-the experimental time point that divides the early and late steady states, if using the 2-steady state version.
+the experimental time point that divides the early and late time phases, if using the 2-time phase version.
 }
 }
 
@@ -44,40 +44,33 @@ A. MacNamara
 plotOptimResultsTimeScale
 }
 \examples{
-data(CNOlistToyFB, package="CNORdt")
-data(ToyModelFB, package="CNORdt")
+data(CNOlistToyPB, package="CNORdt")
+data(ToyModelPB, package="CNORdt")
 
 # pre-process model
-
-indexOrig <- indexFinder(CNOlist=CNOlistToyFB, Model=ToyModelFB, verbose=TRUE)
-indexNONC <- findNONC(Model=ToyModelFB, indexes=indexOrig, verbose=TRUE)
-ModelCut <- cutNONC(Model=ToyModelFB, NONCindexes=indexNONC)
-indexNONCcut <- indexFinder(CNOlist=CNOlistToyFB, Model=ModelCut)
+indexOrig <- indexFinder(CNOlist=CNOlist, Model=Model, verbose=T)
+indexNONC <- findNONC(Model=Model, indexes=indexOrig, verbose=T)
+ModelCut <- cutNONC(Model=Model, NONCindexes=indexNONC)
+indexNONCcut <- indexFinder(CNOlist=CNOlist, Model=ModelCut)
 ModelCutCompress <- compressModel(Model=ModelCut, indexes=indexNONCcut)
-indexNONCcutComp <- indexFinder(CNOlist=CNOlistToyFB, Model=ModelCutCompress)
+indexNONCcutComp <- indexFinder(CNOlist=CNOlist, Model=ModelCutCompress)
 ModelCutCompressExpand <- expandGates(Model=ModelCutCompress)
 fields4Sim <- prep4Sim(Model=ModelCutCompressExpand)
 initBstring <- rep(1, length(ModelCutCompressExpand$reacID))
 
 # optimize
+opt1 <- gaBinaryTimeScale(CNOlist=CNOlist, Model=ModelCutCompressExpand,
+SimList=fields4Sim, indexList=indexNONCcutComp, initBstring=initBstring,
+verbose=TRUE, boolUpdates=30, MaxTime=100, lowerB=0.8, upperB=10)
 
-boolUpdates = 20
-optFB <- gaBinaryTimeScale(
-  CNOlist=CNOlistToyFB,
-  Model=ModelCutCompressExpand,
-  SimList=fields4Sim,
-  indexList=indexNONCcutComp,
-  initBstring=initBstring,
-  verbose=TRUE,
-  boolUpdates=boolUpdates,
-  divTime=NULL)
-
+#plot
 cutAndPlotResultsTimeScale(
   Model=ModelCutCompressExpand,
-  bString=optFB$bString,
+  bString=opt1$bString,
   SimList=fields4Sim,
-  CNOlist=CNOlistToyFB,
+  CNOlist=CNOlist,
   indexList=indexNONCcutComp,
-  boolUpdates=boolUpdates)
+  boolUpdates=boolUpdates,
+  lowerB=0.8,
+  upperB=10)
 }
-

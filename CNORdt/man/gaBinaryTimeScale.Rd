@@ -4,12 +4,13 @@
 Genetic algorithm for optimizing models using multiple time-points with 1 or 2 steady states
 }
 \description{
-The genetic algorithm used to optimize a model by fitting to data containing multiple time points. The data can be fitted in 2 ways: applying a single scaling factor to the boolean simulation or, additionally, dividing the data with a user-provided time-point into 2 steady states (that signify early and late reactions).
+The genetic algorithm used to optimize a model by fitting to data containing multiple time points. The data can be fitted in 2 ways: applying a single scaling factor to the boolean simulation or, additionally, dividing the data with a user-provided time-point into 2 time frames (that signify early and late reactions).
 }
 \usage{
 gaBinaryTimeScale(CNOlist, Model, SimList, indexList, sizeFac = 1e-04, NAPenFac = 1,
 initBstring, PopSize = 50, Pmutation = 0.5, MaxTime = 60, maxGens = 500, StallGenMax = 100,
-SelPress = 1.2, elitism = 5, RelTol = 0.1, verbose=TRUE, boolUpdates, divTime=NULL)
+SelPress = 1.2, elitism = 5, RelTol = 0.1, verbose=TRUE, boolUpdates, divTime=NULL,
+lowerB=lowerB, upperB=upperB)
 }
 \arguments{
 \item{CNOlist}{
@@ -66,16 +67,20 @@ the number of synchronous updates performed by the boolean simulator.
 \item{divTime}{
 the experimental time point that divides the early and late steady states, if using the 2-steady state version.
 }
+\item{lowerB}{
+The lower bound for the optimized value of the scaling factor.}
+\item{upperB}{
+The upper bound for the optimized value of the scaling factor.}
 }
 \details{
 This is the modified version of gaBinaryT1 from the CellNOptR package, which is able to use all data from CNOlist$valueSignals.
 }
 \value{
 This function returns a list with elements:
-\item{bString}{the best bitstring}
-\item{Results}{a matrix with columns: "Generation", "Best_score", "Best_bitString", "Stall_Generation", "Avg_Score_Gen", "Best_score_Gen", "Best_bit_Gen", "Iter_time"}
-\item{StringsTol}{the bitstrings whose scores are within the tolerance}
-\item{StringsTolScores}{the scores of the above-mentioned strings}
+\item{bString}{the best bitstring.}
+\item{Results}{a matrix with columns: "Generation", "Best_score", "Best_bitString", "Stall_Generation", "Avg_Score_Gen", "Best_score_Gen", "Best_bit_Gen", "Iter_time".}
+\item{StringsTol}{the bitstrings whose scores are within the tolerance.}
+\item{StringsTolScores}{the scores of the above-mentioned strings.}
 }
 \references{
 J. Saez-Rodriguez, L. G. Alexopoulos, J. Epperlein, R. Samaga, D. A. Lauffenburger, S. Klamt and P. K. Sorger. Discrete logic modeling as a means to link protein signaling networks with functional analysis of
@@ -90,39 +95,26 @@ getFitTimeScale, simulatorTimeScale
 \examples{
 library(CellNOptR)
 library(CNORdt)
-data(CNOlistToyFB, package="CNORdt")
-data(ToyModelFB, package="CNORdt")
+data(CNOlistToyPB, package="CNORdt")
+data(ToyModelPB, package="CNORdt")
 
 # pre-process model
-
-indexOrig <- indexFinder(CNOlist=CNOlistToyFB, Model=ToyModelFB, verbose=TRUE)
-indexNONC <- findNONC(Model=ToyModelFB, indexes=indexOrig, verbose=TRUE)
-ModelCut <- cutNONC(Model=ToyModelFB, NONCindexes=indexNONC)
-indexNONCcut <- indexFinder(CNOlist=CNOlistToyFB, Model=ModelCut)
+indexOrig <- indexFinder(CNOlist=CNOlist, Model=Model, verbose=T)
+indexNONC <- findNONC(Model=Model, indexes=indexOrig, verbose=T)
+ModelCut <- cutNONC(Model=Model, NONCindexes=indexNONC)
+indexNONCcut <- indexFinder(CNOlist=CNOlist, Model=ModelCut)
 ModelCutCompress <- compressModel(Model=ModelCut, indexes=indexNONCcut)
-indexNONCcutComp <- indexFinder(CNOlist=CNOlistToyFB, Model=ModelCutCompress)
+indexNONCcutComp <- indexFinder(CNOlist=CNOlist, Model=ModelCutCompress)
 ModelCutCompressExpand <- expandGates(Model=ModelCutCompress)
 fields4Sim <- prep4Sim(Model=ModelCutCompressExpand)
 initBstring <- rep(1, length(ModelCutCompressExpand$reacID))
 
 # optimize
+opt1 <- gaBinaryTimeScale(CNOlist=CNOlist, Model=ModelCutCompressExpand,
+SimList=fields4Sim, indexList=indexNONCcutComp,
+initBstring=initBstring, verbose=TRUE, boolUpdates=30, MaxTime=100, lowerB=0.8, upperB=10)
 
-boolUpdates = 20
-optFB <- gaBinaryTimeScale(
-  CNOlist=CNOlistToyFB,
-  Model=ModelCutCompressExpand,
-  SimList=fields4Sim,
-  indexList=indexNONCcutComp,
-  initBstring=initBstring,
-  verbose=TRUE,
-  boolUpdates=boolUpdates,
-  divTime=NULL)
-
-cutAndPlotResultsTimeScale(
-  Model=ModelCutCompressExpand,
-  bString=optFB$bString,
-  SimList=fields4Sim,
-  CNOlist=CNOlistToyFB,
-  indexList=indexNONCcutComp,
-  boolUpdates=boolUpdates)
+# plot result
+cutAndPlotResultsTimeScale(Model=ModelCutCompressExpand, bString=opt1$bString, SimList=fields4Sim,
+CNOlist=CNOlist, indexList=indexNONCcutComp, boolUpdates=30, lowerB=0.8, upperB=10)
 }

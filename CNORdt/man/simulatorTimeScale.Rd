@@ -48,17 +48,17 @@ gaBinaryTimeScale, getFitTimeScale
 
 library(CellNOptR)
 library(CNORdt)
-data(CNOlistToyFB, package="CNORdt")
-data(ToyModelFB, package="CNORdt")
+data(CNOlistToyPB, package="CNORdt")
+data(ToyModelPB, package="CNORdt")
 
-indexOrig <- indexFinder(CNOlistToyFB, ToyModelFB, verbose=TRUE)
-fields4Sim <- prep4Sim(ToyModelFB)
+indexOrig <- indexFinder(CNOlist, Model, verbose=TRUE)
+fields4Sim <- prep4Sim(Model)
 
 simRes <- simulatorTimeScale(
-  CNOlist=CNOlistToyFB,
-  Model=ToyModelFB,
+  CNOlist=CNOlist,
+  Model=Model,
   SimList=fields4Sim,
   indexList=indexOrig,
-  boolUpdates=20
+  boolUpdates=30
 )
 }

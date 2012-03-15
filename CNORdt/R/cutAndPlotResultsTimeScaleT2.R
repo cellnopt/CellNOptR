@@ -14,7 +14,7 @@
 ##############################################################################
 # $Id: $
 
-cutAndPlotResultsTimeScaleT2 <- function(Model, bStringT1, bStringT2, SimList, CNOlist, indexList, boolUpdates, divTime) {
+cutAndPlotResultsTimeScaleT2 <- function(Model, bStringT1, bStringT2, SimList, CNOlist, indexList, boolUpdates, divTime, lowerB=lowerB, upperB=upperB) {
 	
 	library(abind)
 	# simulate T1
@@ -29,7 +29,7 @@ cutAndPlotResultsTimeScaleT2 <- function(Model, bStringT1, bStringT2, SimList, C
 	SimListcut$maxIx <- SimListcut$maxIx[as.logical(bStringT1)]
 	SimT1 <- simulatorTimeScale(CNOlist=CNOlist,Model=Modelcut,SimList=SimListcut,indexList=indexList, boolUpdates=boolUpdates[1])
 	SimResT1 <- SimT1[,indexList$signals,]
-	getFitDataT1 <- getFitTimeScale(SimList=SimListcut, CNOlist=CNOlist, Model=Modelcut, indexList=indexList, boolUpdates=boolUpdates, divTime=divTime)
+	getFitDataT1 <- getFitTimeScale(SimList=SimListcut, CNOlist=CNOlist, Model=Modelcut, indexList=indexList, boolUpdates=boolUpdates, divTime=divTime, lowerB=lowerB, upperB=upperB)
 	xCoords1 <- getFitDataT1$xCoords
 
 	# simulate T2
