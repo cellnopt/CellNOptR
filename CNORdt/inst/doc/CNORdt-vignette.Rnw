@@ -133,7 +133,7 @@ Visualize total result:
 %<<getData, eval=TRUE>>=
 %cutAndPlotResultsTimeScaleT2(Model=ModelCutCompressExpand, bStringT1=opt1$bString, bStringT2=opt2$bString,
 %SimList=fields4Sim, CNOlist=CNOlist, indexList=indexNONCcutComp, boolUpdates=c(10,20),
-%divTime=10)
+%divTime=10, lowerB=0.8, upperB=10)
 %@
 
 \section{Post-Optimization}

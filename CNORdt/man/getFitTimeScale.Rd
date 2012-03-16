@@ -71,11 +71,11 @@ gaBinaryTimeScale, simulatorTimeScale
 
 library(CellNOptR)
 library(CNORdt)
-data(CNOlistToyPB, package="CNORdt")
+data(CNOlistPB, package="CNORdt")
 data(ToyModelPB, package="CNORdt")
 
 # pre-processing
-indexOrig <- indexFinder(CNOlist=CNOlist, Model=Model, verbose=T)
+indexOrig <- indexFinder(CNOlist=CNOlist, Model=Model, verbose=TRUE)
 fields4Sim <- prep4Sim(Model=Model)
 
 getFitRes <- getFitTimeScale(

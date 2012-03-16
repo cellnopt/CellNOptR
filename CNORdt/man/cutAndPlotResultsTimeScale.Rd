@@ -32,6 +32,12 @@ the number of synchronous updates performed by the boolean simulator.
 \item{divTime}{
 the experimental time point that divides the early and late time phases, if using the 2-time phase version.
 }
+\item{lowerB}{
+The lower bound for the optimized value of the scaling factor.
+}
+\item{upperB}{
+The upper bound for the optimized value of the scaling factor.
+}
 }
 
 \value{
@@ -44,12 +50,12 @@ A. MacNamara
 plotOptimResultsTimeScale
 }
 \examples{
-data(CNOlistToyPB, package="CNORdt")
+data(CNOlistPB, package="CNORdt")
 data(ToyModelPB, package="CNORdt")
 
 # pre-process model
-indexOrig <- indexFinder(CNOlist=CNOlist, Model=Model, verbose=T)
-indexNONC <- findNONC(Model=Model, indexes=indexOrig, verbose=T)
+indexOrig <- indexFinder(CNOlist=CNOlist, Model=Model, verbose=TRUE)
+indexNONC <- findNONC(Model=Model, indexes=indexOrig, verbose=TRUE)
 ModelCut <- cutNONC(Model=Model, NONCindexes=indexNONC)
 indexNONCcut <- indexFinder(CNOlist=CNOlist, Model=ModelCut)
 ModelCutCompress <- compressModel(Model=ModelCut, indexes=indexNONCcut)
@@ -70,7 +76,7 @@ cutAndPlotResultsTimeScale(
   SimList=fields4Sim,
   CNOlist=CNOlist,
   indexList=indexNONCcutComp,
-  boolUpdates=boolUpdates,
+  boolUpdates=30,
   lowerB=0.8,
   upperB=10)
 }

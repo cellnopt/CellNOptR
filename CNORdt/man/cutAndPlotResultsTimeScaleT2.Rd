@@ -1,59 +1,96 @@
 \name{cutAndPlotResultsTimeScaleT2}
 \alias{cutAndPlotResultsTimeScaleT2}
 \title{
-Discrete time simulation of a boolean model
+Plot the results of a 2 time-phase time-course optimization
 }
 \description{
-Simulates multiple time points
+This function takes the optimized bit string of the early and late time phases, cuts the model according to the strings and then finds the optimized scaling factor to pass on to plotOptimResultsTimeScale for visualization.
 }
 \usage{
-simulatorTimeScale(CNOlist, Model, SimList, indexList, boolUpdates)
+cutAndPlotResultsTimeScaleT2(Model, bStringT1, bStringT2, SimList,
+CNOlist, indexList, boolUpdates, divTime, lowerB=lowerB, upperB=upperB)
 }
 \arguments{
-\item{CNOlist}{
-a CNOlist.
-}
 \item{Model}{
-a Model that only contains the reactions to be evaluated.
+the expanded model used as input for gaBinaryTimeScale.
+}
+\item{bStringT1}{
+a bit string for T1 as output by gabinaryTimeScale (i.e. a vector of 1s and 0s).
+}
+\item{bStringT2}{
+a bit string for T2 as output by gabinaryTimeScaleT2 (i.e. a vector of 1s and 0s).
 }
 \item{SimList}{
-a SimList as created by prep4Sim, that has also already been cut to contain only the reactions to be evaluated.
+a simlist corresponding to the model, as output by prep4Sim.
+}
+\item{CNOlist}{
+the CNOlist used in optimization.
 }
 \item{indexList}{
-an indexList as created by indexFinder.
+an indexList, produced by indexFinder run on the model and the CNOlist above.
 }
 \item{boolUpdates}{
-The number of update rounds the simulator should run for.
+the number of synchronous updates performed by the boolean simulator.
+}
+\item{divTime}{
+the experimental time point that divides the early and late time phases, if using the 2-time phase version.
+}
+\item{lowerB}{
+The lower bound for the optimized value of the scaling factor.
+}
+\item{upperB}{
+The upper bound for the optimized value of the scaling factor.
 }
 }
-\details{
-}
+
 \value{
-}
-\references{
+This function doesn't return anything, it only plots the graph in your graphic window.
 }
 \author{
 A. MacNamara
 }
 \seealso{
-gaBinaryTimeScale, getFitTimeScale
+plotOptimResultsTimeScale
 }
 \examples{
-# this computes the output of the full model, which is normally not done on a stand alone basis, but if you have a model and would like to visualise its output compared to your data, then this is what you should do.
-
 library(CellNOptR)
-library(CNORdiscreteTime)
-data(CNOlistToyFB, package="CNORdiscreteTime")
-data(ToyModelFB, package="CNORdiscreteTime")
+library(CNORdt)
+data(CNOlistPB, package="CNORdt")
+data(ToyModelPB, package="CNORdt")
 
-indexOrig <- indexFinder(CNOlistToyFB, ToyModelFB, verbose=TRUE)
-fields4Sim <- prep4Sim(ToyModelFB)
+# pre-process model
+indexOrig <- indexFinder(CNOlist=CNOlist, Model=Model, verbose=TRUE)
+indexNONC <- findNONC(Model=Model, indexes=indexOrig, verbose=TRUE)
+ModelCut <- cutNONC(Model=Model, NONCindexes=indexNONC)
+indexNONCcut <- indexFinder(CNOlist=CNOlist, Model=ModelCut)
+ModelCutCompress <- compressModel(Model=ModelCut, indexes=indexNONCcut)
+indexNONCcutComp <- indexFinder(CNOlist=CNOlist, Model=ModelCutCompress)
+ModelCutCompressExpand <- expandGates(Model=ModelCutCompress)
+fields4Sim <- prep4Sim(Model=ModelCutCompressExpand)
+initBstring <- rep(1, length(ModelCutCompressExpand$reacID))
 
-simRes <- simulatorTimeScale(
-  CNOlist=CNOlistToyFB,
-  Model=ToyModelFB,
-  SimList=fields4Sim,
-  indexList=indexOrig,
-  boolUpdates=20
-)
+# define boolUpdates and divTime
+boolUpdates=c(10,20)
+divTime=10
+
+# optimize T1
+opt1 <- gaBinaryTimeScale(CNOlist=CNOlist, Model=ModelCutCompressExpand,
+SimList=fields4Sim, indexList=indexNONCcutComp, initBstring=initBstring,
+verbose=TRUE, boolUpdates=boolUpdates, divTime=divTime, MaxTime=100,
+lowerB=0.8, upperB=10)
+
+# simulate the above model to get the starting point for second time phase
+dataStartPoint = cutModel(Model=ModelCutCompressExpand, SimList=fields4Sim, bitString=opt1$bString)
+simT1 = simulatorTimeScale(CNOlist=CNOlist, Model=dataStartPoint[[1]], SimList=dataStartPoint[[2]],
+indexList=indexNONCcutComp, boolUpdates=boolUpdates[1])
+
+# optimize the 'second' network then stitch the results together
+opt2 <- gaBinaryTimeScaleT2(CNOlist=CNOlist, Model=ModelCutCompressExpand,
+SimList=fields4Sim, indexList=indexNONCcutComp,
+bStringT1=opt1$bString, SimResT1=simT1, verbose=TRUE, boolUpdates=boolUpdates, divTime=divTime, lowerB=0.8, upperB=10)
+
+# visualize total result
+cutAndPlotResultsTimeScaleT2(Model=ModelCutCompressExpand, bStringT1=opt1$bString, bStringT2=opt2$bString,
+SimList=fields4Sim, CNOlist=CNOlist, indexList=indexNONCcutComp, boolUpdates=boolUpdates,
+divTime=divTime, lowerB=0.8, upperB=10)
 }

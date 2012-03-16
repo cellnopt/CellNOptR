@@ -46,9 +46,9 @@ cutAndPlotResultsTimeScale
 # but the output can be viewed as follows:
 
 library(CellNOptR)
-library(CNORdiscreteTime)
-data(CNOlistToyPB, package="CNORdiscreteTime")
-data(ToyModelPB, package="CNORdiscreteTime")
+library(CNORdt)
+data(CNOlistPB, package="CNORdt")
+data(ToyModelPB, package="CNORdt")
 boolUpdates=20
 
 indexOrig <- indexFinder(CNOlist, Model, verbose=TRUE)

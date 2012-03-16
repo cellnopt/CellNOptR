@@ -49,7 +49,7 @@ cutAndPlotResultsTimeScaleT2 <- function(Model, bStringT1, bStringT2, SimList, C
 	SimListcut$maxIx <- SimListcut$maxIx[as.logical(bitString2)]
 	SimT2 <- simulatorTimeScaleT2(SimResultsT1=SimT1[,,dim(SimT1)[3]], CNOlist=CNOlist, Model=Modelcut, SimList=SimListcut, indexList=indexList, boolUpdates=boolUpdates[2])
 	SimResT2 <- SimT2[,indexList$signals,]
-	getFitDataT2 <- getFitTimeScale(SimList=SimListcut, CNOlist=CNOlist, Model=Modelcut, indexList=indexList, boolUpdates=boolUpdates, divTime=divTime, timeSplit="late", SimResultsT1=SimT1)
+	getFitDataT2 <- getFitTimeScale(SimList=SimListcut, CNOlist=CNOlist, Model=Modelcut, indexList=indexList, boolUpdates=boolUpdates, divTime=divTime, timeSplit="late", SimResultsT1=SimT1, lowerB=lowerB, upperB=upperB)
 	xCoords2 <- CNOlist$timeSignals[which(CNOlist$timeSignals==divTime)+1] + getFitDataT2$xCoords
 	
 	# put it all together

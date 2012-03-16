@@ -7,10 +7,7 @@ Genetic algorithm for optimizing models using multiple time-points with 1 or 2 s
 The genetic algorithm used to optimize a model by fitting to data containing multiple time points. The data can be fitted in 2 ways: applying a single scaling factor to the boolean simulation or, additionally, dividing the data with a user-provided time-point into 2 time phases (that signify early and late reactions).
 }
 \usage{
-gaBinaryTimeScale(CNOlist, Model, SimList, indexList, sizeFac = 1e-04, NAPenFac = 1,
-initBstring, PopSize = 50, Pmutation = 0.5, MaxTime = 60, maxGens = 500, StallGenMax = 100,
-SelPress = 1.2, elitism = 5, RelTol = 0.1, verbose=TRUE, boolUpdates, divTime=NULL,
-lowerB=lowerB, upperB=upperB)
+gaBinaryTimeScaleT2(CNOlist, Model, SimList, indexList, bStringT1, SimResT1, sizeFac=0.0001, NAPenFac=1, PopSize=50, Pmutation=0.5, MaxTime=60, maxGens=500, StallGenMax=100, SelPress=1.2, elitism=5, RelTol=0.1, verbose=TRUE, boolUpdates, divTime, lowerB=lowerB, upperB=upperB)
 }
 \arguments{
 \item{CNOlist}{
@@ -25,14 +22,17 @@ a list that contains additional fields for the simulator, as created by prep4Sim
 \item{indexList}{
 a list of indexes of species stimulated/inhibited/signals, as produced by indexfinder applied on the model and CNOlist above.
 }
+\item{bStringT1}{
+TOADD
+}
+\item{SimResT1}{
+TOADD
+}
 \item{sizeFac}{
 the scaling factor for the size term in the objective function, default to 0.0001.
 }
-\item{NAFac}{
+\item{NAPenFac}{
 the scaling factor for the NA term in the objective function, default to 1.
-}
-\item{initBstring}{
-an initial bitstring to be tested, should be of the same size as the number of reactions in the model above.
 }
 \item{PopSize}{
 the population size for the genetic algorithm, default set to 50.
@@ -96,13 +96,13 @@ getFitTimeScale, simulatorTimeScale
 }
 \examples{
 library(CellNOptR)
-library(CNORdiscreteTime)
-data(CNOlistToyPB, package="CNORdiscreteTime")
-data(ToyModelPB, package="CNORdiscreteTime")
+library(CNORdt)
+data(CNOlistPB, package="CNORdt")
+data(ToyModelPB, package="CNORdt")
 
 # pre-process model
-indexOrig <- indexFinder(CNOlist=CNOlist, Model=Model, verbose=T)
-indexNONC <- findNONC(Model=Model, indexes=indexOrig, verbose=T)
+indexOrig <- indexFinder(CNOlist=CNOlist, Model=Model, verbose=TRUE)
+indexNONC <- findNONC(Model=Model, indexes=indexOrig, verbose=TRUE)
 ModelCut <- cutNONC(Model=Model, NONCindexes=indexNONC)
 indexNONCcut <- indexFinder(CNOlist=CNOlist, Model=ModelCut)
 ModelCutCompress <- compressModel(Model=ModelCut, indexes=indexNONCcut)
@@ -134,5 +134,5 @@ bStringT1=opt1$bString, SimResT1=simT1, verbose=TRUE, boolUpdates=boolUpdates, d
 # visualize total result
 cutAndPlotResultsTimeScaleT2(Model=ModelCutCompressExpand, bStringT1=opt1$bString, bStringT2=opt2$bString,
 SimList=fields4Sim, CNOlist=CNOlist, indexList=indexNONCcutComp, boolUpdates=boolUpdates,
-divTime=divTime)
+divTime=divTime, lowerB=0.8, upperB=10)
 }

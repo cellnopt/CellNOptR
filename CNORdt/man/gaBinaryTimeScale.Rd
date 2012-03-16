@@ -95,12 +95,12 @@ getFitTimeScale, simulatorTimeScale
 \examples{
 library(CellNOptR)
 library(CNORdt)
-data(CNOlistToyPB, package="CNORdt")
+data(CNOlistPB, package="CNORdt")
 data(ToyModelPB, package="CNORdt")
 
 # pre-process model
-indexOrig <- indexFinder(CNOlist=CNOlist, Model=Model, verbose=T)
-indexNONC <- findNONC(Model=Model, indexes=indexOrig, verbose=T)
+indexOrig <- indexFinder(CNOlist=CNOlist, Model=Model, verbose=TRUE)
+indexNONC <- findNONC(Model=Model, indexes=indexOrig, verbose=TRUE)
 ModelCut <- cutNONC(Model=Model, NONCindexes=indexNONC)
 indexNONCcut <- indexFinder(CNOlist=CNOlist, Model=ModelCut)
 ModelCutCompress <- compressModel(Model=ModelCut, indexes=indexNONCcut)

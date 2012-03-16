@@ -32,8 +32,6 @@ To simulate a particular model according to a user-defined bit string, use cutMo
 \value{
 A 3-dimensional array that gives the value of all species under each condition at each update (conditions, species, update).
 }
-\references{
-}
 \author{
 A. MacNamara
 }
@@ -48,7 +46,7 @@ gaBinaryTimeScale, getFitTimeScale
 
 library(CellNOptR)
 library(CNORdt)
-data(CNOlistToyPB, package="CNORdt")
+data(CNOlistPB, package="CNORdt")
 data(ToyModelPB, package="CNORdt")
 
 indexOrig <- indexFinder(CNOlist, Model, verbose=TRUE)
