@@ -140,23 +140,26 @@ to be optimized.
 }
 
 \references{
-[1] Maria Rodriguez-Fernandez, Jose A. Egea, and Julio R. Banga. Novel
-    metaheuristic for parameter estimation in nonlinear dynamic biological
-    systems. BMC Bioinformatics, 7:483+, November 2006.
+Dominik Wittmann, Jan Krumsiek, Julio S. Rodriguez, Douglas
+Lauffenburger, Steffen Klamt, and Fabian Theis. Transforming boolean
+models to continuous models: methodology and application to t-cell
+receptor signaling. BMC Systems Biology, 3(1):98+, September 2009.
 
-[2] Dominik Wittmann, Jan Krumsiek, Julio S. Rodriguez, Douglas
-    Lauffenburger, Steffen Klamt, and Fabian Theis. Transforming boolean
-    models to continuous models: methodology and application to t-cell
-    receptor signaling. BMC Systems Biology, 3(1):98+, September 2009.
+Egea, J.A., Maria, R., Banga, J.R. (2010) An evolutionary method for
+complex-process optimization. Computers & Operations Research 37(2):
+315-324.
+ 
+Egea, J.A., Balsa-Canto, E., Garcia, M.S.G., Banga, J.R. (2009) Dynamic
+optimization of nonlinear processes with an enhanced scatter search
+method. Industrial & Engineering Chemistry Research 49(9): 4388-4401. 
 
-[3] Jan Krumsiek, Sebastian Polsterl, Dominik Wittmann, and Fabian
-    Theis. Odefy - from discrete to continuous models. BMC
-    Bioinformatics, 11(1):233+, 2010.
-    
-[4] Alan C. Hindmarsh, Peter N. Brown, Keith E. Grant, Steven L. Lee,
-	Radu Serban, Dan E. Shumaker, and Carol S. Woodward. SUNDIALS:
-    Suite of nonlinear and differential/algebraic equation solvers. ACM
-    Trans. Math. Softw., 31(3):363-396, September 2005.
+Jan Krumsiek, Sebastian Polsterl, Dominik Wittmann, and Fabian
+Theis. Odefy - from discrete to continuous models. BMC
+Bioinformatics, 11(1):233+, 2010.
+
+R. Serban and A. C. Hindmarsh, "CVODES: the Sensitivity-Enabled ODE Solver in SUNDIALS,"
+Proceedings of IDETC/CIE 2005, Sept. 2005, Long Beach, CA. Also available as LLNL
+technical report UCRL-JP-200039.     
 }
 
 \author{
