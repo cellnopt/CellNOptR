@@ -109,7 +109,7 @@ SimList=fields4Sim, indexList=indexNONCcutComp, initBstring=initBstring,
 verbose=TRUE, boolUpdates=c(10,20), divTime=10, MaxTime=100, lowerB=0.8, upperB=10)
 @
 
-Here you can visualize the `early' fit of the data:
+Here you can visualize the `early' fit of the data in figure~\ref{fig:halfPlot}:
 
 <<getData, eval=FALSE>>=
 cutAndPlotResultsTimeScale(Model=ModelCutCompressExpand, bString=opt1$bString, SimList=fields4Sim,
@@ -119,7 +119,7 @@ CNOlist=CNOlist, indexList=indexNONCcutComp, boolUpdates=c(10,20), divTime=10)
 \begin{figure}[ht]
 \begin{center}
 \includegraphics[width=\textwidth]{CNORdt-vignette-halfPlot}
-\caption{\label{fig:fullPlot}
+\caption{\label{fig:halfPlot}
 }
 \end{center}
 \end{figure}
@@ -144,7 +144,7 @@ SimResT1=simT1, verbose=TRUE, boolUpdates=c(10,20),
 divTime=10, lowerB=0.8, upperB=10)
 @
 
-Visualize total result:
+Visualize total result (figure~\ref{fig:fullPlot}):
 
 <<getData, eval=FALSE>>=
 cutAndPlotResultsTimeScaleT2(Model=ModelCutCompressExpand,
@@ -156,14 +156,15 @@ divTime=10, lowerB=0.8, upperB=10)
 \begin{figure}[ht]
 \begin{center}
 \includegraphics[width=\textwidth]{CNORdt-vignette-fullPlot}
-\caption{\label{fig:fullPlot}
+\caption{The fit of the model at multiple time points using fast ($t=0$ to $t=10$) and slow (from $t=10$ to $t=30$) time phases. The training in CNORdt took 300 seconds.
 }
+\label{fig:fullPlot}
 \end{center}
 \end{figure}
 
 \section{Post-Optimization}
 
-
+As mentioned above, the difference between \emph{CNORdt} and \emph{CellNOptR} is in the simulation of the data. Hence, it is possible to use the range of post-optimization functions available in \emph{CellNOptR} to view, for example, the evolution of fit during optimization (\emph{plotFit}), or map the optimized network onto the input network or PKN (\emph{writeNetwork}). Please see the \emph{CellNOptR} package for more details.
 
 \begin{thebibliography}{1}
 
