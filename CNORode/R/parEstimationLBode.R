@@ -77,6 +77,7 @@ defaultParametersGA <- function(){
 defaultParametersSSm <- function(){
 
     params = list()
+    params$time = 1
     params$maxeval=Inf
     params$maxtime=100
     params$ndiverse=NULL
