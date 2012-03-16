@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.1415926-1.40.11 (TeX Live 2010) (format=pdflatex 2011.1.10)  14 MAR 2012 13:31
+This is pdfTeX, Version 3.1415926-1.40.11 (TeX Live 2010) (format=pdflatex 2011.1.10)  16 MAR 2012 09:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**CNORdt-vignette.Rnw
-(./CNORdt-vignette.Rnw
+**CNORdt-vignette.tex
+(./CNORdt-vignette.tex
 LaTeX2e <2009/09/24>
 Babel <v3.8l> and hyphenation patterns for english, dumylang, nohyphenation, ge
 rman-x-2009-06-19, ngerman-x-2009-06-19, ancientgreek, ibycus, arabic, armenian
@@ -175,7 +175,11 @@ Package: fullpage 1999/02/23 1.1 (PWD)
 \Urlmuskip=\muskip10
 Package: url 2006/04/12  ver 3.3  Verb mode for urls, etc.
 )
-(./CNORdt-vignette.aux)
+(./CNORdt-vignette.aux
+
+LaTeX Warning: Label `fig:fullPlot' multiply defined.
+
+)
 \openout1 = `CNORdt-vignette.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 12.
@@ -192,8 +196,7 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 12.
 LaTeX Font Info:    ... okay on input line 12.
 LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 12.
 LaTeX Font Info:    Try loading font information for TS1+cmr on input line 12.
-
-(/usr/local/texlive/2010/texmf-dist/tex/latex/base/ts1cmr.fd
+ (/usr/local/texlive/2010/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    ... okay on input line 12.
@@ -278,31 +281,57 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <5> on input line 19.
  [1
 
-{/usr/local/texlive/2010/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2]
-(./CNORdt-vignette.aux) ) 
+{/usr/local/texlive/2010/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+LaTeX Font Info:    Try loading font information for TS1+aett on input line 94.
+
+LaTeX Font Info:    No file TS1aett.fd. on input line 94.
+
+
+LaTeX Font Warning: Font shape `TS1/aett/m/sl' undefined
+(Font)              using `TS1/cmr/m/n' instead
+(Font)              for symbol `textquotesingle' on input line 94.
+
+[2] <CNORdt-vignette-halfPlot.pdf, id=21, 1047.915pt x 794.97pt>
+File: CNORdt-vignette-halfPlot.pdf Graphic file (type pdf)
+
+<use CNORdt-vignette-halfPlot.pdf>
+<CNORdt-vignette-fullPlot.pdf, id=22, 1047.915pt x 794.97pt>
+File: CNORdt-vignette-fullPlot.pdf Graphic file (type pdf)
+
+<use CNORdt-vignette-fullPlot.pdf> [3] [4 <./CNORdt-vignette-halfPlot.pdf>]
+[5 <./CNORdt-vignette-fullPlot.pdf>] (./CNORdt-vignette.aux)
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+
+LaTeX Warning: There were multiply-defined labels.
+
+ ) 
 Here is how much of TeX's memory you used:
- 2602 strings out of 493747
- 36950 string characters out of 3143546
- 85180 words of memory out of 3000000
- 5826 multiletter control sequences out of 15000+200000
- 28401 words of font info for 59 fonts, out of 3000000 for 9000
+ 2629 strings out of 493747
+ 37459 string characters out of 3143546
+ 86236 words of memory out of 3000000
+ 5846 multiletter control sequences out of 15000+200000
+ 29227 words of font info for 62 fonts, out of 3000000 for 9000
  714 hyphenation exceptions out of 8191
- 37i,6n,23p,729b,197s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/local/texlive/2010/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2010/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmbx12.pfb></usr/local/texlive/2010/texmf-dist/fonts/type1/public/a
-msfonts/cm/cmmi10.pfb></usr/local/texlive/2010/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmr10.pfb></usr/local/texlive/2010/texmf-dist/fonts/type1/public/amsf
-onts/cm/cmr12.pfb></usr/local/texlive/2010/texmf-dist/fonts/type1/public/amsfon
-ts/cm/cmr17.pfb></usr/local/texlive/2010/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmsy10.pfb></usr/local/texlive/2010/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmti10.pfb></usr/local/texlive/2010/texmf-dist/fonts/type1/public/amsfonts/c
-m/cmti12.pfb></usr/local/texlive/2010/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmtt10.pfb>
-Output written on CNORdt-vignette.pdf (2 pages, 123000 bytes).
+ 37i,6n,23p,779b,273s stack positions out of 5000i,500n,10000p,200000b,50000s
+{/usr/local/texlive/2010/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc
+}</usr/local/texlive/2010/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb>
+</usr/local/texlive/2010/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><
+/usr/local/texlive/2010/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></
+usr/local/texlive/2010/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></us
+r/local/texlive/2010/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/
+local/texlive/2010/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/lo
+cal/texlive/2010/texmf-dist/fonts/type1/public/amsfonts/cm/cmsltt10.pfb></usr/l
+ocal/texlive/2010/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/lo
+cal/texlive/2010/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/loc
+al/texlive/2010/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/loca
+l/texlive/2010/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local
+/texlive/2010/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb>
+Output written on CNORdt-vignette.pdf (5 pages, 387736 bytes).
 PDF statistics:
- 51 PDF objects out of 1000 (max. 8388607)
- 36 compressed objects within 1 object stream
+ 81 PDF objects out of 1000 (max. 8388607)
+ 58 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 11 words of extra memory for PDF output out of 10000 (max. 10000000)
 
