@@ -11,7 +11,7 @@ Perform parameter estimation using a genetic algorithm (package genalg) or ssm
 }
 \usage{
 parEstimationLBode(cnolist, model, method="ga", ode_parameters = NULL, indices = NULL,
-paramsGA=NULL, paramsSSM=NULL)
+paramsGA=NULL, paramsSSm=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -35,8 +35,8 @@ Indices to map data in the model. Obtained with indexFinder function from CellNO
 \item{paramsGA}{
  A list of GA parameters. default is the list returned by \code{defaultParametersGA}.
  } 
-\item{paramsSSM}{
- A list of SSM parameters. default is the list returned by\code{defaultParametersSSm}.
+\item{paramsSSm}{
+ A list of SSm parameters. default is the list returned by\code{defaultParametersSSm}.
  } 
 }
 \value{

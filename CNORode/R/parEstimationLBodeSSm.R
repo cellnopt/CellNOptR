@@ -47,7 +47,7 @@ SSm not available. Try the Genetic Algorithm optimiser instead.")})
 	if(!is.null(local_solver))opts$local_solver=local_solver;
 	if(!is.null(ndiverse))opts$ndiverse=ndiverse;      
 	if(!is.null(dim_refset))opts$dim_refset=dim_refset;  
-	results=essR_optim(problem,opts);
+	results=essR(problem,opts);
 	ode_parameters$parValues[ode_parameters$index_opt_pars]=results$xbest;
 	ode_parameters$ssm_results=results;
 	return(ode_parameters);	
