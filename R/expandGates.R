@@ -111,9 +111,6 @@ expandGates<-function(Model, ignoreList=NA,maxInputsPerGate=2){
     # create combinations of ORs
     # the newANDs list will contain an element for each new '&' gate, named by the name of this new and
     # reac, and containing a vector of the names of the reactions from which it was created
-    checkExisting<-function(x) {
-        all(x == newReac)
-    }
     
     newANDs <- list(finalReac=c("or1","or2"))
     ANDsadded <- 1
