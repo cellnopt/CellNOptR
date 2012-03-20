@@ -201,6 +201,8 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexInteger=NA,
     # --------------------------------------- Build the node and edges attributes list
     nodeAttrs = createNodeAttrs(g, vertices, stimuli, signals, inhibitors, ncno, compressed)
     res = createEdgeAttrs(v1, v2, edges, BStimes, Integr)
+    # an alias
+    edgeAttrs = res$edgeAttrs
 
     # createEdge returns the edgeAttrs and a list of edges that correspond to a
     # bistring element that is zero. In such case, the edge is useless and can
@@ -214,15 +216,20 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexInteger=NA,
     # removed. In principle, this is only and nodes.  
     orphans = nodes(g)[(degree(g)$inDegree  + degree(g)$outDegree) ==0]
     for (x in orphans){
-        g = removeNode(x, g)
+        if (x %in% stimuli == FALSE & x %in% inhibitors == FALSE & x %in% signals == FALSE){
+            g = removeNode(x, g)
+            # What was returned by createEdgeAttrs in now obsolet and need some cleanup
+            f<-function(y){return(x %in% strsplit(y, "~", fixed=TRUE)[[1]])}
+            indices = lapply(names(edgeAttrs$color),  f) == TRUE
+            edgeAttrs$color[indices] <-NULL
+            edgeAttrs$label[indices] <-NULL
+            edgeAttrs$lty[indices] <-NULL
+            edgeAttrs$arrowhead[indices] <-NULL
+            edgeAttrs$penwidth[indices] <-NULL
+        }
     }
-    #nodeAttrs = createNodeAttrs(g, vertices, stimuli, signals, inhibitors, ncno, compressed)
-    #res = createEdgeAttrs(v1, v2, edges, BStimes, Integr)
+    # we must rebuild the edges attributes
 
-    # todo : what about and gates that have either no inputs or no outputs.
-    # Shall we remove them ? 
-
-    edgeAttrs = res$edgeAttrs
     # --------------------------- the ranks computation for the layout
     clusters = create_layout(g, signals, stimuli)
 
@@ -239,12 +246,7 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexInteger=NA,
         graph=list(splines=TRUE,size=graphvizParams$size,bgcolor="white",ratio="fill", pad="0.5,0.5",dpi=72)
         )
 
-    # other options
-    # in graph: pad="0.5,5"))
-    # in graph, add a title with main="Model"))
-
     copyg <- g
-#   plot(g,"dot",attrs=attrs,nodeAttrs=nodeAttrs,edgeAttrs=edgeAttrs,subGList=clusters,recipEdges=recipEdges)
 
     # current version of Rgraphviz (1.32 feb 2012) does not handle edgewidth
     # properly. Anyway, using various edges decrease the lisibilty when
@@ -384,10 +386,12 @@ create_layout <- function(g, signals, stimuli){
     # first the stimulis
     tryCatch(
         {
-            tryCatch({clusterSource <- subGraph(stimuli, g);
+
+
+            tryCatch({
+            clusterSource <- subGraph(stimuli, g);
             clusterSource<-list(graph=clusterSource,cluster=FALSE,attrs=c(rank="source"))},
-                 error=function(e){print("error during clustering in
-subGraph(stimuli, g)? ")})
+                 error=function(e){print("error during clustering in subGraph(stimuli, g)? ")})
             tryCatch(
                 {clusters[[length(clusters)+1]] = clusterSource},
                  error=function(e){print("error in clusters2. should never be here")}
@@ -511,7 +515,6 @@ createNodeAttrs <- function(g, vertices, stimuli, signals, inhibitors, ncno, com
 # Create the node attributes and save in a list to be used either by the
 # plot function of the edgeRenderInfo function.
 createEdgeAttrs <- function(v1, v2, edges, BStimes ,Integer){
-
 
     edgewidth_c = 3 # default edge width
 
