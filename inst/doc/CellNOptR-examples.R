@@ -21,7 +21,7 @@ indicesToyNCNOcut<-indexFinder(CNOlistToy,ToyNCNOcut)
 ToyNCNOcutComp<-compressModel(ToyNCNOcut,indicesToyNCNOcut)
 indicesToyNCNOcutComp<-indexFinder(CNOlistToy,ToyNCNOcutComp)
 ToyNCNOcutCompExp<-expandGates(ToyNCNOcutComp)
-resECNOlistToy<-ResidualError(CNOlistToy)
+resECNOlistToy<-residualError(CNOlistToy)
 ToyFields4Sim<-prep4Sim(ToyNCNOcutCompExp)
 initBstring<-rep(1,length(ToyNCNOcutCompExp$reacID))
 ToyT1opt<-gaBinaryT1(CNOlist=CNOlistToy,Model=ToyNCNOcutCompExp,SimList=ToyFields4Sim,indexList=indicesToyNCNOcutComp,initBstring=initBstring,verbose=TRUE)
@@ -83,7 +83,7 @@ DreamNCNOcutComp<-compressModel(DreamNCNOcut,indicesDreamNCNOcut)
 indicesDreamNCNOcutComp<-indexFinder(CNOlistDREAM,DreamNCNOcutComp)
 #Expand the gates
 DreamNCNOcutCompExp<-expandGates(DreamNCNOcutComp)
-resECNOdream<-ResidualError(CNOlistDREAM)
+resECNOdream<-residualError(CNOlistDREAM)
 #Prepare for simulation
 DreamFields4Sim<-prep4Sim(DreamNCNOcutCompExp)
 #Optimisation
