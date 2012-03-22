@@ -96,8 +96,8 @@ plotOptimResults<-function(
 					yValS4Diff<-yValS4Diff
 					}		
 					
-#Compute the mean difference between data and simulation, not taking into account t0 or NAs					
-			diff<-mean(abs(unlist(yVal4Diff)[2:length(yVal4Diff)]-unlist(yValS4Diff)[2:length(yValS4Diff)]),na.rm=TRUE)
+#Compute the mean difference between data and simulation, taking into account t0 but not NAs					
+			diff<-mean(abs(unlist(yVal4Diff)[1:length(yVal4Diff)]-unlist(yValS4Diff)[1:length(yValS4Diff)]),na.rm=TRUE)
 
 #Set the bg colour based on the above
 			if(is.na(diff)){
