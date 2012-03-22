@@ -70,9 +70,12 @@ cutAndPlotResultsT2 <-function(
 	SimResT2<-SimT2[,indexList$signals]
 	
 	#Put it all together
+
+    Sim0<-simulatorT0(CNOlist=CNOlist,Model=Modelcut,SimList=SimListCut,indexList=indexList)
+    SimResT0<-as.matrix(Sim0[,indexList$signals])
 	
 	SimResults<-list(
-		t0=matrix(data=0,nrow=dim(SimResT1)[1],ncol=dim(SimResT1)[2]),
+		t0=SimResT0,
 		t1=SimResT1,
 		t2=SimResT2)
 		
