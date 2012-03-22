@@ -13,7 +13,7 @@ This function performs any of the following preprocessing steps:
 }
 \usage{
 preprocessing(Data, Model, cutnonc=TRUE, compression=TRUE,
-expansion=TRUE,ignoreList=NA, maxInputsPerGates=2, verbose=TRUE)
+expansion=TRUE,ignoreList=NA, maxInputsPerGate=2, verbose=TRUE)
 }
 
 \arguments{

@@ -10,16 +10,19 @@ a CNOlist (see makeCNOlist and readMIDAS) or information related to the
 pre-processing steps (compression, NONC nodes, expansion gates).
 It can also be used to plot optimised model given the optimisation bitstring.}
 \usage{
-plotModel(model, cnolist=NULL, bString=NULL, indexInteger=NA, signals=NULL, stimuli=NULL,
+plotModel(model, cnolist=NULL, bString=NULL, indexIntegr=NA, signals=NULL, stimuli=NULL,
 inhibitors=NULL, ncno=NULL, compressed=NULL, output="STDOUT",filename=NULL, 
 graphvizParams=list())
 
 }
 \arguments{
-  \item{model}{a model (either the filename or the output of readSif)}
-  \item{cnolist}{the output of makeCNOlist}
-  \item{bString}{a bitstring made of 1 and 0 that must be of same length as the one returned by the GA algorithm (gaBinaryT1).}
-  \item{indexInteger}{a list of weight that must be of same length as the biString returned by the GA algorithm (gaBinaryT1).}
+  \item{model}{a model as returned by \code{readSif}. Alternatively, the filename can also be provided.}
+  \item{cnolist}{output of makeCNOlist}
+  \item{bString}{a sequence made of numbers between 0 and 1 of same length as
+the one returned by the Genetic Algorithm (GA). This is a generalisation of
+the bitString returned by the GA function: several bit strings can be
+averaged and used}
+  \item{indexIntegr}{additional indices to highlight some edge (optional).}
   \item{signals}{a list of nodes belonging to the signals class}
   \item{stimuli}{a list of nodes belonging to the stimuli class}
   \item{inhibitors}{a list of nodes belonging to the inhibitors class}

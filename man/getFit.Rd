@@ -8,7 +8,7 @@ This function computes the value of the objective function for a model and an as
 }
 \usage{
 getFit(SimResults, CNOlist, Model, indexList, timePoint = c("t1", "t2"), sizeFac
-= 1e-04, NAFac = 1, nInTot)
+= 1e-04, NAFac = 1, nInTot, SimResultsT0=NA)
 }
 \arguments{
   \item{SimResults}{
@@ -35,6 +35,10 @@ weights the penalty for the number of NAs
   \item{nInTot}{
 the number of inputs in the model prior to cutting, used to normalised the size penalty
 }
+  \item{SimResultsT0}{
+   Results of the time 0 simulator (internal usage of gaBinaryT1)
+}
+
 }
 \details{
 BE AWARE: contrary to what is done in the Matlab version of CellNOpt, here the simulation results are computed beforehand and the Model that is input into this function is a model that has already been cut i.e. that only contains the reactions present in the optimised model (i.e.should be the same model as the one that you input into the simulator). Also, the SimResults matrix is the full one as output by the simulator, i.e. it contains results for all species in the model, not only the signals
