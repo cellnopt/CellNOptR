@@ -1,3 +1,20 @@
+22/March/2012 0.99.28
+-----------------------
+
+*rev 800-804: implement time0
+
+20/March/2012 0.99.27
+------------------------
+
+* rev782: cleanup in expandGates 
+
+15/March/2012 0.99.26
+
+* rev739: update preprocessing to use the maxInputsPerGates option.
+* rev738: fix plotModel layout
+* rev737: fix major bug in expandGates and increased possible inputs combinations
+
+
 12/March/2012 0.99.25
 -------------------------
 
