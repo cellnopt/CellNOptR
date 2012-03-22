@@ -31,11 +31,17 @@ cutAndPlotResultsT1<-function(
 
     SimListCut<-cutSimList(SimList, bString)
 
-	
 	Sim<-simulatorT1(CNOlist=CNOlist,Model=Modelcut,SimList=SimListCut,indexList=indexList)
 	SimRes<-as.matrix(Sim[,indexList$signals])
 
-	SimResults<-list(t0=matrix(data=0,nrow=dim(SimRes)[1],ncol=dim(SimRes)[2]),t1=SimRes)
+    # former code when t0 was not taken into account (everything set to zero)
+	#SimResults<-list(t0=matrix(data=0,nrow=dim(SimRes)[1],ncol=dim(SimRes)[2]),t1=SimRes)
+
+	# new code
+	Sim0<-simulatorT0(CNOlist=CNOlist,Model=Modelcut,SimList=SimListCut,indexList=indexList)
+	SimRes0<-as.matrix(Sim0[,indexList$signals])
+	SimResults<-list(t0=SimRes0,t1=SimRes)
+
 	expResults<-list(t0=CNOlist$valueSignals[[1]],t1=CNOlist$valueSignals[[2]])
 	
     if (show == TRUE){
