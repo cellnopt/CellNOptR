@@ -13,7 +13,7 @@
 #
 ##############################################################################
 # $Id$
-plotModel <- function(model, cnolist=NULL, bString=NULL, indexInteger=NA, 
+plotModel <- function(model, cnolist=NULL, bString=NULL, indexIntegr=NA, 
     signals=NULL, stimuli=NULL, inhibitors=NULL, ncno=NULL, compressed=NULL, 
     output="STDOUT", filename=NULL,graphvizParams=list()){
 # Quick example:
@@ -104,7 +104,7 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexInteger=NA,
         tmp <- unlist(mysplit(model$reacID))
         reacs = t(matrix(unlist(mysplit(model$reacID)), ncol=length(tmp)/2)) # reordering
 
-        # Use the bString and indexInteger input arguments to build up 
+        # Use the bString and indexIntegr input arguments to build up 
         if (is.null(bString)){# default is only 1 so all edges are accepted
             optimBStimes<-rep(1,dim(reacs)[1])
         }else{
@@ -112,8 +112,8 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexInteger=NA,
         }
 
         optIntegr<-rep(0,length(optimBStimes))
-        if (!is.na(indexInteger[1])){
-            optIntegr[indexInteger]<-1
+        if (!is.na(indexIntegr[1])){
+            optIntegr[indexIntegr]<-1
         }
 
         # finally, build the v1, v2 and edges
@@ -514,7 +514,7 @@ createNodeAttrs <- function(g, vertices, stimuli, signals, inhibitors, ncno, com
 
 # Create the node attributes and save in a list to be used either by the
 # plot function of the edgeRenderInfo function.
-createEdgeAttrs <- function(v1, v2, edges, BStimes ,Integer){
+createEdgeAttrs <- function(v1, v2, edges, BStimes ,Integr){
 
     edgewidth_c = 3 # default edge width
 
@@ -535,10 +535,12 @@ createEdgeAttrs <- function(v1, v2, edges, BStimes ,Integer){
         if (edges[i] == 1){
            arrowhead[edgename] <- "normal"
            edgecolor[edgename] <- "forestgreen"
+           if (Integr[i]==1){edgecolor[edgename] <- "purple"}
         }
         else if (edges[i] == -1){
            arrowhead[edgename] <- "tee"
            edgecolor[edgename] <- "red"
+           if (Integr[i]==1){edgecolor[edgename] <- "purple"}
         }
         else{
            arrowhead[edgename] <- "normal"
@@ -568,8 +570,6 @@ createEdgeAttrs <- function(v1, v2, edges, BStimes ,Integer){
         }
     }
 
-    indexI<-intersect(which(Integer==1), which(BStimes==1))
-    edgecolor[indexI]<-"purple"
 
     edgeAttrs <- list(color=edgecolor,arrowhead=arrowhead,
         penwidth=edgewidth,label=label, lty=lty)
