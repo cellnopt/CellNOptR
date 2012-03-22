@@ -21,17 +21,31 @@ getFit<-function(
 	timePoint=c("t1","t2"),
 	sizeFac=0.0001,
 	NAFac=1,
-	nInTot){
+	nInTot, 
+    SimResultsT0=NA
+    ){
 	
 	SimResults<-SimResults[,indexList$signals]
 	
 	if(timePoint == "t1") tPt<-2
 	if(timePoint == "t2") tPt<-3
 
-	Diff<-SimResults-CNOlist$valueSignals[[tPt]]
-	r<-Diff^2
-	
-	deviationPen<-sum(r[!is.na(r)])
+    # if t0 is provided and we are interested in t1
+    # then  score is based on t1 but also t0
+    if (tPt == 2 && is.na(SimResultsT0)==FALSE){
+        Diff0<-SimResultsT0[,indexList$signals]-CNOlist$valueSignals$t0
+        Diff<-SimResults-CNOlist$valueSignals[[tPt]]
+    	r0<-Diff0^2
+	    r<-Diff^2
+        r <- rbind(r0, r) # we can concatenate because it's matricial computation.
+	    deviationPen<-sum(r[!is.na(r)])/2
+    }# otherwise, no need to take to into account
+    else{
+        Diff<-SimResults-CNOlist$valueSignals[[tPt]]
+    	r<-Diff^2
+    	deviationPen<-sum(r[!is.na(r)])
+    }
+    
 	
 	NAPen<-NAFac*length(which(is.na(SimResults)))
 	
