@@ -257,6 +257,8 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexIntegr=NA,
         print("plotModel: please upgrade to Rgraphviz >1.33.0 for best output")
         edgelwd = 3
         nodelty = "solid" 
+        saveEdgeAttrs = edgeAttrs$color
+        edgeAttrs$color = NULL
     }
     else{
         #edgelwd=edgeAttrs$penwidth
@@ -302,7 +304,9 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexIntegr=NA,
         lwd=edgelwd,
         lty="solid"    #this fails in some cases even with version >=1.33.1
     )
-
+    # hack for version of Rgraphviz 1.32. Set back the edgeAttr for the dot
+    # output
+    edgeAttrs$color = savedEdgeAttrs
 
     if (is.null(clusters)==TRUE){
         # finally, the layout for a R plot
