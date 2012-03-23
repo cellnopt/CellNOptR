@@ -1,4 +1,4 @@
-import("CellNOptR", "genalg")
+import("CellNOptR")
 useDynLib(CNORode)
 
 

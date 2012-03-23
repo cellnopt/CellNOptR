@@ -7,6 +7,6 @@ Author: David Henriques
 Maintainer: David Henriques <davidpcnet@hotmail.com>
 Description: ode add-on to CellNOptR
 License: GPL-2
-LazyLoad: no
+LazyLoad: yes
 Depends: CellNOptR, genalg
 
