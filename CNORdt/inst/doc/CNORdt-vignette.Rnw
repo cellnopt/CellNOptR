@@ -18,7 +18,7 @@
 
 This software is written in the R language, so in order to use it you will need to have R installed on your computer. For more information, please refer to \url{http://www.r-project.org/}.  For more information about how to install R packages, please refer to \url{http://cran.r-project.org/doc/manuals/R-admin.html#Installing-packages}.
 
-\emph{CNORdt} is an add-on to \emph{CellNOptR~}\cite{CellNOptR}, a software package that trains logic models to data~\cite{julio2009}. More details and the package itself can be found using the following command to install:
+\emph{CNORdt} is an add-on to \emph{CellNOptR}~\cite{CellNOptR}, a software package that trains logic models to data~\cite{julio2009}. More details and the package itself can be found using the following command to install:
 
 <<installPackage, eval=FALSE>>=
 install.packages("path_to_CellNOptR/CellNOptR_1.0.0.tar.gz", repos=NULL)
@@ -95,12 +95,11 @@ initBstring <- rep(1, length(ModelCutCompressExpand$reacID))
 
 \section{Optimization}
 
-This is where the difference between CNORdt and its parent package CellNOptR becomes visible. CellNOptR fits the model to data at steady state~i.e. the simulation runs until all species are static. This gives a robust overview of the model behaviour but this formalism cannot model more complex dynamics such as oscillations. CNORdt uses full time course data by scaling the boolean simulation. Hence the difference betweeen model and data can be calculated and optimized across all data points at not just a single one or two.
+This is where the difference between \emph{CNORdt} and its parent package \emph{CellNOptR} becomes visible. \emph{CellNOptR} fits the model to data at steady state~i.e. the simulation runs until all species are static. This gives a robust overview of the model behaviour but this formalism cannot model more complex dynamics such as oscillations. \emph{CNORdt} uses full time course data by scaling the boolean simulation. Hence the difference betweeen model and data can be calculated and optimized across all data points at not just a single one or two.
 
-An additional feature from CellNOptR can also be implemented in CNORdt: the model fitting can be carried out in 2 stages if the user has sufficient knowledge that the data represents early and late reactions (for example, an early phosphoprotein activation followed by later deactivation). This feature is controlled by supplying the division time (`divTime') - the experimental time point where the late reactions start to occur. If no such value is supplied, divTime is set to NULL and the model fitting is not divided into early and late. In the case of this model below, a division time is set at 10 (minutes) as there is a delayed deactivation of phosphoproteins in the data (see MacNamara et al.~\cite{macnamara2012} for more details).
+An additional feature from \emph{CellNOptR} can also be implemented in \emph{CNORdt}: the model fitting can be carried out in 2 stages if the user has sufficient knowledge that the data represents early and late reactions (for example, an early phosphoprotein activation followed by later deactivation). This feature is controlled by supplying the division time (`divTime') - the experimental time point where the late reactions start to occur. If no such value is supplied, divTime is set to NULL and the model fitting is not divided into early and late. In the case of this model below, a division time is set at 10 (minutes) as there is a delayed deactivation of phosphoproteins in the data (see MacNamara et al.~\cite{macnamara2012} for more details).
 
-The other data that currently needs to be supplied in addition to the optimization parameteres descrived are `boolUpdates' and the upper and lower bounds for the optimization of the scaling factor (`upperB' and `lowerB'). The variable `boolUpdates' controls the number of simulation steps (`ticks') and is either 1 or 2 values depending whether `divTime' has been set. This will be set to an intelligent default value in future releases (it can be viewed as a function of model size and experimental time) but it is currently a manual entry.
-The upper and lower bounds control the range of values for the optimization of the scaling factor.
+The other data that currently needs to be supplied in addition to the optimization parameters described are `boolUpdates' and the upper and lower bounds for the optimization of the scaling factor (`upperB' and `lowerB'). The variable `boolUpdates' controls the number of simulation steps (`ticks') and is either 1 or 2 values depending whether `divTime' has been set. This will be set to an intelligent default value in future releases (it can be considered a function of model size and experimental time) but it is currently a manual entry. The upper and lower bounds control the range of values for the optimization of the scaling factor.
 
 <<getData, eval=FALSE>>=
 # the 'switch' time between the 2 time phases needs to be known
@@ -119,8 +118,9 @@ CNOlist=CNOlist, indexList=indexNONCcutComp, boolUpdates=c(10,20), divTime=10, l
 \begin{figure}[ht]
 \begin{center}
 \includegraphics[width=\textwidth]{CNORdt-vignette-halfPlot}
-\caption{\label{fig:halfPlot}
+\caption{The fit of the model over the early time phase ($t=0$ to $t=10$). The black triangles are the experimental measurements across the time course. The simulation is represented by a blue dashed line. The color code represents the normalized error between the simulation and the data. The colors range from white (perfect fit) to red (poor fit) spanning heat map coloration in between.
 }
+\label{fig:halfPlot}
 \end{center}
 \end{figure}
 
@@ -164,7 +164,25 @@ divTime=10, lowerB=0.8, upperB=10)
 
 \section{Post-Optimization}
 
-As mentioned above, the difference between \emph{CNORdt} and \emph{CellNOptR} is in the simulation of the data. Hence, it is possible to use the range of post-optimization functions available in \emph{CellNOptR} to view, for example, the evolution of fit during optimization (\emph{plotFit}), or map the optimized network onto the input network or PKN (\emph{writeNetwork}). Please see the \emph{CellNOptR} package for more details.
+As mentioned above, the difference between \emph{CNORdt} and \emph{CellNOptR} is in the simulation of the data. Hence, it is possible to use the range of post-optimization functions available in \emph{CellNOptR} to view, for example, the evolution of fit during optimization (\emph{plotFit}), or map the optimized network onto the input network or PKN (\emph{writeNetwork}). Please see the \emph{CellNOptR} package for more details about the following:
+
+<<writeRes, eval=FALSE>>=
+writeScaffold(
+	ModelComprExpanded=ModelCutCompressExpand,
+	optimResT1=opt1,
+	optimResT2=opt2,
+	ModelOriginal=Model,
+	CNOlist=CNOlist
+)
+	
+writeNetwork(
+	ModelOriginal=Model,
+	ModelComprExpanded=ModelCutCompressExpand,
+	optimResT1=opt1,
+	optimResT2=opt2,
+	CNOlist=CNOlist
+)
+@
 
 \begin{thebibliography}{1}
 
