@@ -13,7 +13,7 @@
 #
 ##############################################################################
 # $Id$
-plotModel <- function(model, cnolist=NULL, bString=NULL, indexInteger=NA, signals=NULL, stimuli=NULL, inhibitors=NULL,
+plotModel_old <- function(model, cnolist=NULL, bString=NULL, indexInteger=NA, signals=NULL, stimuli=NULL, inhibitors=NULL,
     ncno=NULL, compressed=NULL, output="STDOUT", filename=NULL,graphvizParams=list()){
 #  "$Id$"
 

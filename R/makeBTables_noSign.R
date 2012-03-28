@@ -13,7 +13,7 @@
 #
 ##############################################################################
 # $Id$
-makeBTables <-
+makeBTables_noSign <-
 function(CNOlist, k, measErr){
   #CNOlist should be a list as output from makeCNOlist
   #k is the proportionality constant used to determine the threshold

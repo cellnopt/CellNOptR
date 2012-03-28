@@ -13,7 +13,7 @@
 #
 ##############################################################################
 # $Id$
-plotModel <- function(model, cnolist=NULL, bString=NULL, indexIntegerLG=NA, indexIntegerG=NA, indexIntegerB=NA, indexIntegerR=NA, signals=NULL, stimuli=NULL, inhibitors=NULL,
+plotModel4ModelComparison <- function(model, cnolist=NULL, bString=NULL, indexIntegerLG=NA, indexIntegerG=NA, indexIntegerB=NA, indexIntegerR=NA, signals=NULL, stimuli=NULL, inhibitors=NULL,
     ncno=NULL, compressed=NULL, output="STDOUT", filename=NULL,graphvizParams=list()){
 #  "$Id$"
 
