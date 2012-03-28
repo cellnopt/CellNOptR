@@ -22,7 +22,7 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexIntegr=NA,
 #   g = plotModel(model, cnolist=cnolist)
 #   # g$graph contains the model transformed into a graph object
 
-
+  # edgecolor could be forestgreen
 
   if (is.null(graphvizParams$arrowsize)==TRUE) {
     graphvizParams$arrowsize=2
@@ -33,9 +33,16 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexIntegr=NA,
   if (is.null(graphvizParams$fontsize)==TRUE) {
     graphvizParams$fontsize=22
   }
+  if (is.null(graphvizParams$edgecolor)==TRUE) {
+    graphvizParams$edgecolor="black"
+  }
 
 
-
+  if (length(bString)!=length(model$reacID)){
+      stop(paste("If the bString argument is provided it must have the same",
+        "  length as model$reacID. ", "The model has ", length(model$reacID), 
+        "  edges whereas the bitstring has a length of ", length(bString), sep=""))
+   }
 
     # Some required library to build the graph and plot the results using
     # graphviz.
@@ -200,7 +207,8 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexIntegr=NA,
 
     # --------------------------------------- Build the node and edges attributes list
     nodeAttrs = createNodeAttrs(g, vertices, stimuli, signals, inhibitors, ncno, compressed)
-    res = createEdgeAttrs(v1, v2, edges, BStimes, Integr)
+    res = createEdgeAttrs(v1, v2, edges, BStimes, Integr,
+        user_edgecolor=graphvizParams$edgecolor)
     # an alias
     edgeAttrs = res$edgeAttrs
 
@@ -393,7 +401,6 @@ create_layout <- function(g, signals, stimuli){
     tryCatch(
         {
 
-
             tryCatch({
             clusterSource <- subGraph(stimuli, g);
             clusterSource<-list(graph=clusterSource,cluster=FALSE,attrs=c(rank="source"))},
@@ -520,7 +527,7 @@ createNodeAttrs <- function(g, vertices, stimuli, signals, inhibitors, ncno, com
 
 # Create the node attributes and save in a list to be used either by the
 # plot function of the edgeRenderInfo function.
-createEdgeAttrs <- function(v1, v2, edges, BStimes ,Integr){
+createEdgeAttrs <- function(v1, v2, edges, BStimes ,Integr, user_edgecolor){
 
     edgewidth_c = 3 # default edge width
 
@@ -540,7 +547,7 @@ createEdgeAttrs <- function(v1, v2, edges, BStimes ,Integr){
 
         if (edges[i] == 1){
            arrowhead[edgename] <- "normal"
-           edgecolor[edgename] <- "forestgreen"
+           edgecolor[edgename] <- user_edgecolor
            if (Integr[i]==1){edgecolor[edgename] <- "purple"}
         }
         else if (edges[i] == -1){

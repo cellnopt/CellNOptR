@@ -30,8 +30,15 @@ averaged and used}
   \item{compressed}{a list of compressed nodes}
   \item{filename}{the filename (without extension) used to write the dot file}
   \item{output}{the type of output (PNG, PDF, SVG accepted)}
-  \item{graphvizParams}{Not used for the moment, but could be used to provide any graphviz user preferences in the future}
-}
+  \item{graphvizParams}{a list of optional arguments dedicated to Rgraphviz.
+Accepted arguments are: \code{arrowsize} (default is 2); 
+\code{size} (a string for the dot output default is "15,15");\code{fontsize}
+(default is 22);\code{edgecolor} (default is "black").
+}}
+
+
+
+
 \details{
 This function plots the model and also saves it in a dot file that can be processed
 later on. However, you can also save the plot in PNG or PDF or SVG format (one at
