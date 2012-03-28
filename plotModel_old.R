@@ -463,10 +463,10 @@ createEdgeAttrs <- function(v1, v2, edges, BStimes ,Integer){
         #print(c(BStimes[i], v))
         if (v != 100){
             if (v == 0){
-                if (length(grep("and", edgename))>=1){
-                    toremove <- append(toremove, edgename)
-                }
-                edgecolor[edgename] = "transparent"
+if (length(grep("and", edgename))>=1){
+                   toremove <- append(toremove, edgename)
+               }
+                edgecolor[edgename] = "grey90"
             }
             else{
               edgecolor[edgename] <- paste("grey", as.character(100-v), sep="")
