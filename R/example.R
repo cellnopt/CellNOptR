@@ -5,18 +5,18 @@ library(CellNOptR)
 pathToSVN="/Users/localadmin/CNO_trunk_svn2"
 
 
-source(paste(pathToSVN,"/CNOR_add_links/AddLink.R",sep=""))
-source(paste(pathToSVN,"/CNOR_add_links/makeBTables.R",sep=""))
-source(paste(pathToSVN,"/CNOR_add_links/SearchLinkGraph.R",sep=""))
-source(paste(pathToSVN,"/CNOR_add_links/downCueGraph.R",sep=""))
-source(paste(pathToSVN,"/CNOR_add_links/MapBTables2Model.R",sep=""))
-source(paste(pathToSVN,"/CNOR_add_links/upSignalGraph.R",sep=""))
-source(paste(pathToSVN,"/CNOR_add_links/AddLinkAND.R",sep=""))
-source(paste(pathToSVN,"/CNOR_add_links/model2sif.R",sep=""))
-source(paste(pathToSVN,"/CNOR_add_links/sif2graph.R",sep=""))
-source(paste(pathToSVN,"/CNOR_add_links/AddLinkAND.R",sep=""))
-source(paste(pathToSVN,"/CNOR_add_links/getFitint.R",sep=""))
-source(paste(pathToSVN,"/CNOR_add_links/gaBinaryT1int.R",sep=""))
+source(paste(pathToSVN,"/CNOR_add_links/R/AddLink.R",sep=""))
+source(paste(pathToSVN,"/CNOR_add_links/R/makeBTables.R",sep=""))
+source(paste(pathToSVN,"/CNOR_add_links/R/SearchLinkGraph.R",sep=""))
+source(paste(pathToSVN,"/CNOR_add_links/R/downCueGraph.R",sep=""))
+source(paste(pathToSVN,"/CNOR_add_links/R/MapBTables2Model.R",sep=""))
+source(paste(pathToSVN,"/CNOR_add_links/R/upSignalGraph.R",sep=""))
+source(paste(pathToSVN,"/CNOR_add_links/R/AddLinkAND.R",sep=""))
+source(paste(pathToSVN,"/CNOR_add_links/R/model2sif.R",sep=""))
+source(paste(pathToSVN,"/CNOR_add_links/R/sif2graph.R",sep=""))
+source(paste(pathToSVN,"/CNOR_add_links/R/AddLinkAND.R",sep=""))
+source(paste(pathToSVN,"/CNOR_add_links/R/getFitint.R",sep=""))
+source(paste(pathToSVN,"/CNOR_add_links/R/gaBinaryT1int.R",sep=""))
 
 
 
