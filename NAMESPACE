@@ -1,1 +1,23 @@
-export("AddLinks")
+import("CellNOptR")
+
+export("AddLinkAND",
+    "AddLink",
+    "Binference",
+    "downCueGraph",
+    "gaBinaryT1int",
+    "getFitint",
+    "graph2sif",
+    "linksRanking",
+    "makeBTables_noSign",
+    "makeBTables",
+    "MapBTables2Model",
+    "MapCEN2Model",
+    "MIinference",
+    "model2sif",
+    "plotModel4ModelComparison",
+    "plotModel_old",
+    "SearchLinkGraph",
+    "searchPPIigraph",
+    "searchPPI",
+    "sif2graph",
+    "upSignalGraph")

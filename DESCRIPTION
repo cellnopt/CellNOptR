@@ -1,12 +1,12 @@
-Package: CNORal
+Package: CNORaddlinks
 Type: Package
-Title: R version of CellNOpt, boolean features only 
-Version: 0.99.26
-Date: 2012-03-15
-Author: C.Terfve, T.Cokelaer
-Maintainer: C.Terfve <terfve@ebi.ac.uk>
-Depends: RBGL, graph
+Title: CellNetOptimiser using add links feature
+Version: 0.1.0
+Date: 2012-03-28
+Author: F.Eduati
+Maintainer: F.Eduati <eduati@ebi.ac.uk>
+Depends: CellNOptR
 biocViews: CellBasedAssays, CellBiology, Proteomics, Bioinformatics, TimeCourse
-Description: This package does optimisation of boolean logic networks of signalling pathways based on a previous knowledge network and a set of data upon perturbation of the nodes in the network.
+Description: This package add missing links to network used in networks of signalling pathways based on a previous knowledge network and a set of data upon perturbation of the nodes in the network.
 License: GPL-2
-LazyLoad: no
+LazyLoad: yes
