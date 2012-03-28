@@ -15,11 +15,12 @@
 # $Id$
 cutSimList <- function(SimList, bitString)
 {
-    SimListCut<-SimList
-    finalCube<-SimListCut$finalCube[as.logical(bitString),]
-    ixNeg<-SimListCut$ixNeg[as.logical(bitString),]
-    ignoreCube<-SimListCut$ignoreCube[as.logical(bitString),]
-    maxIx<-SimListCut$maxIx[as.logical(bitString)]
+    bitString = as.logical(bitString)
+    SimListCut <- SimList
+    finalCube <- SimListCut$finalCube[bitString,]
+    ixNeg <-SimListCut$ixNeg[bitString,]
+    ignoreCube <- SimListCut$ignoreCube[bitString,]
+    maxIx <- SimListCut$maxIx[bitString]
     # in some cases the finalcube is a matrix but list of integer, so we
     # need to convert back to a matrix. Happens for simple models only hence
     # the warning.
