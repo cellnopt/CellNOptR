@@ -400,11 +400,12 @@ create_layout <- function(g, signals, stimuli){
     # first the stimulis
     tryCatch(
         {
-
             tryCatch({
             clusterSource <- subGraph(stimuli, g);
             clusterSource<-list(graph=clusterSource,cluster=FALSE,attrs=c(rank="source"))},
-                 error=function(e){print("error during clustering in subGraph(stimuli, g)? ")})
+                 error=function(e){print("error during clustering in
+subGraph(stimuli, g)? Does the stimuli from your MIDAS are present in the model
+?"); print(stimuli)})
             tryCatch(
                 {clusters[[length(clusters)+1]] = clusterSource},
                  error=function(e){print("error in clusters2. should never be here")}
