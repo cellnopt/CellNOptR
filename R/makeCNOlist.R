@@ -101,6 +101,15 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
         namesStimuli<-namesStimuli[-grep(pattern="NOINHIB", namesStimuli)]
         }
 
+    if(sum("NO-INHIB" %in% namesCues) != 0){
+        namesCues<-namesCues[-grep(pattern="NO-INHIB", namesCues)]
+        namesStimuli<-namesStimuli[-grep(pattern="NO-INHIB", namesStimuli)]
+        }
+    if(sum("NO-LIG" %in% namesCues) != 0){
+        namesCues<-namesCues[-grep(pattern="NO-LIG", namesCues)]
+        namesStimuli<-namesStimuli[-grep(pattern="NO-LIG", namesStimuli)]
+        }
+
     #now extract the names of the signals
     namesSignals<-colnames(dataset$dataMatrix)[dataset$DAcol]
     namesSignals<-sub(
