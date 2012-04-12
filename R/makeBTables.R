@@ -14,7 +14,7 @@
 ##############################################################################
 # $Id$
 makeBTables <-
-function(CNOlist, k, measErr, timePoint=NA){
+function(CNOlist, k=2, measErr=c(0.1, 0), timePoint=NA){
   #CNOlist should be a list as output from makeCNOlist
   #k is the proportionality constant used to determine the threshold
   #measErr should be a 2 value vector (err1, err2) defining the error model as sd^2=err1^2+(err2*data)^2

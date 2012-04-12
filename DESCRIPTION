@@ -1,12 +1,12 @@
-Package: CNORaddlinks
+Package: CNORfeeder
 Type: Package
-Title: CellNetOptimiser using add links feature
+Title: Integration of CellNOptR to add missing links
 Version: 0.1.0
 Date: 2012-03-28
 Author: F.Eduati
 Maintainer: F.Eduati <eduati@ebi.ac.uk>
-Depends: CellNOptR
+Depends: CellNOptR, igraph, minet, catnet
 biocViews: CellBasedAssays, CellBiology, Proteomics, Bioinformatics, TimeCourse
-Description: This package add missing links to network used in networks of signalling pathways based on a previous knowledge network and a set of data upon perturbation of the nodes in the network.
+Description: This package integrates literature-constrained and data-driven methods to infer signalling networks from perturbation experiments. It permits to extends a given network with links derived from the data via various inference methods, and uses information on physical interactions of proteins to guide and validate the integration of links.
 License: GPL-2
 LazyLoad: yes

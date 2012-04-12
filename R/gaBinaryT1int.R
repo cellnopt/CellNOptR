@@ -1,4 +1,4 @@
-gaBinaryT1int<-function(
+	gaBinaryT1int<-function(
 	CNOlist,
 	Model,
 	SimList,
@@ -58,8 +58,20 @@ gaBinaryT1int<-function(
 		SimListCut<-cutSimList(SimList, bitString)
 
 		### ADDED ####
-		ModelCut$indexIntegr<-which(ModelCut$reacID%in%Model$reacID[ModelCut$indexIntegr][as.logical(bitString[ModelCut$indexIntegr])])
+		nInputs<-abs(apply(Model$interMat,2,sum))+1
+		PPIweights<-rep(1,length(Model$reacID))
+		if (!is.null(modelIntegr$IntegrPPIscores)){
+			PPIweights[Model$indexIntegr]<-Model$IntegrPPIscores
+		}
+		IntegrPen<-rep(1,length(Model$reacID))
+		IntegrPen[Model$indexIntegr]<-integrFac
 		
+		nInputsCut<-nInputs[as.logical(bitString)]
+		PPIweightsCut<-PPIweights[as.logical(bitString)]
+		IntegrPenCut<-IntegrPen[as.logical(bitString)]
+		
+		LinkPen<-sum(nInputsCut*PPIweightsCut*IntegrPenCut)
+				
 	#compute the simulated results	
 		SimResults<-simulatorT1(
 			CNOlist=CNOlist,
@@ -75,7 +87,7 @@ gaBinaryT1int<-function(
 			indexList=indexList,
 			timePoint="t1",
 			sizeFac=sizeFac,
-			integrFac=integrFac,
+			LinkPen=LinkPen,
 			NAFac=NAFac,
 			nInTot=length(which(Model$interMat == -1)))
 		nDataP<-sum(!is.na(CNOlist$valueSignals[[2]]))

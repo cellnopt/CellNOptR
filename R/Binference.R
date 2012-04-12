@@ -14,7 +14,7 @@
 ##############################################################################
 # $Id$
 Binference <-
-function(CNOlist, Model="AIC", tempCheckOrders=10, maxIter=100, filename="BAYESIAN"){
+function(CNOlist, mode="AIC", tempCheckOrders=10, maxIter=100, filename="BAYESIAN"){
   
   library(catnet)
   
@@ -73,7 +73,7 @@ function(CNOlist, Model="AIC", tempCheckOrders=10, maxIter=100, filename="BAYESI
   nets <- cnSearchSA(data=psamples, perturbations=perturbations, maxParentSet=3,
                        parentSizes=parentSizes, maxComplexity=0,
                        parentsPool=NULL, fixedParents=NULL,
-                       edgeProb=NULL, dirProb=NULL, selectMode = "AIC",
+                       edgeProb=NULL, dirProb=NULL, selectMode = mode,
                        tempStart=1, tempCoolFact=0.1, tempCheckOrders=tempCheckOrders,
                        maxIter=maxIter, 
                        orderShuffles=1, stopDiff=0,

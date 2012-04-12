@@ -5,7 +5,7 @@ getFitint<-function(
 	indexList,
 	timePoint=c("t1","t2"),
 	sizeFac=0.0001,
-	integrFac=10,
+	LinkPen,
 	NAFac=1,
 	nInTot){
 	
@@ -23,12 +23,13 @@ getFitint<-function(
 	
 	nDataPts<-dim(CNOlist$valueSignals[[tPt]])[1]*dim(CNOlist$valueSignals[[tPt]])[2]
 	
-	nInputs<-length(which(Model$interMat == -1))
+	#nInputs<-length(which(Model$interMat == -1))
 			
-	nInputsIntegr<-length(which(Model$interMat[,Model$indexIntegr] == -1))
+	#nInputsIntegr<-length(which(Model$interMat[,Model$indexIntegr] == -1))
 				
-	sizePen<-((nDataPts*sizeFac)/nInTot)*(nInputs+(integrFac-1)*nInputsIntegr)
-			
+	#sizePen<-((nDataPts*sizeFac)/nInTot)*(nInputs+(integrFac-1)*nInputsIntegr)
+	sizePen<-((nDataPts*sizeFac)/nInTot)*LinkPen
+		
 	score<-deviationPen+NAPen+sizePen
 	
 	return(score)

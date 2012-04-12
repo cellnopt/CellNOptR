@@ -13,7 +13,7 @@
 #
 ##############################################################################
 # $Id$
-searchPPIigraph <- function(node1, node2, UniprotID, igraph, noPKNnodes=TRUE){
+searchPPIigraph <- function(node1, node2, UniprotID, igraph, noPKNnodes=TRUE, color="blue"){
 
   if (noPKNnodes==TRUE){
     #node1 is the ending node and is always a 1 value vector
@@ -52,9 +52,11 @@ searchPPIigraph <- function(node1, node2, UniprotID, igraph, noPKNnodes=TRUE){
           if (ck<ckmin[j]){
             pathOK<-V(gg)[ix]
             tmp<-pathOK$name
+			V(igraph)[tmp]$color<-color
+			E(igraph,path=V(igraph)[tmp])$color<-color
             #paths contains also starting and anding nodes
-            tmp<-tmp[-1]
-            tmp<-tmp[-length(tmp)]
+#tmp<-tmp[-1]
+#            tmp<-tmp[-length(tmp)]
             path[[j]]<-tmp
             
           }
@@ -67,6 +69,6 @@ searchPPIigraph <- function(node1, node2, UniprotID, igraph, noPKNnodes=TRUE){
   ckmin<-ckmin-2
   #for and nodes the maximum distance from all the nodes is taken
   ckmin<-max(ckmin)
-  res<-list(ckmin=ckmin, path=path)
+  res<-list(ckmin=ckmin, path=path, igraph=igraph)
   return(res)
 }

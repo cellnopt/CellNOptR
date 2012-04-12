@@ -1,4 +1,4 @@
-import("CellNOptR")
+import("CellNOptR", "igraph", "minet", "catnet")
 
 export("AddLinkAND",
     "AddLink",
@@ -8,16 +8,13 @@ export("AddLinkAND",
     "getFitint",
     "graph2sif",
     "linksRanking",
-    "makeBTables_noSign",
     "makeBTables",
     "MapBTables2Model",
-    "MapCEN2Model",
+    "MapDDN2Model",
     "MIinference",
     "model2sif",
-    "plotModel4ModelComparison",
-    "plotModel_old",
+    "PPIweight",
     "SearchLinkGraph",
     "searchPPIigraph",
-    "searchPPI",
     "sif2graph",
     "upSignalGraph")

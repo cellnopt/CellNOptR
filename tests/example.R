@@ -1,52 +1,58 @@
-library(CellNOptR)
+# this is an example of the main steps of the integrated CellNOptR - CNORfeeder pipeline
+
+library(CNORfeeder)
+
+# load the data already formatted as CNOlist
+data(CNOlistDREAM,package="CellNOptR")
+# load the model (PKN) already in the CNO format
+data(DreamModel,package="CellNOptR")
+# see CellNOptR documentation to import other data/PKNs)
 
 
-# path to the local copy of the SVN trunk
-pathToSVN="/Users/localadmin/CNO_trunk_svn2"
+# load the UniprotID of proteins in the PKN
+data(UniprotIDdream,package="CNORfeeder")
+# load the curated PIN as igraph 
+data(PPINigraph,package="CNORfeeder")
+
+# A. COMPRESSION (see Fig 1A) - CellNOptR
+# preprocessing step
+res<-preprocessing(Data=CNOlistDREAM, Model=DreamModel)
+Model<-res$model  #this is the compressed model
 
 
-source(paste(pathToSVN,"/CNOR_add_links/R/AddLink.R",sep=""))
-source(paste(pathToSVN,"/CNOR_add_links/R/makeBTables.R",sep=""))
-source(paste(pathToSVN,"/CNOR_add_links/R/SearchLinkGraph.R",sep=""))
-source(paste(pathToSVN,"/CNOR_add_links/R/downCueGraph.R",sep=""))
-source(paste(pathToSVN,"/CNOR_add_links/R/MapBTables2Model.R",sep=""))
-source(paste(pathToSVN,"/CNOR_add_links/R/upSignalGraph.R",sep=""))
-source(paste(pathToSVN,"/CNOR_add_links/R/AddLinkAND.R",sep=""))
-source(paste(pathToSVN,"/CNOR_add_links/R/model2sif.R",sep=""))
-source(paste(pathToSVN,"/CNOR_add_links/R/sif2graph.R",sep=""))
-source(paste(pathToSVN,"/CNOR_add_links/R/AddLinkAND.R",sep=""))
-source(paste(pathToSVN,"/CNOR_add_links/R/getFitint.R",sep=""))
-source(paste(pathToSVN,"/CNOR_add_links/R/gaBinaryT1int.R",sep=""))
+# C. INFERENCE (see Fig 1C) - CNORfeeder
+# FEED inference: codified in Boolean Tables
+BTable <- makeBTables(CNOlist=CNOlistDREAM, k=2, measErr=c(0.1, 0))
 
 
-
-# CNOlist is the original dataset loaded from the csv file
-myData<- readMIDAS(MIDASfile = paste(pathToSVN,"/Model_with_data/sampleModels/LiverDREAM/LiverDREAM.csv", sep=""))
-CNOlist <- makeCNOlist(dataset = myData, subfield = FALSE)
-
-# generation of the boolean tables codifying the effects of stimuli and inhibitors on each measured protein
-BTable <- makeBTables(CNOlist=CNOlist, k=2, measErr=c(0.1, 0))
-
-# model is the original PKN loaded from the sif file
-model=readSif(sifFile = paste(pathToSVN,"/Model_with_data/sampleModels/LiverDREAM/LiverDREAM.sif", sep=""))
-
-# compression and expansion of the model
-checkSignals(CNOlist,model)
-indices<-indexFinder(CNOlist,model,verbose=TRUE)
-NCNOindices<-findNONC(model,indices,verbose=TRUE)
-NCNOcut<-cutNONC(model,NCNOindices)
-indicesNCNOcut<-indexFinder(CNOlist,NCNOcut)
-NCNOcutComp<-compressModel(NCNOcut,indicesNCNOcut)
-indicesNCNOcutComp<-indexFinder(CNOlist,NCNOcutComp)
-NCNOcutCompExp<-expandGates(NCNOcutComp)
-
-Model=NCNOcutCompExp
-
-# integration of inferred links (using Boolean tables) with the Model
-#CEN <- MapBTables2Model(BTable=BTable,Model=NULL,allInter=TRUE)
+# D. INTEGRATION (see Fig 1D) - CNORfeeder
+# integration with the compressed model
 modelIntegr <- MapBTables2Model(BTable=BTable,Model=Model,allInter=TRUE)
+# see example in ?MapDDN2Model to use other reverse-engineering methods
 
-# a field $indexIntegr with the index of the integrated links is added to the model,
-# the list of links added beyond the PKN can be obtained as
-modelIntegr$reacID[modelIntegr$indexIntegr]
 
+# E. WEGHTING (see Fig 1E) - CNORfeeder
+# proritization of links based on the PIN
+# the followig step may take a while:
+# if not run, all integrated links will have the same weight in the training step
+# resPPIweight <- PPIweight(modelIntegr=modelIntegr,PKNmodel=DreamModel,CNOlist=CNOlistDREAM,UniprotID=UniprotIDdream,PPINigraph=PPINigraph)
+# modelIntegr<-resPPIweight$modelIntegr
+
+
+# B. TRAINING (see Fig 1B) - CellNOptR
+DreamFields4Sim<-prep4Sim(modelIntegr)
+initBstring<-rep(1,length(modelIntegr$reacID))
+# training to data using genetic algorithm (run longer to obtain better results)
+DreamT1opt<-gaBinaryT1int(
+CNOlist=CNOlistDREAM,
+	Model=modelIntegr,
+	SimList=DreamFields4Sim,
+	indexList=res$indices,
+	initBstring=initBstring,
+	maxGens=2,
+	PopSize=5,
+	verbose=FALSE)
+
+
+# plot the model with selected links in geen (if derived form the PKN) and in purple (if integrated)
+plotModel(model=modelIntegr, cnolist=CNOlistDREAM, bString=DreamT1opt$bString, indexIntegr=modelIntegr$indexIntegr)
