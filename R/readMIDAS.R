@@ -102,8 +102,17 @@ readMIDAS<-function(MIDASfile, verbose=TRUE){
         print(paste("Your data set comprises measurements on ", length(DVcol)," different species"))
     }
 
+    # first, replace all CellType string into CellLine.
+    CellType<-grep(pattern="(TR:\\w*:CellType)",
+        x=colnames(data),ignore.case=TRUE,perl=TRUE,value=TRUE)
+    for (x in CellType){
+        names(data)[names(data)==x] <- sub(":CellType", ":CellLine",x)
+    }
+
+    # then look at all CellLine strings before removing them.
     CellLine<-grep(pattern="(TR:\\w*:CellLine)",
         x=colnames(data),ignore.case=TRUE,perl=TRUE,value=TRUE)
+
 
     if(length(CellLine) != 0){
 
@@ -122,7 +131,7 @@ readMIDAS<-function(MIDASfile, verbose=TRUE){
         if (verbose){
             print(paste("Your data set comprises ", length(TRcol),"stimuli and inhibitors"))
         }
-        warning("There is no cell line information. If some of your TR columns represents the cell lines, please indicate it in your file by naming them 'TR:name:CellLine'")
+        warning("There is no cell line information. If some of your TR columns represents the cell lines, please indicate it in your file by naming them 'TR:name:CellLine' (you may use TR:name:CellType' as well.")
     }
 
     if (verbose){
