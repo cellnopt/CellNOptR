@@ -35,7 +35,12 @@ readSif<-function(sifFile){
 		}
 		
 	reacID<-apply(sif,1,createReacID)
-	
+
+    # reaction with and gates can not have "and -1 specy" reaction: edge must be
+    # 1
+    if (any(substring(reacID, 1,4)=="!and")==TRUE){
+        stop("Found an and gate with not edge. This is not possible check your SIF file. Must be 'and 1 specy', not 'and -1 specy' !!")
+    }
 #Create empty interMat and notMat	
 	interMat<-matrix(data=0,nrow=length(namesSpecies), ncol=dim(sif)[1])
 	rownames(interMat)<-namesSpecies

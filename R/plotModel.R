@@ -36,6 +36,9 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexIntegr=NA,
   if (is.null(graphvizParams$edgecolor)==TRUE) {
     graphvizParams$edgecolor="black"
   }
+  if (is.null(graphvizParams$nodeLabels)==TRUE) {
+    graphvizParams$nodeLabels=NULL
+  }
 
 
 
@@ -86,7 +89,11 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexIntegr=NA,
         v1 = raw$V1 # alias to vertices in column 1
         v2 = raw$V3 # alias to vertices in column 2
         edges = raw$V2 # alias to the edges
-        BStimes<-rep(1,length(edges)) # the bitstring to color the edges
+        if (is.null(bString)){# default is only 1 so all edges are accepted
+            BStimes<-rep(1,length(edges))
+        }else{
+            BStimes<-bString
+        }
         Integr<-rep(0,length(edges))  # 
     }
     # otherwise, the user probably provided the model already read by readSif
@@ -206,7 +213,9 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexIntegr=NA,
     recipEdges="distinct" # an edge A->B does not overlap with B->A
 
     # --------------------------------------- Build the node and edges attributes list
-    nodeAttrs = createNodeAttrs(g, vertices, stimuli, signals, inhibitors, ncno, compressed)
+    nodeAttrs = createNodeAttrs(g, vertices, stimuli, signals, inhibitors, ncno,
+compressed, nodeLabels=graphvizParams$nodeLabels)
+
     res = createEdgeAttrs(v1, v2, edges, BStimes, Integr,
         user_edgecolor=graphvizParams$edgecolor)
     # an alias
@@ -250,8 +259,8 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexIntegr=NA,
     fontsize=graphvizParams$fontsize
     attrs <- list(
         node=list(fontsize=fontsize,fontname="Helvetica",style="filled,bold"),
-        edge=list(style="solid",penwidth=1,weight="1.0",arrowsize=graphvizParams$arrowsize),
-        graph=list(splines=TRUE,size=graphvizParams$size,bgcolor="white",ratio="fill", pad="0.5,0.5",dpi=72)
+        edge=list(style="solid",penwidth=1,weight="1.0",arrowsize=graphvizParams$arrowsize,minlen=3),
+        graph=list(splines=TRUE,size=graphvizParams$size,bgcolor="white",ratio="fill",pad="0.5,0.5",dpi=72)
         )
 
     copyg <- g
@@ -434,7 +443,8 @@ subGraph(stimuli, g)? Does the stimuli from your MIDAS are present in the model
 
 # Create the node attributes and save in a list to be used either by the
 # plot function of the nodeRenderInfo function.
-createNodeAttrs <- function(g, vertices, stimuli, signals, inhibitors, ncno, compressed){
+createNodeAttrs <- function(g, vertices, stimuli, signals, inhibitors, ncno,
+compressed, nodeLabels=NULL){
 
     # ----------------------------------------------- Build the node attributes list
     fillcolor <- list()
@@ -459,6 +469,20 @@ createNodeAttrs <- function(g, vertices, stimuli, signals, inhibitors, ncno, com
         width[s] <- 2
         fixedsize[s] <- FALSE
         shape[s] <- "ellipse" 
+    }
+
+    # user can provide a list of labels for the nodes. Usuful to show attributes
+    # of a node.
+    if (is.null(nodeLabels)==FALSE){
+        names(nodeLabels)<-vertices
+        if (length(nodeLabels)!=length(vertices)){
+            stop("if nodeLabels provided, it must be of same size as vertices")
+        }
+        else{
+            for (s in vertices){
+                label[s] = nodeLabels[s]
+            }
+        }
     }
 
     # The stimulis node
@@ -529,7 +553,6 @@ createNodeAttrs <- function(g, vertices, stimuli, signals, inhibitors, ncno, com
 # Create the node attributes and save in a list to be used either by the
 # plot function of the edgeRenderInfo function.
 createEdgeAttrs <- function(v1, v2, edges, BStimes ,Integr, user_edgecolor){
-
     edgewidth_c = 3 # default edge width
 
     # The edge attributes
@@ -565,16 +588,30 @@ createEdgeAttrs <- function(v1, v2, edges, BStimes ,Integr, user_edgecolor){
         v = (BStimes[i]*100)%/%1
         # width of the edges
         if (v != 100){
+            # first, let us build the color
+            if (edgecolor[edgename] == 'red'){
+                # if red, go from red to light pink color according to v value
+                color = rgb(1,1-(max(20,v)/100),1-(max(20,v)/100))
+            }
+            else if (edgecolor[edgename] == 'black'){
+                # if black, go from grey dark to grey light color according to v value
+                color = paste("grey", as.character(100.-v), sep="")
+            }
+            else{
+                # otherwise, just keep the color identical and only add label
+                color = edgecolor[edgename]
+            }
+            # now, we fill the fields with color and width
             if (v == 0){
-              edgewidth[edgename]  = edgewidth_c*(10./100)
-              edgecolor[edgename] <- paste("grey", as.character(100.-10.), sep="")
+                edgewidth[edgename]  = edgewidth_c*(10./100)
+                edgecolor[edgename] = color
+                # and gates that have no link are removed.
                 if (length(grep("and", edgename))>=1){
                     toremove <- append(toremove, edgename)
                 }
-                #edgecolor[edgename] = "transparent"
             }
             else{
-              edgecolor[edgename] <- paste("grey", as.character(100-v), sep="")
+              edgecolor[edgename] = color
               edgewidth[edgename] = edgewidth_c*(v/100)
               label[edgename] = as.character(v)
             }
