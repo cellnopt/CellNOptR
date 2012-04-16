@@ -102,13 +102,14 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
         }
 
     if(sum("NO-INHIB" %in% namesCues) != 0){
-        namesCues<-namesCues[-grep(pattern="NO-INHIB", namesCues)]
-        namesStimuli<-namesStimuli[-grep(pattern="NO-INHIB", namesStimuli)]
-        }
+        stop("Found a column with NO-INHIB tag. MIDAS files must use NOINHIB instead. Fix your MIDAS file please")
+    }
     if(sum("NO-LIG" %in% namesCues) != 0){
-        namesCues<-namesCues[-grep(pattern="NO-LIG", namesCues)]
-        namesStimuli<-namesStimuli[-grep(pattern="NO-LIG", namesStimuli)]
-        }
+        stop("Found a column with NO-LIG tag. MIDAS files do not accept NO-LIG. use NOINHIB or NOCYTO instead. Fix your MIDAS file please")
+    }
+    if(sum("NO-CYTO" %in% namesCues) != 0){
+        stop("Found a column with NO-CYTO tag. MIDAS file must use NOCYTO instead. Fix your MIDAS file please")
+    }
 
     #now extract the names of the signals
     namesSignals<-colnames(dataset$dataMatrix)[dataset$DAcol]
@@ -136,7 +137,6 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
 #2.I remove the columns with NOCYTO or NOINHIB (if they exist), they don't bring any info
 
     if(length(grep(pattern="NOCYTO",colnames(dataset$dataMatrix)[dataset$TRcol])) != 0){
-
         nocyto<-grep(pattern="NOCYTO",colnames(dataset$dataMatrix)[dataset$TRcol])
         TRcol<-dataset$TRcol[-nocyto]
         cues<-dataset$dataMatrix[,TRcol]
