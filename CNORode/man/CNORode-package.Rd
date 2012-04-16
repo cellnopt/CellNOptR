@@ -13,7 +13,7 @@ logic based ODE models based on the Odefy approach.
 \tabular{ll}{
 Package: \tab CNORode\cr
 Type: \tab Package\cr
-Version: \tab 0.9\cr
+Version: \tab 1.0\cr
 Date: \tab 2011-11-03\cr
 License: \tab GPL-2\cr
 LazyLoad: \tab yes\cr

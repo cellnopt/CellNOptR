@@ -49,7 +49,7 @@ createLBodeContPars <-function
 				count=count+1;
 				parNames[count]=paste(namesSpecies[inputs[i]],"_n_",namesSpecies[j],sep="");
 				parValues[count]=default_n;
-				index_n=c(index_n,count);
+				index_k=c(index_k,count);
 				LB[count]=LB_n;
 				UB[count]=UB_n;
 				if(opt_n)index_opt_pars=c(index_opt_pars,count);
@@ -57,7 +57,7 @@ createLBodeContPars <-function
 				count=count+1;
 				parNames[count]=paste(namesSpecies[inputs[i]],"_k_",namesSpecies[j],sep="");
 				parValues[count]=default_k;
-				index_k=c(index_k,count);
+				index_n=c(index_k,count);
 				LB[count]=LB_k;
 				UB[count]=UB_k;
 				if(opt_k)index_opt_pars=c(index_opt_pars,count);
