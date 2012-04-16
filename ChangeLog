@@ -1,3 +1,14 @@
+16/April/2010 1.3.3
+--------------------
+* rev996: fix bug report 78 to use [[1]] instead of t0 to acces valueSignals in
+  the makecnolist objects.
+* rev994: fix bug report 97 to have red links even when bstring is provided. Add
+  trivial sanity check in readSif to prevent "and -1 specy" reaction to be
+  accepted by error in a SIF file.
+* rev993: fix bug report 88. NO-INHIB and NO-CYTO are not accepted following
+  agreement that used must use NOINHIB and NOCYTO instead. This cancels rev896
+  fix.
+
 3e/April/2010 1.3.2
 ----------------------
 * rev896: makeCNOlist removes NO-INHIB and NO-LIG columns
