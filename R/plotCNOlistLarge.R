@@ -62,7 +62,7 @@ plotCNOlistLarge<-function(CNOlist,nsplit=4, newDevice=FALSE){
 		CNOlist$valueCues<-CNOlist$valueCues[indices,]
 		CNOlist$valueStimuli<-CNOlist$valueStimuli[indices,]
 		CNOlist$valueInhibitors<-CNOlist$valueInhibitors[indices,]
-		CNOlist$valueSignals$t0<-CNOlist$valueSignals$t0[indices,]
+		CNOlist$valueSignals[[1]]<-CNOlist$valueSignals[[1]][indices,]
 		
 		for(n in 2:length(CNOlist$valueSignals)){
 			CNOlist$valueSignals[[n]]<-CNOlist$valueSignals[[n]][indices,]

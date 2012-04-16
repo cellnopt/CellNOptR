@@ -212,7 +212,7 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
     }
 #Do the t=0 matrix, and produce a new cues matrix, that does not contain duplicates 
 #(1 row per condition and different matrices will be build for the different times)
-    valueSignals<-list(t0=matrix(data=0,nrow=whereTimes[2],ncol=length(dataset$DVcol)))
+    valueSignals<-list(matrix(data=0,nrow=whereTimes[2],ncol=length(dataset$DVcol)))
     
 #This vector tells me which columns of the cues matrix I should pay attention to when 
 #copying data across for time=0    
@@ -243,7 +243,7 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
         if(length(present) == 0){
             for(n in timesRows[(whereTimes[1]+1):(whereTimes[1]+whereTimes[2])]){
                     if(sum(cues[n,zerosCond]) == 0){
-                        valueSignals$t0[count,]<-as.numeric(dataset$dataMatrix[i,dataset$DVcol])
+                        valueSignals[[1]][count,]<-as.numeric(dataset$dataMatrix[i,dataset$DVcol])
                         newcues[count,]<-cues[n,]
                         count=count+1
                         }
@@ -253,7 +253,7 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
                 if(length(zerosCond[which(cues[n,zerosCond] > 0)]) == length(present)){
                     if(all(zerosCond[which(cues[n,zerosCond] > 0)] == present) && 
                         length(which(cues[n,zerosCond] > 0)) != 0){
-                        valueSignals$t0[count,]<-as.numeric(dataset$dataMatrix[i,dataset$DVcol])
+                        valueSignals[[1]][count,]<-as.numeric(dataset$dataMatrix[i,dataset$DVcol])
                         newcues[count,]<-cues[n,]
                         count=count+1
                     }
@@ -297,6 +297,12 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
         valueStimuli<-as.matrix(valueStimuli,nrow=dim(newcues)[1])
         }
         
+
+    # concatenate [[1]] to the list of valueSignals, naming it t0. Use
+    # temporarely for back compatibility. [[1]] was indeed named t0. 
+    # we decided to have consistency ad use indices for all time. 
+    # all codes have been changed but maybe some scripts are still using t0
+    valueSignals<-c(cnolist$valueSignals, list(t0=cnolist$valueSignals[[1]])
     return(list(
         namesCues=namesCues,
         namesStimuli=namesStimuli,
