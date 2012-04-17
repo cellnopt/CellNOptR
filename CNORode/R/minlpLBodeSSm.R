@@ -26,10 +26,19 @@ function
 )
 {	
 
-    tryCatch({library(essR)}, error=function(e){stop("essR package not found.
-    SSm not available. Try the Genetic Algorithm optimiser instead.")})
+	#Check if essR is installed
+	dummy_f<-function(x){
+		return(0);
+	}
+	problem<-list(f=dummy_f,x_L=rep(0),x_U=c(1));
+	opts<-list();
 
-
+    tryCatch({essR(problem,opts)}, error=function(e){stop("essR package not found.
+	SSm not available. Install the package and load it or try the Genetic Algorithm
+	optimiser instead.")});
+	#################################################################################
+	
+	
 	adjMat=incidence2Adjacency(model);
 	if(is.null(ode_parameters))
 	{
@@ -71,6 +80,5 @@ function
 	ode_parameters$parValues[ode_parameters$index_opt_pars]=optimization_res$xbest[1:n_cont];
 	ode_parameters$ssm_results=optimization_res;
 	return(ode_parameters);
-	
 }
 

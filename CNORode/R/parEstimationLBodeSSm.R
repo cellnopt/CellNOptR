@@ -23,9 +23,16 @@ parEstimationLBodeSSm <-function
 		maxNumSteps=100000,		maxErrTestsFails=50,	nan_fac=1
 )
 {
+	#Check if essR is installed
+	dummy_f<-function(x){
+		return(0);
+	}
+	problem<-list(f=dummy_f,x_L=rep(0),x_U=c(1));
+	opts<-list();
 
-    tryCatch({library(essR)}, error=function(e){stop("essR package not found.
-SSm not available. Try the Genetic Algorithm optimiser instead.")})
+    tryCatch({essR(problem,opts)}, error=function(e){stop("essR package not found.
+	SSm not available. Install the package and load it or try the Genetic Algorithm
+	optimiser instead.")});
 
 	adjMat=incidence2Adjacency(model);
 	if(is.null(ode_parameters)){
