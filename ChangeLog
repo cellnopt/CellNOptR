@@ -1,5 +1,7 @@
 16/April/2010 1.3.3
 --------------------
+* rev997: fix bug 89 to allows only CellLine pattern in the MIDAS header but
+  also CellType.
 * rev996: fix bug report 78 to use [[1]] instead of t0 to acces valueSignals in
   the makecnolist objects.
 * rev994: fix bug report 97 to have red links even when bstring is provided. Add
