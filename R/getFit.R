@@ -33,7 +33,7 @@ getFit<-function(
     # if t0 is provided and we are interested in t1
     # then  score is based on t1 but also t0
     if (tPt == 2 && is.na(SimResultsT0)==FALSE){
-        Diff0<-SimResultsT0[,indexList$signals]-CNOlist$valueSignals$t0
+        Diff0<-SimResultsT0[,indexList$signals]-CNOlist$valueSignals[[1]]
         Diff<-SimResults-CNOlist$valueSignals[[tPt]]
     	r0<-Diff0^2
 	    r<-Diff^2
