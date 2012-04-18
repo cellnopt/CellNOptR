@@ -90,19 +90,19 @@
 }
 
 \examples{
-	library(CNORode)
-	data("ToyCNOlist",package="CNORode");
-	data("ToyModel",package="CNORode");
-	data("ToyIndices",package="CNORode");
+library(CNORode)
+data("ToyCNOlist",package="CNORode");
+data("ToyModel",package="CNORode");
+data("ToyIndices",package="CNORode");
 
-	ode_parameters=createLBodeContPars(model,random=TRUE);
-	minlp_obj_function=getLBodeMINLPObjFunction(cnolist, model,ode_parameters,indices);
+ode_parameters=createLBodeContPars(model,random=TRUE);
+minlp_obj_function=getLBodeMINLPObjFunction(cnolist, model,ode_parameters,indices);
 
-	n_int_vars=dim(model$interMat)[2];
-	x_int=round(runif(n_int_vars))
-	x_cont=ode_parameters$parValues;
-	x=c(x_cont,x_int);
-	f=minlp_obj_function(x);
+n_int_vars=dim(model$interMat)[2];
+x_int=round(runif(n_int_vars))
+x_cont=ode_parameters$parValues;
+x=c(x_cont,x_int);
+f=minlp_obj_function(x);
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

@@ -53,10 +53,9 @@
 \keyword{CNORode}
 
 \seealso{
-	~~ Optional links to other man pages, e.g. ~~
-	~~ \code{\link{CellNOptR}} ~~
-	~~ \code{\link{parEstimationLBode}} ~~
-	~~ \code{\link{getLBodeModelSim}} ~~
-	~~ \code{\link{parEstimationLBode}} ~~
-	~~ \code{\link{plotLBodeFitness}} ~~
+	\code{\link{CellNOptR}},
+	\code{\link{parEstimationLBode}},
+	\code{\link{getLBodeModelSim}},
+	\code{\link{parEstimationLBode}} 
+	\code{\link{plotLBodeFitness}}.
 }

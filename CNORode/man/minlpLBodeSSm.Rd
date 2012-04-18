@@ -158,22 +158,23 @@
 }
 
 \examples{
-	\dontrun{library(CNORode)
-	data("ToyCNOlist",package="CNORode");
-	data("ToyModel",package="CNORode");
-	data("ToyIndices",package="CNORode");
+
+\dontrun{
+data("ToyCNOlist",package="CNORode");
+data("ToyModel",package="CNORode");
+data("ToyIndices",package="CNORode");
 	
-	ode_parameters=createLBodeContPars(model,random=TRUE);
+ode_parameters=createLBodeContPars(model,random=TRUE);
 
-	#Visualize intial simulation
-	#simulatedData=plotLBodeFitness(cnolist, model,ode_parameters,indices=indices)
-	ode_parameters=minlpLBodeSSm(cnolist,model,ode_parameters,
-	indices=indices,maxtime=10,ndiverse=10,dim_refset=6);
-	model=ode_parameters$model;
+#Visualize initial solution
+simulatedData=plotLBodeFitness(cnolist, model,ode_parameters,indices=indices)
+ode_parameters=minlpLBodeSSm(cnolist,model)
+model=ode_parameters$model;
 
-	#Visual solution after optimization
-	#simulatedData=plotLBodeFitness(cnolist,model,indices=indices);
-	}
+#Visualize fitted solution
+simulatedData=plotLBodeFitness(cnolist,model,indices=indices);
+}
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

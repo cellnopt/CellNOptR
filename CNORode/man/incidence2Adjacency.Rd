@@ -24,6 +24,10 @@
 	Directed Adjacency matrix of size n_species by n_species. 
 }
 
+\note{
+	For internal use of CNORode.
+}
+
 \author{
 	David Henriques, Thomas Cokelaer
 }

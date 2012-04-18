@@ -44,19 +44,6 @@
 	\code{\link{parEstimationLBodeGA}}
 }
 
-\examples{
-	#Visualize intial simulation
-	#simulatedData=plotLBodeFitness(cnolist, model,ode_parameters,indices=indices)
-	params = defaultParametersGA()
-	params$maxtime = 10
-	params$ndiverse = 10
-	params$dim_refset = 6
-	\dontrun{
-	ode_parameters=parEstimationLBode(cnolist,model,ode_parameters=ode_parameters,
-	indices=indices,paramsGA=params);
-	}
-}
-
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 

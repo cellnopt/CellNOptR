@@ -8,7 +8,7 @@
 }
 
 \description{
-	This function uses ssmR to perform parameter estimation. The objective function
+	This function uses essR to perform parameter estimation. The objective function
 	is the same as the one provided by \code{\link{getLBodeContObjFunction}}.
 }
 
@@ -151,21 +151,22 @@
 }
 
 \examples{
-	\dontrun{
-		data("ToyCNOlist",package="CNORode");
-		data("ToyModel",package="CNORode");
-		data("ToyIndices",package="CNORode");
-		library(essR);
+\dontrun{
+data("ToyCNOlist",package="CNORode");
+data("ToyModel",package="CNORode");
+data("ToyIndices",package="CNORode");
 
-		ode_parameters=createLBodeContPars(model,random=TRUE);
-		%Visualize intial simulation
-		%simulatedData=plotLBodeFitness(cnolist, model,ode_parameters,indices=indices)
-		ode_parameters=parEstimationLBodeSSm(cnolist,model,ode_parameters,
-		indices=indices,maxtime=10,ndiverse=10,dim_refset=6);
+ode_parameters=createLBodeContPars(model,random=TRUE);
 
-		%Visual solution after optimization
-		%simulatedData=plotLBodeFitness(cnolist, model,indices=indices,ode_parameters=ode_parameters);
-	}
+#Visualize intial simulation
+simulatedData=plotLBodeFitness(cnolist, model,ode_parameters,indices=indices)
+
+ode_parameters=parEstimationLBodeSSm(cnolist,model,ode_parameters,
+indices=indices,maxtime=20,ndiverse=50,dim_refset=6);
+
+#Visualize fitterd solution
+simulatedData=plotLBodeFitness(cnolist, model,indices=indices,ode_parameters=ode_parameters);
+}
 }
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the

@@ -25,25 +25,25 @@ function
 	nan_fac=1
 )
 {	
-
+	adjMat=incidence2Adjacency(model);
+	if(is.null(ode_parameters))
+	{
+		ode_parameters=createLBodeContPars(model,random=TRUE);
+	}
+	
 	#Check if essR is installed
 	dummy_f<-function(x){
 		return(0);
 	}
 	problem<-list(f=dummy_f,x_L=rep(0),x_U=c(1));
 	opts<-list();
+	opts$maxeval=0;
+	opts$maxtime=0;
 
-    tryCatch({essR(problem,opts)}, error=function(e){stop("essR package not found.
+    val=tryCatch({essR(problem,opts)}, error=function(e){print("essR package not found.
 	SSm not available. Install the package and load it or try the Genetic Algorithm
-	optimiser instead.")});
-	#################################################################################
-	
-	
-	adjMat=incidence2Adjacency(model);
-	if(is.null(ode_parameters))
-	{
-		ode_parameters=createLBodeContPars(model,random=TRUE);
-	}
+	optimiser instead.");return(ode_parameters);});
+	######################################################################################
 	
 	n_cont=length(ode_parameters$index_opt_pars);
 	n_int=dim(model$interMat)[2];
@@ -66,7 +66,7 @@ function
 	opts$maxtime=maxtime;
 	if(!is.null(ndiverse))opts$ndiverse=ndiverse;      
 	if(!is.null(dim_refset))opts$dim_refset=dim_refset;
-	optimization_res=essR_optim(problem,opts);
+	optimization_res=essR(problem,opts);
 	
 	ode_parameters$bitString=optimization_res$xbest[(n_cont+1):(n_cont+n_int)];
 	index_reactions=which(as.logical(ode_parameters$bitString));

@@ -9,9 +9,9 @@
 \description{
 	This function configures returns the objective function that can be used to evaluate
 	the fitness of a logic based ODE model using a particular set of parameters.
-	This function can be particular useful if you are planing to couple a nonlinear
+	This function can be particularly useful if you are planing to couple a nonlinear
 	optimization solver. The returned value of the objective function corresponds to 
-	the mean squared value.
+	the mean squared value normalized by the number of data points.
 }
 
 \usage{

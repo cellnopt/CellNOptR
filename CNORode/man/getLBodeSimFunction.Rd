@@ -11,7 +11,9 @@
 }
 
 \usage{
-	getLBodeSimFunction(cnolist1, model1, adjMatrix1, indices1, odeParameters1, time1 = 1, verbose1 = 0, transfer_function1 = 3, reltol1 = 1e-04, atol1 = 0.001, maxStepSize1 = Inf, maxNumSteps1 = 1e+05, maxErrTestsFails1 = 50)
+	getLBodeSimFunction(cnolist1, model1, adjMatrix1, indices1, odeParameters1,
+	time1 = 1, verbose1 = 0, transfer_function1 = 3, reltol1 = 1e-04, atol1 = 0.001,
+	maxStepSize1 = Inf, maxNumSteps1 = 1e+05, maxErrTestsFails1 = 50)
 }
 
 %- maybe also 'usage' for other objects documented here.
@@ -61,7 +63,7 @@
 }
 
 \value{
-	This function is for CNORode internal use.
+	A function that returns a simulated model.
 }
 
 \author{

@@ -8,15 +8,16 @@
 }
 
 \description{
-	Creates a list with the needed the continuous parameters to simulate the model,
+	Creates a list with the continuous parameters  to simulate the model,
 	upper and lower bounds for the parameter estimation, parameters names, indices of
-	the parameters and others.
+	the parameters and other information.
 }
 
 \usage{
 	createLBodeContPars(model, LB_n = 1, LB_k = 0.1, LB_tau = 0.01, 
-	UB_n = 5, UB_k = 0.9, UB_tau = 10, default_n = 3, default_k = 0.5, default_tau = 1,
-	LB_in = c(), UB_in = c(), opt_n = TRUE, opt_k = TRUE, opt_tau = TRUE, random = FALSE)
+	UB_n = 5, UB_k = 0.9, UB_tau = 10, default_n = 3, default_k = 0.5,
+	default_tau = 1, LB_in = c(), UB_in = c(), opt_n = TRUE, opt_k = TRUE,
+	opt_tau = TRUE, random = FALSE)
 }
 
 %- maybe also 'usage' for other objects documented here.

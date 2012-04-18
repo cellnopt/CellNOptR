@@ -22,12 +22,12 @@
 	}
 }
 
-\details{
-	For internal use of CNORode.
-}
-
 \value{
 	A numeric vector with 0's for positions which are states and 1's  for positions which are.
+}
+
+\note{
+	For internal use of CNORode.
 }
 
 \author{

@@ -85,11 +85,11 @@
 }
 
 \examples{
-	library(CNORode)
-	data('ToyCNOlist',package='CNORode');
-	data('ToyModel',package='CNORode');
-	data('ToyIndices',package='CNORode');
-	modelSimulation=getLBodeModelSim(cnolist, model,indices=indices);
+library(CNORode)
+data('ToyCNOlist',package='CNORode');
+data('ToyModel',package='CNORode');
+data('ToyIndices',package='CNORode');
+modelSimulation=getLBodeModelSim(cnolist, model,indices=indices);
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
