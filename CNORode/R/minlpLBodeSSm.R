@@ -29,8 +29,10 @@ function
 	if(is.null(ode_parameters))
 	{
 		ode_parameters=createLBodeContPars(model,random=TRUE);
+		
 	}
 	
+	ode_parameters$model=model;
 	#Check if essR is installed
 	dummy_f<-function(x){
 		return(0);
