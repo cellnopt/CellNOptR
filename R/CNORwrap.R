@@ -32,39 +32,37 @@
 #16.Write the scaffold and PKN
 #17.Write the report
 
-CNORwrap<-function(paramsList,Data,Model,Name,NamesData,Time=1){
+CNORwrap<-function(paramsList=NA,Data,Model,Name,NamesData=NA,Time=1){
 
-#if the paramsList is set to NA, it means that only default parameters have been provided
-#so we are going to build the parameters list with those
+    #if the paramsList is set to NA, it means that only default parameters have been provided
+    #so we are going to build the parameters list with those
 
-	if(is.na(paramsList[1])){
-		paramsList<-list()
-		paramsList$Data<-Data
-		paramsList$Model<-Model
-		paramsList$sizeFac<-1e-04
-		paramsList$NAFac<-1
-		paramsList$PopSize<-50
-		paramsList$Pmutation<-0.5
-		paramsList$MaxTime<-60
-		paramsList$maxGens<-500
-		paramsList$StallGenMax<-100
-		paramsList$SelPress<-1.2
-		paramsList$elitism<-5
-		paramsList$RelTol<-0.1
-		paramsList$verbose<-FALSE
-		}
-		
-#1.Plot the CNOlist
+	if(is.na(paramsList[1])==TRUE){
+        paramsList <- defaultParameters(Data, Model)
+	}
+
+    if (is.list(NamesData)==FALSE){
+        if (is.na(NamesData)==TRUE){
+            NamesData <- list(
+                CNOlist=paste(Name, "Data",sep=""), 
+               Model=paste(Name,"Model", sep=""))
+        }
+        else{
+            stop("NamesData must be a list or kept to the default values (NA)")
+        }
+    }
+
+    #1.Plot the CNOlist
 	plotCNOlist(paramsList$Data)
 	plotCNOlistPDF(
 		CNOlist=paramsList$Data,
 		filename=paste(Name,"DataPlot.pdf",sep="")
 		)
-		
-#2.Checks data to model compatibility
+
+    #2. Checks data to model compatibility
 	checkSignals(CNOlist=paramsList$Data,Model=paramsList$Model)
 	
-#3.Find the indices, in the model, of the species that are inh/stim/sign
+    #3. Find the indices, in the model, of the species that are inh/stim/sign
 	Indices<-indexFinder(
 		CNOlist=paramsList$Data,
 		Model=paramsList$Model,
