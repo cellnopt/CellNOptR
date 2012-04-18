@@ -1,5 +1,6 @@
 16/April/2010 1.3.3
 --------------------
+* rev1025: CNORwrap NAmesData and paramsList are now optional
 * rev997: fix bug 89 to allows only CellLine pattern in the MIDAS header but
   also CellType.
 * rev996: fix bug report 78 to use [[1]] instead of t0 to acces valueSignals in
