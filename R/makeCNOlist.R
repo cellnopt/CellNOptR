@@ -298,11 +298,6 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
         }
         
 
-    # concatenate [[1]] to the list of valueSignals, naming it t0. Use
-    # temporarely for back compatibility. [[1]] was indeed named t0. 
-    # we decided to have consistency ad use indices for all time. 
-    # all codes have been changed but maybe some scripts are still using t0
-    valueSignals<-c(valueSignals, list(t0=valueSignals[[1]]))
     return(list(
         namesCues=namesCues,
         namesStimuli=namesStimuli,
