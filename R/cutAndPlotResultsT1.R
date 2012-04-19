@@ -13,7 +13,8 @@
 #
 ##############################################################################
 # $Id$
-cutAndPlotResultsT1<-function(
+
+cutAndPlotResultsT1 <- function(
 	Model,
 	bString,
 	SimList,
@@ -21,53 +22,49 @@ cutAndPlotResultsT1<-function(
 	indexList,
 	plotPDF=FALSE,
     tag=NULL,
-    show=TRUE){
-	
-	Modelcut<-Model
-	Modelcut$interMat<-Modelcut$interMat[,as.logical(bString)]
-	Modelcut$notMat<-Modelcut$notMat[,as.logical(bString)]
-	Modelcut$reacID<-Modelcut$reacID[as.logical(bString)]
+    show=TRUE,
+    tPt=CNOlist$timeSignals[2]) {
 
+	Modelcut <- Model
+	Modelcut$interMat <- Modelcut$interMat[,as.logical(bString)]
+	Modelcut$notMat <- Modelcut$notMat[,as.logical(bString)]
+	Modelcut$reacID <- Modelcut$reacID[as.logical(bString)]
 
-    SimListCut<-cutSimList(SimList, bString)
+	SimListCut<-cutSimList(SimList,bString)
 
-	Sim<-simulatorT1(CNOlist=CNOlist,Model=Modelcut,SimList=SimListCut,indexList=indexList)
-	SimRes<-as.matrix(Sim[,indexList$signals])
+	Sim <- simulatorT1(CNOlist=CNOlist,Model=Modelcut,SimList=SimListCut,indexList=indexList)
+	SimRes <- as.matrix(Sim[,indexList$signals])
 
     # former code when t0 was not taken into account (everything set to zero)
-	#SimResults<-list(t0=matrix(data=0,nrow=dim(SimRes)[1],ncol=dim(SimRes)[2]),t1=SimRes)
+	#SimResults <- list(t0=matrix(data=0,nrow=dim(SimRes)[1],ncol=dim(SimRes)[2]),t1=SimRes)
 
 	# new code
-	Sim0<-simulatorT0(CNOlist=CNOlist,Model=Modelcut,SimList=SimListCut,indexList=indexList)
-	SimRes0<-as.matrix(Sim0[,indexList$signals])
-	SimResults<-list(t0=SimRes0,t1=SimRes)
-
-	expResults<-list(t0=CNOlist$valueSignals[[1]],t1=CNOlist$valueSignals[[2]])
-	
-    if (show == TRUE){
-    	plotOptimResults(
-	    	SimResults=SimResults,
-		    expResults=expResults,
-    		times=CNOlist$timeSignals[1:2],
-	    	namesCues=CNOlist$namesCues,
-		    namesSignals=CNOlist$namesSignals,
-    		valueCues=CNOlist$valueCues)
-	}
-	if(plotPDF == TRUE){
-        if ( is.null(tag)){
-               filename<-paste(deparse(substitute(Model)), "SimResultsT1.pdf", sep="")
-        }
-        else{
-            filename<-paste(tag, "SimResultsT1.pdf", sep="_")
-        }
-		plotOptimResultsPDF(
+	Sim0 <- simulatorT0(CNOlist=CNOlist,Model=Modelcut,SimList=SimListCut,indexList=indexList)
+	SimRes0 <- as.matrix(Sim0[,indexList$signals])
+	SimResults <- list(t0=SimRes0,t1=SimRes)
+		
+    if(show==TRUE) {
+    	plotOptimResultsPan(
 			SimResults=SimResults,
-			expResults=expResults,
-			times=CNOlist$timeSignals[1:2],
-			filename=filename,
-			namesCues=CNOlist$namesCues,
-			namesSignals=CNOlist$namesSignals,
-			valueCues=CNOlist$valueCues)
-		}
+			CNOlist=CNOlist,
+			formalism="ss1",
+			tPt=tPt
+		)
 	}
+	if(plotPDF == TRUE) {
+		if(is.null(tag)) {
+			filename <- paste(deparse(substitute(Model)),"SimResultsT1.pdf",sep="")
+        } else {
+			filename <- paste(tag,"SimResultsT1.pdf",sep="_")
+        }
+		plotOptimResultsPan(
+			SimResults=SimResults,
+			CNOlist=CNOlist,
+			pdf=TRUE,
+			formalism="ss1",
+			pdfFileName=filename,
+			tPt=tPt
+		)
+	}
+}
 
