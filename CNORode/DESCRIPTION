@@ -1,7 +1,7 @@
 Package: CNORode
 Type: Package
 Title: ode add-on to CellNOptR 
-Version: 0.9
+Version: 0.99
 Date: 2011-11-03
 Author: David Henriques
 Maintainer: David Henriques <davidpcnet@hotmail.com>
@@ -9,4 +9,4 @@ Description: ode add-on to CellNOptR
 License: GPL-2
 LazyLoad: yes
 Depends: CellNOptR, genalg
-
+Suggests: essR
