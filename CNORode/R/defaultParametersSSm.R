@@ -15,6 +15,10 @@ function(){
     params$maxNumSteps = 1e+05
     params$maxErrTestsFails = 50
     params$nan_fac = 1
+    params$time = 1 
 
     return(params)
 }
+
+
+
