@@ -23,6 +23,11 @@ parEstimationLBodeSSm <-function
 		maxNumSteps=100000,		maxErrTestsFails=50,	nan_fac=1
 )
 {
+    tryCatch({library(essR)}, error=function(e){print("essR package not found.
+	SSm not available. Install the package and load it or try the Genetic Algorithm
+	optimiser instead.");return(ode_parameters);});
+
+
 	adjMat=incidence2Adjacency(model);
 	if(is.null(ode_parameters)){
 		ode_parameters=createLBodeContPars(model,random=TRUE);
@@ -38,10 +43,8 @@ parEstimationLBodeSSm <-function
 	opts$maxeval=0;
 	opts$maxtime=0;
 
-    val=tryCatch({essR(problem,opts)}, error=function(e){print("essR package not found.
-	SSm not available. Install the package and load it or try the Genetic Algorithm
-	optimiser instead.");return(ode_parameters);});
-	
+    val=essR(problem,opts)
+
 	problem=list();
 	problem$f<-getLBodeContObjFunction(cnolist,	model,ode_parameters,indices,
 	time,verbose,transfer_function,reltol,atol,maxStepSize,maxNumSteps,maxErrTestsFails);

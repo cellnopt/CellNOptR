@@ -1,27 +1,27 @@
 parEstimationLBode<-function (cnolist, model, method="ga", 
-    ode_parameters = NULL, indices = NULL, paramsGA=NULL, paramsSSM=NULL)
+    ode_parameters = NULL, indices = NULL, paramsGA=NULL, paramsSSm=NULL)
 {
 
     if (method == "essm"){
-        if (is.null(paramsSSM)){
-            paramsSSM = defaultParametersSSm()
+        if (is.null(paramsSSm)){
+            paramsSSm = defaultParametersSSm()
         }
         ode_parameters = parEstimationLBodeSSm(cnolist, model, 
             ode_parameters=ode_parameters, indices=indices,
-            maxeval=paramsSSM$maxeval, 
-            maxtime=paramsSSM$maxtime,
-            ndiverse=paramsSSM$ndiverse, 
-            dim_refset=paramsSSM$dim_refset, 
-            local_solver=paramsSSM$local_solver, 
-            time=paramsSSM$time, 
-            verbose=paramsSSM$verbose, 
-            transfer_function=paramsSSM$transfer_function, 
-            reltol=paramsSSM$reltol, 
-            atol=paramsSSM$atol, 
-            maxStepSize=paramsSSM$maxStepSize, 
-            maxNumSteps=paramsSSM$maxNumSteps, 
-            maxErrTestsFails=paramsSSM$maxErrTestsFails, 
-            nan_fac=paramsSSM$nan_fac) 
+            maxeval=paramsSSm$maxeval, 
+            maxtime=paramsSSm$maxtime,
+            ndiverse=paramsSSm$ndiverse, 
+            dim_refset=paramsSSm$dim_refset, 
+            local_solver=paramsSSm$local_solver, 
+            time=paramsSSm$time, 
+            verbose=paramsSSm$verbose, 
+            transfer_function=paramsSSm$transfer_function, 
+            reltol=paramsSSm$reltol, 
+            atol=paramsSSm$atol, 
+            maxStepSize=paramsSSm$maxStepSize, 
+            maxNumSteps=paramsSSm$maxNumSteps, 
+            maxErrTestsFails=paramsSSm$maxErrTestsFails, 
+            nan_fac=paramsSSm$nan_fac) 
 
 
     }
