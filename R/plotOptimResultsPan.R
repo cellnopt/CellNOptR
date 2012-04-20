@@ -46,7 +46,7 @@ plotOptimResultsPan <- function(SimResults=SimResults, yInterpol=NULL, xCoords=N
 	
 	#####	/functions/	#####
 	
-	close.screen(all.screens=T)
+	plot.new()
 	if(pdf==TRUE) {
 		pdf(file=pdfFileName, width=14.5,height=11)	
 	}
@@ -282,6 +282,7 @@ plotOptimResultsPan <- function(SimResults=SimResults, yInterpol=NULL, xCoords=N
 	if(pdf==TRUE) {
 		dev.off()
 	}
+	close.screen(all.screens=TRUE)
 }			
 
 
