@@ -28,7 +28,6 @@ The results of the optimisation process at t2 (set this to NA if you have perfor
   \item{CNOlist}{
 The CNOlist on which the optimisation is based
 }
-
   \item{tag}{
 NULL or string; tells whether you want to prefix filenames with a tag (replaces
 the default behaviour).

@@ -16,20 +16,42 @@ graphvizParams=list())
 
 }
 \arguments{
-  \item{model}{a model as returned by \code{readSif}. Alternatively, the filename can also be provided.}
-  \item{cnolist}{output of makeCNOlist}
-  \item{bString}{a sequence made of numbers between 0 and 1 of same length as
+  \item{model}{
+a model as returned by \code{readSif}. Alternatively, the filename can also be provided.
+}
+  \item{cnolist}{
+output of makeCNOlist
+}
+  \item{bString}{
+a sequence made of numbers between 0 and 1 of same length as
 the one returned by the Genetic Algorithm (GA). This is a generalisation of
 the bitString returned by the GA function: several bit strings can be
-averaged and used}
-  \item{indexIntegr}{additional indices to highlight some edge (optional).}
-  \item{signals}{a list of nodes belonging to the signals class}
-  \item{stimuli}{a list of nodes belonging to the stimuli class}
-  \item{inhibitors}{a list of nodes belonging to the inhibitors class}
-  \item{ncno}{a list of NCNO nodes.}
-  \item{compressed}{a list of compressed nodes}
-  \item{filename}{the filename (without extension) used to write the dot file}
-  \item{output}{the type of output (PNG, PDF, SVG accepted)}
+averaged and used
+}
+  \item{indexIntegr}{
+additional indices to highlight some edge (optional).
+}
+  \item{signals}{
+a list of nodes belonging to the signals class
+}
+  \item{stimuli}{
+a list of nodes belonging to the stimuli class
+}
+  \item{inhibitors}{
+a list of nodes belonging to the inhibitors class
+}
+  \item{ncno}{
+a list of NCNO nodes.
+}
+  \item{compressed}{
+a list of compressed nodes
+}
+  \item{filename}{
+the filename (without extension) used to write the dot file
+}
+  \item{output}{
+the type of output (PNG, PDF, SVG accepted)
+}
   \item{graphvizParams}{a list of optional arguments dedicated to Rgraphviz.
 Accepted arguments are: \code{arrowsize} (default is 2); 
 \code{size} (a string for the dot output default is "15,15");\code{fontsize}

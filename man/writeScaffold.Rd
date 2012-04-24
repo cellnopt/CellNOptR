@@ -26,7 +26,7 @@ The PKN model
   \item{CNOlist}{
 The CNOlist on which the optimisation is based 
 }
-\item{tag}{
+  \item{tag}{
 NULL or string; tells whether you want to prefix filenames with a tag (replaces the default behaviour).
 }
 }

@@ -18,29 +18,29 @@ expansion=TRUE,ignoreList=NA, maxInputsPerGate=2, verbose=TRUE)
 
 \arguments{
   \item{Data}{
-   the CNOlist that contains the data that you will use
-  }
+the CNOlist that contains the data that you will use
+}
   \item{Model}{
-    the model object as returned by \link{readSif}
-  }
+the model object as returned by \link{readSif}
+}
   \item{cutnonc}{
-    Removes the NONC nodes using \link{cutNONC} and \link{findNONC} (Default is TRUE).
-  }
+Removes the NONC nodes using \link{cutNONC} and \link{findNONC} (Default is TRUE).
+}
   \item{compression}{
-    Compress the model using \link{compressModel} (Default is TRUE).
-  }
+Compress the model using \link{compressModel} (Default is TRUE).
+}
   \item{expansion}{
-    Add and gates using \link{expandGates} (Default is TRUE).
-  }
+Add and gates using \link{expandGates} (Default is TRUE).
+}
   \item{ignoreList}{
-    list of reactions indices to ignore in the expansion step.
-  }
+list of reactions indices to ignore in the expansion step.
+}
   \item{maxInputsPerGate}{
-    used by the \link{expandGates} function to set maximum inputs per and gates.
-  }
+used by the \link{expandGates} function to set maximum inputs per and gates.
+}
   \item{verbose}{
-    verbose option (Default is TRUE).
-  }
+verbose option (Default is TRUE).
+}
 }
 
 
