@@ -12,7 +12,7 @@
 #  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
 #
 ##############################################################################
-# $Id: MapDDN2Model.R 853 2012-03-28 15:09:06Z cokelaer $
+# $Id: MapDDN2Model.R 853 2012-03-28 15:09:06Z eduati $
 MapDDN2Model <-
 function(DDN,Model,CNOlist,allInter=TRUE){
 	g<-sif2graph(model2sif(Model=Model))
