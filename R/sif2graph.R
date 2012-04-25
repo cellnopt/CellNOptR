@@ -14,6 +14,13 @@
 ##############################################################################
 # $Id$
 sif2graph<-function(sif){
+	
+  #if the input is a character it shoud be the name ot the sif file
+  #otherwise a matrix in the sif format
+  if (typeof(sif) == "character"){
+	sif = read.table(sif) 
+  }
+	
   # build the unique vertices from the column 1 and 3 of the SIF file
   vertices = unique(c(as.character(sif[,1]), as.character(sif[,3])))
   # some aliases
@@ -23,7 +30,8 @@ sif2graph<-function(sif){
 
   l = length(vertices) - 1
   g <- new("graphNEL", nodes=vertices, edgemode="directed")
-  weights = rep(1, l)
+  #weights = rep(1, l)
+  weights = edges
   for (i in 1:length(v1)){
     g <- addEdge(as.character(v1[i]), as.character(v2[i]), g, weights[i])
   }

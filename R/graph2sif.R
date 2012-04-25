@@ -13,7 +13,7 @@
 #
 ##############################################################################
 # $Id$
-graph2sif<-function(graph,writeSif=FALSE){
+graph2sif<-function(graph,writeSif=FALSE, filename="Graph"){
   
   ed<-edges(graph)
   no<-nodes(graph)
@@ -21,16 +21,20 @@ graph2sif<-function(graph,writeSif=FALSE){
   
   for (i in 1:length(no)){
     node1<-no[i]
-    for (j in 1:length(ed[[i]])){
-      node2<-ed[[i]][j]
-      sifFile<-rbind(sifFile,c(node1,1,node2))
-    }
+	if (length(ed[[i]])>0){
+      for (j in 1:length(ed[[i]])){
+        node2<-ed[[i]][j]
+		sig<-sign(as.numeric(edgeData(graph,no[i],ed[[i]][j], "weight")))
+        sifFile<-rbind(sifFile,c(node1,sig,node2))
+	  }
+	}
   }
   
   sifFile<-sifFile[-1,]
   
   if (writeSif==TRUE){
-    write.table(sifFile, file="Graph.sif", row.names=FALSE,col.names=FALSE,quote=FALSE,sep="\t")
+	filename<-paste(filename, ".sif", sep="")
+    write.table(sifFile, file=filename, row.names=FALSE,col.names=FALSE,quote=FALSE,sep="\t")
   }
 
   return(sifFile)
