@@ -14,7 +14,20 @@
 ##############################################################################
 # $Id: $
 
-cutAndPlotResultsTimeScaleT2 <- function(Model, bStringT1, bStringT2, SimList, CNOlist, indexList, boolUpdates, divTime, lowerB=lowerB, upperB=upperB) {
+cutAndPlotResultsTimeScaleT2 <- function(
+	Model,
+	bStringT1,
+	bStringT2,
+	SimList,
+	CNOlist,
+	indexList,
+	boolUpdates,
+	divTime,
+	lowerB=lowerB,
+	upperB=upperB,
+	show=TRUE,
+	plotPDF=FALSE,
+	tag=NULL) {
 	
 	library(abind)
 	# simulate T1
@@ -57,9 +70,31 @@ cutAndPlotResultsTimeScaleT2 <- function(Model, bStringT1, bStringT2, SimList, C
 	SimResALL[,4,c(1:2)]=1
 	SimResALL[c(3,6,9),5,c(2:3)]=0
 	yInterALL = abind(getFitDataT1$yInter, getFitDataT2$yInter, along=3)
-	expResults <- CNOlist$valueSignals
 	
-	plotOptimResultsTimeScale(SimResults=SimResALL, yInterpol=yInterALL, xCoords=c(xCoords1,xCoords2), CNOlist=CNOlist)
-
+	if(show==TRUE) {
+		plotOptimResultsPan(
+			SimResults=SimResALL,
+			yInterpol=yInterALL,
+			xCoords=c(xCoords1,xCoords2),
+			CNOlist=CNOlist,
+			formalism="dt"
+		)	
+	}
+		
+	if(plotPDF == TRUE) {
+		if(is.null(tag)) {
+			filename <- paste(deparse(substitute(Model)),"SimResultsT1.pdf",sep="")
+        } else {
+			filename <- paste(tag,"SimResultsT1.pdf",sep="_")
+        }
+		plotOptimResultsPan(
+			SimResults=SimResALL,
+			yInterpol=yInterALL,
+			xCoords=c(xCoords1,xCoords2),
+			CNOlist=CNOlist,
+			formalism="dt",
+			pdfFileNam=filename,
+			pdf=TRUE)
+	}
 }
 

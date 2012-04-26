@@ -14,7 +14,19 @@
 ##############################################################################
 # $Id: $
 
-cutAndPlotResultsTimeScale <- function(Model, bString, SimList, CNOlist, indexList, boolUpdates=boolUpdates, divTime=NULL, lowerB=lowerB, upperB=upperB) {
+cutAndPlotResultsTimeScale <- function(
+	Model,
+	bString,
+	SimList,
+	CNOlist,
+	indexList,
+	boolUpdates=boolUpdates,
+	divTime=NULL,
+	lowerB=lowerB,
+	upperB=upperB, 
+	show=TRUE,
+	plotPDF=FALSE,
+	tag=NULL) {
 	
 	Modelcut <- Model
 	Modelcut$interMat <- Modelcut$interMat[,as.logical(bString)]
@@ -30,7 +42,29 @@ cutAndPlotResultsTimeScale <- function(Model, bString, SimList, CNOlist, indexLi
 	SimRes <- simulatorTimeScale(CNOlist=CNOlist, Model=Modelcut, SimList=SimListcut, indexList=indexList, boolUpdates=boolUpdates)
 	SimRes = SimRes[,indexList$signals,]
 	getFitData <- getFitTimeScale(SimList=SimListcut, CNOlist=CNOlist, Model=Modelcut, indexList=indexList, boolUpdates=boolUpdates, divTime=divTime, lowerB=lowerB, upperB=upperB)
-	plotOptimResultsTimeScale(SimResults=SimRes, yInterpol=getFitData$yInter, xCoords=getFitData$xCoords, CNOlist=CNOlist)
-
+	
+	if(show==TRUE) {
+		plotOptimResultsPan(SimResults=SimRes,
+		yInterpol=getFitData$yInter,
+		xCoords=getFitData$xCoords,
+		CNOlist=CNOlist,
+		formalism="dt"
+		)
+	}
+	if(plotPDF == TRUE) {
+		if(is.null(tag)) {
+			filename <- paste(deparse(substitute(Model)),"SimResultsT1.pdf",sep="")
+        } else {
+			filename <- paste(tag,"SimResultsT1.pdf",sep="_")
+        }
+		plotOptimResultsPan(SimResults=SimRes,
+			yInterpol=getFitData$yInter,
+			xCoords=getFitData$xCoords,
+			CNOlist=CNOlist,
+			formalism="dt",
+			pdfFileName=filename,
+			pdf=TRUE
+		)
+	}
 }
 
