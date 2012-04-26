@@ -16,7 +16,10 @@
 plotCNOlist<-function(CNOlist){
 
 #check that CNOlist is a CNOlist
-
+	
+	# save current par() and recall at end to avoid permanent changes
+	oldPar = par(no.readonly = TRUE)
+	
 	if(!is.list(CNOlist)){
 		stop("This function expects as input a CNOlist as output by makeCNOlist or normaliseCNOlist")
 		}
@@ -36,7 +39,9 @@ plotCNOlist<-function(CNOlist){
 #set graphic parameters		
 	par(
 		mfrow=c(nr=dim(CNOlist$valueSignals[[1]])[1]+1,nc=dim(CNOlist$valueSignals[[1]])[2]+1),
-		cex=0.5,pch=20,mar=c(0.5,0.5,0,0),oma=c(3,2,2,2))
+		cex=0.5,pch=20,mar=c(0.5,0.5,0,0),oma=c(3,2,2,2)
+	)
+
 	yMax<-max(unlist(lapply(CNOlist$valueSignals,function(x) max(x, na.rm=TRUE))))
 	yMin<-min(unlist(lapply(CNOlist$valueSignals,function(x) min(x, na.rm=TRUE))))
 	xVal<-CNOlist$timeSignals
@@ -130,5 +135,7 @@ plotCNOlist<-function(CNOlist){
                 labels=labels, las=3,cex.axis=1)   
         }
     }
+	par(oldPar)
+
 }
 

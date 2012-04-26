@@ -46,7 +46,7 @@ plotOptimResultsPan <- function(SimResults=SimResults, yInterpol=NULL, xCoords=N
 	
 	#####	/functions/	#####
 	
-	plot.new()
+	oldPar = par(no.readonly=TRUE)
 	if(pdf==TRUE) {
 		pdf(file=pdfFileName, width=14.5,height=11)	
 	}
@@ -242,7 +242,7 @@ plotOptimResultsPan <- function(SimResults=SimResults, yInterpol=NULL, xCoords=N
 		}
 		sInhib = sInhib+1			
 	}
-	
+
 	screen(dim(CNOlist$valueSignals[[1]])[2]+3)
 	splitProp = 1/(dim(CNOlist$valueSignals[[1]])[1]+1)
 	sSplit = matrix(c(0,1,(1-splitProp),1,0,1,0,(1-splitProp)),
@@ -283,6 +283,7 @@ plotOptimResultsPan <- function(SimResults=SimResults, yInterpol=NULL, xCoords=N
 		dev.off()
 	}
 	close.screen(all.screens=TRUE)
+	par(oldPar)
 }			
 
 
