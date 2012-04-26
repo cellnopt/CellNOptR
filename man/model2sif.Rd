@@ -10,7 +10,7 @@ todo
 }
 
 \usage{
-model2sif(Model,optimRes=NA,writeSif=FALSE, filename="Model"){
+model2sif(Model,optimRes=NA,writeSif=FALSE, filename="Model")
 
 }
 

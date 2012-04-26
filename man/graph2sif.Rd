@@ -10,7 +10,7 @@ todo
 }
 
 \usage{
-graph2sif(graph, writeSif=FALSE, filename="Graph"){
+graph2sif(graph, writeSif=FALSE, filename="Graph")
 
 }
 
