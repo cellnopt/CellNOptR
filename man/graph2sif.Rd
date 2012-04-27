@@ -2,11 +2,11 @@
 \alias{graph2sif}
 
 \title{
-todo
+Convert graph to sif
 }
 
 \description{
-  This function converts a network form sif format to graph format.
+  This function converts a network form graph format to sif format. The resulting table can also be saved in a sif file.
 }
 
 \usage{
@@ -17,24 +17,24 @@ graph2sif(graph, writeSif=FALSE, filename="Graph")
 
 \arguments{
   \item{graph}{
-todo
+a graph, as generated using \link{sif2graph}
 }
   \item{writeSif}{
-todo
+it writeSif=FALSE (default) the sif file is not saved. If writeSif=TRUE it is saved.
 }
   \item{filename}{
-todo
+the name of the sif file saved if writeSif=TRUE. Default is Model.sif.
 }
 
 }
 
 
 \details{
-todo
+The sign of link is supposed to be encoded in the graph as the weigth of the edge (-1 negative regulation, +1 positive regulation).
 }
 
 \value{
-\item{sifFile}{todo}
+\item{sifFile}{a table with all the links in the model in the format sourceNode-tab-sign-tab-targetNode}
 }
 
 \author{
@@ -42,7 +42,7 @@ todo
 }
 
 \seealso{
-\link{graph2sif}
+\link{model2sif}, \link{sif2graph}, \link{readSif}, 
 }
 
 

@@ -6,7 +6,7 @@
 }
 
 \description{
-  This function converts a network form sif format to graph format.
+  This function receives as input a network in form sif format and converts it to graph format.
 }
 
 \usage{
@@ -15,10 +15,13 @@ sif2graph(sif)
 
 
 \arguments{
-  \item{sif}{the name of a sif file}
+  \item{sif}{the name of a sif file or the equivalent table}
 }
+
 \details{
-This function takes in a single argument, sifFile, that points to a previous knowledge network in .sif format i.e. sourceNode-tab-sign-tab-targetNode. If there are ANDs they should be introduced as dummy nodes called and# (don't forget the number after "and" otherwise this won't be recognised).  Please be aware that "and" nodes are not expected to be negated, i.e. there are not supposed to be !and1=xyz because that amounts to inverting the sign of all inputs of and1, which is more simply done at the inputs level.
+This function takes a network in sif format (tabel or file), i.e. sourceNode-tab-sign-tab-targetNode. If there are ANDs they should be introduced as dummy nodes called and# (don't forget the number after "and" otherwise this won't be recognised).  Please be aware that "and" nodes are not expected to be negated, i.e. there are not supposed to be !and1=xyz because that amounts to inverting the sign of all inputs of and1, which is more simply done at the inputs level.
+
+In the resulting graph, the sign of each link is encodes as the weigth of the edge (-1 negative regulation, +1 positive regulation).
 }
 
 \value{
@@ -30,7 +33,7 @@ This function takes in a single argument, sifFile, that points to a previous kno
 }
 
 \seealso{
-\link{model2sif}
+\link{graph2sif}, \link{model2sif}, \link{readSif}, 
 }
 
 
