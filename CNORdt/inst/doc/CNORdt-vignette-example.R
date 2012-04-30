@@ -27,7 +27,6 @@ indexNONCcutComp <- indexFinder(CNOlist=CNOlist, Model=ModelCutCompress)
 ModelCutCompressExpand <- expandGates(Model=ModelCutCompress)
 
 # extract information for simulation
-resECNOlist <- residualError(CNOlist)
 fields4Sim <- prep4Sim(Model=ModelCutCompressExpand)
 initBstring <- rep(1, length(ModelCutCompressExpand$reacID))
 
