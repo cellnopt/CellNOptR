@@ -7,7 +7,8 @@ Plot the results of an optimisation at t2
 This function takes a model and an optimised bitstring, it cuts the model according to the bitstring and plots the results of the simulation along with the experimental data. This function is designed to work on results of a 2 step optimisation.
 }
 \usage{
-cutAndPlotResultsT2(Model, bStringT1, bStringT2, SimList, CNOlist, indexList, plotPDF = FALSE, tag=NULL)
+cutAndPlotResultsT2(Model, bStringT1, bStringT2, SimList, CNOlist, indexList,
+plotPDF = FALSE, tag=NULL, tPt=tPt=CNOlist$timeSignals[2:3])
 }
 \arguments{
   \item{Model}{

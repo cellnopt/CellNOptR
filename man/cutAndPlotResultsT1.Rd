@@ -8,7 +8,7 @@ This function takes a model and an optimised bitstring, it cuts the model accord
 }
 \usage{
 cutAndPlotResultsT1(Model, bString, SimList, CNOlist, indexList, plotPDF =
-FALSE, tag = NULL, show=TRUE)
+FALSE, tag = NULL, show=TRUE, tPt=CNOlist$timeSignals[2])
 }
 \arguments{
   \item{Model}{
