@@ -1,4 +1,4 @@
-\name{CNOlistPB}
+\name{CNOlist}
 \docType{data}
 \alias{CNOlistPB}
 \title{Toy data}

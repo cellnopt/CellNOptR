@@ -14,7 +14,7 @@
 ##############################################################################
 # $Id: $
 
-function (Model, bStringT1, bStringT2, SimList, CNOlist, indexList, 
+cutAndPlotResultsTimeScaleT2 <- function (Model, bStringT1, bStringT2, SimList, CNOlist, indexList, 
     boolUpdates, divTime, lowerB = lowerB, upperB = upperB) 
 {
     library(abind)

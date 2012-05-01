@@ -14,7 +14,7 @@
 ##############################################################################
 # $Id: $
 
-function (Model, bString, SimList, CNOlist, indexList, boolUpdates=boolUpdates, 
+cutAndPlotResultsTimeScale <- function (Model, bString, SimList, CNOlist, indexList, boolUpdates=boolUpdates, 
 divTime=NULL, lowerB=lowerB, upperB=upperB) {
 
 	Modelcut <- Model
