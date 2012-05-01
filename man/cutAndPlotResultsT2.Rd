@@ -8,7 +8,7 @@ This function takes a model and an optimised bitstring, it cuts the model accord
 }
 \usage{
 cutAndPlotResultsT2(Model, bStringT1, bStringT2, SimList, CNOlist, indexList,
-plotPDF = FALSE, tag=NULL, tPt=tPt=CNOlist$timeSignals[2:3])
+plotPDF = FALSE, tag=NULL, tPt=CNOlist$timeSignals[2:3])
 }
 \arguments{
   \item{Model}{
@@ -35,6 +35,9 @@ TRUE or FALSE, tells whether you want a pdf to be produced or not
   \item{tag}{
 NULL or string; tells whether you want to prefix filenames with a tag (replaces
 the default behaviour).
+}
+  \item{tPt}{
+todo.
 }
 }
 

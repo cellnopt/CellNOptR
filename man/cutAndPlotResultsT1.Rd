@@ -36,6 +36,9 @@ the default behaviour).
   \item{show}{
 TRUE of FALSE; FALSE tells not to show the plot, which can be useful when scripting.
 }
+  \item{tPt}{
+todo
+}
 }
 
 \value{
