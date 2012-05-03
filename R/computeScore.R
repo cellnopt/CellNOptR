@@ -1,5 +1,5 @@
 #Function that produces the score for a specific bitstring
-getObj<-function(CNOlist,Model,SimList,IndexList,x){
+computeScore<-function(CNOlist,Model,SimList,indexList,x){
 
   bitString<-x
   
