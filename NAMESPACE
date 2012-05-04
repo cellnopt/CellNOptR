@@ -3,6 +3,7 @@ import("graph", "RBGL")
 export("checkSignals",
     "CNORwrap",
     "compressModel",
+    "computeScore",
     "cutAndPlotResultsT1",
     "cutAndPlotResultsT2",
     "cutNONC",
