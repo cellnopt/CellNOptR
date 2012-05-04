@@ -17,9 +17,7 @@
 #Function that computes the score of a specific bitstring
 # todo: this is similar to wha is done in gaBinaryT1. need to do the same for T2
 # todo: timepoints and nafac are hardcoded.
-computeScore<-function(CNOlist,Model,SimList,indexList,x){
-
-  bitString<-x
+computeScore<-function(CNOlist,Model,SimList,indexList,bitString){
   
   #cut the model according to bitstring
   ModelCut<-Model
