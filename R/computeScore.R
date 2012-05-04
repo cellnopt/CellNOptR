@@ -1,4 +1,22 @@
-#Function that produces the score for a specific bitstring
+#
+#  This file is part of the CNO software
+#
+#  Copyright (c) 2011-2012 - EBI
+#
+#  File author(s): CNO developers (cno-dev@ebi.ac.uk)
+#
+#  Distributed under the GPLv2 License.
+#  See accompanying file LICENSE.txt or copy at
+#      http://www.gnu.org/licenses/gpl-2.0.html
+#
+#  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
+#
+##############################################################################
+# $Id: $
+
+#Function that computes the score of a specific bitstring
+# todo: this is similar to wha is done in gaBinaryT1. need to do the same for T2
+# todo: timepoints and nafac are hardcoded.
 computeScore<-function(CNOlist,Model,SimList,indexList,x){
 
   bitString<-x
