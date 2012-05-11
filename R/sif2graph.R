@@ -17,7 +17,7 @@ sif2graph<-function(sif){
 	
   #if the input is a character it shoud be the name ot the sif file
   #otherwise a matrix in the sif format
-  if (typeof(sif) == "character"){
+  if (is.vector(sif) && (typeof(sif) == "character")){
 	sif = read.table(sif) 
   }
 	
@@ -26,7 +26,7 @@ sif2graph<-function(sif){
   # some aliases
   v1 = sif[,1]
   v2 = sif[,3]
-  edges = sif[,2]
+  edges = as.numeric(sif[,2])
 
   l = length(vertices) - 1
   g <- new("graphNEL", nodes=vertices, edgemode="directed")
