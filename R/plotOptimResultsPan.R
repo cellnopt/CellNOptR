@@ -266,19 +266,18 @@ plotOptimResultsPan <- function(SimResults=SimResults, yInterpol=NULL, xCoords=N
 	colbar = heat.colors(100)
 	labels = c(1,0.5,0)
 	len <- length(colbar)
-	rhs <- 0.8
-	rhs2 <- rhs + rhs/40
-	at <- c(par("usr")[3], (par("usr")[4]-par("usr")[3])/2,
-	par("usr")[4])
+	rhs <- 0.6
+	rhs2 <- rhs + rhs/10
+	at <- c(0, 0.5, 1)
 	
-	par(mai=c(0.2,0.2,0.1,0.2))
+	par(mai=c(0,0.2,0,0))
 	plot.new()
-	yyy <- seq(par("usr")[3],par("usr")[4],length=len+1)
+	yyy <- seq(0,1,length=len+1)
 	rect(0, yyy[1:len], rep(rhs, len), yyy[-1],
 	col = colbar, border = colbar)
-	rect(0, par("usr")[3], rhs, par("usr")[4], border="black")
+	rect(0, 0, rhs, 1, border="black")
 	segments(rhs, at, rhs2, at)
-	text(x=rhs2, y=at, labels=labels, pos=4)
+	text(x=rhs2, y=at, labels=labels, pos=4, offset=0.2)
 	if(pdf==TRUE) {
 		dev.off()
 	}
