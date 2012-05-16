@@ -5,7 +5,7 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 	nCond <- dim(CNOlist$valueStimuli)[1]
 
 	yBool = array(dim=c(nCond, nSp, boolUpdates))
-#	yBool[,,1] = 0
+	yBool[,,1] = 0
 
 	if(is.null(dim(Model$interMat))) { 
 		nSp <- length(Model$interMat)
@@ -17,7 +17,7 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 		endIx[i] <- length(which(SimList$maxIx == i))
 	}
 		
-	############################## FUNCTIONS ##############################
+	##############################	FUNCTIONS	##############################
 		
 	compOR <- function(x){
 		if(all(is.na(x[which(SimList$maxIx == s)]))){
@@ -46,7 +46,7 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 		return(cVector)
 	}
 	
-	############################## FUNCTIONS ##############################
+	##############################	/FUNCTIONS/	##############################
 
 	# create an initial values matrix	
 	initValues <- matrix(data=NA, nrow=nCond, ncol=nSp)
@@ -58,7 +58,6 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 	# flip the inhibitors so that 0 = inhibited / 1 = noninhibited
 	valueInhibitors <- 1-CNOlist$valueInhibitors
 	valueInhibitors[which(valueInhibitors == 1)] <- NA
-
 	# set the initial values of the inhibited species: 0 if inhibited, untouched if not inhibited
 	initValues[,indexList$inhibited] <- valueInhibitors
 	
@@ -85,7 +84,7 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 	############################## MAIN LOOP ##############################
 	
 	# main loop
-	for(count.aidan in 1:boolUpdates) {
+	for(count.aidan in 2:boolUpdates) {
 		
 		outputPrev <- newInput
 		# this is now a 2 column matrix that has a column for each input (column in finalCube)
@@ -117,6 +116,7 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 			
 			output.on = which(!is.na(outputCube))
 			delay.on = intersect(output.on, delay.count)
+
 			sw.on = intersect(output.on, sw.count)
 
 			if(length(delay.on)) {
@@ -152,7 +152,6 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 			# this is transformed into a matrix with a column for each reac and a row for each cond
 			
 			outputCube <- matrix(allCubes[,count.aidan], nrow=nCond, ncol=nReacs)
-				
 			# go through each species, and if it has inputs, then take the max across those input reactions
 			# i.e. compute the ORs
 		
@@ -183,7 +182,7 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 		
 		valueInhibitors <- 1-CNOlist$valueInhibitors
 		newInput[,indexList$inhibited] <- valueInhibitors * newInput[,indexList$inhibited]
-
+		
 		# replace NAs with zeros to avoid having the NA penalty applying to unconnected species
 		readout <- newInput
 		readout[is.na(readout)] <- 0

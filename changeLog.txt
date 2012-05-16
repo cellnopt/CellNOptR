@@ -1,0 +1,7 @@
+14/05/2012
+
+* simulatorPause to test
+
+* add t=0 changes
+
+* check spikes in time course caused by NAs

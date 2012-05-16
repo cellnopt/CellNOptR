@@ -1,12 +1,52 @@
 library(CellNOptR)
-library(CNORdiscreteTime)
+library(CNORdt)
+
+source("../CNORdt/R/simulatorPause.R")
+source("../CNORdt/R/getFitPause.R")
+
+load("CNOlistDelay.RData")
+modelDelay = readSif("toyDelay.sif")
+
+indexDelay = indexFinder(CNOlist=CNOlistDelay, Model=modelDelay, verbose=T)
+simDelay = prep4Sim(modelDelay)
+delayThresh = rep(0,6)
+
+source("../CNORdt/R/simulatorPause.R")
+
+sim1 = system.time(replicate(100,simulatorPause(CNOlistDelay, modelDelay, simDelay, indexDelay,
+boolUpdates=10, delayThresh)))
+
+sim1 = system.time(simulatorTimeScale(CNOlistDelay, modelDelay, simDelay, indexDelay,boolUpdates=10))
+
+system.time(replicate(100,simulatorT1(CNOlistDelay, modelDelay, simDelay, indexDelay)))
+
+sim1 = sim1[,indexDelay$signals,]
+
+# make list from bool.sim
+valueSignals = list()
+for(a in 1:dim(sim1)[3]) {
+	valueSignals = c(valueSignals, list(sim1[,,a]))
+}
+CNOlistBool = CNOlistDelay
+CNOlistBool$valueSignals = valueSignals
+CNOlistBool$timeSignals = 0:(boolUpdates-1)
+plotCNOlist(CNOlistBool)
+
+
+
+
+
+
+
 
 optDelay = list()
 optDelay$bString = c(1,0,0,0,1,0,1,1,0,1,1,1,1,1,1,0,0,0,1,1)
 cutData = cutModel(ModelCutCompressExpand,SimList=fields4Sim,bitString=optDelay$bString)
 simDelay = cutData[[2]]
 ModelDelay = cutData[[1]]
+
 indexDelay = indexFinder(CNOlist=CNOlist, Model=ModelDelay, verbose=T)
+
 
 load("objects/CNOlist.RData")
 load("objects/ModelDelay.RData")
