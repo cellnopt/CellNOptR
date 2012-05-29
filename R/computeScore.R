@@ -19,11 +19,13 @@
 # todo: timepoints and nafac are hardcoded.
 computeScore<-function(CNOlist,Model,SimList,indexList,bitString){
   
+
+  bs = as.logical(bitString)
   #cut the model according to bitstring
   ModelCut<-Model
-  ModelCut$interMat<-ModelCut$interMat[,as.logical(bitString)]
-  ModelCut$notMat<-ModelCut$notMat[,as.logical(bitString)]
-  ModelCut$reacID<-ModelCut$reacID[as.logical(bitString)]
+  ModelCut$interMat<-ModelCut$interMat[,bs]
+  ModelCut$notMat<-ModelCut$notMat[,bs]
+  ModelCut$reacID<-ModelCut$reacID[bs]
   
   SimListCut<-cutSimList(SimList, bitString)
   
