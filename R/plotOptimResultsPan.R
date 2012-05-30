@@ -110,7 +110,8 @@ plotOptimResultsPan <- function(SimResults=SimResults, yInterpol=NULL, xCoords=N
 		}		
 	}
 	# max difference between sim and exper
-	diffMax = max(unlist(allDiff))
+	diffMax = max(unlist(!is.na(allDiff)))
+	print(diffMax)
 	
 	# set the count for the split screen window
 	count1 = dim(CNOlist$valueSignals[[1]])[2]+4
@@ -170,7 +171,11 @@ plotOptimResultsPan <- function(SimResults=SimResults, yInterpol=NULL, xCoords=N
 			par(fg="black",mar=c(0.5,0.5,0,0))
 			yVal <- lapply(CNOlist$valueSignals, function(x) {x[r,c]})
 			yValS <- SimResults[r,c,]
-			diff = (1 - (allDiff[r,c] / diffMax)) * 1000
+			if(!is.na(allDiff[r,c])) {
+				diff = (1 - (allDiff[r,c] / diffMax)) * 1000
+			} else {
+				diff = 0
+			}
 			if(diff<1) {diff=1}
 			bgcolor = heatCols[diff]
 			
