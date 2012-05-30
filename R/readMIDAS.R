@@ -138,9 +138,9 @@ readMIDAS<-function(MIDASfile, verbose=TRUE){
         print("Please be aware that CNO only handles measurements on one cell line at this time.")
     }
 
-    TRcol<-grep(pattern="TR",x=colnames(data),ignore.case=FALSE)
-    DAcol<-grep(pattern="DA",x=colnames(data),ignore.case=FALSE)
-    DVcol<-grep(pattern="DV",x=colnames(data),ignore.case=FALSE)
+    TRcol<-grep(pattern="TR:",x=colnames(data),ignore.case=FALSE)
+    DAcol<-grep(pattern="DA:",x=colnames(data),ignore.case=FALSE)
+    DVcol<-grep(pattern="DV:",x=colnames(data),ignore.case=FALSE)
     data<-data[,c(TRcol,DAcol,DVcol)]
 
 
@@ -175,11 +175,12 @@ readMIDAS<-function(MIDASfile, verbose=TRUE){
     }
 
 
+
     return(list(
         dataMatrix=data,
-        TRcol=grep(pattern="TR",x=colnames(data),ignore.case=FALSE),
-        DAcol=grep(pattern="DA",x=colnames(data),ignore.case=FALSE),
-        DVcol=grep(pattern="DV",x=colnames(data),ignore.case=FALSE)))
+        TRcol=grep(pattern="TR:",x=colnames(data),ignore.case=FALSE),
+        DAcol=grep(pattern="DA:",x=colnames(data),ignore.case=FALSE),
+        DVcol=grep(pattern="DV:",x=colnames(data),ignore.case=FALSE)))
 
     }
 
