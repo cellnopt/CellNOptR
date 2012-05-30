@@ -69,14 +69,11 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 
 	############################## TIME DELAY ##############################
 	
-	# better way to do below (faster, without loop)? i.e. c(1,2,3) -> c(1,1...,2,2...,3,3...)
-	sw = rep(0,nReacs)
-	sw[11]=1
 	delayThreshTot = rep(delayThresh, 1, each=nCond)
-	swTot = rep(sw, 1, each=nCond)
-#	strongWeakTot = rep(strongWeak, nReacs*nCond, each=nReacs)
-	delay.count = which(delayThreshTot > 0)
-	sw.count = which(swTot==1)	
+	strongWeakTot = rep(strongWeak, 1, each=nCond)
+
+	delayCount = which(delayThreshTot > 0)
+	strongWeakCount = which(strongWeakTot==1)	
 	
 	# make a matrix to store outputCubes
 	allCubes = matrix(NA, nrow=nReacs*nCond, ncol=boolUpdates)
@@ -84,7 +81,7 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 	############################## MAIN LOOP ##############################
 	
 	# main loop
-	for(count.aidan in 2:boolUpdates) {
+	for(countBool in 2:boolUpdates) {
 		
 		outputPrev <- newInput
 		# this is now a 2 column matrix that has a column for each input (column in finalCube)
@@ -114,16 +111,16 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 
 			########## DELAY ##########
 			
-			output.on = which(!is.na(outputCube))
-			delay.on = intersect(output.on, delay.count)
+			outputOn = which(!is.na(outputCube))
+		#	outputOn = which(outputCube==1)
+			delayOn = intersect(outputOn, delayCount)
+			strongWeakOn = intersect(outputOn, strongWeakCount)
 
-			sw.on = intersect(output.on, sw.count)
-
-			if(length(delay.on)) {
-				for(a in delay.on) {
-					toAdd = count.aidan:(count.aidan+delayThreshTot[a])
+			if(length(delayOn)) {
+				for(a in delayOn) {
+					toAdd = countBool:(countBool+delayThreshTot[a])
 					if(toAdd[length(toAdd)] > boolUpdates) {
-						toAdd = count.aidan:boolUpdates
+						toAdd = countBool:boolUpdates
 					}				
 					futureData = c(rep(0.5,delayThreshTot[a]), outputCube[a])[1:length(toAdd)]
 					futureCheck = which(is.na(allCubes[a, toAdd]))
@@ -133,17 +130,17 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 				}
 			}
 			
-			# if(length(sw.on)) {
-				# for(b in sw.on) {
-					# if(any(is.na(allCubes[b, count.aidan:boolUpdates])) {
-						# swAdd = which(is.na(allCubes[b, count.aidan:boolUpdates])
-							# allCubes[b,swAdd] = 1
-					# }	
-				# }
-			# }
-
-			as.normal = which(is.na(allCubes[,count.aidan]))
-			allCubes[as.normal,count.aidan] = outputCube[as.normal]
+			as.normal = which(is.na(allCubes[,countBool]))
+			allCubes[as.normal,countBool] = outputCube[as.normal]
+			
+			if(length(strongWeakOn)) {
+				for(b in strongWeakOn) {
+					if(allCubes[b,countBool]==1)
+						toChange = which(is.na(allCubes[b,]))
+						allCubes[b,toChange] = outputCube[b]	
+				}	
+			}
+			
 			
 			########## DELAY ##########
 			
@@ -151,7 +148,7 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 			# each condition, concatenated as such allcond4reac1,allcond4reac2,etc...
 			# this is transformed into a matrix with a column for each reac and a row for each cond
 			
-			outputCube <- matrix(allCubes[,count.aidan], nrow=nCond, ncol=nReacs)
+			outputCube <- matrix(allCubes[,countBool], nrow=nCond, ncol=nReacs)
 			# go through each species, and if it has inputs, then take the max across those input reactions
 			# i.e. compute the ORs
 		
@@ -187,8 +184,8 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 		readout <- newInput
 		readout[is.na(readout)] <- 0
 		#outputPrev[is.na(outputPrev)] <- 0
-		yBool[,,count.aidan] = readout
-		count.aidan = count.aidan+1
+		yBool[,,countBool] = readout
+	#	countBool = countBool+1
 
 	}
 

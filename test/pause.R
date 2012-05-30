@@ -11,16 +11,22 @@ indexDelay = indexFinder(CNOlist=CNOlistDelay, Model=modelDelay, verbose=T)
 simDelay = prep4Sim(modelDelay)
 delayThresh = rep(0,6)
 
+# add feedback finder here
+
+source("../CNORdt/R/feedbackFinder1.R")
+source("../CNORdt/R/feedbackWrapper.R")
+
+negEdges = feedbackWrapper(modelDelay)
+
+# simulate with delays
 source("../CNORdt/R/simulatorPause.R")
-
-sim1 = system.time(replicate(100,simulatorPause(CNOlistDelay, modelDelay, simDelay, indexDelay,
-boolUpdates=10, delayThresh)))
-
-sim1 = system.time(simulatorTimeScale(CNOlistDelay, modelDelay, simDelay, indexDelay,boolUpdates=10))
-
-system.time(replicate(100,simulatorT1(CNOlistDelay, modelDelay, simDelay, indexDelay)))
-
+sim1 = simulatorPause(CNOlistDelay, modelDelay, simDelay, indexDelay,
+boolUpdates=30, delayThresh, strongWeak=negEdges)
 sim1 = sim1[,indexDelay$signals,]
+
+
+plotCNOlist(plotData(CNOlistDelay, sim1))
+
 
 # make list from bool.sim
 valueSignals = list()
@@ -34,6 +40,31 @@ plotCNOlist(CNOlistBool)
 
 
 
+sim1 = system.time(replicate(100,simulatorPause(CNOlistDelay, modelDelay, simDelay, indexDelay,
+boolUpdates=10, delayThresh)))
+sim1 = system.time(simulatorTimeScale(CNOlistDelay, modelDelay, simDelay, indexDelay,boolUpdates=10))
+system.time(replicate(100,simulatorT1(CNOlistDelay, modelDelay, simDelay, indexDelay)))
+
+plotData <- function(CNOlist, data) {
+
+    valueSignals = list()
+    outSim = data
+    if(is.list(outSim)) {
+        valueSignals = outSim
+        t = length(outSim)
+    } else {   
+        for(a in 1:dim(outSim)[3]) {
+            valueSignals = c(valueSignals, list(outSim[,,a]))
+        }
+        t = dim(outSim)[3]
+    }   
+    CNOlistSim = CNOlist
+    CNOlistSim$valueSignals = valueSignals
+    CNOlistSim$timeSignals = 0:(t-1)
+
+    return(CNOlistSim)   
+
+}
 
 
 
