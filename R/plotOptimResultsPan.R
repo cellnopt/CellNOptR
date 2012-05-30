@@ -72,7 +72,7 @@ plotOptimResultsPan <- function(SimResults=SimResults, yInterpol=NULL, xCoords=N
 	#yMin <- min(unlist(lapply(CNOlist$valueSignals, function(x) min(x,na.rm=TRUE))))
 	yMin=0
 	# time labels
-	xVal <- CNOlist$timeSignals
+	xVal <- CNOlist$timeSignals[valueSignalsI]
 	if(formalism=="dt") {
 		xValS = xCoords	
 	} else if (formalism == "ss1") {
@@ -169,7 +169,7 @@ plotOptimResultsPan <- function(SimResults=SimResults, yInterpol=NULL, xCoords=N
 				
 			screen(countRow)
 			par(fg="black",mar=c(0.5,0.5,0,0))
-			yVal <- lapply(CNOlist$valueSignals, function(x) {x[r,c]})
+			yVal <- lapply(CNOlist$valueSignals[valueSignalsI], function(x) {x[r,c]})
 			yValS <- SimResults[r,c,]
 			if(!is.na(allDiff[r,c])) {
 				diff = (1 - (allDiff[r,c] / diffMax)) * 1000
