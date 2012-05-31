@@ -111,7 +111,6 @@ plotOptimResultsPan <- function(SimResults=SimResults, yInterpol=NULL, xCoords=N
 	}
 	# max difference between sim and exper
 	diffMax = max(unlist(!is.na(allDiff)))
-	print(diffMax)
 	
 	# set the count for the split screen window
 	count1 = dim(CNOlist$valueSignals[[1]])[2]+4
