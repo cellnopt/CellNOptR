@@ -23,9 +23,18 @@ source("../CNORdt/R/simulatorPause.R")
 sim1 = simulatorPause(CNOlistDelay, modelDelay, simDelay, indexDelay,
 boolUpdates=30, delayThresh, strongWeak=negEdges)
 sim1 = sim1[,indexDelay$signals,]
-
-
 plotCNOlist(plotData(CNOlistDelay, sim1))
+
+# pass to simulator
+CNOlist = CNOlistDelay
+Model = modelDelay
+SimList = simDelay
+indexList = indexDelay
+boolUpdates = 30
+# "B=C"    "C=D"    "!D=B"   "F=G"    "G=H"    "E1=E"   "A=B"    "A1=A"   "!H+E=F"
+delayThresh = c(3,0,0,0,0,0,0,0,0)
+strongWeak = c(0,0,1,0,0,0,0,0,0)
+
 
 
 # make list from bool.sim

@@ -77,6 +77,8 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 	
 	# make a matrix to store outputCubes
 	allCubes = matrix(NA, nrow=nReacs*nCond, ncol=boolUpdates)
+	rownames(allCubes) = rep(Model$reacID,1,each=nCond)
+	allCubes[,1]=0
 
 	############################## MAIN LOOP ##############################
 	
@@ -133,11 +135,13 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 			as.normal = which(is.na(allCubes[,countBool]))
 			allCubes[as.normal,countBool] = outputCube[as.normal]
 			
+			# need to overwrite other inputs as well
 			if(length(strongWeakOn)) {
 				for(b in strongWeakOn) {
-					if(allCubes[b,countBool]==1)
-						toChange = which(is.na(allCubes[b,]))
+					if(!is.na(allCubes[b,countBool]))
+						toChange = which(is.na(allCubes[b,countBool:boolUpdates]))
 						allCubes[b,toChange] = outputCube[b]	
+						reacs2Overwrite = which(Model$interMat[,round(b/nCond)] == 1)				
 				}	
 			}
 			
@@ -183,10 +187,14 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 		# replace NAs with zeros to avoid having the NA penalty applying to unconnected species
 		readout <- newInput
 		readout[is.na(readout)] <- 0
-		#outputPrev[is.na(outputPrev)] <- 0
 		yBool[,,countBool] = readout
-	#	countBool = countBool+1
-
+		
+		###
+		countBool
+		countBool = countBool+1
+		allCubes
+		readout
+		###
 	}
 
 	############################## MAIN LOOP ##############################
