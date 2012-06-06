@@ -206,11 +206,12 @@ plotOptimResultsPan <- function(SimResults=SimResults, yInterpol=NULL, xCoords=N
 	for(c1 in 1:dim(CNOlist$valueSignals[[1]])[1]) {
 		screen(sStim)
 		par(mar=c(0.5,0.5,0,0))
-		if(c1==1) {		
+		
+		if(all(CNOlist$valueStimuli[c1,]==0)) {
 			image(
 				t(matrix(1-CNOlist$valueStimuli[c1,],nrow=1)),
-				col=c("white","white"),xaxt="n",yaxt="n"
-			)
+				col=c("white"),xaxt="n",yaxt="n"
+			)				
 		} else {
 			image(
 				t(matrix(1-CNOlist$valueStimuli[c1,],nrow=1)),

@@ -14,7 +14,7 @@
 ##############################################################################
 # $Id$
 
-cutNONC <- function(Model, NONCindexes, andsInPkn=0) {
+cutNONC <- function(Model, NONCindexes) {
 
 	#####	 FUNCTIONS	#####
 	
@@ -68,22 +68,20 @@ cutNONC <- function(Model, NONCindexes, andsInPkn=0) {
 		# some NONC sp may be part of an AND gate with non-NONC sp
 		# if this is the case, remove the NONC edge, not the reaction from reacID
 		
-		if(andsInPkn) {
-			# rebuild reacIDs from matrix
-			toEdit = as.numeric(which(editReac==TRUE))
-			for(a in toEdit) {
-				andInput = rownames(newInterMat)[which(newInterMat[,a] == -1)]
-				andInd = which(newInterMat[,a] == -1)
-				if(length(intersect(which(newNotMat[,a]==1),which(newInterMat[,a]==-1)))) {
-					andNeg = intersect(which(newNotMat[,a]==1),which(newInterMat[,a]==-1))
-						for(p in 1:length(andNeg)) {
-							andInput[which(andInd==andNeg[p])] = paste("!", andInput[which(andInd==andNeg[p])], sep="")
-						}
-				}
-                            
-				LHS = paste(andInput,collapse="+", sep="")
-				colnames(newInterMat)[a] = paste(LHS, "=", rownames(newInterMat)[which(newInterMat[,a] == 1)], sep="")
+		# rebuild reacIDs from matrix
+		toEdit = as.numeric(which(editReac==TRUE))
+		for(a in toEdit) {
+			andInput = rownames(newInterMat)[which(newInterMat[,a] == -1)]
+			andInd = which(newInterMat[,a] == -1)
+			if(length(intersect(which(newNotMat[,a]==1),which(newInterMat[,a]==-1)))) {
+				andNeg = intersect(which(newNotMat[,a]==1),which(newInterMat[,a]==-1))
+					for(p in 1:length(andNeg)) {
+						andInput[which(andInd==andNeg[p])] = paste("!", andInput[which(andInd==andNeg[p])], sep="")
+					}
 			}
+                            
+			LHS = paste(andInput,collapse="+", sep="")
+			colnames(newInterMat)[a] = paste(LHS, "=", rownames(newInterMat)[which(newInterMat[,a] == 1)], sep="")
 		}
 		
 		reac2remove <- apply(newInterMat,2,emptyInOut)				
