@@ -7,7 +7,10 @@ Genetic algorithm used to optimise a model
 This function is the genetic algorithm to be used to optimise a model by fitting to data containing one time point.
 }
 \usage{
-gaBinaryT1(CNOlist, Model, SimList, indexList, sizeFac = 1e-04, NAFac = 1, initBstring, PopSize = 50, Pmutation = 0.5, MaxTime = 60, maxGens = 500, StallGenMax = 100, SelPress = 1.2, elitism = 5, RelTol = 0.1, verbose=TRUE)
+gaBinaryT1(CNOlist, Model, SimList, indexList, sizeFac = 1e-04, NAFac = 1,
+initBstring, PopSize = 50, Pmutation = 0.5, MaxTime = 60, maxGens = 500,
+StallGenMax = 100, SelPress = 1.2, elitism = 5, RelTol = 0.1, verbose=TRUE,
+priorBitString=NULL)
 }
 \arguments{
   \item{CNOlist}{
@@ -58,6 +61,12 @@ i.e., how different from the best solution, default set to 0.1
 }
   \item{verbose}{
 logical (default to TRUE) do you want the statistics of each generation to be printed on the screen?
+}
+  \item{priorBitString}{
+A bitString of same length at the initial bitstring made of 0, 1 or NA. By
+default, this bitstring is set to NULL (equivalent to setting all bits to NA).
+If provided, all bitstring in a population will be changed to be in agreement
+with the priorBitString list.
 }
 }
 \details{

@@ -7,7 +7,10 @@ Genetic algorithm for time point 2
 This is the genetic algorithm for time point 2, that should follow optimisation based on time point 1.
 }
 \usage{
-gaBinaryT2(CNOlist, Model, SimList, indexList, bStringT1, SimResT1, sizeFac = 1e-04, NAFac = 1, PopSize = 50, Pmutation = 0.5, MaxTime = 60, maxGens = 500, StallGenMax = 100, SelPress = 1.2, elitism = 5, RelTol = 0.1, verbose=TRUE)
+gaBinaryT2(CNOlist, Model, SimList, indexList, bStringT1, SimResT1, sizeFac = 1e-04, NAFac = 1, 
+PopSize = 50, Pmutation = 0.5, MaxTime = 60, maxGens = 500, 
+StallGenMax = 100, SelPress = 1.2, elitism = 5, RelTol = 0.1, verbose=TRUE,
+priorBitString=NULL)
 }
 \arguments{
   \item{CNOlist}{
@@ -61,6 +64,13 @@ the relative tolerance for the best bitstring reported by the genetic algorithm,
   \item{verbose}{
 logical (default to TRUE) do you want the statistics of each generation to be printed on the screen
 }
+\item{priorBitString}{
+A bitString of same length at the initial bitstring made of 0, 1 or NA. By
+default, this bitstring is set to NULL (equivalent to setting all bits to NA).
+If provided, all bitstring in a population will be changed to be in agreement
+with the priorBitString list.
+}
+
 }
 \details{
 This function takes in the same input as the T1 ga, but in addition it takes in the bitstring optimised for T1, and does not take an initial bitstring. It also takes a matrix SimResT1, which is the results of simulatorT1 ran on the model optimised for T1. Be aware that the bitString that this function returns is one that only includes the bits that it actually looks at, i.e. the bits that were 0 in the bStringT1

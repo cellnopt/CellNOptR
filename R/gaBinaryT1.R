@@ -29,13 +29,16 @@ gaBinaryT1<-function(
 	SelPress=1.2,
 	elitism=5, 
 	RelTol=0.1, 
-	verbose=TRUE){
+	verbose=TRUE,
+    priorBitString=NULL){
 	
 #initialise
 	bLength<-length(initBstring)
 	Pop<-rbind(
 		initBstring,
 		round(matrix(runif(bLength*(PopSize-1)), nrow=(PopSize-1),ncol=bLength)))
+
+    Pop <- addPriorKnowledge(Pop, priorBitString)
 	bestbit<-Pop[1,]
 	bestobj<-Inf
 	stop<-FALSE
@@ -61,7 +64,8 @@ gaBinaryT1<-function(
 	getObj<-function(x){
 	
 		bitString<-x
-		
+        
+
 	#cut the model according to bitstring	
 		ModelCut<-Model
 		ModelCut$interMat<-ModelCut$interMat[,as.logical(bitString)]
@@ -69,7 +73,7 @@ gaBinaryT1<-function(
 		ModelCut$reacID<-ModelCut$reacID[as.logical(bitString)]
 
 		SimListCut<-cutSimList(SimList, bitString)
-		
+
 	#compute the simulated results	
 		SimResults<-simulatorT1(
 			CNOlist=CNOlist,
@@ -83,7 +87,7 @@ gaBinaryT1<-function(
 			Model=ModelCut,
 			SimList=SimListCut,
 			indexList=indexList)
-		
+
 	#Compute the score	
 		Score<-getFit(
 			SimResults=SimResults,
@@ -223,6 +227,9 @@ gaBinaryT1<-function(
 			}else{
 				Pop<-Pop3
 				}
+        Pop <- addPriorKnowledge(Pop, priorBitString)
+
+
 		}
 #end of the while loop
 
@@ -251,3 +258,17 @@ gaBinaryT1<-function(
 		StringsTolScores=PopTolScores))	
 	}
 
+
+addPriorKnowledge <- function(pop, priorBitString){
+    if (is.null(priorBitString) == TRUE){
+        return(pop)
+    }
+    else{
+        for (i in 1:dim(pop)[1]){
+            pop[i,!is.na(priorBitString)] = priorBitString[!is.na(priorBitString)]
+        }
+    }
+
+
+   return(pop)
+}

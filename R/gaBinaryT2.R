@@ -30,7 +30,8 @@ gaBinaryT2 <-function(
 	SelPress=1.2,
 	elitism=5, 
 	RelTol=0.1,
-	verbose=TRUE){
+	verbose=TRUE,
+    priorBitString=NULL){
 	
 #Find the bits to optimise
 
@@ -40,6 +41,8 @@ gaBinaryT2 <-function(
 
 	bLength<-length(bits2optimise)
 	Pop<-round(matrix(runif(bLength*(PopSize)), nrow=(PopSize),ncol=bLength))
+    Pop <- addPriorKnowledge(Pop, priorBitString)
+
 	bestbit<-Pop[1,]
 	bestobj<-Inf
 	stop<-FALSE
@@ -206,7 +209,7 @@ gaBinaryT2 <-function(
 			}else{
 				Pop<-Pop3
 				}
-				
+        Pop <- addPriorKnowledge(Pop, priorBitString)
 		}
 		
 	PopTol<-PopTol[-1,]
