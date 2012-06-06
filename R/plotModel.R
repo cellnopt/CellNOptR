@@ -293,7 +293,7 @@ compressed, nodeLabels=graphvizParams$nodeLabels)
         col=nodeAttrs$color,
         style=nodeAttrs$style,
         lty=nodelty,
-        lwd=2,             # width of the nodes. IF provided, all nodes have the same width
+        lwd=2,   # width of the nodes. IF provided, all nodes have the same width
         label=nodeAttrs$label,
         shape=shapes,
         cex=0.4,
@@ -334,13 +334,27 @@ compressed, nodeLabels=graphvizParams$nodeLabels)
         #plot(g,"dot",attrs=attrs,nodeAttrs=nodeAttrs,edgeAttrs=edgeAttrs, recipEdges=recipEdges)
         edgeAttrs$lty=NULL    # why ? 
         toDot(copyg, output_dot, nodeAttrs=nodeAttrs,edgeAttrs=edgeAttrs,attrs=attrs, recipEdges=recipEdges)
+
+        # bug introduced in Rgraphviz 1.34 that set node attributes border.lwd
+        # and border.color that are not understood by dot. Best solution is to
+        # change Rgraphviz but large latency so we can change the written files
+        # afterwards to change the dot file itself
+        clean_dot(output_dot)
     }
     else{
         # finally, the layout for a R plot
         x <- layoutGraph(g,layoutType="dot",subGList=clusters,recipEdges=recipEdges,attrs=attrs)
         renderGraph(x)
         # and save into dot file.
-        toDot(copyg,output_dot,nodeAttrs=nodeAttrs,subGList=clusters,attrs=attrs,recipEdges=recipEdges,edgeAttrs=edgeAttrs)
+        toDot(copyg, output_dot, nodeAttrs=nodeAttrs, subGList=clusters, 
+             attrs=attrs, recipEdges=recipEdges, edgeAttrs=edgeAttrs)
+        # bug introduced in Rgraphviz 1.34 that set node attributes border.lwd
+        # and border.color that are not understood by dot. Best solution is to
+        # change Rgraphviz but large latency so we can change the written files
+        # afterwards to change the dot file itself
+        clean_dot(output_dot)
+        
+
     }
 
     if (output != "STDOUT"){dev.off()}
@@ -462,7 +476,7 @@ compressed, nodeLabels=NULL){
     for (s in vertices){
         color[s] <- "black"         # color edge
         fillcolor[s] <- "white"     # fill color
-        style[s] <- "filled, bold"  
+        style[s] <- "filled,bold"  
         lty[s] <- "solid"           
         label[s] <- s
         height[s] <- 1
@@ -621,9 +635,27 @@ createEdgeAttrs <- function(v1, v2, edges, BStimes ,Integr, user_edgecolor){
         }
     }
 
-
     edgeAttrs <- list(color=edgecolor,arrowhead=arrowhead,
         penwidth=edgewidth,label=label, lty=lty)
 
     return(list(toremove=toremove, edgeAttrs=edgeAttrs))
+}
+
+
+
+clean_dot <- function(filename)
+{
+    savedata = readLines(filename)
+    data = savedata
+    for (i in 1:length(data)){
+        data[i] = sub("border.lwd=1,", "", data[i])
+        data[i] = sub("border.color=black", "", data[i])
+    }
+
+    # if died, need to save back the "savedata"
+    # otherwise, we can overwrite model.dot
+    tryCatch(write(data, file=filename), error=function(e){print("Could not scan the dot file for cleaning (border.lwd and border.color). "); })
+
+
+
 }
