@@ -139,9 +139,17 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 			if(length(strongWeakOn)) {
 				for(b in strongWeakOn) {
 					if(!is.na(allCubes[b,countBool]))
+		
+						whatReac = round(b/nCond)
+						whatCond = floor(b/whatReac)
+						
+						output1 = which(Model$interMat[,whatReac] > 0)
+						reacsToFreeze = which(Model$interMat[output1,] > 0)
+						
+						bPlus = (reacsToFreeze-1)*nCond + whatCond
 						toChange = which(is.na(allCubes[b,countBool:boolUpdates]))
-						allCubes[b,toChange] = outputCube[b]	
-						reacs2Overwrite = which(Model$interMat[,round(b/nCond)] == 1)				
+						allCubes[bPlus,toChange] = outputCube[b]
+									
 				}	
 			}
 			
