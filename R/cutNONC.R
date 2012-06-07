@@ -53,10 +53,7 @@ cutNONC <- function(Model, NONCindexes) {
 		
 		# if there are AND gates in the PKN, find out
 		# if any NONCs are parts of AND gates
-		if(andsInPkn) {
-			editReac = apply(Model$interMat,2,multipleInOut)
-		}
-		
+		editReac = apply(Model$interMat,2,multipleInOut)
 		newSpecies <- Model$namesSpecies[-NONCindexes]
 		newInterMat <- Model$interMat[-NONCindexes,]
 		newNotMat <- Model$notMat[-NONCindexes,]
