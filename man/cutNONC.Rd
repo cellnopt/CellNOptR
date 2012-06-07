@@ -7,7 +7,7 @@ Cuts the non-observable/non-controllable species from the model
 This function cuts the non-observable and/or non-controllable species from the model, and returns a cut model.
 }
 \usage{
-cutNONC(Model, NONCindexes, andsInPkn)
+cutNONC(Model, NONCindexes)
 }
 \arguments{
   \item{Model}{
@@ -15,9 +15,6 @@ a model structure, as produced by readSif
 }
   \item{NONCindexes}{
 a vector of indices of species to remove in that model, as produced for example by findNONC
-}
-  \item{andsInPkn}{
-a boolean value indicating if there are AND gates in the input model, defaults to 1
 }
 }
 \details{
