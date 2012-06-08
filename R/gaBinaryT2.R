@@ -238,3 +238,17 @@ gaBinaryT2 <-function(
 		StringsTolScores=PopTolScores))	
 	}
 
+
+# same as in gaBinaryT1. needs to be cleanup in future releases 
+addPriorKnowledge <- function(pop, priorBitString){
+    if (is.null(priorBitString) == TRUE){
+        return(pop)
+    }
+    else{
+        for (i in 1:dim(pop)[1]){
+            pop[i,!is.na(priorBitString)] = priorBitString[!is.na(priorBitString)]
+        }
+    }
+   return(pop)
+}
+
