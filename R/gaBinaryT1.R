@@ -61,11 +61,17 @@ gaBinaryT1<-function(
 	PopTolScores<-NA
 	
 #Function that produces the score for a specific bitstring
-	getObj<-function(x){
+	getObj<-function(x, scoresHash=NULL){
 	
 		bitString<-x
         
-
+    # the hash table is used to speed up code. gain is guaranteed to be at least equal to elitism/popsize
+    if (is.null(scoresHash)==FALSE){
+        thisScore <- scoresHash[rownames(scoresHash) == paste(unlist(x), collapse=","),1]
+         if (length(thisScore) != 0){
+                 return(thisScore)
+            } # otherwise let us keep going
+        }
 	#cut the model according to bitstring	
 		ModelCut<-Model
 		ModelCut$interMat<-ModelCut$interMat[,as.logical(bitString)]
@@ -108,12 +114,58 @@ gaBinaryT1<-function(
 #Loop
 	t0<-Sys.time()
 	t<-t0
-	
+
+    # used by the scores hashTable. computed and skipped are useful for 
+    # debugging to check efficiency of the hash table.
+    scoresHash <- data.frame()
+    computed <- 0 
+    skipped <-0
+    maxSizeHashTable = 2000
+    # if you do want the hastable, uncomment the following line.
+    # scoresHash = NULL
+
 	while(!stop){
 	
 		#compute the scores
-		scores<-apply(Pop,1,getObj)
+		scores<-apply(Pop,1,getObj, scoresHash=scoresHash)
 		
+
+        # this piece of code is related to the scoresHash only, not the GA
+        if (is.null(scoresHash)==FALSE){
+            new <- 0
+            for (i in 1:dim(Pop)[1]){
+                thisScore <- scoresHash[rownames(scoresHash) == paste(unlist(Pop[i,]), collapse=","), 1]
+                # if not already stored, store the score and corresponding bitstring
+                if (length(thisScore) == 0){
+                    # compute a new score
+                    thisScore <- scores[i]
+                    computed = computed + 1
+                    # rename the row (latest one) of the newly added score  
+                    if (dim(scoresHash)[1]<maxSizeHashTable){
+                        scoresHash <- rbind(scoresHash, c(thisScore, 0))
+                        j = dim(scoresHash)[1]
+                        row.names(scoresHash)[j] = paste(unlist(Pop[i,]), collapse=",")
+                    }
+                    else{
+                        # shift by -1 so that first element put in the queue (that
+                        # we get rid of) is last 
+                        scoresHash = shift(scoresHash, -1)
+                        # overwrite last element with the latest score and bitstring
+                        scoresHash[maxSizeHashTable,] = c(thisScore, 0)
+                        row.names(scoresHash)[maxSizeHashTable] = 
+                            paste(unlist(Pop[i,]), collapse=",")
+                    }
+                 }
+                 else {
+                     count = scoresHash[rownames(scoresHash) == paste(unlist(Pop[i,]), collapse=","), 2]
+                     scoresHash[rownames(scoresHash) == paste(unlist(Pop[i,]), collapse=","), 2] = count+1
+                     skipped = skipped + 1
+                     new = new + 1
+                 }
+             }
+            #print(c(skipped, computed))
+        }
+
 		#Fitness assignment: ranking, linear
 		rankP<-order(scores,decreasing=TRUE)
 		Pop<-Pop[rankP,]
@@ -269,6 +321,9 @@ addPriorKnowledge <- function(pop, priorBitString){
         }
     }
 
-
    return(pop)
 }
+
+# simple function to shift a data.frame
+shift <- function(d, k) rbind( tail(d,k), head(d,-k), deparse.level = 0 )
+
