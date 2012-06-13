@@ -34,10 +34,10 @@ checkSignals<-function(CNOlist, Model){
 
     # check that Model is a Model list
     if(!is.list(Model)){
-        stop("This function expects as input a Model as output by readSif")
+        stop("This function expects as input a Model as output by readSIF")
     }
     if(all(names(Model) != c("reacID", "namesSpecies","interMat","notMat"))){
-        stop("This function expects as input a Model as output by readSif")
+        stop("This function expects as input a Model as output by readSIF")
     }
 
     # check that all of the signals in CNOlist$namesSignals match to one species in Model$namesSpecies
