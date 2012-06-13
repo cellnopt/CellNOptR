@@ -115,56 +115,18 @@ gaBinaryT1<-function(
 	t0<-Sys.time()
 	t<-t0
 
-    # used by the scores hashTable. computed and skipped are useful for 
-    # debugging to check efficiency of the hash table.
+    # used by the scores hashTable. 
     scoresHash <- data.frame()
-    computed <- 0 
-    skipped <-0
-    maxSizeHashTable = 2000
     # if you do want the hastable, uncomment the following line.
-    # scoresHash = NULL
+    #scoresHash = NULL
 
 	while(!stop){
 	
 		#compute the scores
 		scores<-apply(Pop,1,getObj, scoresHash=scoresHash)
 		
-
-        # this piece of code is related to the scoresHash only, not the GA
-        if (is.null(scoresHash)==FALSE){
-            new <- 0
-            for (i in 1:dim(Pop)[1]){
-                thisScore <- scoresHash[rownames(scoresHash) == paste(unlist(Pop[i,]), collapse=","), 1]
-                # if not already stored, store the score and corresponding bitstring
-                if (length(thisScore) == 0){
-                    # compute a new score
-                    thisScore <- scores[i]
-                    computed = computed + 1
-                    # rename the row (latest one) of the newly added score  
-                    if (dim(scoresHash)[1]<maxSizeHashTable){
-                        scoresHash <- rbind(scoresHash, c(thisScore, 0))
-                        j = dim(scoresHash)[1]
-                        row.names(scoresHash)[j] = paste(unlist(Pop[i,]), collapse=",")
-                    }
-                    else{
-                        # shift by -1 so that first element put in the queue (that
-                        # we get rid of) is last 
-                        scoresHash = shift(scoresHash, -1)
-                        # overwrite last element with the latest score and bitstring
-                        scoresHash[maxSizeHashTable,] = c(thisScore, 0)
-                        row.names(scoresHash)[maxSizeHashTable] = 
-                            paste(unlist(Pop[i,]), collapse=",")
-                    }
-                 }
-                 else {
-                     count = scoresHash[rownames(scoresHash) == paste(unlist(Pop[i,]), collapse=","), 2]
-                     scoresHash[rownames(scoresHash) == paste(unlist(Pop[i,]), collapse=","), 2] = count+1
-                     skipped = skipped + 1
-                     new = new + 1
-                 }
-             }
-            #print(c(skipped, computed))
-        }
+        # fill the hash table to speed up code
+        scoresHash<-fillHashTable(scoresHash, scores, Pop)
 
 		#Fitness assignment: ranking, linear
 		rankP<-order(scores,decreasing=TRUE)
@@ -303,6 +265,7 @@ gaBinaryT1<-function(
 			
 	res<-res[3:dim(res)[1],]	
 	rownames(res)<-NULL
+
 	return(list(
 		bString=bestbit,
 		Results=res,
@@ -327,3 +290,46 @@ addPriorKnowledge <- function(pop, priorBitString){
 # simple function to shift a data.frame
 shift <- function(d, k) rbind( tail(d,k), head(d,-k), deparse.level = 0 )
 
+
+
+fillHashTable <-function(scoresHash, scores, Pop)
+{
+    # if not a data.frame, just return NULL
+    if (is.null(scoresHash)==TRUE){ return(NULL)}
+
+    PopSize = dim(Pop)[1]
+    maxSizeHashTable = 5000 # should be twice as much as 
+    for (i in 1:dim(Pop)[1]){
+        thisScore <- scoresHash[rownames(scoresHash) == paste(unlist(Pop[i,]), collapse=","), 1]
+        # if not already stored, store the score and corresponding bitstring
+        if (length(thisScore) == 0){
+            # compute a new score
+            thisScore <- scores[i]
+            # rename the row (latest one) of the newly added score  
+            if (dim(scoresHash)[1]<maxSizeHashTable){
+                scoresHash <- rbind(scoresHash, c(thisScore, 1))
+                j = dim(scoresHash)[1]
+                row.names(scoresHash)[j] = paste(unlist(Pop[i,]), collapse=",")
+            }
+            else{
+                # shift by -1 so that first element put in the queue (that
+                # we get rid of) is last 
+                #indices = c(1:maxSizeHashTable-PopSize*2)
+                #scoresHash[indices, ] = scoresHash[order(scoresHash[indices,2], decreasing=TRUE), ]
+                scoresHash = shift(scoresHash, -1)
+
+
+                #scoresHash = shift(scoresHash, -1)
+                # overwrite last element with the latest score and bitstring
+                scoresHash[maxSizeHashTable,] = c(thisScore, 1)
+                row.names(scoresHash)[maxSizeHashTable] = 
+                    paste(unlist(Pop[i,]), collapse=",")
+            }
+         }
+         else {
+             count = scoresHash[rownames(scoresHash) == paste(unlist(Pop[i,]), collapse=","), 2]
+             scoresHash[rownames(scoresHash) == paste(unlist(Pop[i,]), collapse=","), 2] = count+1
+         }
+    }
+    return(scoresHash)
+}
