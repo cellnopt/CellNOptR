@@ -96,7 +96,7 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexIntegr=NA,
         }
         Integr<-rep(0,length(edges))  # 
     }
-    # otherwise, the user probably provided the model already read by readSif
+    # otherwise, the user probably provided the model already read by readSIF
     # in which case, and gates must be extracted from strings such as
     # "node1+node2=node3"
     # This block is the tricky part of the function. Change with care.
@@ -106,7 +106,7 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexIntegr=NA,
             "  length as model$reacID. ", "The model has ", length(model$reacID), 
             "  edges whereas the bitstring has a length of ", length(bString), sep=""))
         }
-        # namesSpecies == names(model) try to check if model resemble the output of readSif ?
+        # namesSpecies == names(model) try to check if model resemble the output of readSIF ?
         # ideally we should have a type.
 
         # build the unique vertices from the nameSpecies
