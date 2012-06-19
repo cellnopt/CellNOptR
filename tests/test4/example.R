@@ -59,7 +59,7 @@ setwd("tests/test4")
 #source("temp.R");
 library("CNORode")
 
-s = readSif('model.sif')
+s = readSIF('model.sif')
 m = readMIDAS('initialData.csv')
 cnolist = makeCNOlist(m, subfield=FALSE)
 

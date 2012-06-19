@@ -19,7 +19,7 @@ load("CNOlistToyFB.RData")
 cnolist=CNOlistToyFB
 
 
-model = readSif('ToyModelFeedbackDataGenerator.sif')
+model = readSIF('ToyModelFeedbackDataGenerator.sif')
 indices <- indexFinder(cnolist, model)
 
 #indices<- findNONC(model, indices, verbose = TRUE)

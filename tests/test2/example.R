@@ -17,7 +17,7 @@ library(CellNOptR)
 #setwd("C:/Users/David/Desktop/stuff/CNOR_ode/tests/test2");
 library("CNORode")
 
-s = readSif('model.sif')
+s = readSIF('model.sif')
 m = readMIDAS('initialData.csv')
 cnolist = makeCNOlist(m, subfield=FALSE)
 

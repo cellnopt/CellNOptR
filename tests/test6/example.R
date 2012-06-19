@@ -18,10 +18,10 @@ library(CellNOptR)
 library("CNORode")
 #source("logic_based_ode_parameters_estimation_SSm_cluster.R");
 #source("simulate_and_plot_ode_fitness.R")
-s = readSif('model_espelin.sif')
+s = readSIF('model_espelin.sif')
 m = readMIDAS('initialData_espelin.csv')
 
-#s = readSif('model.sif')
+#s = readSIF('model.sif')
 #m = readMIDAS('initialData.csv')
 cnolist = makeCNOlist(m, subfield=FALSE)
 indices <- indexFinder(cnolist, s, verbose = TRUE)
