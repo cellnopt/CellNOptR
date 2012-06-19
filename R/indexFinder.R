@@ -34,12 +34,12 @@ indexFinder<-function(CNOlist, Model, verbose=FALSE){
 		
 #check that Model is a Model list
 
-	if(!is.list(Model)) stop("This function expects as input a Model as output by readSif")
+	if(!is.list(Model)) stop("This function expects as input a Model as output by readSIF")
 	
 	if(length(Model) == 4) {
 	
 		if(all(names(Model) != c("reacID", "namesSpecies","interMat","notMat"))){
-			stop("This function expects as input a Model as output by readSif")
+			stop("This function expects as input a Model as output by readSIF")
 			}	
 			
 		}
@@ -47,7 +47,7 @@ indexFinder<-function(CNOlist, Model, verbose=FALSE){
 	if(length(Model) == 5) {
 	
 		if(all(names(Model) != c("reacID", "namesSpecies","interMat","notMat","speciesCompressed"))){
-			stop("This function expects as input a Model as output by readSif")
+			stop("This function expects as input a Model as output by readSIF")
 			}	
 			
 		}	

@@ -14,7 +14,7 @@
 #
 ##############################################################################
 # $Id$
-readSif<-function(sifFile){
+readSIF<-function(sifFile){
 
 #Read the sif file
 	sif<-read.table(sifFile)

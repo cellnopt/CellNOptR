@@ -93,7 +93,7 @@ CNORwrap<-function(paramsList=NA,Data,Model,Name,NamesData=NA,Time=1){
 	resE<-residualError(CNOlist=paramsList$Data)
 	
 #11.Prepare for simulation
-	fields4Sim<-prep4Sim(Model=NCNOcutCompExp)
+	fields4Sim<-prep4sim(Model=NCNOcutCompExp)
 	
 #12.Optimisation t1	
 	initBstring<-rep(1,length(NCNOcutCompExp$reacID))

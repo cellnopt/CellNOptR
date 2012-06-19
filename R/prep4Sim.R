@@ -13,7 +13,7 @@
 #
 ##############################################################################
 # $Id$
-prep4Sim<-function(Model){
+prep4sim<-function(Model){
 
 #Compute the max number of inputs observed in the model for a single reaction
 	maxInput<-colSums(Model$interMat)
