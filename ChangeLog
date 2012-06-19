@@ -1,4 +1,12 @@
-6/June/2010 1.3.11
+19/June/2012: 1.3.14
+* rev1487. change readSif into readSIF and prep4Sim into prep4sim
+
+12/June/2012: 1.3.13
+------------------------
+* rev1465. gaBinaryT1 uses a has table to compute scores.
+
+6/June/2012 1.3.11
+-------------------
 * rev1398: faster simulatorT1 (3 times)
 * rev1407: add prior knowledge bitstring in the GA algorithm (T1 and T2) (bug
   report 107) 
