@@ -17,7 +17,7 @@ a CNOlist.
 a Model that only contains the reactions to be evaluated.
 }
 \item{SimList}{
-a SimList as created by prep4Sim, that has also already been cut to contain only the reactions to be evaluated.
+a SimList as created by prep4sim, that has also already been cut to contain only the reactions to be evaluated.
 }
 \item{indexList}{
 an indexList as created by indexFinder.
@@ -50,7 +50,7 @@ data(CNOlistPB, package="CNORdt")
 data(ToyModelPB, package="CNORdt")
 
 indexOrig <- indexFinder(CNOlist, Model, verbose=TRUE)
-fields4Sim <- prep4Sim(Model)
+fields4Sim <- prep4sim(Model)
 
 simRes <- simulatorTimeScale(
   CNOlist=CNOlist,

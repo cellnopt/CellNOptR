@@ -21,7 +21,7 @@ a bit string for T1 as output by gabinaryTimeScale (i.e. a vector of 1s and 0s).
 a bit string for T2 as output by gabinaryTimeScaleT2 (i.e. a vector of 1s and 0s).
 }
 \item{SimList}{
-a simlist corresponding to the model, as output by prep4Sim.
+a simlist corresponding to the model, as output by prep4sim.
 }
 \item{CNOlist}{
 the CNOlist used in optimization.
@@ -66,7 +66,7 @@ indexNONCcut <- indexFinder(CNOlist=CNOlist, Model=ModelCut)
 ModelCutCompress <- compressModel(Model=ModelCut, indexes=indexNONCcut)
 indexNONCcutComp <- indexFinder(CNOlist=CNOlist, Model=ModelCutCompress)
 ModelCutCompressExpand <- expandGates(Model=ModelCutCompress)
-fields4Sim <- prep4Sim(Model=ModelCutCompressExpand)
+fields4Sim <- prep4sim(Model=ModelCutCompressExpand)
 initBstring <- rep(1, length(ModelCutCompressExpand$reacID))
 
 # define boolUpdates and divTime

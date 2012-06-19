@@ -12,7 +12,7 @@ NAPenFac=1, boolUpdates, timeSplit="early", divTime=NULL, SimResultsT1, lowerB=l
 }
 \arguments{
 \item{SimList}{
-a list that contains additional fields for the simulator, as created by prep4Sim applied to the model above.
+a list that contains additional fields for the simulator, as created by prep4sim applied to the model above.
 }
 \item{CNOlist}{
 a CNOlist on which the score is based (based on all valueSignals).
@@ -76,7 +76,7 @@ data(ToyModelPB, package="CNORdt")
 
 # pre-processing
 indexOrig <- indexFinder(CNOlist=CNOlist, Model=Model, verbose=TRUE)
-fields4Sim <- prep4Sim(Model=Model)
+fields4Sim <- prep4sim(Model=Model)
 
 getFitRes <- getFitTimeScale(
   SimList=fields4Sim,

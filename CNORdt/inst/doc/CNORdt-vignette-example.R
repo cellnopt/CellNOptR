@@ -27,7 +27,7 @@ indexNONCcutComp <- indexFinder(CNOlist=CNOlist, Model=ModelCutCompress)
 ModelCutCompressExpand <- expandGates(Model=ModelCutCompress)
 
 # extract information for simulation
-fields4Sim <- prep4Sim(Model=ModelCutCompressExpand)
+fields4Sim <- prep4sim(Model=ModelCutCompressExpand)
 initBstring <- rep(1, length(ModelCutCompressExpand$reacID))
 
 opt1 <- gaBinaryTimeScale(CNOlist=CNOlist, Model=ModelCutCompressExpand,

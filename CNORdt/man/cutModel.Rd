@@ -13,7 +13,7 @@ cutModel(Model, SimList, bitString)
 a Model that only contains the reactions to be evaluated.
 }
 \item{SimList}{
-a list that contains additional fields for the simulator, as created by prep4Sim applied to the model above.
+a list that contains additional fields for the simulator, as created by prep4sim applied to the model above.
 }
 \item{bitString}{
 a vector of 0s and 1s signifying which hyperedges to cut.
@@ -47,7 +47,7 @@ indexNONCcut <- indexFinder(CNOlist=CNOlist, Model=ModelCut)
 ModelCutCompress <- compressModel(Model=ModelCut, indexes=indexNONCcut)
 indexNONCcutComp <- indexFinder(CNOlist=CNOlist, Model=ModelCutCompress)
 ModelCutCompressExpand <- expandGates(Model=ModelCutCompress)
-fields4Sim <- prep4Sim(Model=ModelCutCompressExpand)
+fields4Sim <- prep4sim(Model=ModelCutCompressExpand)
 initBstring <- rep(1, length(ModelCutCompressExpand$reacID))
 
 bitString = sample(c(0,1), length(ModelCutCompressExpand$reacID), replace=TRUE)
