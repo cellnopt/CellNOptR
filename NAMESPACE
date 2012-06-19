@@ -1,5 +1,8 @@
 import("graph", "RBGL")
 
+useDynLib(CellNOptR)
+
+
 export("checkSignals",
     "CNORwrap",
     "compressModel",
@@ -26,16 +29,17 @@ export("checkSignals",
     "plotFit",
     "plotOptimResults",
     "plotOptimResultsPDF",
-    "prep4Sim",
+    "prep4sim",
     "preprocessing",
     "readMIDAS",
-    "readSif",
+    "readSIF",
     "residualError",
     "sif2graph",
     "simulateT1",
     "simulatorT1",
     "simulatorT2",
     "writeDot",
+    "writeSIF",
     "writeNetwork",
     "writeReport",
     "writeScaffold", 
