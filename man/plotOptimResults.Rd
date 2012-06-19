@@ -57,7 +57,7 @@ setwd(tmpdir)
 data(CNOlistToy,package="CellNOptR")
 data(ToyModel,package="CellNOptR")
 indicesToy<-indexFinder(CNOlistToy,ToyModel,verbose=TRUE)
-ToyFields4Sim<-prep4Sim(ToyModel)
+ToyFields4Sim<-prep4sim(ToyModel)
 
 #simulate model
 

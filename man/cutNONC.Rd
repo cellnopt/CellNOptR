@@ -11,7 +11,7 @@ cutNONC(Model, NONCindexes)
 }
 \arguments{
   \item{Model}{
-a model structure, as produced by readSif
+a model structure, as produced by readSIF
 }
   \item{NONCindexes}{
 a vector of indices of species to remove in that model, as produced for example by findNONC
@@ -27,7 +27,7 @@ a model
 C.Terfve
 }
 \seealso{
-findNONC, readSif
+findNONC, readSIF
 }
 \examples{
 data(CNOlistToy,package="CellNOptR")

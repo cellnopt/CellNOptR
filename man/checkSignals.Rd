@@ -4,7 +4,10 @@
 Check the CNOlist and model matching
 }
 \description{
-This function checks that all the signals in the CNOlist match to species in the model. It also checks that the CNOlist and Model lists have the right format and contain the right fields.
+This function checks that all the signals in the CNOlist match to species in the
+model. It also checks that the CNOlist and Model lists have the right format and
+contain the right fields. It is called by the preprocessing function so there is
+no need to call it directly anymore if you use preprocessing.
 }
 \usage{
 checkSignals(CNOlist, Model)
@@ -14,7 +17,7 @@ checkSignals(CNOlist, Model)
 A CNOlist structure, as created by makeCNOlist
 }
   \item{Model}{
-A model structure, as created by readSif
+A model structure, as created by readSIF
 }
 }
 \details{
@@ -27,7 +30,7 @@ If all ok this function doesn't return anything.
 C. Terfve
 }
 \seealso{
-makeCNOlist, readSif
+makeCNOlist, readSIF
 }
 \examples{
 data(CNOlistToy,package="CellNOptR")

@@ -1,5 +1,5 @@
-\name{readSif}
-\alias{readSif}
+\name{readSIF}
+\alias{readSIF}
 \title{
 Read a sif file and create a model object
 }
@@ -7,7 +7,7 @@ Read a sif file and create a model object
 This function reads in a cityscape sif file and creates a model object that can be used in the CellNOptR procedure.
 }
 \usage{
-readSif(sifFile)
+readSIF(sifFile)
 }
 \arguments{
   \item{sifFile}{
@@ -44,5 +44,5 @@ tmpdir<-tempdir()
 setwd(tmpdir)
 cpfile<-dir(system.file("ToyModel",package="CellNOptR"),full=TRUE)
 file.copy(from=cpfile,to=getwd(),overwrite=TRUE)
-ToyModel<-readSif(sifFile="ToyPKNMMB.sif")
+ToyModel<-readSIF(sifFile="ToyPKNMMB.sif")
 }

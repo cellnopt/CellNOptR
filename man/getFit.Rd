@@ -64,7 +64,7 @@ data(CNOlistToy,package="CellNOptR")
 data(ToyModel,package="CellNOptR")
 
 indicesToy<-indexFinder(CNOlistToy,ToyModel,verbose=FALSE)
-ToyFields4Sim<-prep4Sim(ToyModel)
+ToyFields4Sim<-prep4sim(ToyModel)
 SimResults<-simulatorT1(
 	CNOlist=CNOlistToy,
 	Model=ToyModel,

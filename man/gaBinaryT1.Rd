@@ -20,7 +20,7 @@ a CNOlist on which the score is based (based on valueSignals[[2]], i.e. data at 
 a Model list
 }
   \item{SimList}{
-a list that contains additional fields for the simulator, as created by prep4Sim applied to the model above
+a list that contains additional fields for the simulator, as created by prep4sim applied to the model above
 }
   \item{indexList}{
 a list of indexes of species stimulated/inhibited/signals, as produced by indexfinder applied on the model and CNOlist above
@@ -87,7 +87,7 @@ mammalian signal transduction, Molecular Systems Biology, 5:331, 2009.
 C. Terfve
 }
 \seealso{
-GetFit, prep4Sim, indexFinder, simulatorT1
+GetFit, prep4sim, indexFinder, simulatorT1
 }
 \examples{
 data(CNOlistToy,package="CellNOptR")
@@ -105,7 +105,7 @@ ToyNCNOcutCompExp<-expandGates(ToyNCNOcutComp)
 
 #optimise
 
-ToyFields4Sim<-prep4Sim(ToyNCNOcutCompExp)
+ToyFields4Sim<-prep4sim(ToyNCNOcutCompExp)
 initBstring<-rep(1,length(ToyNCNOcutCompExp$reacID))
 ToyT1opt<-gaBinaryT1(
 	CNOlist=CNOlistToy,

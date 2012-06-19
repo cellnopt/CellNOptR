@@ -11,7 +11,7 @@ compressModel(Model, indexes)
 }
 \arguments{
   \item{Model}{
-a model structure as produced by readSif
+a model structure as produced by readSIF
 }
   \item{indexes}{
 list of indexes of sthe species stimulated/inhibited/measured in the model, as created by indexFinder
@@ -27,7 +27,7 @@ a compressed model list, with an additional field called 'speciesCompressed' tha
 C.Terfve
 }
 \seealso{
-indexFinder, readSif
+indexFinder, readSIF
 }
 \examples{
 #load data

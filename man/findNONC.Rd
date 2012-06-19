@@ -11,7 +11,7 @@ findNONC(Model, indexes, verbose)
 }
 \arguments{
   \item{Model}{
-a model, as created by readSif
+a model, as created by readSIF
 }
   \item{indexes}{
  a list of indices of species measured, stimulated or inhibited, as created by indexFinder
@@ -30,7 +30,7 @@ a vector of indices of species to remove
 C. Terfve
 }
 \seealso{
-cutNONC, indexFinder, readSif
+cutNONC, indexFinder, readSIF
 }
 \examples{
 data(CNOlistToy,package="CellNOptR")

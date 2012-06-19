@@ -17,7 +17,7 @@ model2sif(Model,optimRes=NA,writeSif=FALSE, filename="Model")
 
 \arguments{
   \item{Model}{
-the model as generated using \link{readSif}
+the model as generated using \link{readSIF}
 }
   \item{optimRes}{
 the output of the optimisation (as obtained using \link{gaBinaryT1}), default set to NA the whole model in converted 
@@ -45,7 +45,7 @@ All links in the model are converted in sif format that is sourceNode-tab-sign-t
 }
 
 \seealso{
-\link{graph2sif}, \link{sif2graph}, \link{readSif}, 
+\link{graph2sif}, \link{sif2graph}, \link{readSIF}, 
 }
 
 

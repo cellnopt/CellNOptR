@@ -14,7 +14,7 @@ indexFinder(CNOlist, Model,verbose=FALSE)
 a CNOlist structure, as produced by makeCNOlist
 }
   \item{Model}{
-a model structure, as produced by readSif
+a model structure, as produced by readSIF
 }
   \item{verbose}{
 do you want information about the cues and signals identities printed on the screen? Default if false but we would advise to set it to true when the function is called for the first time.

@@ -22,7 +22,7 @@ a bitstring to cut the model, as output by \code{gabinaryT1} (i.e. a vector of
 1s and 0s, of length equal to the number of reactions in the model)
 }
   \item{SimList}{
-a list of additional fields for simulation as created by \code{prep4Sim},
+a list of additional fields for simulation as created by \code{prep4sim},
 corresponding to the full model
 }
   \item{indexList}{
@@ -51,7 +51,7 @@ data(CNOlistToy,package="CellNOptR")
 data(ToyModel,package="CellNOptR")
 
 indicesToy<-indexFinder(CNOlistToy,ToyModel,verbose=FALSE)
-ToyFields4Sim<-prep4Sim(ToyModel)
+ToyFields4Sim<-prep4sim(ToyModel)
 
 SimRes<-simulateT1(
 	CNOlist=CNOlistToy, 

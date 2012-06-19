@@ -20,7 +20,7 @@ a CNOlist on which the score is based (based on valueSignals[[3]], i.e. data at 
 a Model list
 }
   \item{SimList}{
-a list that contains additional fields for the simulator, as created by prep4Sim applied to the model above
+a list that contains additional fields for the simulator, as created by prep4sim applied to the model above
 }
   \item{indexList}{
 a list of indexes of species stimulated/inhibited/signals, as produced by indexfinder applied on teh model and CNOlist above
@@ -86,7 +86,7 @@ This function returns a list with elements:
 C.Terfve
 }
 \seealso{
-GetFit, prep4Sim, indexFinder, simulatorT1, simulatorT2, gaBinaryT2
+GetFit, prep4sim, indexFinder, simulatorT1, simulatorT2, gaBinaryT2
 }
 \examples{
 #load data
@@ -106,7 +106,7 @@ indexesToyNCNOcutComp2<-indexFinder(CNOlistToy2,ToyNCNOcutComp2)
 ToyNCNOcutCompExp2<-expandGates(ToyNCNOcutComp2)
 
 #optimise t1
-ToyFields4Sim2<-prep4Sim(ToyNCNOcutCompExp2)
+ToyFields4Sim2<-prep4sim(ToyNCNOcutCompExp2)
 initBstring2<-rep(1,length(ToyNCNOcutCompExp2$reacID))
 ToyT1opt2<-gaBinaryT1(
 	CNOlist=CNOlistToy2,

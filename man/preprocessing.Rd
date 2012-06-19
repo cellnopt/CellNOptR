@@ -21,7 +21,7 @@ expansion=TRUE,ignoreList=NA, maxInputsPerGate=2, verbose=TRUE)
 the CNOlist that contains the data that you will use
 }
   \item{Model}{
-the model object as returned by \link{readSif}
+the model object as returned by \link{readSIF}
 }
   \item{cutnonc}{
 Removes the NONC nodes using \link{cutNONC} and \link{findNONC} (Default is TRUE).
@@ -62,7 +62,7 @@ indexFinder.}
 
 
 \seealso{
-\link{readSif}, \link{readMIDAS}, \link{cutNONC}, \link{findNONC},
+\link{readSIF}, \link{readMIDAS}, \link{cutNONC}, \link{findNONC},
 \link{compressModel} and \link{expandGates}.
 
 }

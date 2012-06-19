@@ -42,7 +42,7 @@ The sign of link is supposed to be encoded in the graph as the weigth of the edg
 }
 
 \seealso{
-\link{model2sif}, \link{sif2graph}, \link{readSif}, 
+\link{model2sif}, \link{sif2graph}, \link{readSIF}, 
 }
 
 

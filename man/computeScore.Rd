@@ -24,7 +24,7 @@ t1)
 a Model list
 }
   \item{SimList}{
-a list that contains additional fields for the simulator, as created by prep4Sim
+a list that contains additional fields for the simulator, as created by prep4sim
 applied to the model above
 }
   \item{indexList}{

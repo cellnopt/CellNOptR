@@ -21,7 +21,7 @@ a bitstring for T1 as output by gabinaryT1
 a bitstring for T2 as output by gabinaryT2
 }
   \item{SimList}{
-a simlist corresponding to the model, as output by prep4Sim
+a simlist corresponding to the model, as output by prep4sim
 }
   \item{CNOlist}{
 a CNOlist, corresponding to the optimisation one
@@ -48,7 +48,7 @@ This function doesn't return anything, it only plots the graph in your graphic w
 C. Terfve
 }
 \seealso{
-gabinaryT1, prep4Sim, cutAndPlotResultsT1
+gabinaryT1, prep4sim, cutAndPlotResultsT1
 }
 \examples{
 #load data
@@ -68,7 +68,7 @@ indexesToyNCNOcutComp2<-indexFinder(CNOlistToy2,ToyNCNOcutComp2)
 ToyNCNOcutCompExp2<-expandGates(ToyNCNOcutComp2)
 
 #optimise t1
-ToyFields4Sim2<-prep4Sim(ToyNCNOcutCompExp2)
+ToyFields4Sim2<-prep4sim(ToyNCNOcutCompExp2)
 initBstring2<-rep(1,length(ToyNCNOcutCompExp2$reacID))
 ToyT1opt2<-gaBinaryT1(
 	CNOlist=CNOlistToy2,

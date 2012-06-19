@@ -39,7 +39,7 @@ ToyCompExp<-expandGates(ToyComp)
 
 #optimise
 
-ToyFields4Sim<-prep4Sim(ToyCompExp)
+ToyFields4Sim<-prep4sim(ToyCompExp)
 initBstring<-rep(1,length(ToyCompExp$reacID))
 ToyT1opt<-gaBinaryT1(
 	CNOlist=CNOlistToy,

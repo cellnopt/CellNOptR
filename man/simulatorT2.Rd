@@ -19,7 +19,7 @@ a CNOlist
   \item{Model}{
 a Model that only contains the reactions to be evaluated, and the additional field \code{Model$times} that should have been created inside the gabinaryT2 optimisation engine.}
   \item{SimList}{
-a SimList as created by prep4Sim, that has also already been cut to contain only the reactions to be evaluated
+a SimList as created by prep4sim, that has also already been cut to contain only the reactions to be evaluated
 }
   \item{indexList}{
 an indexList as created by indexFinder
@@ -47,7 +47,7 @@ data(CNOlistToy2,package="CellNOptR")
 data(ToyModel2,package="CellNOptR")
 
 indicesToy<-indexFinder(CNOlistToy2,ToyModel2,verbose=FALSE)
-ToyFields4Sim<-prep4Sim(ToyModel2)
+ToyFields4Sim<-prep4sim(ToyModel2)
 
 Sim<-simulatorT1(
 	CNOlist=CNOlistToy2,

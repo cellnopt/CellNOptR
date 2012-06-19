@@ -17,7 +17,7 @@ graphvizParams=list())
 }
 \arguments{
   \item{model}{
-a model as returned by \code{readSif}. Alternatively, the filename can also be provided.
+a model as returned by \code{readSIF}. Alternatively, the filename can also be provided.
 }
   \item{cnolist}{
 output of makeCNOlist
@@ -96,7 +96,7 @@ a graph representation of the model
 T. Cokelaer
 }
 \seealso{
-\link{readMIDAS}, \link{readSif}, \link{makeCNOlist}, \link{writeNetwork},
+\link{readMIDAS}, \link{readSIF}, \link{makeCNOlist}, \link{writeNetwork},
 \link{writeDot}, and \link{gaBinaryT1}
 }
 

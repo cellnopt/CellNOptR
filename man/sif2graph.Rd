@@ -33,7 +33,7 @@ In the resulting graph, the sign of each link is encodes as the weigth of the ed
 }
 
 \seealso{
-\link{graph2sif}, \link{model2sif}, \link{readSif}, 
+\link{graph2sif}, \link{model2sif}, \link{readSIF}, 
 }
 
 

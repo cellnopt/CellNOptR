@@ -1,5 +1,5 @@
-\name{prep4Sim}
-\alias{prep4Sim}
+\name{prep4sim}
+\alias{prep4sim}
 \title{
 Prepare a model for simulation
 }
@@ -7,11 +7,11 @@ Prepare a model for simulation
 Adds to the model some fields that are used by the simulation engine
 }
 \usage{
-prep4Sim(Model)
+prep4sim(Model)
 }
 \arguments{
   \item{Model}{
-a model list, as output by readSif, normally pre-processed but that is not a requirement of this function
+a model list, as output by readSIF, normally pre-processed but that is not a requirement of this function
 }
 }
 \details{
@@ -33,5 +33,5 @@ simulatorT1
 }
 \examples{
 data(ToyModel,package="CellNOptR")
-ToyFields4Sim<-prep4Sim(ToyModel)
+ToyFields4Sim<-prep4sim(ToyModel)
 }
