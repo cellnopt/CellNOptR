@@ -15,6 +15,7 @@
 # $Id$
 plotFit<-function(OptRes, filename=NULL){
 
+   oldPar = par(no.readonly = TRUE)
 
    if (is.null(filename)!=TRUE){
         pdf(filename)
@@ -40,6 +41,7 @@ plotFit<-function(OptRes, filename=NULL){
         dev.off()
     }
 
+    par(oldPar)
 
 	}
 
