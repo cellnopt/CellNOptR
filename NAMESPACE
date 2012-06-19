@@ -1,6 +1,6 @@
 import("graph", "RBGL")
 
-useDynLib(CellNOptR)
+#useDynLib(CellNOptR)
 
 
 export("checkSignals",
