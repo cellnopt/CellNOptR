@@ -8,7 +8,7 @@
 
 
 \title{ Training of boolean logic models of signalling networks using prior knowledge networks and perturbation data with \emph{CellNOptR}}
-\author{ Camille Terfve, Julio Saez-Rodriguez}
+\author{ Camille Terfve, Thomas Cokelaer, Julio Saez-Rodriguez}
 
 \begin{document}
 \maketitle
@@ -102,13 +102,13 @@ plotCNOlist(CNOlistToy)
 plotCNOlistPDF(CNOlist=CNOlistToy,filename="ToyModelGraph.pdf")
 @
 
-We then load the prior knowledge network (PKN), contained in a Cytoscape SIF format file, using the function \emph{readSif} (alternatively, this example model can be loaded as a R data object already formatted, similarly to what is done above for the CNOlist).  Cytoscape \cite{Cytoscape} is a software for network visualisation and analysis. You can build a network within Cytoscape and simply save it as the default SIF file format, which can then be imported in \emph{CellNOptR}.  If you choose to do this, then you should make sure that if you have 'and' gates in your network they are present as dummy nodes named 'and' followed by a number from 1 to the number of 'and' nodes that you have.  
+We then load the prior knowledge network (PKN), contained in a Cytoscape SIF format file, using the function \emph{readSIF} (alternatively, this example model can be loaded as a R data object already formatted, similarly to what is done above for the CNOlist).  Cytoscape \cite{Cytoscape} is a software for network visualisation and analysis. You can build a network within Cytoscape and simply save it as the default SIF file format, which can then be imported in \emph{CellNOptR}.  If you choose to do this, then you should make sure that if you have 'and' gates in your network they are present as dummy nodes named 'and' followed by a number from 1 to the number of 'and' nodes that you have.  
 
 Alternatively, you can create your network file as a text file formatted as a SIF file.  Briefly, the expected file format is a tab delimited text file with a line for each directed interaction and the following three elements per line: name of source node, 1 or -1 if the source node is activating or inhibiting the target node, name of target node.  The names of the species in the model must match some of the nodes in the model (and this is case sensitive).  'And' hyperedges are expected to be represented in the SIF file as dummy nodes named 'and' followed by a number.  For example if you have an interaction of the type 'a \& b=c', your SIF file should contain the following three rows: 'a	1	and1', 'b 1 and1', 'and1 1 c'.  Please be aware that when building the scaffold network for optimisation, the software will create all possible 'and' combinations (with maximum 3 inputs) of edges coming into each node, so in the general case it is not necessary to put 2 or 3 input 'and' hyperedges in the prior knowledge network since the software will create them if the corresponding single edges are present. 
 
 
 <<getModel, eval=TRUE>>=
-ToyModel<-readSif(sifFile="ToyPKNMMB.sif")
+ToyModel<-readSIF(sifFile="ToyPKNMMB.sif")
 @
 
 <<getModel2, eval=TRUE>>=
@@ -206,11 +206,11 @@ The optimisation itself is done using a genetic algorithm that tries to optimise
 
 The genetic algorithm function returns a list object that collects a number of informations such as the best string and corresponding score at each iteration, the average fit at each generation, etc.  The function also returns strings that were obtained across the whole optimisation process and that obtained scores that were closed to the best string, where 'close' is defined by a relative tolerance on the score which is set by the parameter \emph{RelTol}.  This is an important piece of information because when the data cannot constrain the model tightly then many strings are obtained with a fit that is close to the optimal one, and interpretation of edges present in the optimal model is therefore more subtle. 
 
-We start off by computing the residual error, which is the minimum error that is unavoidable with a boolean network and comes from the discrete nature of such a model (please remember that although the data is normalised in this pipeline, it is not discretised, and therefore we compare 0/1 values to continuous values between 0 and 1). This value is important because however good is our optimisation, the value of the goodness of fit term cannot go under this residual error. Then we prepare the model for simulation by applying the function \emph{prep4Sim} which adds fields that are needed for the simulation engine. We also create an initial bit string for the optimisation, which in this case is just a string of 1s, but could be a meaningful string if you have prior expectation about the topology of the model.  
+We start off by computing the residual error, which is the minimum error that is unavoidable with a boolean network and comes from the discrete nature of such a model (please remember that although the data is normalised in this pipeline, it is not discretised, and therefore we compare 0/1 values to continuous values between 0 and 1). This value is important because however good is our optimisation, the value of the goodness of fit term cannot go under this residual error. Then we prepare the model for simulation by applying the function \emph{prep4sim} which adds fields that are needed for the simulation engine. We also create an initial bit string for the optimisation, which in this case is just a string of 1s, but could be a meaningful string if you have prior expectation about the topology of the model.  
 
 <<misc4Sim, eval=TRUE>>=
 resECNOlistToy<-residualError(CNOlistToy)
-ToyFields4Sim<-prep4Sim(ToyNCNOcutCompExp)
+ToyFields4Sim<-prep4sim(ToyNCNOcutCompExp)
 initBstring<-rep(1,length(ToyNCNOcutCompExp$reacID))
 @
 
@@ -340,7 +340,7 @@ If you do not want to bother with all of these steps, there is a function that a
 <<getToy, eval=TRUE>>=
 dataToy<-readMIDAS(MIDASfile='ToyDataMMB.csv')
 CNOlistToy<-makeCNOlist(dataset=dataToy,subfield=FALSE)
-ToyModel<-readSif(sifFile="ToyPKNMMB.sif")
+ToyModel<-readSIF(sifFile="ToyPKNMMB.sif")
 @
 
 Then you have two possibilities, either you keep all optimisation parameters to their default values and just type
@@ -395,10 +395,10 @@ unlink("ToyModelMMB2.sif")
 
 \section{A real example}
 
-This package also contains a slightly larger and more realistic data set, which is a part of the network analysed in \cite{julio2009} and comprises 40 species and 58 interactions in the PKN. This network was also used for the signaling challenge in DREAM 4 (see \url{http://www.the-dream-project.org/}).  The associated data was collected in hepatocellular carcinoma cell line HepG2 (see \cite{alexopoulos_networks_2010}).   The same analysis as above can be performed on this data set.  In order to load this data, you need to copy the files in the "DREAMModel" directory to you working directory (see below) then use \emph{readMIDAS}, \emph{readSif} and \emph{makeCNOlist}, or load the pre-formatted model and CNOlist objects, as above.
+This package also contains a slightly larger and more realistic data set, which is a part of the network analysed in \cite{julio2009} and comprises 40 species and 58 interactions in the PKN. This network was also used for the signaling challenge in DREAM 4 (see \url{http://www.the-dream-project.org/}).  The associated data was collected in hepatocellular carcinoma cell line HepG2 (see \cite{alexopoulos_networks_2010}).   The same analysis as above can be performed on this data set.  In order to load this data, you need to copy the files in the "DREAMModel" directory to you working directory (see below) then use \emph{readMIDAS}, \emph{readSIF} and \emph{makeCNOlist}, or load the pre-formatted model and CNOlist objects, as above.
 
 <<getDREAM, eval=FALSE>>=
-#Option 1: copy the SIF and MIDAS files (followed by readMIDAS, makeCNOlist and readSif)
+#Option 1: copy the SIF and MIDAS files (followed by readMIDAS, makeCNOlist and readSIF)
 cpfile<-dir(system.file("DREAMModel",package="CellNOptR"),full=TRUE)
 file.copy(from=cpfile,to=getwd(),overwrite=TRUE)
 #Option 2: load the CNOlist and model objects
@@ -408,7 +408,7 @@ data(DreamModel,package="CellNOptR")
 
 Having loaded both data and model, you can now visualise your data using \emph{plotCNOlist} and \emph{plotCNOlistPDF}.  Then, you check that the data matches the model (\emph{checkSignals}), and get the indices of measured/inhibited/stimulated species (\emph{indexFinder}). You can now start the preprocessing of the model, i.e. find the non-observable/non-controllable species (\emph{findNONC}), cut them (\emph{cutNONC}), recompute the indices (\emph{indexFinder}), compress the model (\emph{compressModel}), recompute the indices (\emph{indexFinder}), and expand the gates (\emph{expandGates}).
 
-Having obtained a pre-processed model, we compute the residual error (\emph{residualError}), prepare the model for simulation (\emph{prep4Sim}), and run the training function (\emph{gaBinaryT1}). Finally,we plot the results of our training (\emph{cutAndPlotResultsT1}, see figure \ref{fig:DREAMres}) as well as the information about the evolution of fit during optimisation (\emph{plotFit}).
+Having obtained a pre-processed model, we compute the residual error (\emph{residualError}), prepare the model for simulation (\emph{prep4sim}), and run the training function (\emph{gaBinaryT1}). Finally,we plot the results of our training (\emph{cutAndPlotResultsT1}, see figure \ref{fig:DREAMres}) as well as the information about the evolution of fit during optimisation (\emph{plotFit}).
 
 \begin{figure*}
 \centerline{\includegraphics[width=\textwidth]{Fig4.pdf}}
@@ -459,7 +459,7 @@ ToyNCNOcutComp2<-compressModel(ToyNCNOcut2,indicesToyNCNOcut2)
 indicesToyNCNOcutComp2<-indexFinder(CNOlistToy2,ToyNCNOcutComp2)
 ToyNCNOcutCompExp2<-expandGates(ToyNCNOcutComp2)
 resECNOlistToy2<-residualError(CNOlistToy2)
-ToyFields4Sim2<-prep4Sim(ToyNCNOcutCompExp2)
+ToyFields4Sim2<-prep4sim(ToyNCNOcutCompExp2)
 initBstring2<-rep(1,length(ToyNCNOcutCompExp2$reacID))
 ToyT1opt2<-gaBinaryT1(
 	CNOlist=CNOlistToy2,
