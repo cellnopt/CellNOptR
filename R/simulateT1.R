@@ -15,12 +15,9 @@
 # $Id$
 simulateT1<-function(CNOlist,Model,bStringT1,SimList,indexList){
 
-	Modelcut<-Model
-	
-	Modelcut$interMat<-Modelcut$interMat[,as.logical(bStringT1)]
-	Modelcut$notMat<-Modelcut$notMat[,as.logical(bStringT1)]
-	Modelcut$reacID<-Modelcut$reacID[as.logical(bStringT1)]
-	
+	Modelcut<-cutModel(Model, bStringT1)
+
+
 	SimListcut<-SimList
 	SimListcut$finalCube<-SimListcut$finalCube[as.logical(bStringT1),]
 	SimListcut$ixNeg<-SimListcut$ixNeg[as.logical(bStringT1),]

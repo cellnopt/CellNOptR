@@ -18,31 +18,26 @@
 # todo: this is similar to wha is done in gaBinaryT1. need to do the same for T2
 # todo: timepoints and nafac are hardcoded.
 computeScore<-function(CNOlist,Model,SimList,indexList,bitString){
-  
 
-  bs = as.logical(bitString)
-  #cut the model according to bitstring
-  ModelCut<-Model
-  ModelCut$interMat<-ModelCut$interMat[,bs]
-  ModelCut$notMat<-ModelCut$notMat[,bs]
-  ModelCut$reacID<-ModelCut$reacID[bs]
-  
+
+  ModelCut = cutModel(Model, bitString)
+
   SimListCut<-cutSimList(SimList, bitString)
-  
+
   #compute the simulated results
   SimResults<-simulatorT1(
     CNOlist=CNOlist,
     Model=ModelCut,
     SimList=SimListCut,
     indexList=indexList)
-  
+
   # We may want to to use the T0 information.
   SimResultsT0<-simulatorT0(
     CNOlist=CNOlist,
     Model=ModelCut,
     SimList=SimListCut,
     indexList=indexList)
-  
+
   #Compute the score
   Score<-getFit(
     SimResults=SimResults,
