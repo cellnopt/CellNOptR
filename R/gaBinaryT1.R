@@ -28,7 +28,7 @@ gaBinaryT1<-function(
 	StallGenMax=100,
 	SelPress=1.2,
 	elitism=5, 
-	RelTol=0.1, 
+	RelTol=0.1,
 	verbose=TRUE,
     priorBitString=NULL){
 	
@@ -48,15 +48,8 @@ gaBinaryT1<-function(
 	res<-rbind(
 		c(g,bestobj,toString(bestbit),stallGen,Inf,Inf,toString(bestbit),0),
 		c(g,bestobj,toString(bestbit),stallGen,Inf,Inf,toString(bestbit),0))
-	colnames(res)<-c(
-		"Generation",
-		"Best_score",
-		"Best_bitString",
-		"Stall_Generation",
-		"Avg_Score_Gen",
-		"Best_score_Gen",
-		"Best_bit_Gen",
-		"Iter_time")
+	colnames(res)<-c("Generation","Best_score","Best_bitString","Stall_Generation",
+        "Avg_Score_Gen","Best_score_Gen","Best_bit_Gen","Iter_time")
 	PopTol<-rep(NA,bLength)
 	PopTolScores<-NA
 	
@@ -73,11 +66,7 @@ gaBinaryT1<-function(
             } # otherwise let us keep going
         }
 	#cut the model according to bitstring	
-		ModelCut<-Model
-		ModelCut$interMat<-ModelCut$interMat[,as.logical(bitString)]
-		ModelCut$notMat<-ModelCut$notMat[,as.logical(bitString)]
-		ModelCut$reacID<-ModelCut$reacID[as.logical(bitString)]
-
+		ModelCut<-cutModel(Model, bitString)
 		SimListCut<-cutSimList(SimList, bitString)
 
 	#compute the simulated results	
@@ -182,20 +171,15 @@ gaBinaryT1<-function(
 		thisGenBestBit<-Pop[length(scores),]
 		
 		if(is.na(thisGenBest)){
-		
 			thisGenBest<-min(scores, na.rm=TRUE)
 			thisGenBestBit<-Pop[which(scores == thisGenBest)[1],]
-			
-			}
-			
+		}
+
 		if(thisGenBest < bestobj){
-		
 			bestobj<-thisGenBest
 			bestbit<-thisGenBestBit
 			stallGen<-0
-			
 			}else{
-			
 				stallGen<-stallGen+1
 				}
 				
@@ -208,23 +192,18 @@ gaBinaryT1<-function(
 			thisGenBest,
 			toString(thisGenBestBit),
 			as.numeric((t[length(t)]-t[length(t)-1]), units="secs"))	
-			
-		names(resThisGen)<-c(
-			"Generation",
-			"Best_score",
-			"Best_bitString",
-			"Stall_Generation",
-			"Avg_Score_Gen",
-			"Best_score_Gen",
-			"Best_bit_Gen",
-			"Iter_time")
-			
+
+		names(resThisGen)<-c("Generation","Best_score","Best_bitString","Stall_Generation",
+            "Avg_Score_Gen","Best_score_Gen","Best_bit_Gen","Iter_time")
+
 		if(verbose) print(resThisGen)
 		
 		res<-rbind(res,resThisGen)
 		
 		#Check stopping criteria
-		Criteria<-c((stallGen > StallGenMax),(as.numeric((t[length(t)]-t[1]), units="secs") > MaxTime),(g > maxGens))
+		Criteria<-c((stallGen > StallGenMax),
+            (as.numeric((t[length(t)]-t[1]), units="secs") > MaxTime),
+            (g > maxGens))
 		if(any(Criteria)) stop<-TRUE
 		
 		#Check for bitstrings that are within the tolerance of the best bitstring
@@ -242,8 +221,6 @@ gaBinaryT1<-function(
 				Pop<-Pop3
 				}
         Pop <- addPriorKnowledge(Pop, priorBitString)
-
-
 		}
 #end of the while loop
 
@@ -283,7 +260,6 @@ addPriorKnowledge <- function(pop, priorBitString){
             pop[i,!is.na(priorBitString)] = priorBitString[!is.na(priorBitString)]
         }
     }
-
    return(pop)
 }
 

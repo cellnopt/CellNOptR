@@ -52,7 +52,8 @@ gaBinaryT2 <-function(
 	res<-rbind(
 		c(g,bestobj,toString(bestbit),stallGen,Inf,Inf,toString(bestbit),0),
 		c(g,bestobj,toString(bestbit),stallGen,Inf,Inf,toString(bestbit),0))
-	colnames(res)<-c("Generation","Best_score","Best_bitString","Stall_Generation","Avg_Score_Gen","Best_score_Gen","Best_bit_Gen","Iter_time")
+	colnames(res)<-c("Generation","Best_score","Best_bitString","Stall_Generation",
+        "Avg_Score_Gen","Best_score_Gen","Best_bit_Gen","Iter_time")
 	PopTol<-rep(NA,bLength)
 	PopTolScores<-NA
 	
@@ -66,13 +67,8 @@ gaBinaryT2 <-function(
 		bStringtimes[which(bStringT1 == 0)]<-x*2
 		
 	#cut the model according to bitstring	
-		ModelCut<-Model
-		ModelCut$interMat<-ModelCut$interMat[,as.logical(bitString)]
-		ModelCut$notMat<-ModelCut$notMat[,as.logical(bitString)]
-		ModelCut$reacID<-ModelCut$reacID[as.logical(bitString)]
+		ModelCut<-cutModel(Model, bitString)
 		ModelCut$times<-bStringtimes[which(bStringtimes != 0)]
-
-
 		SimListCut<-cutSimList(SimList, bitString)
 
 		
@@ -96,9 +92,10 @@ gaBinaryT2 <-function(
 			nInTot=length(which(Model$interMat == -1)))
 		nDataP<-sum(!is.na(CNOlist$valueSignals[[2]]))
 		Score<-Score/nDataP
+
 		return(Score)
-		
 		}
+
 #Loop
 	t0<-Sys.time()
 	t<-t0
@@ -110,14 +107,12 @@ gaBinaryT2 <-function(
 		scores<-apply(Pop,1,getObj)
 		
 		#Fitness assignment: ranking, linear
-		
 		rankP<-order(scores,decreasing=TRUE)
 		Pop<-Pop[rankP,]
 		scores<-scores[rankP]
 		fitness<-2-SelPress+(2*(SelPress-1)*(c(1:PopSize)-1)/(PopSize-1))
 		
 		#selection:stochastic uniform sampling 
-		
 		wheel1<-cumsum(fitness/sum(fitness))
 		breaks<-runif(1)*1/PopSize
 		breaks<-c(breaks,breaks+((1:(PopSize-1)))/PopSize)
@@ -128,32 +123,28 @@ gaBinaryT2 <-function(
 			}
 			
 		#intermediate generation
-		
 		Pop2<-Pop[sel,]
-		PSize2<-dim(Pop2)[1]		
+		PSize2<-dim(Pop2)[1]
 		PSize3<-PopSize-elitism
 		
 		#Recombination: uniform: each bit has a .5 proba of being inherited from each parent
-		
 		mates<-cbind(ceiling(runif(PSize3)*PSize2),ceiling(runif(PSize3)*PSize2))
 		
 		#This holds the probability, for each bit, to be inherited from parent 1 (if TRUE) or 2 (if FALSE)
-		
 		InhBit<-matrix(runif((PSize3*bLength)),nrow=PSize3,ncol=bLength)
 		InhBit<-InhBit < 0.5
+
 		Pop3par1<-Pop2[mates[,1],]
 		Pop3par2<-Pop2[mates[,2],]
 		Pop3<-Pop3par2
 		Pop3[InhBit]<-Pop3par1[InhBit]
 		
 		#Mutation
-		
 		MutProba<-matrix(runif((PSize3*bLength)),nrow=PSize3,ncol=bLength)
 		MutProba<-(MutProba < (Pmutation/bLength))
 		Pop3[MutProba]<-1-Pop3[MutProba]
 		
 		#Compute stats
-		
 		t<-c(t,Sys.time())
 		g<-g+1
 		thisGenBest<-scores[length(scores)]
@@ -163,7 +154,7 @@ gaBinaryT2 <-function(
 			thisGenBest<-min(scores, na.rm=TRUE)
 			thisGenBestBit<-Pop[which(scores == thisGenBest)[1],]
 		}
-		
+
 		if(thisGenBest < bestobj){
 			bestobj<-thisGenBest
 			bestbit<-thisGenBestBit
@@ -180,23 +171,23 @@ gaBinaryT2 <-function(
 			(mean(scores,na.rm=TRUE)),
 			thisGenBest,
 			toString(thisGenBestBit),
-			as.numeric((t[length(t)]-t[length(t)-1]), units="secs"))		
-		
-		names(resThisGen)<-c("Generation","Best_score","Best_bitString","Stall_Generation","Avg_Score_Gen","Best_score_Gen","Best_bit_Gen","Iter_time")
+			as.numeric((t[length(t)]-t[length(t)-1]), units="secs"))	
+
+		names(resThisGen)<-c("Generation","Best_score","Best_bitString","Stall_Generation",
+            "Avg_Score_Gen","Best_score_Gen","Best_bit_Gen","Iter_time")
+
 		if(verbose) print(resThisGen)
+		
 		res<-rbind(res,resThisGen)
 		
 		#Check stopping criteria
-		
-		Criteria<-c(
-			(stallGen > StallGenMax),
-			(as.numeric((t[length(t)]-t[1]), units="secs") > MaxTime),
-			(g > maxGens))
+		Criteria<-c((stallGen > StallGenMax),
+            (as.numeric((t[length(t)]-t[1]), units="secs") > MaxTime),
+            (g > maxGens))
 		if(any(Criteria)) stop<-TRUE
 		
 		#Check for bitstrings that are within the tolerance of the best bitstring
-		
-		tolScore<-scores[length(scores)]*0.1
+		tolScore<-scores[length(scores)]*RelTol
 		TolBs<-which(scores < scores[length(scores)]+tolScore)
 		
 		if(length(TolBs) > 0){
@@ -211,7 +202,8 @@ gaBinaryT2 <-function(
 				}
         Pop <- addPriorKnowledge(Pop, priorBitString)
 		}
-		
+#end of the while loop
+
 	PopTol<-PopTol[-1,]
 	PopTolScores<-PopTolScores[-1]
 	TolBs<-which(PopTolScores < scores[length(scores)]+tolScore)
@@ -226,11 +218,11 @@ gaBinaryT2 <-function(
 		}else{
 			PopTol<-PopTolT[1:(length(PopTolT)-1)]
 			PopTolScores<-PopTolT[length(PopTolT)]
-			}	
+			}
 			
 	res<-res[3:dim(res)[1],]	
 	rownames(res)<-NULL
-	
+
 	return(list(
 		bString=bestbit,
 		Results=res,
