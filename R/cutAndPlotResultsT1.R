@@ -25,10 +25,7 @@ cutAndPlotResultsT1 <- function(
     show=TRUE,
     tPt=CNOlist$timeSignals[2]) {
 
-	Modelcut <- Model
-	Modelcut$interMat <- Modelcut$interMat[,as.logical(bString)]
-	Modelcut$notMat <- Modelcut$notMat[,as.logical(bString)]
-	Modelcut$reacID <- Modelcut$reacID[as.logical(bString)]
+	Modelcut <- cutModel(Model, bString)
 
 	SimListCut<-cutSimList(SimList,bString)
 
