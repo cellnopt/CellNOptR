@@ -93,7 +93,7 @@ gaBinaryT2 <-function(
         Score<-Score/nDataP
 
         return(Score)
-        }
+    }
 
     #Loop
     t0<-Sys.time()
