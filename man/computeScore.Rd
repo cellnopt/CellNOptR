@@ -2,15 +2,16 @@
 \alias{computeScore}
 
 \title{
-  Convert a model object in sif format
+  Compute the score of a model/data set using a bitString to cut the model.
 }
 
 \description{
-compute and return score of a model (cut using a bitstring).
+See \code{gaBinaryT1}
 }
 
 \usage{
-computeScore(CNOlist, Model, SimList, indexList, bitString)
+computeScore(CNOlist, Model, SimList, indexList, bitString, sizeFac=0.0001,
+NAFac=1)
 
 }
 
@@ -37,16 +38,13 @@ a bistring to select a sub model
 }
 
 
-\details{
-All links in the model are converted in sif format that is sourceNode-tab-sign-tab-targetNode. If there are ANDs, they are converted using dummy nodes called and# (e.g. A+B=C will be A-tab-1-tab-and1; B-tab-1-tab-and1; and1-tab-1-tab-C).
-}
 
 \value{
 \item{score}{See gaBinaryT1 for details}
 }
 
 \author{
-    A.Vatsiou, T. Cokelaer
+    T. Cokelaer
 }
 
 
