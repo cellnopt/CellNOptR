@@ -99,7 +99,7 @@ model2sif<-function(Model,optimRes=NA,writeSif=FALSE, filename="Model"){
 #absent from the model (0), present at t1(1) or present at t2(2)
   if (writeSif==TRUE){
 	filename<-paste(filename, ".sif", sep="")
-    write.table(sifFile, file=filename, row.names=FALSE,col.names=FALSE,quote=FALSE,sep="\t")
+    writeSIF(sifFile, file=filename)
   }
 
   return(sifFile)
