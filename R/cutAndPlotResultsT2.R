@@ -61,7 +61,7 @@ cutAndPlotResultsT2 <-function(
 	
 	# simulate
 	SimT2 <- simulatorT2(
-		SimResultst1=SimT1,
+		SimResultsT1=SimT1,
 		CNOlist=CNOlist,
 		Model=Modelcut,
 		SimList=SimListCut,

@@ -14,7 +14,7 @@
 ##############################################################################
 # $Id$
 simulatorT2 <-function(
-	SimResultst1,
+	SimResultsT1,
 	CNOlist,
 	Model,
 	SimList,
@@ -42,7 +42,7 @@ simulatorT2 <-function(
 	testVal<-1E-3
 	
 #Create an initial values matrix	
-	initValues<-SimResultst1
+	initValues<-SimResultsT1
 	
 #Initialise main loop
 	newInput<-initValues
