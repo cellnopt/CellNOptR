@@ -32,7 +32,7 @@ the scaling factor for the size term in the objective function, default to 0.000
 the scaling factor for the NA term in the objective function, default to 1
 }
   \item{initBstring}{
-an initial bitsring to be tested, should be of the same size as the number of reactions in the model above
+an initial bitsrting to be tested, should be of the same size as the number of reactions in the model above
 }
   \item{PopSize}{
 the population size for the genetic algorithm, default set to 50

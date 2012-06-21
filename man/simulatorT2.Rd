@@ -7,10 +7,10 @@ Simulation of a boolean model for time 2
 This function simulates a boolean model at time 2 where time 2 is assume to be a pseudo-steady states at a time scale slower than the pseudo-steady state evaluated at time 1
 }
 \usage{
-simulatorT2(SimResultst1, CNOlist, Model, SimList, indexList)
+simulatorT2(SimResultsT1, CNOlist, Model, SimList, indexList)
 }
 \arguments{
-  \item{SimResultst1}{
+  \item{SimResultsT1}{
 a matrix that is the output of simulatorT1 (i.e. one row per condition and one column per species IN THE MODEL)
 }
   \item{CNOlist}{
@@ -55,7 +55,7 @@ Sim<-simulatorT1(
 	SimList=ToyFields4Sim,
 	indexList=indicesToy)
 Sim2<-simulatorT2(
-	SimResultst1=Sim, 
+	SimResultsT1=Sim, 
 	CNOlist=CNOlistToy2, 
 	Model=ToyModel2, 
 	SimList=ToyFields4Sim, 

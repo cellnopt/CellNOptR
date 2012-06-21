@@ -14,7 +14,7 @@ compressModel(Model, indexes)
 a model structure as produced by readSIF
 }
   \item{indexes}{
-list of indexes of sthe species stimulated/inhibited/measured in the model, as created by indexFinder
+list of indexes of the species stimulated/inhibited/measured in the model, as created by indexFinder
 }
 }
 \details{

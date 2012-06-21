@@ -1,22 +1,23 @@
 \name{readSIF}
+\alias{readSif}
 \alias{readSIF}
 \title{
-Read a sif file and create a model object
+Read a SIF file and create a model object
 }
 \description{
-This function reads in a cityscape sif file and creates a model object that can be used in the CellNOptR procedure.
+This function reads in a cityscape SIF file and creates a model object that can be used in the CellNOptR procedure.
 }
 \usage{
 readSIF(sifFile)
 }
 \arguments{
   \item{sifFile}{
-the name of a sif file
+the name of a SIF file
 }
 }
 \details{
 This function takes in a single argument, sifFile, that points to a previous
-knowledge network in .sif format i.e. sourceNode-tab-sign-tab-targetNode. If
+knowledge network in SIF format i.e. sourceNode-tab-sign-tab-targetNode. If
 there are ANDs they should be introduced as dummy nodes called and# (don't
 forget the number after "and" otherwise this won't be recognised).  Please be
 aware that "and" nodes are not expected to be negated, i.e. there are not

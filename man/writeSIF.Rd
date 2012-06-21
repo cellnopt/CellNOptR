@@ -1,10 +1,12 @@
 \name{writeSIF}
 \alias{writeSIF}
+\alias{writeSif}
+
 \title{
-Convert a model into a SIF format and save it in a file.
+Convert a model into a SIF format and save the result in a file.
 }
 \description{
-This function takes as input a model (e.g., read from a SIF data set with
+This function takes as input a model (as created by e.g., read from a SIF data set with
 readSIF function) and save it into a file. 
 }
 \usage{

@@ -14,7 +14,7 @@ checkSignals(CNOlist, Model)
 }
 \arguments{
   \item{CNOlist}{
-A CNOlist structure, as created by makeCNOlist
+A CNOlist structure, as created by \code{makeCNOlist}
 }
   \item{Model}{
 A model structure, as created by readSIF
@@ -30,7 +30,7 @@ If all ok this function doesn't return anything.
 C. Terfve
 }
 \seealso{
-makeCNOlist, readSIF
+\code{\link{makeCNOlist}}, readSIF
 }
 \examples{
 data(CNOlistToy,package="CellNOptR")
