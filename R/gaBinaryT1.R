@@ -67,7 +67,7 @@ gaBinaryT1<-function(
             } # otherwise let us keep going
         }
 
-        Score = computeScore(CNOlist, Model, SimList, indexList, bitString)
+        Score = computeScoreT1(CNOlist, Model, SimList, indexList, bitString)
 
         return(Score)
     }
