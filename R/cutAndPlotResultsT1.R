@@ -39,7 +39,7 @@ cutAndPlotResultsT1 <- function(
 	Sim0 <- simulatorT0(CNOlist=CNOlist,Model=Modelcut,SimList=SimListCut,indexList=indexList)
 	SimRes0 <- as.matrix(Sim0[,indexList$signals])
 	SimResults <- list(t0=SimRes0,t1=SimRes)
-	dev.new()
+	#dev.new()
     if(show==TRUE) {
     	plotOptimResultsPan(
 			SimResults=SimResults,
