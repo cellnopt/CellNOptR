@@ -58,39 +58,8 @@ gaBinaryT2 <-function(
     #Function that produces the score for a specific bitstring
     getObj<-function(x){
 
-        bitString<-bStringT1
-        bitString[which(bStringT1 == 0)]<-x
-        bStringTimes<-bStringT1
-        bStringTimes[which(bStringT1 == 0)]<-x*2
-
-#        Score = computeScoreT2(CNOlist, Model, SimList, indexList, SimResT1,
-#                    bitString, bStringTimes, sizeFac, NAFac)
-        #cut the model according to bitstring    
-        ModelCut<-cutModel(Model, bitString)
-        ModelCut$times<-bStringTimes[which(bStringTimes != 0)]
-        SimListCut<-cutSimList(SimList, bitString)
-
-        
-        #compute the simulated results    
-        SimResults<-simulatorT2(
-            SimResultsT1=SimResT1,
-            CNOlist=CNOlist,
-            Model=ModelCut,
-            SimList=SimListCut,
-            indexList=indexList)
-    
-        #Compute the score    
-        Score<-getFit(
-            SimResults=SimResults,
-            CNOlist=CNOlist,
-            Model=ModelCut,
-            indexList=indexList,
-            timePoint="t2",
-            sizeFac=sizeFac,
-            NAFac=NAFac,
-            nInTot=length(which(Model$interMat == -1)))
-        nDataP<-sum(!is.na(CNOlist$valueSignals[[2]]))
-        Score<-Score/nDataP
+        Score = computeScoreT2(CNOlist, Model, SimList, indexList, SimResT1,
+                    bStringT1, x, sizeFac, NAFac)
 
         return(Score)
     }
