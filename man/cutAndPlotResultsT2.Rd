@@ -15,10 +15,10 @@ plotPDF = FALSE, tag=NULL, tPt=CNOlist$timeSignals[2:3])
 a model (the full one that was used for optimisation)
 }
   \item{bStringT1}{
-a bitstring for T1 as output by gabinaryT1 
+a bitstring for T1 as output by gaBinaryT1 
 }
   \item{bStringT2}{
-a bitstring for T2 as output by gabinaryT2
+a bitstring for T2 as output by gaBinaryT2
 }
   \item{SimList}{
 a simlist corresponding to the model, as output by prep4sim
@@ -48,7 +48,7 @@ This function doesn't return anything, it only plots the graph in your graphic w
 C. Terfve
 }
 \seealso{
-gabinaryT1, prep4sim, cutAndPlotResultsT1
+gaBinaryT1, prep4sim, cutAndPlotResultsT1
 }
 \examples{
 #load data

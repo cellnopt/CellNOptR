@@ -24,7 +24,7 @@ a vector with named entries t1, t2 and t1andt2 that hold the residual error for 
 C. Terfve
 }
 \seealso{
-makeCNOlist, normaliseCNOlist, GetFit
+makeCNOlist, normaliseCNOlist, getFit
 }
 \examples{
 data(CNOlistToy,package="CellNOptR")

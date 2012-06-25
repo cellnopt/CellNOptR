@@ -24,7 +24,7 @@ This function doesn't return anything, it just produces a plot in your graphics 
 C. Terfve
 }
 \seealso{
-gabinaryT1
+gaBinaryT1
 }
 \examples{
 data(CNOlistToy,package="CellNOptR")

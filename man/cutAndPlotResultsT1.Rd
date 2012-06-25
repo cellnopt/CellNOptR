@@ -15,7 +15,7 @@ FALSE, tag = NULL, show=TRUE, tPt=CNOlist$timeSignals[2])
 a model (the full one that was used for optimisation)
 }
   \item{bString}{
-a bitstring for T1  as output by gabinaryT1 (i.e. a vector of 1s and 0s)
+a bitstring for T1  as output by gaBinaryT1 (i.e. a vector of 1s and 0s)
 }
   \item{SimList}{
 a simlist corresponding to the model, as output by prep4sim
@@ -48,7 +48,7 @@ This function doesn't return anything, it only plots the graph in your graphic w
 C.Terfve
 }
 \seealso{
-gabinaryT1, prep4sim
+gaBinaryT1, prep4sim
 }
 \examples{
 #load data

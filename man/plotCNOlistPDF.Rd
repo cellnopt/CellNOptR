@@ -24,7 +24,7 @@ This function doesn't return anything, it just produces a pdf file containing yo
 C. Terfve
 }
 \seealso{
-plotCNolist, plotCNOlistLarge, plotCNOlistLargePDF
+plotCNOlist, plotCNOlistLarge, plotCNOlistLargePDF
 }
 \examples{
 tmpdir<-tempdir()

@@ -63,7 +63,7 @@ indexFinder.}
 
 \seealso{
 \link{readSIF}, \link{readMIDAS}, \link{cutNONC}, \link{findNONC},
-\link{compressModel} and \link{expandGates}.
+\link{compressModel}, \link{expandGates}.
 
 }
 \examples{

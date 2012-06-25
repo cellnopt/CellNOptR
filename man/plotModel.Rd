@@ -19,9 +19,7 @@ graphvizParams=list())
   \item{model}{
 a model as returned by \code{readSIF}. Alternatively, the filename can also be provided.
 }
-  \item{cnolist}{
-output of makeCNOlist
-}
+\item{cnolist}{output of makeCNOlist}
   \item{bString}{
 a sequence made of numbers between 0 and 1 of same length as
 the one returned by the Genetic Algorithm (GA). This is a generalisation of
@@ -29,11 +27,11 @@ the bitString returned by the GA function: several bit strings can be
 averaged and used
 }
   \item{indexIntegr}{
-additional indices to highlight some edge (optional).
+    additional indices to highlight some edge (optional).
 }
   \item{signals}{
 a list of nodes belonging to the signals class
-}
+        }
   \item{stimuli}{
 a list of nodes belonging to the stimuli class
 }
@@ -97,7 +95,7 @@ T. Cokelaer
 }
 \seealso{
 \link{readMIDAS}, \link{readSIF}, \link{makeCNOlist}, \link{writeNetwork},
-\link{writeDot}, and \link{gaBinaryT1}
+\link{writeDot}, \link{gaBinaryT1}
 }
 
 \note{This function depends on the Rgraphviz package.}

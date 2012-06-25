@@ -86,7 +86,7 @@ This function returns a list with elements:
 C.Terfve
 }
 \seealso{
-GetFit, prep4sim, indexFinder, simulatorT1, simulatorT2, gaBinaryT2
+getFit, prep4sim, indexFinder, simulatorT1, simulatorT2, gaBinaryT2
 }
 \examples{
 #load data

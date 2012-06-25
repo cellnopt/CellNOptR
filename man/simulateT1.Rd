@@ -18,7 +18,7 @@ a CNOlist object
 a full model
 }
   \item{bStringT1}{
-a bitstring to cut the model, as output by \code{gabinaryT1} (i.e. a vector of
+a bitstring to cut the model, as output by \code{gaBinaryT1} (i.e. a vector of
 1s and 0s, of length equal to the number of reactions in the model)
 }
   \item{SimList}{
@@ -34,7 +34,7 @@ This function is a wrapper for simulatorT1, that cuts the model before simulatin
 }
 \value{
 a matrix of simulated values, including all species in the model, i.e. to be
-used as input of gabinaryT2 (not implemented here) but not to be used directly
+used as input of gaBinaryT2 (not implemented here) but not to be used directly
 in \code{plotOptimResults.}
 }
 \author{

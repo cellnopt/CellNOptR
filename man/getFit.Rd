@@ -54,7 +54,7 @@ mammalian signal transduction, Molecular Systems Biology, 5:331, 2009.
 C. Terfve
 }
 \seealso{
-gabinaryT1, indexFinder, simulatorT1
+gaBinaryT1, indexFinder, simulatorT1
 }
 \examples{
 #Here we will evaluate the fit of the full initial model, 

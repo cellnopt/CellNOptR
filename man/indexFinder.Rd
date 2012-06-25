@@ -30,7 +30,7 @@ a list with fields:
 C. Terfve
 }
 \seealso{
-makeCNOlist, ReadSif
+\link{makeCNOlist}, \link{readSIF}
 }
 \examples{
 data(CNOlistToy,package="CellNOptR")

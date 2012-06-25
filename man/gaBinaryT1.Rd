@@ -87,7 +87,7 @@ mammalian signal transduction, Molecular Systems Biology, 5:331, 2009.
 C. Terfve
 }
 \seealso{
-GetFit, prep4sim, indexFinder, simulatorT1
+getFit, prep4sim, indexFinder, simulatorT1
 }
 \examples{
 data(CNOlistToy,package="CellNOptR")
