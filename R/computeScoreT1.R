@@ -17,40 +17,41 @@
 #Function that computes the score of a specific bitstring
 # todo: this is similar to wha is done in gaBinaryT1. need to do the same for T2
 # todo: timepoints and nafac are hardcoded.
-computeScoreT1<-function(CNOlist, Model, SimList, indexList, bitString,
+computeScoreT1<-function(CNOlist, model, simList, indexList, bitString,
     sizeFac=0.0001, NAFac=1){
 
 
-  ModelCut = cutModel(Model, bitString)
-  SimListCut<-cutSimList(SimList, bitString)
+    modelCut = cutModel(model, bitString)
+    simListCut<-cutSimList(simList, bitString)
 
-  #compute the simulated results
-  SimResults<-simulatorT1(
-    CNOlist=CNOlist,
-    Model=ModelCut,
-    SimList=SimListCut,
-    indexList=indexList)
+    #compute the simulated results
+    simResults<-simulatorT1(
+        CNOlist=CNOlist,
+        model=modelCut,
+        simList=simListCut,
+        indexList=indexList)
 
-  # We may want to to use the T0 information.
-  SimResultsT0<-simulatorT0(
-    CNOlist=CNOlist,
-    Model=ModelCut,
-    SimList=SimListCut,
-    indexList=indexList)
+    # We may want to to use the T0 information.
+    simResultsT0<-simulatorT0(
+        CNOlist=CNOlist,
+        model=modelCut,
+        simList=simListCut,
+        indexList=indexList)
 
-  #Compute the score
-  Score<-getFit(
-    SimResults=SimResults,
-    SimResultsT0=SimResultsT0,
-    CNOlist=CNOlist,
-    Model=ModelCut,
-    indexList=indexList,
-    timePoint="t1",
-    sizeFac=sizeFac,
-    NAFac=NAFac,
-    nInTot=length(which(Model$interMat == -1)))
-  nDataP<-sum(!is.na(CNOlist$valueSignals[[2]]))
-  Score<-Score/nDataP
-  
-  return(Score)
+    #Compute the score
+    Score<-getFit(
+        simResults=simResults,
+        simResultsT0=simResultsT0,
+        CNOlist=CNOlist,
+        model=modelCut,
+        indexList=indexList,
+        timePoint="t1",
+        sizeFac=sizeFac,
+        NAFac=NAFac,
+        nInTot=length(which(model$interMat == -1)))
+
+    nDataP<-sum(!is.na(CNOlist$valueSignals[[2]]))
+    Score<-Score/nDataP
+
+    return(Score)
 }

@@ -10,8 +10,8 @@ a CNOlist (see makeCNOlist and readMIDAS) or information related to the
 pre-processing steps (compression, NONC nodes, expansion gates).
 It can also be used to plot optimised model given the optimisation bitstring.}
 \usage{
-plotModel(model, cnolist=NULL, bString=NULL, indexIntegr=NA, signals=NULL, stimuli=NULL,
-inhibitors=NULL, ncno=NULL, compressed=NULL, output="STDOUT",filename=NULL, 
+plotModel(model, CNOlist=NULL, bString=NULL, indexIntegr=NA, signals=NULL, stimuli=NULL,
+inhibitors=NULL, NCNO=NULL, compressed=NULL, output="STDOUT",filename=NULL, 
 graphvizParams=list())
 
 }
@@ -19,7 +19,7 @@ graphvizParams=list())
   \item{model}{
 a model as returned by \code{readSIF}. Alternatively, the filename can also be provided.
 }
-\item{cnolist}{output of makeCNOlist}
+\item{CNOlist}{output of makeCNOlist}
   \item{bString}{
 a sequence made of numbers between 0 and 1 of same length as
 the one returned by the Genetic Algorithm (GA). This is a generalisation of
@@ -38,7 +38,7 @@ a list of nodes belonging to the stimuli class
   \item{inhibitors}{
 a list of nodes belonging to the inhibitors class
 }
-  \item{ncno}{
+  \item{NCNO}{
 a list of NCNO nodes.
 }
   \item{compressed}{
@@ -64,9 +64,9 @@ This function plots the model and also saves it in a dot file that can be proces
 later on. However, you can also save the plot in PNG or PDF or SVG format (one at
 a time).
 
-The cnolist argument contains the signals/stimuli/inhibitors so if you provide
-a cnolist there is no need to use these arguments. If you decide to use them
-they will overwrite the contents of the cnolist argument.
+The CNOlist argument contains the signals/stimuli/inhibitors so if you provide
+a CNOlist there is no need to use these arguments. If you decide to use them
+they will overwrite the contents of the CNOlist argument.
 
 optimRes is the output of gaBinary. One of its field is called bString and
 contains a list of 0 and 1 (the optimisation is perfomed with a binary
@@ -104,7 +104,7 @@ T. Cokelaer
     \dontrun{library(CellNOptR)
     data(CNOlistToy,package="CellNOptR")
     data(ToyModel,package="CellNOptR")
-    res<-plotModel(ToyModel, cnolist=CNOlistToy, compressed=c("TRAF6", "p38"))
+    res<-plotModel(ToyModel, CNOlist=CNOlistToy, compressed=c("TRAF6", "p38"))
     }
 }
 

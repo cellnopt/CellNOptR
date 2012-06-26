@@ -15,8 +15,8 @@
 # $Id$
 plotCNOlistLargePDF <-
 function(CNOlist,filename,nsplit, width=14, height=7){
-	pdf(file=filename,width=width,height=height)
-	plotCNOlistLarge(CNOlist,nsplit=nsplit,newDevice=FALSE)
-	dev.off()
-	}
+    pdf(file=filename,width=width,height=height)
+    plotCNOlistLarge(CNOlist,nsplit=nsplit,newDevice=FALSE)
+    dev.off()
+    }
 

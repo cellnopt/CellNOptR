@@ -7,11 +7,11 @@ Plot the results of an optimisation at t2
 This function takes a model and an optimised bitstring, it cuts the model according to the bitstring and plots the results of the simulation along with the experimental data. This function is designed to work on results of a 2 step optimisation.
 }
 \usage{
-cutAndPlotResultsT2(Model, bStringT1, bStringT2, SimList, CNOlist, indexList,
+cutAndPlotResultsT2(model, bStringT1, bStringT2, simList, CNOlist, indexList,
 plotPDF = FALSE, tag=NULL, tPt=CNOlist$timeSignals[2:3])
 }
 \arguments{
-  \item{Model}{
+  \item{model}{
 a model (the full one that was used for optimisation)
 }
   \item{bStringT1}{
@@ -20,7 +20,7 @@ a bitstring for T1 as output by gaBinaryT1
   \item{bStringT2}{
 a bitstring for T2 as output by gaBinaryT2
 }
-  \item{SimList}{
+  \item{simList}{
 a simlist corresponding to the model, as output by prep4sim
 }
   \item{CNOlist}{
@@ -58,51 +58,49 @@ data(ToyModel2,package="CellNOptR")
 
 #pre-process model
 
-checkSignals(CNOlistToy2,ToyModel2)
-indexesToy2<-indexFinder(CNOlistToy2,ToyModel2,verbose=FALSE)
-ToyNCNOindexes2<-findNONC(ToyModel2,indexesToy2,verbose=FALSE)
-ToyNCNOcut2<-cutNONC(ToyModel2,ToyNCNOindexes2)
-indexesToyNCNOcut2<-indexFinder(CNOlistToy2,ToyNCNOcut2)
-ToyNCNOcutComp2<-compressModel(ToyNCNOcut2,indexesToyNCNOcut2)
-indexesToyNCNOcutComp2<-indexFinder(CNOlistToy2,ToyNCNOcutComp2)
-ToyNCNOcutCompExp2<-expandGates(ToyNCNOcutComp2)
 
 #optimise t1
-ToyFields4Sim2<-prep4sim(ToyNCNOcutCompExp2)
-initBstring2<-rep(1,length(ToyNCNOcutCompExp2$reacID))
+results = preprocessing(CNOlistToy2, ToyModel2)
+processedModel = results$model
+indices = results$indices
+
+ToyFields4Sim2<-prep4sim(processedModel)
+initBstring2<-rep(1,length(processedModel$reacID))
 ToyT1opt2<-gaBinaryT1(
 	CNOlist=CNOlistToy2,
-	Model=ToyNCNOcutCompExp2,
-	SimList=ToyFields4Sim2,
-	indexList=indexesToyNCNOcutComp2,
+	model=processedModel,
+	simList=ToyFields4Sim2,
+	indexList=indices,
 	initBstring=initBstring2,
 	maxGens=2, 
-	PopSize = 5,
+	popSize = 5,
 	verbose=FALSE)
 
 #Optimise T2
 SimToyT12<-simulateT1(
 	CNOlist=CNOlistToy2,
-	Model=ToyNCNOcutCompExp2,
+	model=processedModel,
 	bStringT1=ToyT1opt2$bString,
-	SimList=ToyFields4Sim2,
-	indexList=indexesToyNCNOcutComp2)
+	simList=ToyFields4Sim2,
+	indexList=indices)
+
 ToyT1opt2T2<-gaBinaryT2(
 	CNOlist=CNOlistToy2,
-	Model=ToyNCNOcutCompExp2,
-	SimList=ToyFields4Sim2,
-	indexList=indexesToyNCNOcutComp2,
+	model=processedModel,
+	simList=ToyFields4Sim2,
+	indexList=indices,
 	bStringT1=ToyT1opt2$bString,
-	SimResT1=SimToyT12,
+	simResT1=SimToyT12,
 	maxGens=2, 
-	PopSize = 5,
+	popSize = 5,
 	verbose=FALSE)
+
 cutAndPlotResultsT2(
-	Model=ToyNCNOcutCompExp2,
+	model=processedModel,
 	bStringT1=ToyT1opt2$bString,
 	bStringT2=ToyT1opt2T2$bString,
-	SimList=ToyFields4Sim2,
+	simList=ToyFields4Sim2,
 	CNOlist=CNOlistToy2,
-	indexList=indexesToyNCNOcutComp2,
+	indexList=indices,
 	plotPDF=FALSE)
 }

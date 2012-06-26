@@ -1,5 +1,5 @@
-\name{computeScore}
-\alias{computeScore}
+\name{computeScoreT1}
+\alias{computeScoreT1}
 
 \title{
   Compute the score of a model/data set using a bitString to cut the model.
@@ -13,7 +13,7 @@ sizeFac and NAFac are penalties added to the final score as described in
 }
 
 \usage{
-computeScore(CNOlist, Model, SimList, indexList, bitString, sizeFac=0.0001, NAFac=1)
+computeScoreT1(CNOlist, model, simList, indexList, bitString, sizeFac=0.0001, NAFac=1)
 
 }
 
@@ -22,11 +22,11 @@ computeScore(CNOlist, Model, SimList, indexList, bitString, sizeFac=0.0001, NAFa
     \item{CNOlist}{
         a CNOlist structure, as created by \code{makeCNOlist}.
     }
-    \item{Model}{
+    \item{model}{
         a model structure, as created by code{readSIF}, normally pre-processed 
         but that is not a requirement of this function.
     }
-    \item{SimList}{
+    \item{simList}{
         a SimList as created by \code{prep4sim}, that has also already been cut to 
         contain only the reactions to be evaluated.
     }
@@ -60,7 +60,7 @@ computeScore(CNOlist, Model, SimList, indexList, bitString, sizeFac=0.0001, NAFa
     data(ToyModel,package="CellNOptR")
     res <- preprocessing(CNOlistToy,ToyModel)
     simlist  <-prep4sim(res$model)
-    score = computeScore(CNOlistToy, res$model, simlist, res$indices, rep(1,16))
+    score = computeScoreT1(CNOlistToy, res$model, simlist, res$indices, rep(1,16))
 }
 
 

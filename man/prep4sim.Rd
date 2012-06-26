@@ -1,5 +1,6 @@
 \name{prep4sim}
 \alias{prep4sim}
+\alias{prep4Sim}
 \title{
 Prepare a model for simulation
 }
@@ -7,10 +8,10 @@ Prepare a model for simulation
 Adds to the model some fields that are used by the simulation engine
 }
 \usage{
-prep4sim(Model)
+prep4sim(model)
 }
 \arguments{
-  \item{Model}{
+  \item{model}{
 a model list, as output by readSIF, normally pre-processed but that is not a requirement of this function
 }
 }

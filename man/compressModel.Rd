@@ -12,10 +12,10 @@ You can also use \link{preprocessing} function instead that calls \link{compress
 other preprocessing functions.  
 }
 \usage{
-compressModel(Model, indexes)
+compressModel(model, indexes)
 }
 \arguments{
-    \item{Model}{
+    \item{model}{
         a model structure as produced by \link{readSIF}.
     }
     \item{indexes}{
@@ -44,5 +44,5 @@ data(CNOlistToy,package="CellNOptR")
 data(ToyModel,package="CellNOptR")
 
 indicesToy<-indexFinder(CNOlistToy,ToyModel,verbose=FALSE)
-ToyComp<-compressModel(ToyModel,indicesToy)
+toyComp<-compressModel(ToyModel,indicesToy)
 }

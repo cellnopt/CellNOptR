@@ -13,7 +13,8 @@ sizeFac and NAFac are penalties added to the final score as described in
 }
 
 \usage{
-computeScoreT2(CNOlist, Model, SimList, indexList, SimResT1, bitString, bStringTimes, sizeFac=0.0001, NAFac=1)
+computeScoreT2(CNOlist, model, simList, indexList, simResT1, bStringT1,
+    bStringT2, sizeFac=0.0001, NAFac=1)
 }
 
 
@@ -21,23 +22,26 @@ computeScoreT2(CNOlist, Model, SimList, indexList, SimResT1, bitString, bStringT
     \item{CNOlist}{
         a CNOlist structure, as created by \code{makeCNOlist}.
     }
-    \item{Model}{
+    \item{model}{
         a model structure, as created by code{readSIF}, normally pre-processed 
         but that is not a requirement of this function.
     }
-    \item{SimList}{
-        a SimList as created by \code{prep4sim}, that has also already been cut to 
+    \item{simList}{
+        a simList as created by \code{prep4sim}, that has also already been cut to 
         contain only the reactions to be evaluated.
     }
     \item{indexList}{
         a list of indexes of the species stimulated/inhibited/measured in the 
         model, as created by \code{indexFinder}.
     }
-    \item{SimResT1}{
-    Results of T1 step.
+    \item{simResT1}{
+        Results of T1 step.
     }
-    \item{bitString}{
-        a bitstring of the same size as the number of reactions in the model above
+    \item{bStringT1}{
+        the best bitString at time T1
+    }
+    \item{bStringT2}{
+        the bitString to use to compute the score at time T2
     }
     \item{sizeFac}{
     the scaling factor for the size term in the objective function, default to 0.0001
@@ -58,11 +62,17 @@ computeScoreT2(CNOlist, Model, SimList, indexList, SimResT1, bitString, bStringT
 }
 
 \examples{
-    data(CNOlistToy,package="CellNOptR")
-    data(ToyModel,package="CellNOptR")
-    res <- preprocessing(CNOlistToy,ToyModel)
+    data(CNOlistToy2,package="CellNOptR")
+    data(ToyModel2,package="CellNOptR")
+    res <- preprocessing(CNOlistToy2, ToyModel2)
     simlist <-prep4sim(res$model)
-    score = computeScoreT2(CNOlistToy, res$model,simlist, res$indices, c())
+    bStringT1 = c(0,0,1,1,1,1,1,1,0,0,1,1,1,1,1,1)
+    simT1<-simulateT1(CNOlist=CNOlistToy2, model=res$model,
+            bStringT1=bStringT1, simList=simlist, indexList=res$indices)
+
+
+    score = computeScoreT2(CNOlistToy2, res$model ,simlist, res$indices, simT1,
+        bStringT1, bStringT2=c(1,0,1,0))
 }
 
 

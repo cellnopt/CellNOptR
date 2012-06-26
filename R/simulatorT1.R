@@ -13,18 +13,18 @@
 #
 ##############################################################################
 # $Id$
-simulatorT1<-function(CNOlist,Model,SimList,indexList){
-    nSp<-dim(Model$interMat)[1]
-    nReacs<-dim(Model$interMat)[2]    
+simulatorT1<-function(CNOlist,model,simList,indexList){
+    nSp<-dim(model$interMat)[1]
+    nReacs<-dim(model$interMat)[2]
     nCond<-dim(CNOlist$valueStimuli)[1]
-    maxIpg<-dim(SimList$finalCube)[2]
-    
-    if(is.null(dim(Model$interMat))){ 
-        nSp<-length(Model$interMat)
+    maxIpg<-dim(simList$finalCube)[2]
+
+    if(is.null(dim(model$interMat))){
+        nSp<-length(model$interMat)
         nReacs<-1
-        maxIpg<-length(SimList$finalCube)
+        maxIpg<-length(simList$finalCube)
     }
-    # simulator at t1. 
+    # simulator at t1.
     # WARNING: simulatorT0 calls this function. There is a tricky part in
     # simualtorT1 to handle the NA case . Be very careful when changinh this
     # function. TC. March 2012
@@ -34,25 +34,25 @@ simulatorT1<-function(CNOlist,Model,SimList,indexList){
     endIx<-rep(NA,nSp)
 
     for(i in 1:nSp){
-        endIx[i]<-length(which(SimList$maxIx == i))
+        endIx[i]<-length(which(simList$maxIx == i))
         }
 
-    maxgpo<-max(endIx)    
+    maxgpo<-max(endIx)
 
     # This value is used to test the stop condition for difference between 2
     # iterations.
     testVal<-1E-3
 
-    #Create an initial values matrix    
+    #Create an initial values matrix
     initValues<-matrix(data=NA,nrow=nCond,ncol=nSp)
-    colnames(initValues)<-Model$namesSpecies
+    colnames(initValues)<-model$namesSpecies
 
     # See warning on the top
-    # Set the initial values of the stimuli    
+    # Set the initial values of the stimuli
     initValues[,indexList$stimulated]<-CNOlist$valueStimuli
 
     # See warning on the top
-    # Flip the inhibitors so that 0=inhibited/1=non-inhibitted    
+    # Flip the inhibitors so that 0=inhibited/1=non-inhibitted
     valueInhibitors<-1-CNOlist$valueInhibitors
     valueInhibitors[which(valueInhibitors == 1)]<-NA
 
@@ -77,55 +77,55 @@ simulatorT1<-function(CNOlist,Model,SimList,indexList){
 
     filltempCube<-function(x){
         cMatrix<-matrix(data=x,nrow=nReacs,ncol=nCond)
-	    cVector<-apply(cMatrix,1,function(x){return(x)})
-	return(cVector)
-	}
+        cVector<-apply(cMatrix,1,function(x){return(x)})
+    return(cVector)
+    }
 
     # The IxNeg and Ignore matrices can be filled once for all before the loop
     if(nReacs > 1){
-        tempIxNeg<-apply(SimList$ixNeg,2,filltempCube)
-		tempIgnore<-apply(SimList$ignoreCube,2,filltempCube)
-		}
+        tempIxNeg<-apply(simList$ixNeg,2,filltempCube)
+        tempIgnore<-apply(simList$ignoreCube,2,filltempCube)
+        }
     else{
         tempIxNeg<-matrix(
-            SimList$ixNeg,nrow=nCond,
-            ncol=length(SimList$ixNeg),byrow=TRUE)
+            simList$ixNeg,nrow=nCond,
+            ncol=length(simList$ixNeg),byrow=TRUE)
         tempIgnore<-matrix(
-            SimList$ignoreCube,nrow=nCond,
-            ncol=length(SimList$ignoreCube),byrow=TRUE)
+            simList$ignoreCube,nrow=nCond,
+            ncol=length(simList$ignoreCube),byrow=TRUE)
     }
 
     #Main loop
     while(termCheck1 && termCheck2 ){
-    
+
         outputPrev<-newInput
         # This is now a 2 columns matrix that has a column for each input (column in finalCube)
         # and a set of rows for each reac (where a set contains as many rows as conditions)
         # all concatenated into one long column.
         if(nReacs > 1){
-            #outputPrev[,SimList$fina
-			tempStore<-apply(SimList$finalCube,2,function(x){return(outputPrev[,x])})
-			}
+            #outputPrev[,simList$fina
+            tempStore<-apply(simList$finalCube,2,function(x){return(outputPrev[,x])})
+            }
         else{
-            tempStore<-outputPrev[,SimList$finalCube]
+            tempStore<-outputPrev[,simList$finalCube]
         }
 
         #Compute all the ands by taking, for each gate, the min value across the inputs of that gate
-		if(nReacs > 1){
+        if(nReacs > 1){
             # new code with inf instead of NA. Speed up the code
-			#Set to Inf the values that are "dummies", so they won't influence the min
-	        tempStore[tempIgnore]<-Inf
+            #Set to Inf the values that are "dummies", so they won't influence the min
+            tempStore[tempIgnore]<-Inf
 
-			#Flip the values that enter with a negative sign
-			tempStore[tempIxNeg]<-1-tempStore[tempIxNeg]
+            #Flip the values that enter with a negative sign
+            tempStore[tempIxNeg]<-1-tempStore[tempIxNeg]
 
             outputCube <- apply(tempStore, 1, min)
-			#outputCube<-apply(tempStore,1,minNA)
+            #outputCube<-apply(tempStore,1,minNA)
 
             #OutputCube is now a vector of length (nCond*nReacs) that contains the input of each reaction in
             #each condition, concatenated as such allcond4reac1,allcond4reac2,etc...
             #This is transformed into a matrix with a column for each reac and a row for each cond
-			outputCube<-matrix(outputCube, nrow=nCond, ncol=nReacs)
+            outputCube<-matrix(outputCube, nrow=nCond, ncol=nReacs)
 
             #Go through each species, and if it has inputs, then take the max across those input reactions
             #i.e. compute the ORs
@@ -133,9 +133,9 @@ simulatorT1<-function(CNOlist,Model,SimList,indexList){
             # create the newInput matrix once for all. Faster than implicit
             # creation
             newInput = matrix(ncol=nSp, nrow=nCond, byrow=FALSE)
-			for(s in 1:nSp){
-				if(endIx[s] != 0){
-                    selection <- outputCube[,SimList$maxIx == s]
+            for(s in 1:nSp){
+                if(endIx[s] != 0){
+                    selection <- outputCube[,simList$maxIx == s]
                     if (length(selection) == nCond){
                         newInput[,s] <- selection
                     }
@@ -149,43 +149,43 @@ simulatorT1<-function(CNOlist,Model,SimList,indexList){
         }
         else{
             # OLD code with NA. Slower but we hardly enter in this loop
-			#Set to NA the values that are "dummies", so they won't influence the min
-			tempStore[tempIgnore]<-NA
-			#Flip the values that enter with a negative sign
-			tempStore[tempIxNeg]<-1-tempStore[tempIxNeg]
+            #Set to NA the values that are "dummies", so they won't influence the min
+            tempStore[tempIgnore]<-NA
+            #Flip the values that enter with a negative sign
+            tempStore[tempIxNeg]<-1-tempStore[tempIxNeg]
 
             outputCube<-ifelse(all(is.na(tempStore)),NA,min(tempStore,na.rm=TRUE))
-            newInput[,SimList$maxIx]<-outputCube
+            newInput[,simList$maxIx]<-outputCube
         }
 
     #Reset the inhibitors and stimuli
     for(stim in 1:length(indexList$stimulated)){
-			stimM<-cbind(
-			    CNOlist$valueStimuli[,stim],
-				newInput[,indexList$stimulated[stim]])
-			maxNA<-function(x){
-				return(max(x,na.rm=TRUE))
-				}
+            stimM<-cbind(
+                CNOlist$valueStimuli[,stim],
+                newInput[,indexList$stimulated[stim]])
+            maxNA<-function(x){
+                return(max(x,na.rm=TRUE))
+                }
             stimV<-apply(stimM,1,maxNA)
-			newInput[,indexList$stimulated[stim]]<-stimV
-			}
+            newInput[,indexList$stimulated[stim]]<-stimV
+            }
 #
     valueInhibitors<-1-CNOlist$valueInhibitors
     newInput[,indexList$inhibited]<-valueInhibitors*newInput[,indexList$inhibited]
 
-    #Replace NAs with zeros to avoid having the NA	penalty applying to unconnected species
-	newInput[is.na(newInput)]<-0
-	outputPrev[is.na(outputPrev)]<-0
+    #Replace NAs with zeros to avoid having the NA    penalty applying to unconnected species
+    newInput[is.na(newInput)]<-0
+    outputPrev[is.na(outputPrev)]<-0
 
-    #Check the 2 termination conditions		
-	termCheck1<-!all(abs(outputPrev-newInput)<testVal)
-	termCheck2<-(count < (nSp*1.2))
-	count<-count+1
-	}
+    #Check the 2 termination conditions
+    termCheck1<-!all(abs(outputPrev-newInput)<testVal)
+    termCheck2<-(count < (nSp*1.2))
+    count<-count+1
+    }
 
 #Set the non-resolved bits to NA
-	newInput[which(abs(outputPrev-newInput) > testVal)]<-NA
+    newInput[which(abs(outputPrev-newInput) > testVal)]<-NA
 
-	return(newInput)
-	}
+    return(newInput)
+    }
 

@@ -3,7 +3,7 @@
 %\VignettePackage{CellNOptR}
 
 \documentclass{article}
-\usepackage{Sweave,fullpage}
+\usepackage{Sweave}
 \usepackage{url}
 
 
@@ -188,8 +188,8 @@ In \emph{CellNOptR} (from version 1.2), a function called
 line:
 
 <<expand, eval=TRUE>>=
-results <- preprocessing(CNOlistToy, ToyModel, expansion=TRUE, compression=TRUE,
-cutnonc=TRUE, verbose=FALSE)
+results <- preprocessing(CNOlistToy, ToyModel, expansion=TRUE, 
+    compression=TRUE, cutNONC=TRUE, verbose=FALSE)
 ToyNCMOcutComp <- results$model
 indicesToyNCNOcutComp <- results$indices
 @
@@ -200,11 +200,11 @@ emphasize the usage of the function.
  
  \section{Training of the model} 
  
-By 'optimising the model', we mean exploring the space of possible combinations of expanded gates in the PKN in order to find the combination that reproduces most closely the data.  Comparison between model and data is obtained by  simulating the steady state behaviour of the model under all conditions present in the data, and comparing these binary values to the normalised data points. The match between data and model is quantified using an objective function with parameters \emph{sizeFac} and \emph{NAFac}.  This function is the sum of a term that computes the fit of the simulated data to the experimental data, a term that penalises increased model size (weighted by the parameter \emph{sizeFac}), and a term that penalises NAs in the output of the simulation (i.e. nodes that are in a non resolved state, typically negative feedbacks; weighted by the parameter \emph{NAFac}). Typically this has the following structure: \(\frac{1}{n} \sum_{t,l,k} (M_{t,l,k}-D_{t,l,k})^2 + \alpha \frac{1}{s} \sum_{edges} e_{edges} + \beta n_{NA} \), where n is the number of data points, M the model output for time t, readout l, condition k, D is the corresponding measurement, \(\alpha\) is the size factor, \(e\) is the number of inputs for the egde considered (where \(edges\) are all edges present in the optimised model), s is the number of hyperdeges in the model, \(\beta\) is the NA factor, and \(n_{NA}\) is the number of undetermined values returned by the model.
+By "optimising the model", we mean exploring the space of possible combinations of expanded gates in the PKN in order to find the combination that reproduces most closely the data.  Comparison between model and data is obtained by  simulating the steady state behaviour of the model under all conditions present in the data, and comparing these binary values to the normalised data points. The match between data and model is quantified using an objective function with parameters \emph{sizeFac} and \emph{NAFac}.  This function is the sum of a term that computes the fit of the simulated data to the experimental data, a term that penalises increased model size (weighted by the parameter \emph{sizeFac}), and a term that penalises NAs in the output of the simulation (i.e. nodes that are in a non resolved state, typically negative feedbacks; weighted by the parameter \emph{NAFac}). Typically this has the following structure: \(\frac{1}{n} \sum_{t,l,k} (M_{t,l,k}-D_{t,l,k})^2 + \alpha \frac{1}{s} \sum_{edges} e_{edges} + \beta n_{NA} \), where n is the number of data points, M the model output for time t, readout l, condition k, D is the corresponding measurement, \(\alpha\) is the size factor, \(e\) is the number of inputs for the egde considered (where \(edges\) are all edges present in the optimised model), s is the number of hyperdeges in the model, \(\beta\) is the NA factor, and \(n_{NA}\) is the number of undetermined values returned by the model.
 
-The optimisation itself is done using a genetic algorithm that tries to optimise a string of 0s and 1s denoting the presence or absence of each gate in the model, where the fitness of each individual string is obtained based on the value of the objective function (score). This genetic algorithm uses the following methods: random initialisation of the population (although an initial string is given to the algorithm in the parameter \emph{initBstring}) of size set by \emph{PopSize}, linear ranking based on the scores for fitness assignment (with a default selective pressure of 1.2, set by the parameter \emph{SelPress}), stochastic uniform sampling for selection (with an \emph{elitism} parameter that allows the best x strings to be carried on 'as is' to the next generation), uniform crossover probability, and a mutation probability over the sequence set to 0.5 as default (set by \emph{Pmutation}).  The search can be stopped using three conditions: a maximum time in seconds (\emph{MaxTime}), a maximum number of generations (\emph{maxGens}), and a maximum number of stall generations (i.e. generations where the best string is identical, \emph{StallGenMax}).  
+The optimisation itself is done using a genetic algorithm that tries to optimise a string of 0s and 1s denoting the presence or absence of each gate in the model, where the fitness of each individual string is obtained based on the value of the objective function (score). This genetic algorithm uses the following methods: random initialisation of the population (although an initial string is given to the algorithm in the parameter \emph{initBstring}) of size set by \emph{popSize}, linear ranking based on the scores for fitness assignment (with a default selective pressure of 1.2, set by the parameter \emph{selPress}), stochastic uniform sampling for selection (with an \emph{elitism} parameter that allows the best x strings to be carried on 'as is' to the next generation), uniform crossover probability, and a mutation probability over the sequence set to 0.5 as default (set by \emph{pMutation}).  The search can be stopped using three conditions: a maximum time in seconds (\emph{maxTime}), a maximum number of generations (\emph{maxGens}), and a maximum number of stall generations (i.e. generations where the best string is identical, \emph{stallGenMax}).  
 
-The genetic algorithm function returns a list object that collects a number of informations such as the best string and corresponding score at each iteration, the average fit at each generation, etc.  The function also returns strings that were obtained across the whole optimisation process and that obtained scores that were closed to the best string, where 'close' is defined by a relative tolerance on the score which is set by the parameter \emph{RelTol}.  This is an important piece of information because when the data cannot constrain the model tightly then many strings are obtained with a fit that is close to the optimal one, and interpretation of edges present in the optimal model is therefore more subtle. 
+The genetic algorithm function returns a list object that collects a number of informations such as the best string and corresponding score at each iteration, the average fit at each generation, etc.  The function also returns strings that were obtained across the whole optimisation process and that obtained scores that were closed to the best string, where 'close' is defined by a relative tolerance on the score which is set by the parameter \emph{relTol}.  This is an important piece of information because when the data cannot constrain the model tightly then many strings are obtained with a fit that is close to the optimal one, and interpretation of edges present in the optimal model is therefore more subtle. 
 
 We start off by computing the residual error, which is the minimum error that is unavoidable with a boolean network and comes from the discrete nature of such a model (please remember that although the data is normalised in this pipeline, it is not discretised, and therefore we compare 0/1 values to continuous values between 0 and 1). This value is important because however good is our optimisation, the value of the goodness of fit term cannot go under this residual error. Then we prepare the model for simulation by applying the function \emph{prep4sim} which adds fields that are needed for the simulation engine. We also create an initial bit string for the optimisation, which in this case is just a string of 1s, but could be a meaningful string if you have prior expectation about the topology of the model.  
 
@@ -220,8 +220,8 @@ We can now start the optimisation, in this case with default values for all non 
 <<optim, eval=TRUE>>=
 ToyT1opt<-gaBinaryT1(
 	CNOlist=CNOlistToy,
-	Model=ToyNCNOcutCompExp,
-	SimList=ToyFields4Sim,
+	model=ToyNCNOcutCompExp,
+	simList=ToyFields4Sim,
 	indexList=indicesToyNCNOcutComp,
 	initBstring=initBstring,
 	verbose=FALSE)
@@ -232,9 +232,9 @@ We will now produce plots of our analysis.  First, we plot the results of simula
 \begin{center}
 <<resSim, fig=FALSE, eval=FALSE>>=
 cutAndPlotResultsT1(
-	Model=ToyNCNOcutCompExp,
+	model=ToyNCNOcutCompExp,
 	bString=ToyT1opt$bString,
-	SimList=ToyFields4Sim,
+	simList=ToyFields4Sim,
 	CNOlist=CNOlistToy,
 	indexList=indicesToyNCNOcutComp,
 	plotPDF=FALSE)
@@ -243,7 +243,7 @@ cutAndPlotResultsT1(
 \begin{center}
 %TOSWITCH
 <<plotFit, eval=TRUE, fig=TRUE>>=
-plotFit(OptRes=ToyT1opt)
+plotFit(optRes=ToyT1opt)
 @ 
 \end{center}
 
@@ -253,14 +253,14 @@ Setting the plotPDF argument to "TRUE" means that a PDF figure will be produced 
 %TOSWITCH
 <<simFitPDF, results=hide, eval=TRUE>>=
 cutAndPlotResultsT1(
-	Model=ToyNCNOcutCompExp,
+	model=ToyNCNOcutCompExp,
 	bString=ToyT1opt$bString,
-	SimList=ToyFields4Sim,
+	simList=ToyFields4Sim,
 	CNOlist=CNOlistToy,
 	indexList=indicesToyNCNOcutComp,
 	plotPDF=TRUE)
 pdf("evolFitToyT1.pdf")
-plotFit(OptRes=ToyT1opt)
+plotFit(optRes=ToyT1opt)
 dev.off()
 @
 
@@ -283,33 +283,40 @@ We then also write the prior knowledge network, using the function \emph{writeNe
 \label{fig:PKN}
 \end{figure*}
 
-You can then write a report that contains relevant information about your analysis and links to the various plots that you created.  This will be in the form of an html file called CellNOptReport.html, which will be stored along with all of your plots in a directory that you create and name (the name of that folder is a parameter in the function \emph{writeReport}).  Please not that the function \emph{writeReport} will create the folder and move all of the files given by the list \emph{namesFiles} into this directory. The files given by the arguments \emph{dataPlot}, \emph{evolFit1}, \emph{optimResT1} will then be hyperlinked to your html report. 
+You can then write a report that contains relevant information about your
+analysis and links to the various plots that you created.  This will be in the
+form of an html file called CellNOptReport.html, which will be stored along with
+all of your plots in a directory that you create and name (the name of that
+folder is a parameter in the function \emph{writeReport}).  Please not that the
+function \emph{writeReport} will create the folder and move all of the files
+given by the list \emph{namesFiles} into this directory. The files given by the
+arguments \emph{dataPlot}, \emph{evolFitT1}, \emph{optimResT1} will then be hyperlinked to your html report. 
 
 
 %TOSWITCH
 <<writeRes, eval=TRUE>>=
 writeScaffold(
-	ModelComprExpanded=ToyNCNOcutCompExp,
+	modelComprExpanded=ToyNCNOcutCompExp,
 	optimResT1=ToyT1opt,
 	optimResT2=NA,
-	ModelOriginal=ToyModel,
+	modelOriginal=ToyModel,
 	CNOlist=CNOlistToy)
 	
 writeNetwork(
-	ModelOriginal=ToyModel,
-	ModelComprExpanded=ToyNCNOcutCompExp,
+	modelOriginal=ToyModel,
+	modelComprExpanded=ToyNCNOcutCompExp,
 	optimResT1=ToyT1opt,
 	optimResT2=NA,
 	CNOlist=CNOlistToy)
 	
 namesFilesToy<-list(
 	dataPlot="ToyModelGraph.pdf",
-	evolFit1="evolFitToyT1.pdf",
-	evolFit2=NA,
-	SimResults1="ToyNCNOcutCompExpSimResultsT1.pdf",
-	SimResults2=NA,
-	Scaffold="Scaffold.sif",
-	ScaffoldDot="Scaffold.dot",
+	evolFitT1="evolFitToyT1.pdf",
+	evolFitT2=NA,
+	simResultsT1="ToyNCNOcutCompExpSimResultsT1.pdf",
+	simResultsT2=NA,
+	scaffold="Scaffold.sif",
+	scaffoldDot="Scaffold.dot",
 	tscaffold="TimesScaffold.EA",
 	wscaffold="weightsScaffold.EA",
 	PKN="PKN.sif",
@@ -317,16 +324,16 @@ namesFilesToy<-list(
 	wPKN="TimesPKN.EA",
 	nPKN="nodesPKN.NA")
 	
-writeReport(
-	ModelOriginal=ToyModel,
-	ModelOpt=ToyNCNOcutCompExp,
-	optimResT1=ToyT1opt,
-	optimResT2=NA,
-	CNOlist=CNOlistToy,
-	directory="testToy",
-	namesFiles=namesFilesToy,
-	namesData=list(CNOlist="Toy",Model="ToyModel"),
-	resE=resECNOlistToy)
+#writeReport(
+#	modelOriginal=ToyModel,
+#	modelOpt=ToyNCNOcutCompExp,
+#	optimResT1=ToyT1opt,
+#	optimResT2=NA,
+#	CNOlist=CNOlistToy,
+#	directory="testToy",
+#	namesFiles=namesFilesToy,
+#	namesdata=list(CNOlist="Toy",model="ToyModel"),
+#	resE=resECNOlistToy)
 @
 
 <<eraseDir, eval=TRUE, echo=FALSE>>=
@@ -346,15 +353,15 @@ ToyModel<-readSIF(sifFile="ToyPKNMMB.sif")
 Then you have two possibilities, either you keep all optimisation parameters to their default values and just type
 
 <<wrap1, eval=FALSE, results=hide>>=
-CNORwrap(
+res <- CNORwrap(
 	paramsList=NA,
-	Name="Toy",
-	NamesData=list(CNOlist="ToyData",Model="ToyModel"),
-	Data=CNOlistToy,
-	Model=ToyModel)
+	name="Toy",
+	namesdata=list(CNOlist="ToyData",model="ToyModel"),
+	data=CNOlistToy,
+	model=ToyModel)
 @
 
-or you want to have some control over the parameters of the optimisation, in which case you create a parameters list with fields \emph{Data} (the CNOlist containing your data),  \emph{Model} (your model object),  \emph{sizeFac} (default to 1e-04), \emph{NAFac} (default to 1), \emph{PopSize} (default to 50), \emph{Pmutation} (default to 0.5), \emph{MaxTime} (default to 60), \emph{maxGens} (default to 500), \emph{StallGenMax} (default to 100), \emph{SelPress} (default to 1.2), \emph{elitism} (default to 5), \emph{RelTol} (default to 0.1), \emph{verbose} (default to FALSE ). You can then call the wrapper function with this set of parameters. 
+or you want to have some control over the parameters of the optimisation, in which case you create a parameters list with fields \emph{Data} (the CNOlist containing your data),  \emph{model} (your model object),  \emph{sizeFac} (default to 1e-04), \emph{NAFac} (default to 1), \emph{popSize} (default to 50), \emph{pMutation} (default to 0.5), \emph{maxTime} (default to 60), \emph{maxGens} (default to 500), \emph{stallGenMax} (default to 100), \emph{selPress} (default to 1.2), \emph{elitism} (default to 5), \emph{relTol} (default to 0.1), \emph{verbose} (default to FALSE ). You can then call the wrapper function with this set of parameters. 
 
 <<eraseToyDir, eval=TRUE, echo=FALSE>>=
 unlink("Toy",recursive=TRUE)
@@ -362,26 +369,26 @@ unlink("Toy",recursive=TRUE)
 
 <<wrap2, eval=TRUE>>=
 pList<-list(	
-	Data=CNOlistToy,
-	Model=ToyModel,
+	data=CNOlistToy,
+	model=ToyModel,
 	sizeFac = 1e-04, 
 	NAFac = 1, 
-	PopSize = 10, 
-	Pmutation = 0.5, 
-	MaxTime = 60, 
+	popSize = 10, 
+	pMutation = 0.5, 
+	maxTime = 60, 
 	maxGens = 5, 
-	StallGenMax = 5, 
-	SelPress = 1.2, 
+	stallGenMax = 5, 
+	selPress = 1.2, 
 	elitism = 5, 
-	RelTol = 0.1,
+	relTol = 0.1,
 	verbose=FALSE)
 	
-CNORwrap(
+res <- CNORwrap(
 	paramsList=pList,
-	Name="Toy",
-	NamesData=list(CNOlist="ToyData",Model="ToyModel"),
-	Data=NA,
-	Model=NA)
+	name="Toy",
+	namesData=list(CNOlist="ToyData",model="ToyModel"),
+	data=NA,
+	model=NA)
 @
 
 Both of these versions will generate the graphs produced above on your graphics window, and as PDF's that will be hyperlinked to your html report, and you will be able to find all of these hyperlinked with your html report, all in a directory called by the \emph{Name} parameter, in your working directory.
@@ -463,27 +470,27 @@ ToyFields4Sim2<-prep4sim(ToyNCNOcutCompExp2)
 initBstring2<-rep(1,length(ToyNCNOcutCompExp2$reacID))
 ToyT1opt2<-gaBinaryT1(
 	CNOlist=CNOlistToy2,
-	Model=ToyNCNOcutCompExp2,
-	SimList=ToyFields4Sim2,
+	model=ToyNCNOcutCompExp2,
+	simList=ToyFields4Sim2,
 	indexList=indicesToyNCNOcutComp2,
 	initBstring=initBstring2,
-	StallGenMax=10,
-	MaxTime=60,
+	stallGenMax=10,
+	maxTime=60,
 	verbose=FALSE)
 @
 
 <<t2OptT1plot, eval=FALSE>>=
 cutAndPlotResultsT1(
-	Model=ToyNCNOcutCompExp2,
+	model=ToyNCNOcutCompExp2,
 	bString=ToyT1opt2$bString,
-	SimList=ToyFields4Sim2,
+	simList=ToyFields4Sim2,
 	CNOlist=CNOlistToy2,
 	indexList=indicesToyNCNOcutComp2,
 	plotPDF=TRUE)
 pdf("evolFitToy2T1.pdf")
-plotFit(OptRes=ToyT1opt2)
+plotFit(optRes=ToyT1opt2)
 dev.off()
-plotFit(OptRes=ToyT1opt2)
+plotFit(optRes=ToyT1opt2)
 @
 
 We can now optimise the second time point.
@@ -492,20 +499,20 @@ We can now optimise the second time point.
 <<t2OptT2, eval=TRUE>>=
 SimToyT12<-simulateT1(
 	CNOlist=CNOlistToy2,
-	Model=ToyNCNOcutCompExp2,
+	model=ToyNCNOcutCompExp2,
 	bStringT1=ToyT1opt2$bString,
-	SimList=ToyFields4Sim2,
+	simList=ToyFields4Sim2,
 	indexList=indicesToyNCNOcutComp2)
 	
 ToyT1opt2T2<-gaBinaryT2(
 	CNOlist=CNOlistToy2,
-	Model=ToyNCNOcutCompExp2,
-	SimList=ToyFields4Sim2,
+	model=ToyNCNOcutCompExp2,
+	simList=ToyFields4Sim2,
 	indexList=indicesToyNCNOcutComp2,
 	bStringT1=ToyT1opt2$bString,
-	SimResT1=SimToyT12,
-	StallGenMax=10,
-	MaxTime=60,
+	simResT1=SimToyT12,
+	stallGenMax=10,
+	maxTime=60,
 	verbose=FALSE)
 @
 
@@ -516,10 +523,10 @@ Finally, we produce all the plots and write the report.
 %TOSWITCH
 <<resSimT2, eval=TRUE, fig=TRUE>>=	
 cutAndPlotResultsT2(
-	Model=ToyNCNOcutCompExp2,
+	model=ToyNCNOcutCompExp2,
 	bStringT1=ToyT1opt2$bString,
 	bStringT2=ToyT1opt2T2$bString,
-	SimList=ToyFields4Sim2,
+	simList=ToyFields4Sim2,
 	CNOlist=CNOlistToy2,
 	indexList=indicesToyNCNOcutComp2,
 	plotPDF=FALSE)
@@ -527,29 +534,29 @@ cutAndPlotResultsT2(
 
 <<t2OptT2plot, eval=FALSE>>=	
 pdf("evolFitToy2T2.pdf")
-plotFit(OptRes=ToyT1opt2T2)
+plotFit(optRes=ToyT1opt2T2)
 dev.off()
-plotFit(OptRes=ToyT1opt2T2)
+plotFit(optRes=ToyT1opt2T2)
 writeScaffold(
-	ModelComprExpanded=ToyNCNOcutCompExp2,
+	modelComprExpanded=ToyNCNOcutCompExp2,
 	optimResT1=ToyT1opt2,
 	optimResT2=ToyT1opt2T2,
-	ModelOriginal=ToyModel2,
+	modelOriginal=ToyModel2,
 	CNOlist=CNOlistToy2)
 writeNetwork(
-	ModelOriginal=ToyModel2,
-	ModelComprExpanded=ToyNCNOcutCompExp2,
+	modelOriginal=ToyModel2,
+	modelComprExpanded=ToyNCNOcutCompExp2,
 	optimResT1=ToyT1opt2,
 	optimResT2=ToyT1opt2T2,
 	CNOlist=CNOlistToy2)
 namesFilesToy<-list(
 	dataPlot="ToyModelGraphT2.pdf",
-	evolFit1="evolFitToy2T1.pdf",
-	evolFit2="evolFitToy2T2.pdf",
-	SimResults2="ToyNCNOcutCompExp2SimResultsT1T2.pdf",
-	SimResults1="ToyNCNOcutCompExp2SimResultsT1.pdf",
-	Scaffold="Scaffold.sif",
-	ScaffoldDot="Scaffold.dot",
+	evolFitT1="evolFitToy2T1.pdf",
+	evolFitT2="evolFitToy2T2.pdf",
+	simResultsT2="ToyNCNOcutCompExp2SimResultsT1T2.pdf",
+	simResultsT1="ToyNCNOcutCompExp2SimResultsT1.pdf",
+	scaffold="Scaffold.sif",
+	scaffoldDot="Scaffold.dot",
 	tscaffold="TimesScaffold.EA",
 	wscaffold="weightsScaffold.EA",
 	PKN="PKN.sif",
@@ -557,14 +564,14 @@ namesFilesToy<-list(
 	wPKN="TimesPKN.EA",
 	nPKN="nodesPKN.NA")
 writeReport(
-	ModelOriginal=ToyModel2,
-	ModelOpt=ToyNCNOcutCompExp2,
+	modelOriginal=ToyModel2,
+	modelOpt=ToyNCNOcutCompExp2,
 	optimResT1=ToyT1opt2,
 	optimResT2=ToyT1opt2T2,
 	CNOlist=CNOlistToy2,
 	directory="testToy2",
 	namesFiles=namesFilesToy,
-	namesData=list(CNOlist="ToyModified4T2",Model="ToyModified4T2"),
+	namesData=list(CNOlist="ToyModified4T2",model="ToyModified4T2"),
 	resE=resECNOlistToy2)
 @
 

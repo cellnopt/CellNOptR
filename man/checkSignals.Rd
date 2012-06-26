@@ -10,13 +10,13 @@ contain the right fields. It is called by the \link{preprocessing} function so t
 no need to call it directly anymore if you use the \link{preprocessing} function.
 }
 \usage{
-checkSignals(CNOlist, Model)
+checkSignals(CNOlist, model)
 }
 \arguments{
     \item{CNOlist}{
         A CNOlist structure, as created by \link{makeCNOlist}.
     }
-    \item{Model}{
+    \item{model}{
         A model structure, as created by \link{readSIF}.
     }
 }

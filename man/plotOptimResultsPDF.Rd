@@ -7,17 +7,17 @@ Plot the data and simulated values in a pdf file
 This is a wrapper for \code{plotOptimResults}
 }
 \usage{
-plotOptimResultsPDF(SimResults = SimResults, expResults = expResults, times = times, namesCues = namesCues, namesSignals = namesSignals, valueCues = valueCues, filename)
+plotOptimResultsPDF(simResults, expResults, times, namesCues, namesSignals, valueCues, filename)
 }
 \arguments{
-  \item{SimResults}{
+  \item{simResults}{
 a list with a field for each time point, each containing a matrix of dimensions number of conditions * number of signals, with the first field being t0.  Typically produced by simulating a model and then extracting the columns that correspond to signals
 }
   \item{expResults}{
 same as above, but contains the experimental results, ie this is \code{CNOlist$valueSignals}
 }
   \item{times}{
-a vector of times, its length should be the same as the number of fields in SimResults and ExpResults
+a vector of times, its length should be the same as the number of fields in simResults and ExpResults
 }
   \item{namesCues}{
 a vector of names, typically \code{CNOlist$namesCues}
@@ -61,18 +61,18 @@ ToyFields4Sim<-prep4sim(ToyModel)
 
 #simulate the model
 
-Sim<-simulatorT1(CNOlist=CNOlistToy,Model=ToyModel,SimList=ToyFields4Sim,indexList=indicesToy)
+Sim<-simulatorT1(CNOlist=CNOlistToy,model=ToyModel,simList=ToyFields4Sim,indexList=indicesToy)
 
 #format the results and data as expected by plotOptimResults
 
-SimRes<-Sim[,indicesToy$signals]
-SimResults<-list(t0=matrix(data=0,nrow=dim(SimRes)[1],ncol=dim(SimRes)[2]),t1=SimRes)
+simRes<-Sim[,indicesToy$signals]
+simResults<-list(t0=matrix(data=0,nrow=dim(simRes)[1],ncol=dim(simRes)[2]),t1=simRes)
 expResults<-list(t0=CNOlistToy$valueSignals[[1]],t1=CNOlistToy$valueSignals[[2]])
 
 #plot
 
 plotOptimResultsPDF(
-	SimResults=SimResults,
+	simResults=simResults,
 	expResults=expResults,
 	times=CNOlistToy$timeSignals[1:2],
 	namesCues=CNOlistToy$namesCues,

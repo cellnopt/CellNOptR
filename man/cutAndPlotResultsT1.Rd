@@ -7,17 +7,17 @@ Plot the results of an optimisation at t1
 This function takes a model and an optimised bitstring, it cuts the model according to the bitstring and plots the results of the simulation along with the experimental data.
 }
 \usage{
-cutAndPlotResultsT1(Model, bString, SimList, CNOlist, indexList, plotPDF =
+cutAndPlotResultsT1(model, bString, simList, CNOlist, indexList, plotPDF =
 FALSE, tag = NULL, show=TRUE, tPt=CNOlist$timeSignals[2])
 }
 \arguments{
-  \item{Model}{
+  \item{model}{
 a model (the full one that was used for optimisation)
 }
   \item{bString}{
 a bitstring for T1  as output by gaBinaryT1 (i.e. a vector of 1s and 0s)
 }
-  \item{SimList}{
+  \item{simList}{
 a simlist corresponding to the model, as output by prep4sim
 }
   \item{CNOlist}{
@@ -57,34 +57,29 @@ data(CNOlistToy,package="CellNOptR")
 data(ToyModel,package="CellNOptR")
 
 #pre-process model
-
-checkSignals(CNOlistToy,ToyModel)
-indicesToy<-indexFinder(CNOlistToy,ToyModel,verbose=FALSE)
-ToyNCNOindices<-findNONC(ToyModel,indicesToy,verbose=FALSE)
-ToyNCNOcut<-cutNONC(ToyModel,ToyNCNOindices)
-indicesToyNCNOcut<-indexFinder(CNOlistToy,ToyNCNOcut)
-ToyNCNOcutComp<-compressModel(ToyNCNOcut,indicesToyNCNOcut)
-indicesToyNCNOcutComp<-indexFinder(CNOlistToy,ToyNCNOcutComp)
-ToyNCNOcutCompExp<-expandGates(ToyNCNOcutComp)
+results = preprocessing(CNOlistToy, ToyModel)
+processedModel = results$model
+indices = results$indices
 
 #optimise
 
-ToyFields4Sim<-prep4sim(ToyNCNOcutCompExp)
-initBstring<-rep(1,length(ToyNCNOcutCompExp$reacID))
+ToyFields4Sim<-prep4sim(processedModel)
+initBstring<-rep(1,length(processedModel$reacID))
 ToyT1opt<-gaBinaryT1(
 	CNOlist=CNOlistToy,
-	Model=ToyNCNOcutCompExp,
-	SimList=ToyFields4Sim,
-	indexList=indicesToyNCNOcutComp,
+	model=processedModel,
+	simList=ToyFields4Sim,
+	indexList=indices,
 	initBstring=initBstring, 
 	maxGens=2, 
-	PopSize = 5,
+	popSize = 5,
 	verbose=FALSE)
+
 cutAndPlotResultsT1(
-	Model=ToyNCNOcutCompExp,
+	model=processedModel,
 	bString=ToyT1opt$bString,
-	SimList=ToyFields4Sim,
+	simList=ToyFields4Sim,
 	CNOlist=CNOlistToy,
-	indexList=indicesToyNCNOcutComp,
+	indexList=indices,
 	plotPDF=FALSE)
 }

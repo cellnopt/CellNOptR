@@ -13,29 +13,29 @@
 #
 ##############################################################################
 # $Id$
-simulateT1<-function(CNOlist,Model,bStringT1,SimList,indexList){
+simulateT1<-function(CNOlist, model, bStringT1, simList, indexList){
 
-	Modelcut<-cutModel(Model, bStringT1)
+    Modelcut<-cutModel(model, bStringT1)
 
 
-	SimListcut<-SimList
-	SimListcut$finalCube<-SimListcut$finalCube[as.logical(bStringT1),]
-	SimListcut$ixNeg<-SimListcut$ixNeg[as.logical(bStringT1),]
-	SimListcut$ignoreCube<-SimListcut$ignoreCube[as.logical(bStringT1),]
-	SimListcut$maxIx<-SimListcut$maxIx[as.logical(bStringT1)]
-	
-	if(is.null(dim(SimListcut$finalCube))){
-		SimListcut$finalCube<-matrix(SimListcut$finalCube,ncol=1)
-		SimListcut$ixNeg<-matrix(SimListcut$ixNeg,ncol=1)
-		SimListcut$ignoreCube<-matrix(SimListcut$ignoreCube,ncol=1)
-		}
-		
-	SimRes<-simulatorT1(
-		CNOlist=CNOlist,
-		Model=Modelcut,
-		SimList=SimListcut,
-		indexList=indexList)
-	
-	return(SimRes)
-	}
+    simListcut<-simList
+    simListcut$finalCube<-simListcut$finalCube[as.logical(bStringT1),]
+    simListcut$ixNeg<-simListcut$ixNeg[as.logical(bStringT1),]
+    simListcut$ignoreCube<-simListcut$ignoreCube[as.logical(bStringT1),]
+    simListcut$maxIx<-simListcut$maxIx[as.logical(bStringT1)]
+
+    if(is.null(dim(simListcut$finalCube))){
+        simListcut$finalCube<-matrix(simListcut$finalCube,ncol=1)
+        simListcut$ixNeg<-matrix(simListcut$ixNeg,ncol=1)
+        simListcut$ignoreCube<-matrix(simListcut$ignoreCube,ncol=1)
+        }
+
+    simRes<-simulatorT1(
+        CNOlist=CNOlist,
+        model=Modelcut,
+        simList=simListcut,
+        indexList=indexList)
+
+    return(simRes)
+}
 

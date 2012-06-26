@@ -20,7 +20,7 @@ graph2sif(graph, writeSif=FALSE, filename="Graph")
 a graph, as generated using \link{sif2graph}
 }
   \item{writeSif}{
-it writeSif=FALSE (default) the sif file is not saved. If writeSif=TRUE it is saved.
+if writeSif=FALSE (default) the sif file is not saved. If writeSif=TRUE it is saved.
 }
   \item{filename}{
 the name of the sif file saved if writeSif=TRUE. Default is Model.sif.
@@ -38,7 +38,7 @@ The sign of link is supposed to be encoded in the graph as the weigth of the edg
 }
 
 \author{
-    F.Eduati
+    F. Eduati
 }
 
 \seealso{

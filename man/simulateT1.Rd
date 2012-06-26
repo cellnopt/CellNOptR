@@ -8,20 +8,20 @@ This function cuts a model according to a bitstring optimised at T1, and
 simulates the model accordingly.
 }
 \usage{
-simulateT1(CNOlist, Model, bStringT1, SimList, indexList)
+simulateT1(CNOlist, model, bStringT1, simList, indexList)
 }
 \arguments{
   \item{CNOlist}{
 a CNOlist object
 }
-  \item{Model}{
+  \item{model}{
 a full model
 }
   \item{bStringT1}{
 a bitstring to cut the model, as output by \code{gaBinaryT1} (i.e. a vector of
 1s and 0s, of length equal to the number of reactions in the model)
 }
-  \item{SimList}{
+  \item{simList}{
 a list of additional fields for simulation as created by \code{prep4sim},
 corresponding to the full model
 }
@@ -53,10 +53,10 @@ data(ToyModel,package="CellNOptR")
 indicesToy<-indexFinder(CNOlistToy,ToyModel,verbose=FALSE)
 ToyFields4Sim<-prep4sim(ToyModel)
 
-SimRes<-simulateT1(
+simRes<-simulateT1(
 	CNOlist=CNOlistToy, 
-	Model=ToyModel, 
+	model=ToyModel, 
 	bStringT1=round(runif(length(ToyModel$reacID))), 
-	SimList=ToyFields4Sim, 
+	simList=ToyFields4Sim, 
 	indexList=indicesToy)
 }

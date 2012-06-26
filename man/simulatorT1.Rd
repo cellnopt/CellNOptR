@@ -7,17 +7,17 @@ Simulation of a boolean model
 This is the simulator, inspired from BoolSimEngMKM in the Matlab CellNOpt, to be used on one time point simulations
 }
 \usage{
-simulatorT1(CNOlist, Model, SimList, indexList)
+simulatorT1(CNOlist, model, simList, indexList)
 }
 \arguments{
   \item{CNOlist}{
 a CNOlist
 }
-  \item{Model}{
-a Model that only contains the reactions to be evaluated
+  \item{model}{
+a model that only contains the reactions to be evaluated
 }
-  \item{SimList}{
-a SimList as created by prep4sim, that has also already been cut to contain only the reactions to be evaluated
+  \item{simList}{
+a simList as created by prep4sim, that has also already been cut to contain only the reactions to be evaluated
 }
   \item{indexList}{
 an indexList as created by indexFinder
@@ -49,7 +49,7 @@ Inflammatory Stimuli, PLoS Comp. Biol., 7(3): e1001099, 2011.}
 C. Terfve
 }
 \seealso{
-SimulateT1, cutAndPlotResultsT1
+simulateT1, cutAndPlotResultsT1
 }
 \examples{
 #This computes the output of the full model, which is normally not done on a stand alone basis, but if you have a model and would like to visualise its output compared to your data, then this is what you should do
@@ -62,7 +62,7 @@ ToyFields4Sim<-prep4sim(ToyModel)
 
 Sim<-simulatorT1(
 	CNOlist=CNOlistToy,
-	Model=ToyModel,
-	SimList=ToyFields4Sim,
+	model=ToyModel,
+	simList=ToyFields4Sim,
 	indexList=indicesToy)
 }

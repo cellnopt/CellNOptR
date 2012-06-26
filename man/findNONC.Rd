@@ -7,14 +7,14 @@ Find the indexes of the non-observable and non controllable species
 This function finds the indexes of the non-observable and non controllable species and returns the indices, in the model, of the species to remove
 }
 \usage{
-findNONC(Model, indexes, verbose=FALSE)
+findNONC(model, indexes, verbose=FALSE)
 }
 \arguments{
-    \item{Model}{
+    \item{model}{
         a model structure, as created by \link{readSIF}
     }
     \item{indexes}{
-        a list of indexes of the species stimulated/inhibited/measured, as created by \code{indexFinder} from a model.        
+        a list of indexes of the species stimulated/inhibited/measured, as created by \link{indexFinder} from a model.        
     }
     \item{verbose}{
         verbose option (default to FALSE)
@@ -30,7 +30,7 @@ a vector of indices of species to remove
 C. Terfve
 }
 \seealso{
-cutNONC, indexFinder, readSIF
+\link{cutNONC}, \link{indexFinder}, \link{readSIF}
 }
 \examples{
     data(CNOlistToy, package="CellNOptR")

@@ -7,19 +7,20 @@ Genetic algorithm used to optimise a model
 This function is the genetic algorithm to be used to optimise a model by fitting to data containing one time point.
 }
 \usage{
-gaBinaryT1(CNOlist, Model, SimList, indexList, sizeFac = 1e-04, NAFac = 1,
-initBstring, PopSize = 50, Pmutation = 0.5, MaxTime = 60, maxGens = 500,
-StallGenMax = 100, SelPress = 1.2, elitism = 5, RelTol = 0.1, verbose=TRUE,
+gaBinaryT1(CNOlist, model, simList, indexList, sizeFac = 1e-04, NAFac = 1,
+initBstring, popSize = 50, pMutation = 0.5, maxTime = 60, maxGens = 500,
+stallGenMax = 100, selPress = 1.2, elitism = 5, relTol = 0.1, verbose=TRUE,
 priorBitString=NULL)
 }
 \arguments{
   \item{CNOlist}{
 a CNOlist on which the score is based (based on valueSignals[[2]], i.e. data at t1)
 }
-  \item{Model}{
-a Model list
+  \item{model}{
+a model structure, as created by \code{readSIF}, normally pre-processed but that
+is not a requirement of this function
 }
-  \item{SimList}{
+  \item{simList}{
 a list that contains additional fields for the simulator, as created by prep4sim applied to the model above
 }
   \item{indexList}{
@@ -34,28 +35,28 @@ the scaling factor for the NA term in the objective function, default to 1
   \item{initBstring}{
 an initial bitsrting to be tested, should be of the same size as the number of reactions in the model above
 }
-  \item{PopSize}{
+  \item{popSize}{
 the population size for the genetic algorithm, default set to 50
 }
-  \item{Pmutation}{
+  \item{pMutation}{
 the mutation probability for the genetic algorithm, default set to 0.5
 }
-  \item{MaxTime}{
+  \item{maxTime}{
 the maximum optimisation time in seconds, default set to 60
 }
   \item{maxGens}{
 the maximum number of generations in the genetic algorithm, default set to 500
 }
-  \item{StallGenMax}{
+  \item{stallGenMax}{
 the maximum number of stall generations in the genetic algorithm, default to 100
 }
-  \item{SelPress}{
+  \item{selPress}{
 the selective pressure in the genetic algorithm, default set to 1.2
 }
   \item{elitism}{
 the number of best individuals that are propagated to the next generation in the genetic algorithm, default set to 5
 }
-  \item{RelTol}{
+  \item{relTol}{
 the relative tolerance for the best bitstring reported by the genetic algorithm,
 i.e., how different from the best solution, default set to 0.1
 }
@@ -75,9 +76,9 @@ The whole procedure is described in details in Saez-Rodriguez et al. (2009). The
 \value{
 This function returns a list with elements:
 \item{bString}{the best bitstring}
-\item{Results}{ a matrix with columns "Generation","Best_score","Best_bitString","Stall_Generation","Avg_Score_Gen","Best_score_Gen","Best_bit_Gen","Iter_time"}
-\item{StringsTol}{the bitstrings whose scores are within the tolerance}
-\item{StringsTolScores}{the scores of the above-mentioned strings}
+\item{results}{ a matrix with columns "Generation","Best_score","Best_bitString","Stall_Generation","Avg_Score_Gen","Best_score_Gen","Best_bit_Gen","Iter_time"}
+\item{stringsTol}{the bitstrings whose scores are within the tolerance}
+\item{stringsTolScores}{the scores of the above-mentioned strings}
 }
 \references{
 J. Saez-Rodriguez, L. G. Alexopoulos, J. Epperlein, R. Samaga, D. A. Lauffenburger, S. Klamt and P. K. Sorger. Discrete logic modeling as a means to link protein signaling networks with functional analysis of
@@ -87,7 +88,7 @@ mammalian signal transduction, Molecular Systems Biology, 5:331, 2009.
 C. Terfve
 }
 \seealso{
-getFit, prep4sim, indexFinder, simulatorT1
+\link{getFit}, \link{prep4sim}, \link{indexFinder}, \link{simulatorT1}
 }
 \examples{
 data(CNOlistToy,package="CellNOptR")
@@ -95,25 +96,19 @@ data(ToyModel,package="CellNOptR")
 
 #pre-process model
 
-indicesToy<-indexFinder(CNOlistToy,ToyModel,verbose=FALSE)
-ToyNCNOindices<-findNONC(ToyModel,indicesToy,verbose=FALSE)
-ToyNCNOcut<-cutNONC(ToyModel,ToyNCNOindices)
-indicesToyNCNOcut<-indexFinder(CNOlistToy,ToyNCNOcut)
-ToyNCNOcutComp<-compressModel(ToyNCNOcut,indicesToyNCNOcut)
-indicesToyNCNOcutComp<-indexFinder(CNOlistToy,ToyNCNOcutComp)
-ToyNCNOcutCompExp<-expandGates(ToyNCNOcutComp)
+results = preprocessing(CNOlistToy, ToyModel)
+processedModel = results$model
+indices = results$indices
 
 #optimise
 
-ToyFields4Sim<-prep4sim(ToyNCNOcutCompExp)
-initBstring<-rep(1,length(ToyNCNOcutCompExp$reacID))
+ToyFields4Sim<-prep4sim(processedModel)
+initBstring<-rep(1,length(processedModel))
 ToyT1opt<-gaBinaryT1(
 	CNOlist=CNOlistToy,
-	Model=ToyNCNOcutCompExp,
-	SimList=ToyFields4Sim,
-	indexList=indicesToyNCNOcutComp,
+	model=processedModel,
+	simList=ToyFields4Sim,
+	indexList=indices,
 	initBstring=initBstring,
-	maxGens=2,
-	PopSize=5,
-	verbose=FALSE)
+	maxGens=2, popSize=5, verbose=FALSE)
 }

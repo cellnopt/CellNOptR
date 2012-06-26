@@ -12,18 +12,18 @@ This function performs any of the following preprocessing steps:
     }
 }
 \usage{
-preprocessing(Data, Model, cutnonc=TRUE, compression=TRUE,
-expansion=TRUE,ignoreList=NA, maxInputsPerGate=2, verbose=TRUE)
+preprocessing(data, model, cutNONC=TRUE, compression=TRUE,
+    expansion=TRUE, ignoreList=NA, maxInputsPerGate=2, verbose=TRUE)
 }
 
 \arguments{
-  \item{Data}{
+  \item{data}{
 the CNOlist that contains the data that you will use
 }
-  \item{Model}{
+  \item{model}{
 the model object as returned by \link{readSIF}
 }
-  \item{cutnonc}{
+  \item{cutNONC}{
 Removes the NONC nodes using \link{cutNONC} and \link{findNONC} (Default is TRUE).
 }
   \item{compression}{
@@ -69,7 +69,7 @@ indexFinder.}
 \examples{
 data(ToyModel,package="CellNOptR")
 data(CNOlistToy,package="CellNOptR")
-res = preprocessing(CNOlistToy, ToyModel, cutnonc=FALSE)
+res = preprocessing(CNOlistToy, ToyModel, cutNONC=FALSE)
 # res is a list containing the new model (res$model) and its indices
 # (res$indices).
 }

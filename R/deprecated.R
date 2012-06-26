@@ -3,7 +3,7 @@ readSif <- function(sifFile){
     return(readSIF(sifFile))
 }
 
-prep4Sim <- function(Model, params){
+prep4Sim <- function(model, params){
     warning("readSif is a deprecated function. Use readSIF instead. ")
-    return(prep4sim(Model, params))
+    return(prep4sim(model))
 }

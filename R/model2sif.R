@@ -13,27 +13,27 @@
 #
 ##############################################################################
 # $Id$
-model2sif<-function(Model,optimRes=NA,writeSif=FALSE, filename="Model"){
+model2sif<-function(model,optimRes=NA,writeSif=FALSE, filename="Model"){
 	
   if (is.na(optimRes[1])){
-    BStimes<-rep(1,length(Model$reacID))
+    BStimes<-rep(1,length(model$reacID))
   }else{
     BStimes<-optimRes$bString
   }	
 
 	findOutput<-function(x){
 		sp<-which(x == 1)
-		sp<-Model$namesSpecies[sp]
+		sp<-model$namesSpecies[sp]
 		}
 		
-	reacOutput<-apply(Model$interMat,2,findOutput)
+	reacOutput<-apply(model$interMat,2,findOutput)
 	
 	findInput<-function(x){
 		sp<-which(x == -1)
-		sp<-Model$namesSpecies[sp]
+		sp<-model$namesSpecies[sp]
 		}
 		
-	reacInput<-apply(Model$interMat,2,findInput)
+	reacInput<-apply(model$interMat,2,findInput)
 		
 #if the class of reacInput is not a list, then there are no AND gates
 	if(class(reacInput) != "list"){
@@ -43,7 +43,7 @@ model2sif<-function(Model,optimRes=NA,writeSif=FALSE, filename="Model"){
 			return(isNegI)
 			}
 			
-		inpSign<-apply(Model$notMat,2,isNeg)
+		inpSign<-apply(model$notMat,2,isNeg)
 		inpSign<-!inpSign
 		inpSign[inpSign]<-1
 		inpSign[!inpSign]<--1
@@ -66,7 +66,7 @@ model2sif<-function(Model,optimRes=NA,writeSif=FALSE, filename="Model"){
 					  tmp[1,1]<-reacInput[[i]]
 					  tmp[1,3]<-reacOutput[i]
 					  tmp[1,2]<-ifelse(
-						  any(Model$notMat[,i] == 1),-1,1)
+						  any(model$notMat[,i] == 1),-1,1)
               sifFile<-rbind(sifFile,tmp)
           
 					}else{
@@ -76,7 +76,7 @@ model2sif<-function(Model,optimRes=NA,writeSif=FALSE, filename="Model"){
 							tmp[1,1]<-reacInput[[i]][inp]
 							tmp[1,3]<-paste("and",nANDs,sep="")
 							tmp[1,2]<-ifelse(
-								Model$notMat[which(reacInput[[i]][inp]==rownames(Model$notMat)),i] == 1,
+								model$notMat[which(reacInput[[i]][inp]==rownames(model$notMat)),i] == 1,
 								-1,1)
               sifFile<-rbind(sifFile,tmp)
 							}

@@ -14,32 +14,32 @@
 ##############################################################################
 # $Id$
 plotOptimResultsPDF<-function(
-	SimResults=SimResults,
-	expResults=expResults,
-	times=times,
-	namesCues=namesCues,
-	namesSignals=namesSignals,
-	valueCues=valueCues,
-	filename){
-	
-	if(sum(dim(SimResults[[1]])) < 20){
-	
-		pdf(file=filename,width=14,height=7)
-		
-		}else{
-		
-			pdf(file=filename,width=21,height=10)
-			
-			}
-			
-	plotOptimResults(
-		SimResults=SimResults,
-		expResults=expResults,
-		times=times,
-		namesCues=namesCues,
-		namesSignals=namesSignals, 
-		valueCues=valueCues)
-	
-	dev.off()
-	}
+    simResults=simResults,
+    expResults=expResults,
+    times=times,
+    namesCues=namesCues,
+    namesSignals=namesSignals,
+    valueCues=valueCues,
+    filename){
+
+    if(sum(dim(simResults[[1]])) < 20){
+
+        pdf(file=filename,width=14,height=7)
+
+        }else{
+
+            pdf(file=filename,width=21,height=10)
+
+            }
+
+    plotOptimResults(
+        simResults=simResults,
+        expResults=expResults,
+        times=times,
+        namesCues=namesCues,
+        namesSignals=namesSignals,
+        valueCues=valueCues)
+
+    dev.off()
+    }
 

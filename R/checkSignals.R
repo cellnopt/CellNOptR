@@ -13,13 +13,13 @@
 #
 ##############################################################################
 # $Id$
-checkSignals<-function(CNOlist, Model){
+checkSignals<-function(CNOlist, model){
 
     # check that CNOlist is a CNOlist
     if(!is.list(CNOlist)){
         stop("This function expects as input a CNOlist as output by makeCNOlist or normaliseCNOlist")
     }
-    if(all(names(CNOlist) != 
+    if(all(names(CNOlist) !=
             c("namesCues",
             "namesStimuli",
             "namesInhibitors",
@@ -32,16 +32,16 @@ checkSignals<-function(CNOlist, Model){
         stop("This function expects as input a CNOlist as output by makeCNOlist")
         }
 
-    # check that Model is a Model list
-    if(!is.list(Model)){
+    # check that model is a Model list
+    if(!is.list(model)){
         stop("This function expects as input a Model as output by readSIF")
     }
-    if(all(names(Model) != c("reacID", "namesSpecies","interMat","notMat"))){
+    if(all(names(model) != c("reacID", "namesSpecies","interMat","notMat"))){
         stop("This function expects as input a Model as output by readSIF")
     }
 
-    # check that all of the signals in CNOlist$namesSignals match to one species in Model$namesSpecies
-    signalsMatch<-match(CNOlist$namesSignals,Model$namesSpecies,nomatch=0)
+    # check that all of the signals in CNOlist$namesSignals match to one species in model$namesSpecies
+    signalsMatch<-match(CNOlist$namesSignals,model$namesSpecies,nomatch=0)
     if(any(signalsMatch == 0)){
         warning(paste(
             "The following signals from your CNOlist do not match any of the species in your model, and should be removed:",

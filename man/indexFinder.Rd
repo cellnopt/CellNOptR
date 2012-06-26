@@ -1,19 +1,19 @@
 \name{indexFinder}
 \alias{indexFinder}
 \title{
-Finds the indices, in the Model fields, of the species that are measured/inhibited/stimulated
+Finds the indices, in the model fields, of the species that are measured/inhibited/stimulated
 }
 \description{
-This function finds the indices, in the Model fields, of the species that are measured/inhibited/stimulated. It looks for their position in Model$namesSpecies which has the same order as the rows of interMat and notMat, and therefore these indexes can be used there as well.
+This function finds the indices, in the model fields, of the species that are measured/inhibited/stimulated. It looks for their position in model$namesSpecies which has the same order as the rows of interMat and notMat, and therefore these indexes can be used there as well.
 }
 \usage{
-indexFinder(CNOlist, Model,verbose=FALSE)
+indexFinder(CNOlist, model,verbose=FALSE)
 }
 \arguments{
   \item{CNOlist}{
 a CNOlist structure, as produced by makeCNOlist
 }
-  \item{Model}{
+  \item{model}{
 a model structure, as produced by readSIF
 }
   \item{verbose}{

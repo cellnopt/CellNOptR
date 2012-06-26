@@ -13,8 +13,8 @@
 #
 ##############################################################################
 # $Id$
-plotModel <- function(model, cnolist=NULL, bString=NULL, indexIntegr=NA, 
-    signals=NULL, stimuli=NULL, inhibitors=NULL, ncno=NULL, compressed=NULL, 
+plotModel <- function(model, CNOlist=NULL, bString=NULL, indexIntegr=NA,
+    signals=NULL, stimuli=NULL, inhibitors=NULL, NCNO=NULL, compressed=NULL,
     output="STDOUT", filename=NULL,graphvizParams=list()){
 # Quick example:
 # ---------------
@@ -23,6 +23,7 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexIntegr=NA,
 #   # g$graph contains the model transformed into a graph object
 
   # edgecolor could be forestgreen
+  cnolist = CNOlist
 
   if (is.null(graphvizParams$arrowsize)==TRUE) {
     graphvizParams$arrowsize=2
@@ -57,23 +58,23 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexIntegr=NA,
     }
 
     # Set the image format if any
-    if (output %in% c("STDOUT", "PDF", "PNG", "SVG") != TRUE){ 
+    if (output %in% c("STDOUT", "PDF", "PNG", "SVG") != TRUE){
         stop("wrong output format.Must be in PDF, PNG, SVG")
     }
     else{
-       if (output=="PDF"){ 
+       if (output=="PDF"){
             pdf(paste(filename, ".pdf", sep=""))
         }
        else if (output=="PNG"){
             png(paste(filename, ".png", sep=""))
         }
-       else if (output=="SVG"){ 
+       else if (output=="SVG"){
             svg(paste(filename, ".svg", sep=""), pointsize=22, width=10, height=10)
         }
     }
 
     # Input data. If the cnolist is a character, we guess that the user provided the MIDAS
-    # filename from which we can try to construct the cnolist.  
+    # filename from which we can try to construct the cnolist.
     if (typeof(cnolist) == "character"){
         tryCatch({cnolist = makeCNOlist(readMIDAS(cnolist, verbose=FALSE), subfield=FALSE)},
             error=function(e){stop("An error occured while trying to create the cnolist.
@@ -94,16 +95,16 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexIntegr=NA,
         }else{
             BStimes<-bString
         }
-        Integr<-rep(0,length(edges))  # 
+        Integr<-rep(0,length(edges))  #
     }
     # otherwise, the user probably provided the model already read by readSIF
     # in which case, and gates must be extracted from strings such as
     # "node1+node2=node3"
     # This block is the tricky part of the function. Change with care.
-    else if (typeof(model)=="list" && any("namesSpecies" == names(model))){ 
+    else if (typeof(model)=="list" && any("namesSpecies" == names(model))){
         if (length(bString)!=length(model$reacID) & is.null(bString)==FALSE){
             stop(paste("If the bString argument is provided it must have the same",
-            "  length as model$reacID. ", "The model has ", length(model$reacID), 
+            "  length as model$reacID. ", "The model has ", length(model$reacID),
             "  edges whereas the bitstring has a length of ", length(bString), sep=""))
         }
         # namesSpecies == names(model) try to check if model resemble the output of readSIF ?
@@ -118,7 +119,7 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexIntegr=NA,
         tmp <- unlist(mysplit(model$reacID))
         reacs = t(matrix(unlist(mysplit(model$reacID)), ncol=length(tmp)/2)) # reordering
 
-        # Use the bString and indexIntegr input arguments to build up 
+        # Use the bString and indexIntegr input arguments to build up
         if (is.null(bString)){# default is only 1 so all edges are accepted
             optimBStimes<-rep(1,dim(reacs)[1])
         }else{
@@ -195,12 +196,12 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexIntegr=NA,
     }
 
 
-    # build the edges. IGraph does not use names for the vertices but ids 
+    # build the edges. IGraph does not use names for the vertices but ids
     # that starts at zero. Let us build a data.frame to store the correspondence
     # between the ids and names.
     l = length(vertices) - 1
 
-    # build the graph 
+    # build the graph
     g <- new("graphNEL", nodes=vertices, edgemode="directed")
     weights = rep(1, l) # for now, the weights are to 1.
     for (i in 1:length(v1)){
@@ -208,12 +209,12 @@ plotModel <- function(model, cnolist=NULL, bString=NULL, indexIntegr=NA,
     }
 
     # The graph is now built. We can proceed with node and edge attributes for
-    # the output files 
+    # the output files
 
     recipEdges="distinct" # an edge A->B does not overlap with B->A
 
     # --------------------------------------- Build the node and edges attributes list
-    nodeAttrs = createNodeAttrs(g, vertices, stimuli, signals, inhibitors, ncno,
+    nodeAttrs = createNodeAttrs(g, vertices, stimuli, signals, inhibitors, NCNO,
 compressed, nodeLabels=graphvizParams$nodeLabels)
 
     res = createEdgeAttrs(v1, v2, edges, BStimes, Integr,
@@ -223,14 +224,14 @@ compressed, nodeLabels=graphvizParams$nodeLabels)
 
     # createEdge returns the edgeAttrs and a list of edges that correspond to a
     # bistring element that is zero. In such case, the edge is useless and can
-    # be removed. 
+    # be removed.
     toremove = res$toremove
     for (x in toremove){
         y = unlist(strsplit(x, "~"))
         g = removeEdge(y[1], y[2], g)
     }
     # Some nodes are now connected to no other nodes. These nodes can be
-    # removed. In principle, this is only and nodes.  
+    # removed. In principle, this is only and nodes.
     orphans = nodes(g)[(degree(g)$inDegree  + degree(g)$outDegree) ==0]
     for (x in orphans){
         if (x %in% stimuli == FALSE & x %in% inhibitors == FALSE & x %in% signals == FALSE){
@@ -270,10 +271,10 @@ compressed, nodeLabels=graphvizParams$nodeLabels)
     # width are small and color light, so for all edges have the same width
     # of 3
     if (installed.packages()[,"Version"]["Rgraphviz"] <= "1.33.0"){
-        #nodeAttrs$lty = "solid" 
+        #nodeAttrs$lty = "solid"
         print("plotModel: please upgrade to Rgraphviz >1.33.0 for best output")
         edgelwd = 3
-        nodelty = "solid" 
+        nodelty = "solid"
         savedEdgeAttrs = edgeAttrs$color
         edgeAttrs$color = NULL
     }
@@ -289,7 +290,7 @@ compressed, nodeLabels=graphvizParams$nodeLabels)
     shapes[shapes=="triangle"] = "circle"
 
     nodeRenderInfo(g) <- list(
-        fill=nodeAttrs$fillcolor, 
+        fill=nodeAttrs$fillcolor,
         col=nodeAttrs$color,
         style=nodeAttrs$style,
         lty=nodelty,
@@ -298,12 +299,12 @@ compressed, nodeLabels=graphvizParams$nodeLabels)
         shape=shapes,
         cex=0.4,
         fontsize=fontsize,
-        iwidth=nodeAttrs$width,  
+        iwidth=nodeAttrs$width,
         iheight=nodeAttrs$height,
         fixedsize=FALSE)
 
    # the arrowhead "normal" is buggy in Rgraphviz version 1.32 so switch to
-   # "open" for now. However, the dot output keeps using the normal arrow. 
+   # "open" for now. However, the dot output keeps using the normal arrow.
    arrowhead2 = edgeAttrs$arrowhead
    arrowhead2[arrowhead2=="normal"] = "open"
 
@@ -332,7 +333,7 @@ compressed, nodeLabels=graphvizParams$nodeLabels)
         x <- layoutGraph(g,layoutType="dot",recipEdges=recipEdges,attrs=attrs)
         renderGraph(x)
         #plot(g,"dot",attrs=attrs,nodeAttrs=nodeAttrs,edgeAttrs=edgeAttrs, recipEdges=recipEdges)
-        edgeAttrs$lty=NULL    # why ? 
+        edgeAttrs$lty=NULL    # why ?
         toDot(copyg, output_dot, nodeAttrs=nodeAttrs,edgeAttrs=edgeAttrs,attrs=attrs, recipEdges=recipEdges)
 
         # bug introduced in Rgraphviz 1.34 that set node attributes border.lwd
@@ -346,14 +347,14 @@ compressed, nodeLabels=graphvizParams$nodeLabels)
         x <- layoutGraph(g,layoutType="dot",subGList=clusters,recipEdges=recipEdges,attrs=attrs)
         renderGraph(x)
         # and save into dot file.
-        toDot(copyg, output_dot, nodeAttrs=nodeAttrs, subGList=clusters, 
+        toDot(copyg, output_dot, nodeAttrs=nodeAttrs, subGList=clusters,
              attrs=attrs, recipEdges=recipEdges, edgeAttrs=edgeAttrs)
         # bug introduced in Rgraphviz 1.34 that set node attributes border.lwd
         # and border.color that are not understood by dot. Best solution is to
         # change Rgraphviz but large latency so we can change the written files
         # afterwards to change the dot file itself
         clean_dot(output_dot)
-        
+
 
     }
 
@@ -363,7 +364,7 @@ compressed, nodeLabels=graphvizParams$nodeLabels)
 
 
 # if a cnolist, or at least signals/stimuli, then we can create ranking for the
-# layout 
+# layout
 create_layout <- function(g, signals, stimuli){
 
     # this algo will tell us the distance between vertices
@@ -392,12 +393,12 @@ create_layout <- function(g, signals, stimuli){
     ranks <- apply(distMatrix, 2, max)
     mrank = max(ranks, na.rm=TRUE)-1  # -1 because we already know the sinks
     if (mrank == -Inf){
-        print("Issue while computing max rank. Skipping the clustering step"); 
-        return (NULL) 
+        print("Issue while computing max rank. Skipping the clustering step");
+        return (NULL)
     }
 
     clusters <- list()
-    if (mrank >= 1){ # otherwise, nothing to do. 
+    if (mrank >= 1){ # otherwise, nothing to do.
         # for each different rank select the names of the column to create a
         # cluster
         for (rank in 1:mrank){  # starts at 1 although ranks starts at 0.
@@ -433,7 +434,7 @@ subGraph(stimuli, g)? Does the stimuli from your MIDAS are present in the model
                 {clusters[[length(clusters)+1]] = clusterSource},
                  error=function(e){print("error in clusters2. should never be here")}
             )
-    
+
         },
         error=function(e){print("warning: clustering the source/stimuli failed. carry on...")}
     )
@@ -444,7 +445,7 @@ subGraph(stimuli, g)? Does the stimuli from your MIDAS are present in the model
             clusterSink <- subGraph(sinks, g)
             clusterSink <- list(graph=clusterSink, cluster=FALSE,  attrs=c(rank="sink"))
             tryCatch(
-                {clusters[[length(clusters)+1]] = clusterSink}, 
+                {clusters[[length(clusters)+1]] = clusterSink},
                 error=function(e){print("error in clusters3. should never be here")}
             )
         }, error=function(e){print("warning: clustering the sink failed. carry on...")}
@@ -457,13 +458,13 @@ subGraph(stimuli, g)? Does the stimuli from your MIDAS are present in the model
 
 # Create the node attributes and save in a list to be used either by the
 # plot function of the nodeRenderInfo function.
-createNodeAttrs <- function(g, vertices, stimuli, signals, inhibitors, ncno,
+createNodeAttrs <- function(g, vertices, stimuli, signals, inhibitors, NCNO,
 compressed, nodeLabels=NULL){
 
     # ----------------------------------------------- Build the node attributes list
     fillcolor <- list()
     color <- list()
-    style <- list()  # the style of what is inside the node. 
+    style <- list()  # the style of what is inside the node.
     lty <- list()    #style of the contour node
     height <-list()
     label <- list()
@@ -476,13 +477,13 @@ compressed, nodeLabels=NULL){
     for (s in vertices){
         color[s] <- "black"         # color edge
         fillcolor[s] <- "white"     # fill color
-        style[s] <- "filled,bold"  
-        lty[s] <- "solid"           
+        style[s] <- "filled,bold"
+        lty[s] <- "solid"
         label[s] <- s
         height[s] <- 1
         width[s] <- 2
         fixedsize[s] <- FALSE
-        shape[s] <- "ellipse" 
+        shape[s] <- "ellipse"
     }
 
     # user can provide a list of labels for the nodes. Usuful to show attributes
@@ -500,14 +501,14 @@ compressed, nodeLabels=NULL){
     }
 
     # The stimulis node
-    for (s in stimuli){ 
-        fillcolor[s] <- "olivedrab3"; 
+    for (s in stimuli){
+        fillcolor[s] <- "olivedrab3";
         color[s] <- "olivedrab3";
         style[s] <- "filled"
     }
     # The signal nodes
     for (s in signals){ #must be before the inhibitors to allow bicolors
-        fillcolor[s] <- "lightblue"; 
+        fillcolor[s] <- "lightblue";
         color[s] <-"lightblue";
     }
     # The inhibitor node, that may also belong to the signal category.
@@ -518,21 +519,21 @@ compressed, nodeLabels=NULL){
             color[s] <-"orangered"
         }
         else{
-            fillcolor[s] <- "orangered"; 
+            fillcolor[s] <- "orangered";
             color[s] <-"orangered";
         }
     }
     # The compressed nodes
-    for (s in compressed){ 
-        fillcolor[s] <- "white"; 
-        color[s] <- "black"; 
-        style[s] <- "dashed,bold"; 
+    for (s in compressed){
+        fillcolor[s] <- "white";
+        color[s] <- "black";
+        style[s] <- "dashed,bold";
         lty[s]="dashed";
     }
     # The NCNO node
-    for (s in ncno){ 
-        fillcolor[s] <- "white"; 
-        color[s] <- "grey"; 
+    for (s in NCNO){
+        fillcolor[s] <- "white";
+        color[s] <- "grey";
         fillcolor[s] = "grey"
     }
     # the and gate nodes
@@ -554,7 +555,7 @@ compressed, nodeLabels=NULL){
             fillcolor[s] = "red"
             shape[s]="rectangle"
         }
-            
+
         }
     }
     nodeAttrs <- list(fillcolor=fillcolor, color=color, label=label, width=width, height=height,
@@ -598,7 +599,7 @@ createEdgeAttrs <- function(v1, v2, edges, BStimes ,Integr, user_edgecolor){
            edgecolor[edgename] <- "blue"
         }
 
-        # BStimes contains the bitstring. color the edges according to its value 
+        # BStimes contains the bitstring. color the edges according to its value
         v = (BStimes[i]*100)%/%1
         # width of the edges
         if (v != 100){

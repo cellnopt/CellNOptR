@@ -10,13 +10,13 @@
 }
 
 \usage{
-model2sif(Model,optimRes=NA,writeSif=FALSE, filename="Model")
+model2sif(model,optimRes=NA,writeSif=FALSE, filename="Model")
 
 }
 
 
 \arguments{
-  \item{Model}{
+  \item{model}{
 the model as generated using \link{readSIF}
 }
   \item{optimRes}{

@@ -14,7 +14,10 @@
 ##############################################################################
 # $Id: plotOptimResultsPan.R 802 2012-03-22 16:44:12Z cokelaer $
 
-plotOptimResultsPan <- function(SimResults=SimResults, yInterpol=NULL, xCoords=NULL, CNOlist=CNOlist, nsplit=1, formalism=c("ss1","ss2","dt","ode"), pdf=FALSE, pdfFileName="", tPt=NULL) {
+plotOptimResultsPan <- function(simResults, yInterpol=NULL, xCoords=NULL,
+    CNOlist=CNOlist, nsplit=1, formalism=c("ss1","ss2","dt","ode"), pdf=FALSE,
+    pdfFileName="", tPt=NULL)
+{
 
 	# check that CNOlist is a CNOlist
 	if(!is.list(CNOlist)) {
@@ -85,9 +88,9 @@ plotOptimResultsPan <- function(SimResults=SimResults, yInterpol=NULL, xCoords=N
 	# latest time point
 	xValMax = max(xVal)
 		
-	# make SimResults array if not already	
-	if(!is.array(SimResults)) {
-		SimResults = list2Array(SimResults, dim=c(dim(SimResults[[1]]),length(SimResults)))	
+	# make simResults array if not already	
+	if(!is.array(simResults)) {
+		simResults = list2Array(simResults, dim=c(dim(simResults[[1]]),length(simResults)))	
 	}
 
 	# make valueSignals an array
@@ -95,17 +98,17 @@ plotOptimResultsPan <- function(SimResults=SimResults, yInterpol=NULL, xCoords=N
 	dim=c(dim(CNOlist$valueSignals[[1]]),length(CNOlist$valueSignals)))
 
 	# calculate the MSE
-	allDiff = matrix(NA, nrow=dim(SimResults)[1], ncol=dim(SimResults)[2])
+	allDiff = matrix(NA, nrow=dim(simResults)[1], ncol=dim(simResults)[2])
 	if(formalism != "dt") {
-		for(a in 1:dim(SimResults)[1]) {
-			for(b in 1:dim(SimResults)[2]) {
-				allDiff[a,b] = sum((SimResults[a,b,]-valueSignalsArr[a,b,valueSignalsI])^2)
+		for(a in 1:dim(simResults)[1]) {
+			for(b in 1:dim(simResults)[2]) {
+				allDiff[a,b] = sum((simResults[a,b,]-valueSignalsArr[a,b,valueSignalsI])^2)
 			}
 		}	
 	} else {
-		for(a in 1:dim(SimResults)[1]) {
-			for(b in 1:dim(SimResults)[2]) {
-				allDiff[a,b] = sum((SimResults[a,b,]-yInterpol[a,b,])^2)
+		for(a in 1:dim(simResults)[1]) {
+			for(b in 1:dim(simResults)[2]) {
+				allDiff[a,b] = sum((simResults[a,b,]-yInterpol[a,b,])^2)
 			}
 		}		
 	}
@@ -169,7 +172,7 @@ plotOptimResultsPan <- function(SimResults=SimResults, yInterpol=NULL, xCoords=N
 			screen(countRow)
 			par(fg="black",mar=c(0.5,0.5,0,0))
 			yVal <- lapply(CNOlist$valueSignals[valueSignalsI], function(x) {x[r,c]})
-			yValS <- SimResults[r,c,]
+			yValS <- simResults[r,c,]
 			if(!is.na(allDiff[r,c])) {
 				diff = (1 - (allDiff[r,c] / diffMax)) * 1000
 			} else {
@@ -298,7 +301,7 @@ plotOptimResultsPan <- function(SimResults=SimResults, yInterpol=NULL, xCoords=N
 #	splits <- dim(CNOlist$valueCues)[1]/nsplit	
 #	splits <- floor(splits)
 #	CNOlistOriginal <- CNOlist
-#	SimResultsOriginal <- SimResults
+#	simResultsOriginal <- simResults
 	
 # 	for(i in 1:nsplit) {
 # 		if(nsplit > 1) {
@@ -315,8 +318,8 @@ plotOptimResultsPan <- function(SimResults=SimResults, yInterpol=NULL, xCoords=N
 # 		for(n in 1:length(CNOlist$valueSignals)) {
 # 			CNOlist$valueSignals[[n]] <- CNOlist$valueSignals[[n]][indices,]
 # 		}
-#		for(n in 1:length(SimResults)) {
-#			SimResults[[n]] <- SimResults[[n]][indices,]
+#		for(n in 1:length(simResults)) {
+#			simResults[[n]] <- simResults[[n]][indices,]
 # 		}
 # 	}
 

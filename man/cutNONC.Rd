@@ -7,10 +7,10 @@ Cuts the non-observable/non-controllable species from the model
 This function cuts the non-observable and/or non-controllable species from the model, and returns a cut model.
 }
 \usage{
-cutNONC(Model, NONCindexes)
+cutNONC(model, NONCindexes)
 }
 \arguments{
-  \item{Model}{
+  \item{model}{
 a model structure, as produced by readSIF
 }
   \item{NONCindexes}{
@@ -18,7 +18,7 @@ a vector of indices of species to remove in that model, as produced for example 
 }
 }
 \details{
-This function takes in a model and a vector of indices of species to remove in that model and it removes those species and any reaction involving them (be aware, if you have x&y=z and x is to be removed, then the function produces y=z, because it works by removing entire rows of the Model matrices and then removes the columns that do not have either an input or an output). This function could actually be used to cut any species, not only NONC species.
+This function takes in a model and a vector of indices of species to remove in that model and it removes those species and any reaction involving them (be aware, if you have x&y=z and x is to be removed, then the function produces y=z, because it works by removing entire rows of the model matrices and then removes the columns that do not have either an input or an output). This function could actually be used to cut any species, not only NONC species.
 }
 \value{
 a model

@@ -12,7 +12,7 @@ This package does optimisation of boolean logic networks of signalling pathways 
 \tabular{ll}{
 Package: \tab CellNOptR\cr
 Type: \tab Package\cr
-Version: \tab 1.3.18\cr
+Version: \tab 1.3.19\cr
 Date: \tab 2012-06-25\cr
 License: \tab GPLv2\cr
 LazyLoad: \tab yes\cr
@@ -33,42 +33,29 @@ mammalian signal transduction, Molecular Systems Biology, 5:331, 2009.
 \examples{
 library(CellNOptR)
 
+#version with paramslist
+
 tmpdir<-tempdir()
 setwd(tmpdir)
 
 data(CNOlistToy,package="CellNOptR")
 data(ToyModel,package="CellNOptR")
 
-#From here there are 2 versions: 1. If you want to set the parameters yourself
-pList<-list(
-	Data=CNOlistToy,
-	Model=ToyModel,
-	sizeFac = 1e-04, 
-	NAFac = 1, 
-	PopSize = 10, 
-	Pmutation = 0.5, 
-	MaxTime = 60, 
-	maxGens = 5, 
-	StallGenMax = 5, 
-	SelPress = 1.2, 
-	elitism = 5, 
-	RelTol = 0.1,
-	verbose=TRUE)
+pList = defaultParameters()
+pList$data = CNOlistToy
+pList$model = ToyModel
+pList$maxGens = 5
+pList$popSize = 5
 
-CNORwrap(
-	paramsList=pList,
-	Name="Toy",
-	NamesData=list(CNOlist="ToyData",Model="ToyModel"),
-	Data=NA,
-	Model=NA)
+CNORwrap(paramsList=pList, name="Toy", 
+    namesData=list(CNOlist="ToyData", model="ToyModel"))
 
-#2. If you want to keep the default parameters
 \dontrun{
-CNORwrap(
-	paramsList=NA,
-	Name="Toy",
-	NamesData=list(CNOlist="ToyData",Model="ToyModel"),
-	Data=CNOlistToy,
-	Model=ToyModel)
+#version with default parameters
+
+
+CNORwrap(name="Toy", 
+    namesData=list(CNOlist="ToyData",model="ToyModel"),
+    data=CNOlistToy, model=ToyModel)
 }
 }

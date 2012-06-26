@@ -1,5 +1,5 @@
-\name{cutSimList}
-\alias{cutSimList}
+\name{cutModel}
+\alias{cutModel}
 \title{
 Cut a model structure according to a bitstring
 }
@@ -7,17 +7,17 @@ Cut a model structure according to a bitstring
 This function is for developers only. 
 }
 \usage{
-cutModel(Model, bitString)
+cutModel(model, bString)
 }
 
 \arguments{
-  \item{Model}{the Model object to cut.}
-  \item{bitString}{the bitString to be used to cut the SimList object.}
+  \item{model}{the model object to cut.}
+  \item{bString}{the bitString to be used to cut the model object.}
 }
 
 
 \value{
-  \item{cutModel}{the new Model object}
+  \item{cutModel}{the new model object}
 }
 
 \author{

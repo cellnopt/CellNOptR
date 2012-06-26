@@ -14,54 +14,47 @@
 ##############################################################################
 # $Id$
 
-cutAndPlotResultsT1 <- function(
-	Model,
-	bString,
-	SimList,
-	CNOlist,
-	indexList,
-	plotPDF=FALSE,
-    tag=NULL,
-    show=TRUE,
-    tPt=CNOlist$timeSignals[2]) {
+cutAndPlotResultsT1 <- function(model, bString, simList, CNOlist, indexList,
+    plotPDF=FALSE, tag=NULL, show=TRUE, tPt=CNOlist$timeSignals[2])
+{
 
-	Modelcut <- cutModel(Model, bString)
+    modelCut <- cutModel(model, bString)
 
-	SimListCut<-cutSimList(SimList,bString)
+    simListCut<-cutSimList(simList,bString)
 
-	Sim <- simulatorT1(CNOlist=CNOlist,Model=Modelcut,SimList=SimListCut,indexList=indexList)
-	SimRes <- as.matrix(Sim[,indexList$signals])
+    Sim <- simulatorT1(CNOlist=CNOlist,model=modelCut,simList=simListCut,indexList=indexList)
+    simRes <- as.matrix(Sim[,indexList$signals])
 
     # former code when t0 was not taken into account (everything set to zero)
-	#SimResults <- list(t0=matrix(data=0,nrow=dim(SimRes)[1],ncol=dim(SimRes)[2]),t1=SimRes)
+    #simResults <- list(t0=matrix(data=0,nrow=dim(simRes)[1],ncol=dim(simRes)[2]),t1=simRes)
 
-	# new code
-	Sim0 <- simulatorT0(CNOlist=CNOlist,Model=Modelcut,SimList=SimListCut,indexList=indexList)
-	SimRes0 <- as.matrix(Sim0[,indexList$signals])
-	SimResults <- list(t0=SimRes0,t1=SimRes)
-	#dev.new()
+    # new code
+    Sim0 <- simulatorT0(CNOlist=CNOlist,model=modelCut,simList=simListCut,indexList=indexList)
+    simRes0 <- as.matrix(Sim0[,indexList$signals])
+    simResults <- list(t0=simRes0,t1=simRes)
+    #dev.new()
     if(show==TRUE) {
-    	plotOptimResultsPan(
-			SimResults=SimResults,
-			CNOlist=CNOlist,
-			formalism="ss1",
-			tPt=tPt
-		)
-	}
-	if(plotPDF == TRUE) {
-		if(is.null(tag)) {
-			filename <- paste(deparse(substitute(Model)),"SimResultsT1.pdf",sep="")
+        plotOptimResultsPan(
+            simResults=simResults,
+            CNOlist=CNOlist,
+            formalism="ss1",
+            tPt=tPt
+        )
+    }
+    if(plotPDF == TRUE) {
+        if(is.null(tag)) {
+            filename <- paste(deparse(substitute(model)),"SimResultsT1.pdf",sep="")
         } else {
-			filename <- paste(tag,"SimResultsT1.pdf",sep="_")
+            filename <- paste(tag,"SimResultsT1.pdf",sep="_")
         }
-		plotOptimResultsPan(
-			SimResults=SimResults,
-			CNOlist=CNOlist,
-			pdf=TRUE,
-			formalism="ss1",
-			pdfFileName=filename,
-			tPt=tPt
-		)
-	}
+        plotOptimResultsPan(
+            simResults=simResults,
+            CNOlist=CNOlist,
+            pdf=TRUE,
+            formalism="ss1",
+            pdfFileName=filename,
+            tPt=tPt
+        )
+    }
 }
 

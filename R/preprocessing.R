@@ -13,41 +13,41 @@
 #
 ##############################################################################
 
-preprocessing<-function(Data, Model, cutnonc=TRUE, compression=TRUE,
-expansion=TRUE, ignoreList=NA, maxInputsPerGate=2,verbose=TRUE){
+preprocessing<-function(data, model, cutNONC=TRUE, compression=TRUE,
+    expansion=TRUE, ignoreList=NA, maxInputsPerGate=2,verbose=TRUE){
 
     # why not doing this check here ? Does not cost too much
-	checkSignals(CNOlist=Data,Model=Model)
+	checkSignals(CNOlist=data,model=model)
 
     # a copy of the model 
-    cutmodel <- Model
+    cutModel <- model
 
-    if (cutnonc==TRUE){
+    if (cutNONC==TRUE){
         # Find the indices, in the model, of the species that are inh/stim/sign
-	    indices<-indexFinder(CNOlist=Data, Model=Model,	verbose=verbose)
+	    indices<-indexFinder(CNOlist=data, model=model,	verbose=verbose)
 
         # Find the indices of the non-osb/non-contr	
-	    temp_indices <- findNONC(Model=Model, indexes=indices,verbose=verbose)
+	    temp_indices <- findNONC(model=model, indexes=indices,verbose=verbose)
         # Cut the nonc off the model
-        cutmodel <-cutNONC(Model=Model, NONCindexes=temp_indices)
+        cutModel <-cutNONC(model=model, NONCindexes=temp_indices)
     }
 
     if (compression == TRUE){
         # Recompute the indices
-	    temp_indices<-indexFinder(CNOlist=Data, Model=cutmodel)
+	    temp_indices<-indexFinder(CNOlist=data, model=cutModel)
 
         # Compress the model
-    	cutmodel<-compressModel(Model=cutmodel,indexes=temp_indices)
+    	cutModel<-compressModel(model=cutModel,indexes=temp_indices)
     }
 
     # Recompute the indices. We can do it now because the expanson gate does not
     # remove species but only add and gates.
-	indices<-indexFinder(CNOlist=Data,Model=cutmodel)
+	indices<-indexFinder(CNOlist=data,model=cutModel)
 
     # Expand the gates	
     if (expansion == TRUE){
-        cutmodel <- expandGates(Model=cutmodel, ignoreList=ignoreList,maxInputsPerGate=maxInputsPerGate)
+        cutModel <- expandGates(model=cutModel, ignoreList=ignoreList,maxInputsPerGate=maxInputsPerGate)
     }
 
-    return( list(model=cutmodel, indices=indices))
+    return( list(model=cutModel, indices=indices))
 }
