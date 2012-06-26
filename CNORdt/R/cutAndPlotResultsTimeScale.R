@@ -12,7 +12,7 @@
 #  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
 #
 ##############################################################################
-# $Id: $
+# $Id: Author Date Id Rev URL $
 
 cutAndPlotResultsTimeScale <- function (model, bString, simList, CNOlist, indexList, boolUpdates=boolUpdates, 
 divTime=NULL, lowerB=lowerB, upperB=upperB) {
