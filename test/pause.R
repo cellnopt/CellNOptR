@@ -52,7 +52,7 @@ plotCNOlist(CNOlistBool)
 sim1 = system.time(replicate(100,simulatorPause(CNOlistDelay, modelDelay, simDelay, indexDelay,
 boolUpdates=10, delayThresh)))
 sim1 = system.time(simulatorTimeScale(CNOlistDelay, modelDelay, simDelay, indexDelay,boolUpdates=10))
-system.time(replicate(100,simulatorT1(CNOlistDelay, modelDelay, simDelay, indexDelay)))
+system.time(replicate(1000,simulatorT1(CNOlistDelay, modelDelay, simDelay, indexDelay)))
 
 plotData <- function(CNOlist, data) {
 
