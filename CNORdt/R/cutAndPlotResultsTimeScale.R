@@ -12,14 +12,14 @@
 #  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
 #
 ##############################################################################
-# $Id: Author Date Id Rev URL $
+# $Id: $
 
 cutAndPlotResultsTimeScale <- function (model, bString, simList, CNOlist, indexList, boolUpdates=boolUpdates, 
 divTime=NULL, lowerB=lowerB, upperB=upperB) {
 
 	modelCut <- model
-	modelCut$interMat <- modelCut$interMat[, as.logical(bString)]
-	modelCut$notMat <- modelCut$notMat[, as.logical(bString)]
+	modelCut$interMat <- modelCut$interMat[,as.logical(bString)]
+	modelCut$notMat <- modelCut$notMat[,as.logical(bString)]
 	modelCut$reacID <- modelCut$reacID[as.logical(bString)]
 	
 	simListCut <- simList
@@ -28,15 +28,15 @@ divTime=NULL, lowerB=lowerB, upperB=upperB) {
 	simListCut$ignoreCube <- simListCut$ignoreCube[as.logical(bString),]
 
 	simListCut$maxIx <- simListCut$maxIx[as.logical(bString)]
-	boolUpdates = boolUpdates[1]
-	simRes <- simulatorTimeScale(CNOlist = CNOlist, model = modelCut, 
-	simList = simListCut, indexList = indexList, boolUpdates = boolUpdates)
-	simRes = simRes[, indexList$signals, ]
-	getFitData <- getFitTimeScale(simList = simListCut, CNOlist = CNOlist, 
-	model = modelCut, indexList = indexList, boolUpdates = boolUpdates, 
-	divTime = divTime, lowerB = lowerB, upperB = upperB)
+	boolUpdates=boolUpdates[1]
+	simRes <- simulatorTimeScale(CNOlist=CNOlist, model=modelCut, 
+	simList = simListCut, indexList=indexList, boolUpdates=boolUpdates)
+	simRes = simRes[,indexList$signals,]
+	getFitData <- getFitTimeScale(simList=simListCut, CNOlist=CNOlist, 
+	model = modelCut, indexList=indexList, boolUpdates=boolUpdates, 
+	divTime = divTime, lowerB=lowerB, upperB=upperB)
     
-    plotOptimResultsTimeScale(simResults = simRes, yInterpol = getFitData$yInter, 
-	xCoords = getFitData$xCoords, CNOlist = CNOlist)
+    plotOptimResultsTimeScale(simResults=simRes, yInterpol=getFitData$yInter, 
+	xCoords=getFitData$xCoords, CNOlist=CNOlist)
 }
 

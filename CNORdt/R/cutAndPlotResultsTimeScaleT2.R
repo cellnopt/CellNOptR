@@ -14,28 +14,29 @@
 ##############################################################################
 # $Id: $
 
-cutAndPlotResultsTimeScaleT2 <- function (Model, bStringT1, bStringT2, SimList, CNOlist, indexList, boolUpdates, divTime, lowerB = lowerB, upperB = upperB) {
+cutAndPlotResultsTimeScaleT2 <- function (model, bStringT1, bStringT2, simList,
+CNOlist, indexList, boolUpdates, divTime, lowerB=lowerB, upperB=upperB) {
     
     library(abind)
    	
-   	Modelcut <- Model
-    Modelcut$interMat <- Modelcut$interMat[, as.logical(bStringT1)]
-    Modelcut$notMat <- Modelcut$notMat[, as.logical(bStringT1)]
-    Modelcut$reacID <- Modelcut$reacID[as.logical(bStringT1)]
+   	modelCut <- model
+    modelCut$interMat <- modelCut$interMat[, as.logical(bStringT1)]
+    modelCut$notMat <- modelCut$notMat[, as.logical(bStringT1)]
+    modelCut$reacID <- modelCut$reacID[as.logical(bStringT1)]
     
-    SimListcut <- SimList
-    SimListcut$finalCube <- SimListcut$finalCube[as.logical(bStringT1),]
-    SimListcut$ixNeg <- SimListcut$ixNeg[as.logical(bStringT1),]
-    SimListcut$ignoreCube <- SimListcut$ignoreCube[as.logical(bStringT1),]
-    SimListcut$maxIx <- SimListcut$maxIx[as.logical(bStringT1)]
+    simListCut <- simList
+    simListCut$finalCube <- simListCut$finalCube[as.logical(bStringT1),]
+    simListCut$ixNeg <- simListCut$ixNeg[as.logical(bStringT1),]
+    simListCut$ignoreCube <- simListCut$ignoreCube[as.logical(bStringT1),]
+    simListCut$maxIx <- simListCut$maxIx[as.logical(bStringT1)]
     
-    SimT1 <- simulatorTimeScale(CNOlist = CNOlist, Model = Modelcut, 
-	SimList = SimListcut, indexList = indexList, boolUpdates = boolUpdates[1])
-    SimResT1 <- SimT1[, indexList$signals,]
+    simT1 <- simulatorTimeScale(CNOlist=CNOlist, model=modelCut, 
+	simList=simListCut, indexList=indexList, boolUpdates=boolUpdates[1])
+    simResT1 <- simT1[,indexList$signals,]
     
-    getFitDataT1 <- getFitTimeScale(SimList = SimListcut, CNOlist = CNOlist, 
-	Model = Modelcut, indexList = indexList, boolUpdates = boolUpdates, 
-	divTime = divTime, lowerB = lowerB, upperB = upperB)
+    getFitDataT1 <- getFitTimeScale(simList=simListCut, CNOlist=CNOlist, 
+	model=modelCut, indexList=indexList, boolUpdates=boolUpdates, 
+	divTime=divTime, lowerB=lowerB, upperB=upperB)
     
     xCoords1 <- getFitDataT1$xCoords
     bitString2 <- bStringT1
@@ -43,36 +44,36 @@ cutAndPlotResultsTimeScaleT2 <- function (Model, bStringT1, bStringT2, SimList, 
     BStimes <- bStringT1
     BStimes[which(bStringT1 == 0)] <- bStringT2 * 2
     
-    Modelcut <- Model
-    Modelcut$interMat <- Modelcut$interMat[, as.logical(bitString2)]
-    Modelcut$notMat <- Modelcut$notMat[, as.logical(bitString2)]
-    Modelcut$reacID <- Modelcut$reacID[as.logical(bitString2)]
-    Modelcut$times <- BStimes[which(BStimes != 0)]
+    modelCut <- Model
+    modelCut$interMat <- modelCut$interMat[, as.logical(bitString2)]
+    modelCut$notMat <- modelCut$notMat[, as.logical(bitString2)]
+    modelCut$reacID <- modelCut$reacID[as.logical(bitString2)]
+    modelCut$times <- BStimes[which(BStimes != 0)]
     
-    SimListcut <- SimList
-    SimListcut$finalCube <- SimListcut$finalCube[as.logical(bitString2),]
-    SimListcut$ixNeg <- SimListcut$ixNeg[as.logical(bitString2),]
-    SimListcut$ignoreCube <- SimListcut$ignoreCube[as.logical(bitString2),]
-    SimListcut$maxIx <- SimListcut$maxIx[as.logical(bitString2)]
+    simListCut <- SimList
+    simListCut$finalCube <- simListCut$finalCube[as.logical(bitString2),]
+    simListCut$ixNeg <- simListCut$ixNeg[as.logical(bitString2),]
+    simListCut$ignoreCube <- simListCut$ignoreCube[as.logical(bitString2),]
+    simListCut$maxIx <- simListCut$maxIx[as.logical(bitString2)]
     
-    SimT2 <- simulatorTimeScaleT2(SimResultsT1 = SimT1[, , dim(SimT1)[3]], 
-	CNOlist = CNOlist, Model = Modelcut, SimList = SimListcut, 
-	indexList = indexList, boolUpdates = boolUpdates[2])
-    SimResT2 <- SimT2[, indexList$signals, ]
+    simT2 <- simulatorTimeScaleT2(simResultsT1=SimT1[,,dim(simT1)[3]], 
+	CNOlist=CNOlist, Model=modelCut, simList=simListCut, 
+	indexList=indexList, boolUpdates=boolUpdates[2])
+    simResT2 <- simT2[,indexList$signals,]
     
-    getFitDataT2 <- getFitTimeScale(SimList = SimListcut, CNOlist = CNOlist, 
-	Model = Modelcut, indexList = indexList, boolUpdates = boolUpdates, 
-	divTime = divTime, timeSplit = "late", SimResultsT1 = SimT1, 
-	lowerB = lowerB, upperB = upperB)
+    getFitDataT2 <- getFitTimeScale(simList=simListCut, CNOlist=CNOlist, 
+	model=modelCut, indexList=indexList, boolUpdates=boolUpdates, 
+	divTime=divTime, timeSplit="late", simResultsT1=simT1, 
+	lowerB=lowerB, upperB=upperB)
     
     xCoords2 <- CNOlist$timeSignals[which(CNOlist$timeSignals == 
 	divTime) + 1] + getFitDataT2$xCoords
-    SimResALL = abind(SimResT1, SimResT2, along = 3)
+    simResAll = abind(simResT1, simResT2, along=3)
 
-    yInterALL = abind(getFitDataT1$yInter, getFitDataT2$yInter, 
-	along = 3)
+    yInterAll = abind(getFitDataT1$yInter, getFitDataT2$yInter, 
+	along=3)
     
-    plotOptimResultsTimeScale(SimResults=SimResALL, yInterpol=yInterALL, 
+    plotOptimResultsTimeScale(simResults=simResAll, yInterpol=yInterAll, 
 	xCoords=c(xCoords1, xCoords2), CNOlist=CNOlist)
 }
 

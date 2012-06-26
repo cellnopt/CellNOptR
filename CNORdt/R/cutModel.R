@@ -14,17 +14,17 @@
 ##############################################################################
 # $Id: $
 
-cutModel <- function(Model, SimList, bitString) {
+cutModel <- function(model, simList, bitString) {
 		
 	# cut the model according to bitstring	
-	ModelCut <- Model
-	ModelCut$interMat <- ModelCut$interMat[,as.logical(bitString)]
-	ModelCut$notMat <- ModelCut$notMat[,as.logical(bitString)]
-	ModelCut$reacID <- ModelCut$reacID[as.logical(bitString)]
-	SimListCut <- SimList
-	SimListCut$finalCube <- SimListCut$finalCube[as.logical(bitString),]
-	SimListCut$ixNeg <- SimListCut$ixNeg[as.logical(bitString),]
-	SimListCut$ignoreCube <- SimListCut$ignoreCube[as.logical(bitString),]
-	SimListCut$maxIx <- SimListCut$maxIx[as.logical(bitString)]
-	dataOut = list(ModelCut, SimListCut)
+	modelCut <- model
+	modelCut$interMat <- modelCut$interMat[,as.logical(bitString)]
+	modelCut$notMat <- modelCut$notMat[,as.logical(bitString)]
+	modelCut$reacID <- modelCut$reacID[as.logical(bitString)]
+	simListCut <- simList
+	simListCut$finalCube <- simListCut$finalCube[as.logical(bitString),]
+	simListCut$ixNeg <- simListCut$ixNeg[as.logical(bitString),]
+	simListCut$ignoreCube <- simListCut$ignoreCube[as.logical(bitString),]
+	simListCut$maxIx <- simListCut$maxIx[as.logical(bitString)]
+	dataOut = list(modelCut, simListCut)
 }

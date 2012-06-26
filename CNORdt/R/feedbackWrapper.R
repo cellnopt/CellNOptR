@@ -1,24 +1,24 @@
-feedbackWrapper <- function(Model) {
+feedbackWrapper <- function(model) {
 
-	what.loops = feedbackFinder1(Model)
-	neg.reacs = c()
-	for(b in 1:length(what.loops)) {
-		loop1 = what.loops[[b]]
+	whatLoops = feedbackFinder1(model)
+	negReacs = c()
+	for(b in 1:length(whatLoops)) {
+		loop1 = whatLoops[[b]]
 		loop1 = loop1[loop1 > 0]
 		loop1 = c(loop1, loop1[1])
 		for(a in 1:length(loop1)-1) {
 			lhs = loop1[a]
 			rhs = loop1[a+1]
-			lhs.reac = which(Model$interMat[lhs,] == -1)
-			rhs.reac = which(Model$interMat[rhs,] == 1)
-			reac = intersect(lhs.reac, rhs.reac)
-			if(any(Model$notMat[,reac] == 1)) {
-				neg.reacs = c(neg.reacs, reac)	
+			LHSreac = which(model$interMat[lhs,] == -1)
+			RHSreac = which(model$interMat[rhs,] == 1)
+			reac = intersect(LHSreac, RHSreac)
+			if(any(model$notMat[,reac] == 1)) {
+				negReacs = c(negReacs, reac)	
 			}
 		}
 	}
-	neg.reacs = unique(neg.reacs)
-	negEdges = rep(0,length(Model$reacID))
-	negEdges[neg.reacs] = 1
+	negReacs = unique(negReacs)
+	negEdges = rep(0,length(model$reacID))
+	negEdges[negReacs] = 1
 	return(negEdges)
 }
