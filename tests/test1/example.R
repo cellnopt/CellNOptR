@@ -20,7 +20,9 @@ cnolist=CNOlistToyFB
 
 
 model = readSIF('ToyModelFeedbackDataGenerator.sif')
-indices <- indexFinder(cnolist, model)
+#indices <- indexFinder(cnolist, model)
+
+res = preprocessing(cnolist, model)
 
 #indices<- findNONC(model, indices, verbose = TRUE)
 #model <- cutNONC(model, indices)
@@ -29,18 +31,17 @@ indices <- indexFinder(cnolist, model)
 #indices<- indexFinder(cnolist, model)
 
 
-ode_parameters = createLBodeContPars(model,default_n=3,random=TRUE)
+ode_parameters = createLBodeContPars(res$model,default_n=3,random=TRUE)
 
 # by default, use GA algorithm with default parameters.
 # to overwrite default parameters, use params=defaultParametersGA()
 paramsGA = defaultParametersGA()
 paramsGA.transfert_functions = 3
-ode_parameters = parEstimationLBode(cnolist,model,
-    ode_parameters=ode_parameters,indices=indices, paramsGA=paramsGA)
+ode_parameters = parEstimationLBode(cnolist,res$model,
+    ode_parameters=ode_parameters,indices=res$indices, paramsGA=paramsGA)
 
 
-#,maxtime=100)
 
 dev.new();
-plotLBodeFitness(cnolist,model,ode_parameters,indices)
+res = plotLBodeFitness(cnolist,res$model,ode_parameters,res$indices)
  
