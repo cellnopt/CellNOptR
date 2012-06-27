@@ -1,3 +1,11 @@
+26/June/2012 1.3.19
+----------------------
+
+* add writeMIDAS function
+* major update that changes API to uniformise the code
+* computeScoreT1 and T2 are not used inside gaBinaryT1 and gaBinaryT2
+
+
 19/June/2012: 1.3.14
 * rev1487. change readSif into readSIF and prep4Sim into prep4sim
 
