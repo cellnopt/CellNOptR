@@ -47,7 +47,7 @@ plotLBodeFitness <-function
 	valueCues=valueCues[plot_index_experiments,plot_index_cues];
 	names(valueCues)=namesCues[plot_index_cues];
 
-	plotOptimResults(SimResults=sim_data,expResults=expResults,
+	plotOptimResults(simResults=sim_data,expResults=expResults,
 			times=times,namesCues=namesCues,namesSignals=namesSignals,
 			valueCues=valueCues);
 			
