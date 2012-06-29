@@ -13,7 +13,7 @@
 #
 ##############################################################################
 # $Id$
-plotModel <- function(model, CNOlist=NULL, bString=NULL, indexIntegr=NA,
+plotModel <- function(model, CNOlist=NULL, bString=NULL, indexIntegr=NULL,
     signals=NULL, stimuli=NULL, inhibitors=NULL, NCNO=NULL, compressed=NULL,
     output="STDOUT", filename=NULL,graphvizParams=list()){
 # Quick example:
@@ -127,7 +127,7 @@ plotModel <- function(model, CNOlist=NULL, bString=NULL, indexIntegr=NA,
         }
 
         optIntegr<-rep(0,length(optimBStimes))
-        if (!is.na(indexIntegr[1])){
+        if (is.null(indexIntegr)==FALSE){
             optIntegr[indexIntegr]<-1
         }
 
@@ -577,6 +577,8 @@ createEdgeAttrs <- function(v1, v2, edges, BStimes ,Integr, user_edgecolor){
     label <- list()
     toremove <- list()
     lty <- list() # not used yet.
+
+
     for (i in 1:length(edges)){
         edgename = paste(v1[i], "~", v2[i], sep="")
         edgewidth[edgename] = edgewidth_c    # default edgewidth
@@ -601,6 +603,7 @@ createEdgeAttrs <- function(v1, v2, edges, BStimes ,Integr, user_edgecolor){
 
         # BStimes contains the bitstring. color the edges according to its value
         v = (BStimes[i]*100)%/%1
+
         # width of the edges
         if (v != 100){
             # first, let us build the color
@@ -610,7 +613,7 @@ createEdgeAttrs <- function(v1, v2, edges, BStimes ,Integr, user_edgecolor){
             }
             else if (edgecolor[edgename] == 'black'){
                 # if black, go from grey dark to grey light color according to v value
-                color = paste("grey", as.character(100.-v), sep="")
+                color = paste("grey", as.character(100.-max(20,v)), sep="")
             }
             else{
                 # otherwise, just keep the color identical and only add label
@@ -628,7 +631,9 @@ createEdgeAttrs <- function(v1, v2, edges, BStimes ,Integr, user_edgecolor){
             else{
               edgecolor[edgename] = color
               edgewidth[edgename] = edgewidth_c*(v/100)
-              label[edgename] = as.character(v)
+              if (v!=0){
+                label[edgename] = as.character(v)
+                }else{label[edgename]="0"}
             }
         }
         else {
