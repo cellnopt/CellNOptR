@@ -7,8 +7,8 @@ source("../CNORdt/R/getFitPause.R")
 load("CNOlistDelay.RData")
 modelDelay = readSif("toyDelay.sif")
 
-indexDelay = indexFinder(CNOlist=CNOlistDelay, Model=modelDelay, verbose=T)
-simDelay = prep4Sim(modelDelay)
+indexDelay = indexFinder(CNOlist=CNOlistDelay, model=modelDelay, verbose=T)
+simDelay = prep4sim(modelDelay)
 delayThresh = rep(0,6)
 
 # add feedback finder here

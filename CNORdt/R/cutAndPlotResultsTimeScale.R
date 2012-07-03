@@ -39,4 +39,3 @@ divTime=NULL, lowerB=lowerB, upperB=upperB) {
     plotOptimResultsTimeScale(simResults=simRes, yInterpol=getFitData$yInter, 
 	xCoords=getFitData$xCoords, CNOlist=CNOlist)
 }
-

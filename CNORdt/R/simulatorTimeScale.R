@@ -14,16 +14,16 @@
 ##############################################################################
 # $Id: $
 
-simulatorTimeScale <- function(CNOlist, Model, SimList, indexList, boolUpdates) {
+simulatorTimeScale <- function(CNOlist, model, simList, indexList, boolUpdates) {
 
-	nSp <- dim(Model$interMat)[1]
-	nReacs <- dim(Model$interMat)[2]	
+	nSp <- dim(model$interMat)[1]
+	nReacs <- dim(model$interMat)[2]	
 	nCond <- dim(CNOlist$valueStimuli)[1]
 	yBool = array(dim=c(nCond, nSp, boolUpdates))
 	yBool[,,1] = 0
 
-	if(is.null(dim(Model$interMat))) { 
-		nSp <- length(Model$interMat)
+	if(is.null(dim(model$interMat))) { 
+		nSp <- length(model$interMat)
 		nReacs <- 1
 	}
 
@@ -31,10 +31,10 @@ simulatorTimeScale <- function(CNOlist, Model, SimList, indexList, boolUpdates) 
 	# + other function definitions here
 	endIx <- rep(NA,nSp)
 		for(i in 1:nSp){
-			endIx[i] <- length(which(SimList$maxIx == i))
+			endIx[i] <- length(which(simList$maxIx == i))
 		}
 	
-	filltempCube <- function(x) {
+	fillTempCube <- function(x) {
 		cMatrix <- matrix(data=x, nrow=nReacs, ncol=nCond)
 		cVector <- apply(cMatrix, 1, function(x){return(x)})
 		return(cVector)
@@ -48,11 +48,11 @@ simulatorTimeScale <- function(CNOlist, Model, SimList, indexList, boolUpdates) 
 		}
 	}
 				
-	compOR <- function(x) {
-		if(all(is.na(x[which(SimList$maxIx == s)]))) {
+	compOr <- function(x) {
+		if(all(is.na(x[which(simList$maxIx == s)]))) {
 			res <- NA
 		} else {
-			res <- max(x[which(SimList$maxIx == s)], na.rm=TRUE)
+			res <- max(x[which(simList$maxIx == s)], na.rm=TRUE)
 		}
 		return(res)
 	}
@@ -62,7 +62,7 @@ simulatorTimeScale <- function(CNOlist, Model, SimList, indexList, boolUpdates) 
 
 	# create an initial values matrix	
 	initValues <- matrix(data=NA, nrow=nCond, ncol=nSp)
-	colnames(initValues) <- Model$namesSpecies
+	colnames(initValues) <- model$namesSpecies
 
 	# set the initial values of the stimuli
 	initValues[,indexList$stimulated] <- CNOlist$valueStimuli
@@ -87,13 +87,13 @@ simulatorTimeScale <- function(CNOlist, Model, SimList, indexList, boolUpdates) 
 		# all concatenated into one long column
 				
 		if(nReacs > 1) {
-			tempStore <- apply(SimList$finalCube, 2, function(x){return(outputPrev[,x])})
-			tempIxNeg <- apply(SimList$ixNeg, 2, filltempCube)
-			tempIgnore <- apply(SimList$ignoreCube, 2, filltempCube)
+			tempStore <- apply(simList$finalCube, 2, function(x){return(outputPrev[,x])})
+			tempIxNeg <- apply(simList$ixNeg, 2, fillTempCube)
+			tempIgnore <- apply(simList$ignoreCube, 2, fillTempCube)
 		} else {
-			tempStore <- outputPrev[,SimList$finalCube]
-			tempIxNeg <- matrix(SimList$ixNeg, nrow=nCond, ncol=length(SimList$ixNeg), byrow=TRUE)
-			tempIgnore <- matrix(SimList$ignoreCube, nrow=nCond, ncol=length(SimList$ignoreCube), byrow=TRUE)
+			tempStore <- outputPrev[,simList$finalCube]
+			tempIxNeg <- matrix(simList$ixNeg, nrow=nCond, ncol=length(simList$ixNeg), byrow=TRUE)
+			tempIgnore <- matrix(simList$ignoreCube, nrow=nCond, ncol=length(simList$ignoreCube), byrow=TRUE)
 		}
 
 		# set to NA the values that are "dummies", so they won't influence the min
@@ -115,13 +115,13 @@ simulatorTimeScale <- function(CNOlist, Model, SimList, indexList, boolUpdates) 
 		
 			for(s in 1:nSp){
 				if(endIx[s] != 0){
-					newInput[,s] <- apply(outputCube, 1, compOR)
+					newInput[,s] <- apply(outputCube, 1, compOr)
 				}
 			}
 		
 		} else {
 			outputCube <- ifelse(all(is.na(tempStore)), NA, min(tempStore,na.rm=TRUE))
-			newInput[,SimList$maxIx] <- outputCube
+			newInput[,simList$maxIx] <- outputCube
 		}
 	
 		# reset the inhibitors and stimuli

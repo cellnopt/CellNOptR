@@ -14,55 +14,55 @@
 ##############################################################################
 # $Id: $
 
-getFitTimeScale <- function(SimList, CNOlist, Model, indexList, sizeFac=0.0001, NAPenFac=1, boolUpdates, timeSplit="early", divTime=NULL, SimResultsT1, lowerB=lowerB, upperB=upperB) {
+getFitTimeScale <- function(simList, CNOlist, model, indexList, sizeFac=0.0001, NApenFac=1, boolUpdates, timeSplit="early", divTime=NULL, simResultsT1, lowerB=lowerB, upperB=upperB) {
 
 	if(is.null(divTime)) {divTime = CNOlist$timeSignals[length(CNOlist$timeSignals)]}
 	if(timeSplit=="early") {
-		time.exper = CNOlist$timeSignals[CNOlist$timeSignals <= divTime]
-		time.index = which(CNOlist$timeSignals <= divTime)
+		timeExper = CNOlist$timeSignals[CNOlist$timeSignals <= divTime]
+		timeIndex = which(CNOlist$timeSignals <= divTime)
 		boolUpdates = boolUpdates[1]
 	} else if(timeSplit=="late") {
-		time.exper = CNOlist$timeSignals[CNOlist$timeSignals > divTime]
-		time.index = which(CNOlist$timeSignals > divTime)
+		timeExper = CNOlist$timeSignals[CNOlist$timeSignals > divTime]
+		timeIndex = which(CNOlist$timeSignals > divTime)
 		boolUpdates = boolUpdates[2]
 	}	
 
-	# make sure time.exper[1] = 0 for fitting
-	time.exper = time.exper - time.exper[1]
+	# make sure timeExper[1] = 0 for fitting
+	timeExper = timeExper - timeExper[1]
 	
 	# dimensions, time points
-	times = length(time.exper)
+	times = length(timeExper)
 	sigs = dim(CNOlist$valueSignals[[1]])
 
 	# simulator
 	if(timeSplit=="early") {
-		yBool = simulatorTimeScale(CNOlist, Model, SimList, indexList, boolUpdates)
+		yBool = simulatorTimeScale(CNOlist, model, simList, indexList, boolUpdates)
 	} else if(timeSplit=="late") {
-		yBool = simulatorTimeScaleT2(SimResultsT1[,,dim(SimResultsT1)[3]], CNOlist, Model, SimList, indexList, boolUpdates)
+		yBool = simulatorTimeScaleT2(simResultsT1[,,dim(simResultsT1)[3]], CNOlist, model, simList, indexList, boolUpdates)
 	}
 	
 	yBool = yBool[,indexList$signals,]
 
 	##### IN LOOP #####
 
-	spline.store = list()
-	spline.add = 1
+	splineStore = list()
+	splineAdd = 1
 
 	for (nExper in 1:dim(CNOlist$valueSignals[[1]])[1]) {
 		for (nSig in 1:dim(CNOlist$valueSignals[[1]])[2]) {
 			yTest = c()
-			for (a in time.index) {
+			for (a in timeIndex) {
 				yTest =c(yTest, CNOlist$valueSignals[[a]][nExper, nSig])
 			}
 
 			if(!is.na(yTest[1])) {
-				cs = splinefun(time.exper, yTest)
-				spline.store[spline.add] = list(cs)
+				cS = splinefun(timeExper, yTest)
+				splineStore[splineAdd] = list(cS)
 			} else {
-				cs = splinefun(time.exper,rep(0,times))
-				spline.store[spline.add] = list(cs)
+				cS = splinefun(timeExper,rep(0,times))
+				splineStore[splineAdd] = list(cS)
 			}
-		spline.add = spline.add + 1
+		splineAdd = splineAdd + 1
 		}
 	}
 
@@ -70,17 +70,17 @@ getFitTimeScale <- function(SimList, CNOlist, Model, indexList, sizeFac=0.0001, 
 	findTimeScale <- function(yB, splines) {
 
 		# what to optimize
-		taufinder <- function(what.scale) {
+		taufinder <- function(whatScale) {
 	
 			ySilico = array(dim=dim(yB))
-			number.points = dim(yB)[3]
-			x.coords = seq(0,by=what.scale,length.out=number.points)
+			numberPoints = dim(yB)[3]
+			xCoords = seq(0,by=whatScale,lengthOut=numberPoints)
    			count.1 = 1
     
     		for(nExper in 1:dim(yB)[1]) {
     			for(nSig in 1:dim(yB)[2]) { 
                 
-            		yOut = splines[[count.1]](x.coords)
+            		yOut = splines[[count.1]](xCoords)
             		ySilico[nExper,nSig,] = yOut;
             		count.1 = count.1 + 1
    				}
@@ -91,34 +91,34 @@ getFitTimeScale <- function(SimList, CNOlist, Model, indexList, sizeFac=0.0001, 
     		return(sse)	
 		}
 
-		seed.1 = 0.99
-		est.1 = optim(seed.1, taufinder, method="L-BFGS-B", lower=lowerB, upper=upperB)
+		seed1 = 0.99
+		est1 = optim(seed1, taufinder, method="L-BFGS-B", lower=lowerB, upper=upperB)
 	}
 
-	my.estimate = findTimeScale(yBool, spline.store)
+	myEstimate = findTimeScale(yBool, splineStore)
 	yFinal = array(dim = dim(yBool))
-	xCoords = seq(0,by=my.estimate$par,length.out=boolUpdates)
+	xCoords = seq(0,by=myEstimate$par,lengthOut=boolUpdates)
 	
-	count.2 = 1
+	count2 = 1
 	for(nExper in 1:dim(yBool)[1]) {
 		for(nSig in 1:dim(yBool)[2]) { 
                 
-			yOut = spline.store[[count.2]](xCoords)
+			yOut = splineStore[[count2]](xCoords)
      		yFinal[nExper,nSig,] = yOut;
-      		count.2 = count.2 + 1
+      		count2 = count2 + 1
    		}
 	}
 
-	Diff <- (yBool - yFinal) # * my.weights
-	r <- Diff^2
+	diff <- (yBool - yFinal) # * my.weights
+	r <- diff^2
 	deviationPen <- sum(r[!is.na(r)])
-	NAPen <- NAPenFac * length(which(is.na(yBool)))
+	NApen <- NApenFac * length(which(is.na(yBool)))
 	dims = dim(yFinal)
 	nDataPts <- dims[1] * dims[2] * dims[3]
-	nReac <- length(Model$reacID)
-	nInputs <- length(which(Model$interMat == -1))
+	nReac <- length(model$reacID)
+	nInputs <- length(which(model$interMat == -1))
 	sizePen <- (nDataPts * sizeFac * nInputs) / nReac
-	score <- deviationPen + NAPen + sizePen
-	return(list(score=score, estimate=my.estimate$par, xCoords=xCoords, yInter=yFinal, yBool=yBool))
+	score <- deviationPen + NApen + sizePen
+	return(list(score=score, estimate=myEstimate$par, xCoords=xCoords, yInter=yFinal, yBool=yBool))
 
 }

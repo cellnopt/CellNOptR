@@ -14,7 +14,7 @@
 ##############################################################################
 # $Id: $
 
-plotOptimResultsTimeScale <- function(SimResults=SimResults, yInterpol=yInterpol, xCoords=xCoords, CNOlist=CNOlist, nsplit=1) {
+plotOptimResultsTimeScale <- function(simResults=simResults, yInterpol=yInterpol, xCoords=xCoords, CNOlist=CNOlist, nSplit=1) {
 
 	# check that CNOlist is a CNOlist
 	if(!is.list(CNOlist)) {
@@ -34,17 +34,17 @@ plotOptimResultsTimeScale <- function(SimResults=SimResults, yInterpol=yInterpol
 	stop("This function expects as input a CNOlist as output by makeCNOlist")
 	}
 	
-	splits <- dim(CNOlist$valueCues)[1]/nsplit	
+	splits <- dim(CNOlist$valueCues)[1]/nSplit	
 	splits <- floor(splits)
 	CNOlistOriginal <- CNOlist
-	SimResultsOriginal <- SimResults
+	simResultsOriginal <- simResults
 	yInterpolOriginal <- yInterpol
 	
-	for(i in 1:nsplit) {
+	for(i in 1:nSplit) {
 		
-		if(nsplit > 1) {
+		if(nSplit > 1) {
 			CNOlist <- CNOlistOriginal
-			if(i == nsplit) {
+			if(i == nSplit) {
 				indices <- (indices[length(indices)]+1):dim(CNOlistOriginal$valueCues)[1]
 			}
 			
@@ -56,8 +56,8 @@ plotOptimResultsTimeScale <- function(SimResults=SimResults, yInterpol=yInterpol
 			for(n in 1:length(CNOlist$valueSignals)) {
 				CNOlist$valueSignals[[n]] <- CNOlist$valueSignals[[n]][indices,]
 			}
-			for(n in 1:length(SimResults)) {
-				SimResults[[n]] <- SimResults[[n]][indices,]
+			for(n in 1:length(simResults)) {
+				simResults[[n]] <- simResults[[n]][indices,]
 			}
 			for(n in 1:length(yInterpol)) {
 				yInterpol[[n]] <- yInterpol[[n]][indices,]
@@ -78,10 +78,10 @@ plotOptimResultsTimeScale <- function(SimResults=SimResults, yInterpol=yInterpol
 		xVal<-CNOlist$timeSignals
 		xValS <- xCoords
 		xValMax = max(c(xVal, xValS))
-		allDiff = matrix(NA, nrow=dim(SimResults)[1], ncol=dim(SimResults)[2])
-		for(a in 1:dim(SimResults)[1]) {
-			for(b in 1:dim(SimResults)[2]) {
-				allDiff[a,b] = sum((SimResults[a,b,]-yInterpol[a,b,])^2)
+		allDiff = matrix(NA, nrow=dim(simResults)[1], ncol=dim(simResults)[2])
+		for(a in 1:dim(simResults)[1]) {
+			for(b in 1:dim(simResults)[2]) {
+				allDiff[a,b] = sum((simResults[a,b,]-yInterpol[a,b,])^2)
 			}	
 		}
 		
@@ -119,7 +119,7 @@ plotOptimResultsTimeScale <- function(SimResults=SimResults, yInterpol=yInterpol
 			for(c in 1:dim(CNOlist$valueSignals[[1]])[2]) {
 					
 				yVal <- lapply(CNOlist$valueSignals, function(x) {x[r,c]})
-				yValS <- SimResults[r,c,]
+				yValS <- simResults[r,c,]
 				yValI <- yInterpol[r,c,]
 				diff = (1 - (allDiff[r,c] / diffMax)) * 1000
 				if(diff<1) {diff=1}
@@ -149,16 +149,19 @@ plotOptimResultsTimeScale <- function(SimResults=SimResults, yInterpol=yInterpol
 					axis(side=2,at=c(0,0.5,1), labels=c("","0.5",""),las=1, cex.axis=1.5)
 				}
 			}
-			if(r==1) {		
+		
+			if(all(CNOlist$valueStimuli[r,]==0)) {
 				image(
 					t(matrix(1-CNOlist$valueStimuli[r,],nrow=1)),
-					col=c("white","white"),xaxt="n",yaxt="n"
+					col=c("white"),xaxt="n",yaxt="n"
+				)				
+			} else {
+				image(
+					t(matrix(1-CNOlist$valueStimuli[r,],nrow=1)),
+					col=c("black","white"),xaxt="n",yaxt="n"
 				)
-			} else {				
-			image(
-				t(matrix(1-CNOlist$valueStimuli[r,],nrow=1)),
-				col=c("black","white"),xaxt="n",yaxt="n")
 			}
+			
 			if(r == dim(CNOlist$valueSignals[[1]])[1]) {
 				axis(
 					side=1,
@@ -178,8 +181,5 @@ plotOptimResultsTimeScale <- function(SimResults=SimResults, yInterpol=yInterpol
 					las=3,cex.axis=1.4)
 			}
 		}
-	#	screen(2)
-	#	colorlegend(heat.colors(100),LETTERS[1:12], xlim=c(1,2))
 	}			
 }
-		

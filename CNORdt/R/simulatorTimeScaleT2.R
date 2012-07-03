@@ -14,15 +14,15 @@
 ##############################################################################
 # $Id: $
 
-simulatorTimeScaleT2 <- function(SimResultsT1, CNOlist, Model, SimList, indexList, boolUpdates) {
+simulatorTimeScaleT2 <- function(simResultsT1, CNOlist, model, simList, indexList, boolUpdates) {
 		
-	nSp <- dim(Model$interMat)[1]
-	nReacs <- dim(Model$interMat)[2]
+	nSp <- dim(model$interMat)[1]
+	nReacs <- dim(model$interMat)[2]
 	nCond <- dim(CNOlist$valueStimuli)[1]
 	yBoolT2 = array(dim=c(nCond, nSp, boolUpdates))
 	
-	if(is.null(dim(Model$interMat))) { 
-		nSp <- length(Model$interMat)
+	if(is.null(dim(model$interMat))) { 
+		nSp <- length(model$interMat)
 		nReacs <- 1
 	}
 	
@@ -31,11 +31,11 @@ simulatorTimeScaleT2 <- function(SimResultsT1, CNOlist, Model, SimList, indexLis
 	
 	endIx <- rep(NA, nSp)
 	for(i in 1:nSp) {
-		endIx[i] <- length(which(SimList$maxIx == i))
+		endIx[i] <- length(which(simList$maxIx == i))
 	}
 		
-	filltempCube <- function(x) {
-		cMatrix <- matrix(data=x, nrow=dim(SimList$ixNeg)[1], ncol=nCond)
+	fillTempCube <- function(x) {
+		cMatrix <- matrix(data=x, nrow=dim(simList$ixNeg)[1], ncol=nCond)
 		cVector <- apply(cMatrix, 1, function(x){return(x)})
 		return(cVector)
 	}
@@ -48,11 +48,11 @@ simulatorTimeScaleT2 <- function(SimResultsT1, CNOlist, Model, SimList, indexLis
 		}
 	}
 	
-	compOR <- function(x) {
-		if(all(is.na(x[which(SimList$maxIx == s)]))){
+	compOr <- function(x) {
+		if(all(is.na(x[which(simList$maxIx == s)]))){
 			res <- NA
 		} else {
-			res <- max(x[which(SimList$maxIx == s)], na.rm=TRUE)
+			res <- max(x[which(simList$maxIx == s)], na.rm=TRUE)
 		}
 		return(res)
 	}
@@ -62,16 +62,16 @@ simulatorTimeScaleT2 <- function(SimResultsT1, CNOlist, Model, SimList, indexLis
 	}
 	
 	# create an initial values matrix	
-	initValues <- SimResultsT1
+	initValues <- simResultsT1
 
 	# initialise main loop
 	newInput <- initValues
 
 	# first iteration
 	outputPrev <- newInput
-	tempStore <- apply(SimList$finalCube, 2, function(x){return(outputPrev[,x])})
-	tempIxNeg <- apply(SimList$ixNeg, 2, filltempCube)
-	tempIgnore <- apply(SimList$ignoreCube, 2, filltempCube)
+	tempStore <- apply(simList$finalCube, 2, function(x){return(outputPrev[,x])})
+	tempIxNeg <- apply(simList$ixNeg, 2, fillTempCube)
+	tempIgnore <- apply(simList$ignoreCube, 2, fillTempCube)
 	tempStore[tempIgnore] <- NA
 	tempStore[tempIxNeg] <- 1-tempStore[tempIxNeg]
 
@@ -80,11 +80,11 @@ simulatorTimeScaleT2 <- function(SimResultsT1, CNOlist, Model, SimList, indexLis
 	
 	# rewrite anything that comes to a node that also receives a t2 branch,ie set it to the same 
 	# as our t2 reac for those reacs, so that they won't influence the OR
-	reacsT2 <- which(Model$times == 2)
+	reacsT2 <- which(model$times == 2)
 	if(length(reacsT2) > 0) {
 		for(i in reacsT2) {
-			outNode <- which(Model$interMat[,i] > 0)
-			reacs2Overwrite <- which(Model$interMat[outNode,] > 0)
+			outNode <- which(model$interMat[,i] > 0)
+			reacs2Overwrite <- which(model$interMat[outNode,] > 0)
 			if(length(reacs2Overwrite) != 0) {
 				for(n in 1:length(reacs2Overwrite)) {
 					outputCube[,reacs2Overwrite[n]] <- outputCube[,i]
@@ -95,7 +95,7 @@ simulatorTimeScaleT2 <- function(SimResultsT1, CNOlist, Model, SimList, indexLis
 	
 	for(s in 1:nSp) {
 		if(endIx[s] != 0) {
-			newInput[,s] <- apply(outputCube, 1, compOR)
+			newInput[,s] <- apply(outputCube, 1, compOr)
 		}
 	}	
 	
@@ -121,9 +121,9 @@ simulatorTimeScaleT2 <- function(SimResultsT1, CNOlist, Model, SimList, indexLis
 		# this is now a 2 columns matrix that has a column for each input (column in finalCube)
 		# and a set of rows for each reac (where a set contains as many rows as conditions)
 		# all concatenated into one long column
-		tempStore <- apply(SimList$finalCube, 2, function(x){return(outputPrev[,x])})
-		tempIxNeg <- apply(SimList$ixNeg, 2, filltempCube)
-		tempIgnore <- apply(SimList$ignoreCube, 2, filltempCube)
+		tempStore <- apply(simList$finalCube, 2, function(x){return(outputPrev[,x])})
+		tempIxNeg <- apply(simList$ixNeg, 2, fillTempCube)
+		tempIgnore <- apply(simList$ignoreCube, 2, fillTempCube)
 		
 		# set to NA the values that are "dummies", so they won't influence the min
 		tempStore[tempIgnore] <- NA
@@ -143,15 +143,15 @@ simulatorTimeScaleT2 <- function(SimResultsT1, CNOlist, Model, SimList, indexLis
 		# i.e. compute the ORs
 		for(s in 1:nSp) {
 			if(endIx[s] != 0) {
-				compOR <- function(x) {
-					if(all(is.na(x[which(SimList$maxIx == s)]))) {
+				compOr <- function(x) {
+					if(all(is.na(x[which(simList$maxIx == s)]))) {
 						res <- NA
 					} else {
-						res <- max(x[which(SimList$maxIx == s)], na.rm=TRUE)
+						res <- max(x[which(simList$maxIx == s)], na.rm=TRUE)
 					}
 					return(res)
 				}
-				newInput[,s] <- apply(outputCube, 1, compOR)
+				newInput[,s] <- apply(outputCube, 1, compOr)
 			}
 		}
 
@@ -170,7 +170,7 @@ simulatorTimeScaleT2 <- function(SimResultsT1, CNOlist, Model, SimList, indexLis
 		
 		# set all the nodes that are targets of a t2 reaction to the state that they had at the first iteration
 		if(length(reacsT2) != 0) {
-			t2reacs <- Model$interMat[,reacsT2]
+			t2reacs <- model$interMat[,reacsT2]
 			for(r in 1:length(reacsT2)) {
 				if(length(reacsT2) == 1) {
 					target <- which(t2reacs > 0)
