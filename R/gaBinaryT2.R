@@ -38,7 +38,8 @@ gaBinaryT2 <-function(
 
     #initialise
     bLength<-length(bits2optimise)
-    Pop<-round(matrix(runif(bLength*(popSize)), nrow=(popSize),ncol=bLength))
+    Pop<-round(matrix(runif(bLength*(popSize)),
+		nrow=(popSize),ncol=bLength))
     Pop <- addPriorKnowledge(Pop, priorBitString)
 
     bestbit<-Pop[1,]
@@ -56,10 +57,20 @@ gaBinaryT2 <-function(
     PopTolScores<-NA
 
     #Function that produces the score for a specific bitstring
-    getObj<-function(x){
+    getObj<-function(x, scoresHash=NULL){
+
+        bitString<-x 
+
+		# the hash table is used to speed up code. gain is guaranteed to be at least equal to elitism/popsize
+        if (is.null(scoresHash)==FALSE){
+            thisScore <- scoresHash[rownames(scoresHash) == paste(unlist(x), collapse=","),1]
+             if (length(thisScore) != 0){
+                 return(thisScore)
+            } # otherwise let us keep going
+        }
 
         Score = computeScoreT2(CNOlist, model, simList, indexList, simResT1,
-                    bStringT1, x, sizeFac, NAFac)
+                    bStringT1, bitString, sizeFac, NAFac)
 
         return(Score)
     }
@@ -68,10 +79,18 @@ gaBinaryT2 <-function(
     t0<-Sys.time()
     t<-t0
 
+    # used by the scores hashTable.
+    scoresHash <- data.frame()
+    # if you do want the hastable, uncomment the following line.
+    #scoresHash = NULL
+
     while(!stop){
 
         #compute the scores
-        scores<-apply(Pop,1,getObj)
+        scores<-apply(Pop,1,getObj, scoresHash=scoresHash)
+
+        # fill the hash table to speed up code
+        scoresHash<-fillHashTable(scoresHash, scores, Pop)
 
         #Fitness assignment: ranking, linear
         rankP<-order(scores,decreasing=TRUE)
