@@ -10,7 +10,7 @@ This is the genetic algorithm for time point 2, that should follow optimisation 
 gaBinaryT2(CNOlist, model, simList, indexList, bStringT1, simResT1, sizeFac = 1e-04, NAFac = 1,
 popSize = 50, pMutation = 0.5, maxTime = 60, maxGens = 500,
 stallGenMax = 100, selPress = 1.2, elitism = 5, relTol = 0.1, verbose=TRUE,
-priorBitString=NULL)
+priorBitString=NULL, maxSizeHashTable=5000)
 }
 \arguments{
   \item{CNOlist}{
@@ -70,6 +70,12 @@ default, this bitstring is set to NULL (equivalent to setting all bits to NA).
 If provided, all bitstring in a population will be changed to be in agreement
 with the priorBitString list.
 }
+\item{maxSizeHashTable}{a hash table is use to store bitstring and related 
+ score. This allows the GA to be very efficient is the case of small models.
+ The size of the hash table is 5000 by default, which may be too large for large 
+ models. 
+ }
+
 
 }
 \details{

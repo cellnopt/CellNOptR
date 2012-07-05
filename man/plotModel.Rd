@@ -10,7 +10,7 @@ a CNOlist (see makeCNOlist and readMIDAS) or information related to the
 pre-processing steps (compression, NONC nodes, expansion gates).
 It can also be used to plot optimised model given the optimisation bitstring.}
 \usage{
-plotModel(model, CNOlist=NULL, bString=NULL, indexIntegr=NA, signals=NULL, stimuli=NULL,
+plotModel(model, CNOlist=NULL, bString=NULL, indexIntegr=NULL, signals=NULL, stimuli=NULL,
 inhibitors=NULL, NCNO=NULL, compressed=NULL, output="STDOUT",filename=NULL, 
 graphvizParams=list())
 

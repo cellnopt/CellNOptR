@@ -30,7 +30,8 @@ gaBinaryT1<-function(
     elitism=5,
     relTol=0.1,
     verbose=TRUE,
-    priorBitString=NULL){
+    priorBitString=NULL,
+    maxSizeHashTable=5000){
 
     #initialise
     bLength<-length(initBstring)
@@ -89,7 +90,7 @@ gaBinaryT1<-function(
         scores<-apply(Pop,1,getObj, scoresHash=scoresHash)
 
         # fill the hash table to speed up code
-        scoresHash<-fillHashTable(scoresHash, scores, Pop)
+        scoresHash<-fillHashTable(scoresHash, scores, Pop, maxSizeHashTable)
 
         #Fitness assignment: ranking, linear
         rankP<-order(scores,decreasing=TRUE)
@@ -242,13 +243,12 @@ shift <- function(d, k) rbind( tail(d,k), head(d,-k), deparse.level = 0 )
 
 
 
-fillHashTable <-function(scoresHash, scores, Pop)
+fillHashTable <-function(scoresHash, scores, Pop, maxSizeHashTable=5000)
 {
     # if not a data.frame, just return NULL
     if (is.null(scoresHash)==TRUE){ return(NULL)}
 
     popSize = dim(Pop)[1]
-    maxSizeHashTable = 5000 # should be twice as much as
     for (i in 1:dim(Pop)[1]){
         thisScore <- scoresHash[rownames(scoresHash) == paste(unlist(Pop[i,]), collapse=","), 1]
         # if not already stored, store the score and corresponding bitstring

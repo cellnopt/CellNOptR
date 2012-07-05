@@ -31,7 +31,8 @@ gaBinaryT2 <-function(
     elitism=5,
     relTol=0.1,
     verbose=TRUE,
-    priorBitString=NULL){
+    priorBitString=NULL,
+    maxSizeHashTable=5000){
 
     #Find the bits to optimise
     bits2optimise<-which(bStringT1 == 0)
@@ -90,7 +91,7 @@ gaBinaryT2 <-function(
         scores<-apply(Pop,1,getObj, scoresHash=scoresHash)
 
         # fill the hash table to speed up code
-        scoresHash<-fillHashTable(scoresHash, scores, Pop)
+        scoresHash<-fillHashTable(scoresHash, scores, Pop, maxSizeHashTable)
 
         #Fitness assignment: ranking, linear
         rankP<-order(scores,decreasing=TRUE)
