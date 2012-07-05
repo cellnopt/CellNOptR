@@ -15,7 +15,7 @@
 # $Id: plotOptimResultsPan.R 802 2012-03-22 16:44:12Z cokelaer $
 
 plotOptimResultsPan <- function(simResults, yInterpol=NULL, xCoords=NULL,
-    CNOlist=CNOlist, nsplit=1, formalism=c("ss1","ss2","dt","ode"), pdf=FALSE,
+    CNOlist=CNOlist, nsplit=1, formalism=c("ss1","ss2","ssN","dt","ode"), pdf=FALSE,
     pdfFileName="", tPt=NULL)
 {
 
@@ -82,7 +82,9 @@ plotOptimResultsPan <- function(simResults, yInterpol=NULL, xCoords=NULL,
 		xValS = c(0,tPt[1])
 	} else if (formalism == "ss2") {
 		xValS = c(0,tPt[1:2])
-	} else {
+	} else if (formalism == "ssN") {
+	  xValS = c(0,tPt)
+	}else {
 		xValS = xVal
 	}
 	# latest time point
