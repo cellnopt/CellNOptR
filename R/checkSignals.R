@@ -13,7 +13,7 @@
 #
 ##############################################################################
 # $Id$
-checkSignals<-function(CNOlist, model){
+checkSignals<-function(CNOlist, model ){
 
     # check that CNOlist is a CNOlist
     if(!is.list(CNOlist)){
@@ -46,6 +46,24 @@ checkSignals<-function(CNOlist, model){
         warning(paste(
             "The following signals from your CNOlist do not match any of the species in your model, and should be removed:",
             toString(CNOlist$namesSignals[which(signalsMatch == 0)])
+            ))
+    }
+
+    # same for stimuli 
+    signalsMatch<-match(CNOlist$namesStimuli,model$namesSpecies,nomatch=0)
+    if(any(signalsMatch == 0)){
+        warning(paste(
+            "The following stimuli from your CNOlist do not match any of the species in your model, and should be removed:",
+            toString(CNOlist$namesStimuli[which(signalsMatch == 0)])
+            ))
+    }
+
+    # same for inhibitors
+    signalsMatch<-match(CNOlist$namesInhibitors,model$namesSpecies,nomatch=0)
+    if(any(signalsMatch == 0)){
+        warning(paste(
+            "The following inhibitors from your CNOlist do not match any of the species in your model, and should be removed:",
+            toString(CNOlist$namesInhibitors[which(signalsMatch == 0)])
             ))
     }
 

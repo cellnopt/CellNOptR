@@ -8,6 +8,8 @@ This function checks that all the signals in the CNOlist match to species in the
 model. It also checks that the CNOlist and Model lists have the right format and 
 contain the right fields. It is called by the \link{preprocessing} function so there is 
 no need to call it directly anymore if you use the \link{preprocessing} function.
+
+In version 1.3.20, check of inhibitors and stimuli is also performed. 
 }
 \usage{
 checkSignals(CNOlist, model)
@@ -22,13 +24,12 @@ checkSignals(CNOlist, model)
 }
 \details{
 If the formats are wrong, this function produces an error with an explanation
-message. If the signals does not match the species, this function produces a 
-warning that explains which signals don't match any species, and advises to 
-remove them.
+message. If the signals/inhibitors/stimuli do not match the species, this function produces a 
+warning that explains which signals does no match any species. 
 }
 
 \author{
-C. Terfve
+C. Terfve, T. Cokelaer
 }
 \seealso{
 \code{\link{makeCNOlist}}, \link{readSIF}, \link{preprocessing}
