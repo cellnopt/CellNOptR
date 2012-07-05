@@ -36,7 +36,8 @@ gaBinaryT1<-function(
     bLength<-length(initBstring)
     Pop<-rbind(
         initBstring,
-        round(matrix(runif(bLength*(popSize-1)), nrow=(popSize-1),ncol=bLength)))
+        round(matrix(runif(bLength*(popSize-1)), 
+		nrow=(popSize-1),ncol=bLength)))
 
     Pop <- addPriorKnowledge(Pop, priorBitString)
 
@@ -67,7 +68,8 @@ gaBinaryT1<-function(
             } # otherwise let us keep going
         }
 
-        Score = computeScoreT1(CNOlist, model, simList, indexList, bitString)
+        Score = computeScoreT1(CNOlist, model, simList, indexList, 
+			bitString, sizeFac, NAFac)
 
         return(Score)
     }
