@@ -77,12 +77,6 @@ ToyT1opt2<-gaBinaryT1(
 	verbose=FALSE)
 
 #Optimise T2
-SimToyT12<-simulateT1(
-	CNOlist=CNOlistToy2,
-	model=processedModel,
-	bStringT1=ToyT1opt2$bString,
-	simList=ToyFields4Sim2,
-	indexList=indices)
 
 ToyT1opt2T2<-gaBinaryT2(
 	CNOlist=CNOlistToy2,
@@ -90,7 +84,6 @@ ToyT1opt2T2<-gaBinaryT2(
 	simList=ToyFields4Sim2,
 	indexList=indices,
 	bStringT1=ToyT1opt2$bString,
-	simResT1=SimToyT12,
 	maxGens=2, 
 	popSize = 5,
 	verbose=FALSE)

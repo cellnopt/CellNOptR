@@ -1,5 +1,6 @@
 5/july/2012 1.3.20
 --------------------
+* rev1659. add simulateT1 into gaBinaryT2, simplified CNORwrap code. fix manual, vignettes
 * hash table in gaBinaryT1. option sizeFac and NAFac in gaBinaryT1 was missing.
   Add maxSizeHashTable as optional argument to gaBinaryT1 and T2.
 * make residualError generic for any time points.

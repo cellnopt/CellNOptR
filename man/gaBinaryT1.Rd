@@ -7,8 +7,8 @@ Genetic algorithm used to optimise a model
 This function is the genetic algorithm to be used to optimise a model by fitting to data containing one time point.
 }
 \usage{
-gaBinaryT1(CNOlist, model, simList, indexList, sizeFac = 1e-04, NAFac = 1,
-initBstring, popSize = 50, pMutation = 0.5, maxTime = 60, maxGens = 500,
+gaBinaryT1(CNOlist, model, simList, indexList, initBstring, sizeFac = 1e-04, NAFac = 1,
+ popSize = 50, pMutation = 0.5, maxTime = 60, maxGens = 500,
 stallGenMax = 100, selPress = 1.2, elitism = 5, relTol = 0.1, verbose=TRUE,
 priorBitString=NULL, maxSizeHashTable=5000)
 }
@@ -26,14 +26,14 @@ a list that contains additional fields for the simulator, as created by prep4sim
   \item{indexList}{
 a list of indexes of species stimulated/inhibited/signals, as produced by indexfinder applied on the model and CNOlist above
 }
+  \item{initBstring}{
+an initial bitsrting to be tested, should be of the same size as the number of reactions in the model above
+}
   \item{sizeFac}{
 the scaling factor for the size term in the objective function, default to 0.0001
 }
   \item{NAFac}{
 the scaling factor for the NA term in the objective function, default to 1
-}
-  \item{initBstring}{
-an initial bitsrting to be tested, should be of the same size as the number of reactions in the model above
 }
   \item{popSize}{
 the population size for the genetic algorithm, default set to 50
@@ -91,7 +91,7 @@ J. Saez-Rodriguez, L. G. Alexopoulos, J. Epperlein, R. Samaga, D. A. Lauffenburg
 mammalian signal transduction, Molecular Systems Biology, 5:331, 2009.
 }
 \author{
-C. Terfve
+C. Terfve. T. Cokelaer
 }
 \seealso{
 \link{getFit}, \link{prep4sim}, \link{indexFinder}, \link{simulatorT1}

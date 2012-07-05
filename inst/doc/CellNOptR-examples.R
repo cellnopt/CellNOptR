@@ -101,7 +101,7 @@ ToyNCNOcutCompExp2<-expandGates(ToyNCNOcutComp2)
 #plotFit(OptRes=ToyT1opt2)
 #Optimise T2
 #SimToyT12<-simulateT1(CNOlist=CNOlistToy2,model=ToyNCNOcutCompExp2,bStringT1=ToyT1opt2$bString,simList=ToyFields4Sim2,indexList=indicesToyNCNOcutComp2)
-#ToyT1opt2T2<-gaBinaryT2(CNOlist=CNOlistToy2,model=ToyNCNOcutCompExp2,simList=ToyFields4Sim2,indexList=indicesToyNCNOcutComp2,bStringT1=ToyT1opt2$bString,SimResT1=SimToyT12,MaxTime=18)
+#ToyT1opt2T2<-gaBinaryT2(CNOlist=CNOlistToy2,model=ToyNCNOcutCompExp2,simList=ToyFields4Sim2,indexList=indicesToyNCNOcutComp2,bStringT1=ToyT1opt2$bString,maxTime=18)
 #cutAndPlotResultsT2(model=ToyNCNOcutCompExp2,bStringT1=ToyT1opt2$bString,bStringT2=ToyT1opt2T2$bString,simList=ToyFields4Sim2,CNOlist=CNOlistToy2,indexList=indicesToyNCNOcutComp2,plotPDF=TRUE)
 #pdf("evolFitToy2T2.pdf")
 #plotFit(OptRes=ToyT1opt2T2)

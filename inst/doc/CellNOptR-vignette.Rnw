@@ -497,20 +497,12 @@ We can now optimise the second time point.
 
 %TOSWITCH
 <<t2OptT2, eval=TRUE>>=
-SimToyT12<-simulateT1(
-	CNOlist=CNOlistToy2,
-	model=ToyNCNOcutCompExp2,
-	bStringT1=ToyT1opt2$bString,
-	simList=ToyFields4Sim2,
-	indexList=indicesToyNCNOcutComp2)
-	
 ToyT1opt2T2<-gaBinaryT2(
 	CNOlist=CNOlistToy2,
 	model=ToyNCNOcutCompExp2,
 	simList=ToyFields4Sim2,
 	indexList=indicesToyNCNOcutComp2,
 	bStringT1=ToyT1opt2$bString,
-	simResT1=SimToyT12,
 	stallGenMax=10,
 	maxTime=60,
 	verbose=FALSE)

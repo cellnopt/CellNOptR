@@ -18,9 +18,9 @@ gaBinaryT1<-function(
     model,
     simList,
     indexList,
+    initBstring,
     sizeFac=0.0001,
     NAFac=1,
-    initBstring,
     popSize=50,
     pMutation=0.5,
     maxTime=60,
@@ -33,12 +33,16 @@ gaBinaryT1<-function(
     priorBitString=NULL,
     maxSizeHashTable=5000){
 
-    #initialise
+    # ---- section related to T1  ----
     bLength<-length(initBstring)
+
+
+
     Pop<-rbind(
         initBstring,
-        round(matrix(runif(bLength*(popSize-1)), 
-		nrow=(popSize-1),ncol=bLength)))
+        round(matrix(runif(bLength*(popSize-1)), nrow=(popSize-1),ncol=bLength))
+	)
+    # ---- section related to T1  end ----
 
     Pop <- addPriorKnowledge(Pop, priorBitString)
 

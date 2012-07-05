@@ -23,7 +23,7 @@ plotOptimResultsPan <- function(simResults, yInterpol=NULL, xCoords=NULL,
 	if(!is.list(CNOlist)) {
 		stop("This function expects as input a CNOlist as output by makeCNOlist or normaliseCNOlist")
 	}
-	
+
 	if(all(names(CNOlist) != c(
 			"namesCues",
 			"namesStimuli",
@@ -39,25 +39,25 @@ plotOptimResultsPan <- function(simResults, yInterpol=NULL, xCoords=NULL,
 	formalism <- match.arg(formalism)
 	# index valueSignals according to tPt
 	valueSignalsI = sapply(c(0,tPt), function(x) which(CNOlist$timeSignals==x))
-	
+
 	#####	functions	#####
-	
+
 	list2Array = function(x, dim) {
 		xUnlist = unlist(x);
 		xArray=array(xUnlist,dim=dim)
 	}
-	
+
 	#####	/functions/	#####
-	
+
 	oldPar = par(no.readonly=TRUE)
 	if(pdf==TRUE) {
-		pdf(file=pdfFileName, width=14.5,height=11)	
+		pdf(file=pdfFileName, width=14.5,height=11)
 	}
 	split.screen(c(1,dim(CNOlist$valueSignals[[1]])[2]+3))
 	for(a in 1:(dim(CNOlist$valueSignals[[1]])[2]+2)) {
 		split.screen(c(dim(CNOlist$valueSignals[[1]])[1]+1,1),a)
 	}
-		
+
 	# TODO - do i need all these with split.screen?
 	par(
 		pch=2,
@@ -65,9 +65,9 @@ plotOptimResultsPan <- function(simResults, yInterpol=NULL, xCoords=NULL,
 		mgp=c(3,0.9,0),
 		family="Times"
 	)
-	
+
 	heatCols = heat.colors(1000)
-	
+
 	# maximum across all data points
 	#yMax <- max(unlist(lapply(CNOlist$valueSignals, function(x) max(x,na.rm=TRUE))))
 	yMax=1
@@ -77,7 +77,7 @@ plotOptimResultsPan <- function(simResults, yInterpol=NULL, xCoords=NULL,
 	# time labels
 	xVal <- CNOlist$timeSignals[valueSignalsI]
 	if(formalism=="dt") {
-		xValS = xCoords	
+		xValS = xCoords
 	} else if (formalism == "ss1") {
 		xValS = c(0,tPt[1])
 	} else if (formalism == "ss2") {
@@ -87,10 +87,10 @@ plotOptimResultsPan <- function(simResults, yInterpol=NULL, xCoords=NULL,
 	}
 	# latest time point
 	xValMax = max(xVal)
-		
-	# make simResults array if not already	
+
+	# make simResults array if not already
 	if(!is.array(simResults)) {
-		simResults = list2Array(simResults, dim=c(dim(simResults[[1]]),length(simResults)))	
+		simResults = list2Array(simResults, dim=c(dim(simResults[[1]]),length(simResults)))
 	}
 
 	# make valueSignals an array
@@ -104,27 +104,27 @@ plotOptimResultsPan <- function(simResults, yInterpol=NULL, xCoords=NULL,
 			for(b in 1:dim(simResults)[2]) {
 				allDiff[a,b] = sum((simResults[a,b,]-valueSignalsArr[a,b,valueSignalsI])^2)
 			}
-		}	
+		}
 	} else {
 		for(a in 1:dim(simResults)[1]) {
 			for(b in 1:dim(simResults)[2]) {
 				allDiff[a,b] = sum((simResults[a,b,]-yInterpol[a,b,])^2)
 			}
-		}		
+		}
 	}
 	# max difference between sim and exper
 	diffMax = max(unlist(!is.na(allDiff)))
-	
+
 	# set the count for the split screen window
 	count1 = dim(CNOlist$valueSignals[[1]])[2]+4
-		
+
 	# plot headers
 	for(c in 1:dim(CNOlist$valueSignals[[1]])[2]) {
 		screen(count1)
 		par(fg="blue",mar=c(0.5,0.5,0.7,0))
 		plot(x=xVal, y=rep(-5,length(xVal)), ylim=c(yMin, yMax),
 		xlab=NA,ylab=NA,xaxt="n",yaxt="n")
-			
+
 		text(
 			labels=CNOlist$namesSignals[c],
 			x=((xVal[length(xVal)]-xVal[1])/2),
@@ -133,13 +133,13 @@ plotOptimResultsPan <- function(simResults, yInterpol=NULL, xCoords=NULL,
 		)
 		count1 = count1 + dim(CNOlist$valueSignals[[1]])[1]+1
 	}
-	
-	# stim + inhib	
+
+	# stim + inhib
 	screen(count1)
 	par(fg="blue",mar=c(0.5,0.5,0.7,0))
 	plot(
-		x = xVal, 
-		y = rep(-5,length(xVal)), 
+		x = xVal,
+		y = rep(-5,length(xVal)),
 		ylim = c(yMin, yMax),
 		xlab = NA,ylab=NA,xaxt="n",yaxt="n"
 	)
@@ -148,12 +148,12 @@ plotOptimResultsPan <- function(simResults, yInterpol=NULL, xCoords=NULL,
 		x = ((xVal[length(xVal)]-xVal[1])/2),
 		y = (yMin+((yMax-yMin)/2)),cex=1.6
 	)
-	
+
 	count1 = count1 + dim(CNOlist$valueSignals[[1]])[1]+1
 	screen(count1)
 	par(fg="blue",mar=c(0.5,0.5,0.7,0))
 	plot(
-		x = xVal, y=rep(-5,length(xVal)), 
+		x = xVal, y=rep(-5,length(xVal)),
 		ylim = c(yMin, yMax),
 		xlab = NA,ylab=NA,xaxt="n",yaxt="n")
 	text(
@@ -161,14 +161,14 @@ plotOptimResultsPan <- function(simResults, yInterpol=NULL, xCoords=NULL,
 		x=((xVal[length(xVal)]-xVal[1])/2),
 		y=(yMin+((yMax-yMin)/2)),cex=1.6
 	)
-		
+
 	# new count for plotting results
 	countRow = dim(CNOlist$valueSignals[[1]])[2]+4
-	
+
 	for(c in 1:dim(CNOlist$valueSignals[[1]])[2]) {
 		countRow=countRow+1
 		for(r in 1:dim(CNOlist$valueSignals[[1]])[1]) {
-				
+
 			screen(countRow)
 			par(fg="black",mar=c(0.5,0.5,0,0))
 			yVal <- lapply(CNOlist$valueSignals[valueSignalsI], function(x) {x[r,c]})
@@ -180,7 +180,7 @@ plotOptimResultsPan <- function(simResults, yInterpol=NULL, xCoords=NULL,
 			}
 			if(diff<1) {diff=1}
 			bgcolor = heatCols[diff]
-			
+
 			plot(x=xVal,y=yVal,ylim=c(yMin,yMax),xlab=NA,ylab=NA,xaxt="n",yaxt="n",)
 			rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4], col=bgcolor)
 			points(x=xVal,y=yVal,ylim=c(yMin, yMax),xlab=NA,ylab=NA,xaxt="n",yaxt="n",pch=2)
@@ -189,32 +189,32 @@ plotOptimResultsPan <- function(simResults, yInterpol=NULL, xCoords=NULL,
 			xlab=NA, ylab=NA, xaxt="n", yaxt="n", col="blue", lty=2, lwd=3)
 			points(xValS, yValS, xlim=c(0,xValMax), ylim=c(yMin, yMax),
 			xlab=NA, ylab=NA, xaxt="n", yaxt="n", col="blue", pch=16)
-			
+
 			# add the axis annotations: if we're on the last row, add the x axis
 			if(r == dim(CNOlist$valueSignals[[1]])[1]) {
 				axis(side=1,at=CNOlist$timeSignals)
-			}	
-				
+			}
+
 			# add the axis annotations: if we're on the first column, add the y axis
 			if(c == 1)	{
 				axis(side=2,at=c(0,0.5,1), labels=c("","0.5",""), las=1)
 			}
-						
-			countRow=countRow+1		
+
+			countRow=countRow+1
 		}
 	}
-		
+
 	sStim = countRow+1
-		
+
 	for(c1 in 1:dim(CNOlist$valueSignals[[1]])[1]) {
 		screen(sStim)
 		par(mar=c(0.5,0.5,0,0))
-		
+
 		if(all(CNOlist$valueStimuli[c1,]==0)) {
 			image(
 				t(matrix(1-CNOlist$valueStimuli[c1,],nrow=1)),
 				col=c("white"),xaxt="n",yaxt="n"
-			)				
+			)
 		} else {
 			image(
 				t(matrix(1-CNOlist$valueStimuli[c1,],nrow=1)),
@@ -226,11 +226,11 @@ plotOptimResultsPan <- function(simResults, yInterpol=NULL, xCoords=NULL,
 				side=1,
 				at=seq(from=0, to=1,length.out=length(CNOlist$namesStimuli)),
 				labels=CNOlist$namesStimuli,las=3,cex.axis=1.2
-			)	
+			)
 		}
 		sStim = sStim+1
 	}
-	
+
 	sInhib = sStim+1
 	for(i1 in 1:dim(CNOlist$valueSignals[[1]])[1]) {
 		screen(sInhib)
@@ -248,7 +248,7 @@ plotOptimResultsPan <- function(simResults, yInterpol=NULL, xCoords=NULL,
 				las=3,cex.axis=1.2
 			)
 		}
-		sInhib = sInhib+1			
+		sInhib = sInhib+1
 	}
 
 	screen(dim(CNOlist$valueSignals[[1]])[2]+3)
@@ -259,8 +259,8 @@ plotOptimResultsPan <- function(simResults, yInterpol=NULL, xCoords=NULL,
 	screen(sInhib)
 	par(fg="blue",mar=c(0.5,0.5,0.7,0))
 	plot(
-		x = xVal, 
-		y = rep(-5,length(xVal)), 
+		x = xVal,
+		y = rep(-5,length(xVal)),
 		ylim = c(yMin, yMax),
 		xlab = NA,ylab=NA,xaxt="n",yaxt="n"
 	)
@@ -269,15 +269,15 @@ plotOptimResultsPan <- function(simResults, yInterpol=NULL, xCoords=NULL,
 		x = ((xVal[length(xVal)]-xVal[1])/2),
 		y = (yMin+((yMax-yMin)/2)),cex=1.6
 	)
-	
-	screen(sInhib+1)	
+
+	screen(sInhib+1)
 	colbar = heat.colors(100)
 	labels = c(1,0.5,0)
 	len <- length(colbar)
 	rhs <- 0.6
 	rhs2 <- rhs + rhs/10
 	at <- c(0, 0.5, 1)
-	
+
 	par(mai=c(0,0.2,0,0))
 	plot.new()
 	yyy <- seq(0,1,length=len+1)
@@ -291,18 +291,18 @@ plotOptimResultsPan <- function(simResults, yInterpol=NULL, xCoords=NULL,
 	}
 	close.screen(all.screens=TRUE)
 	par(oldPar)
-}			
+}
 
 
 
 	########## TO ADD ##########
 
 
-#	splits <- dim(CNOlist$valueCues)[1]/nsplit	
+#	splits <- dim(CNOlist$valueCues)[1]/nsplit
 #	splits <- floor(splits)
 #	CNOlistOriginal <- CNOlist
 #	simResultsOriginal <- simResults
-	
+
 # 	for(i in 1:nsplit) {
 # 		if(nsplit > 1) {
 # 			CNOlist <- CNOlistOriginal

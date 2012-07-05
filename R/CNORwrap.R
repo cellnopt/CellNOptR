@@ -16,23 +16,20 @@
 #This function is a wrapper around the whole CNOR analysis, it performs the following steps:
 #1.Plot the CNOlist
 #2.Checks data to model compatibility
-#3.Find the indices, in the model, of the species that are inh/stim/sign
-#4.Find the indices of the non-osb/non-contr
-#5.Cut the nonc off the model
-#6.Recompute the indices
-#7.Compress the model
-#8.Recompute the indices
-#9.Expand the gates
-#10.Compute the residual error
-#11.Prepare for simulation
-#12.Optimisation t1
-#13.Plot simulated and experimental results
-#14.Plot the evolution of fit
-#15.Optimise t2 (not implemented in this version)
-#16.Write the scaffold and PKN
-#17.Write the report
+#3.Cut the nonc off the model
+#4.Compress the model
+#5.Expand the gates
+#6.Compute the residual error
+#7.Prepare for simulation
+#8.Optimisation t1
+#9.Plot simulated and experimental results
+#10.Plot the evolution of fit
+#11.Optimise t2 (not implemented in this version)
+#12.Write the scaffold and PKN
+#13.Write the report
 
-CNORwrap<-function(paramsList=NA, data=NA, model=NA, name, namesData=NA, time=1)
+CNORwrap<-function(paramsList=NA, data=NA, model=NA, name, namesData=NA, time=1,
+compression=TRUE, expansion=TRUE, cutNONC=TRUE)
 {
 
     # aliases
@@ -42,7 +39,7 @@ CNORwrap<-function(paramsList=NA, data=NA, model=NA, name, namesData=NA, time=1)
 
     # if paramsList empty, we will fill it with
     # default values and the Data and model provided
-	if(is.na(paramsList[1])==TRUE){
+    if(is.na(paramsList[1])==TRUE){
         #print("paramList not provided")
         # Data must be provided
         # is.na raise warning, so let us use is.list
@@ -98,208 +95,160 @@ CNORwrap<-function(paramsList=NA, data=NA, model=NA, name, namesData=NA, time=1)
         }
     }
 
-    return(paramsList)
 
     #1.Plot the CNOlist
-	plotCNOlist(paramsList$data)
-	plotCNOlistPDF(
-		CNOlist=paramsList$data,
-		filename=paste(Name,"DataPlot.pdf",sep="")
-		)
+    plotCNOlist(paramsList$data)
+    plotCNOlistPDF(
+        CNOlist=paramsList$data,
+        filename=paste(Name,"DataPlot.pdf",sep="")
+        )
 
     #2. Checks data to model compatibility
-	checkSignals(CNOlist=paramsList$data,model=paramsList$model)
+    checkSignals(CNOlist=paramsList$data,model=paramsList$model)
 
-    #3. Find the indices, in the model, of the species that are inh/stim/sign
-	Indices<-indexFinder(
-		CNOlist=paramsList$data,
-		model=paramsList$model,
-		verbose=paramsList$verbose)
+    #3.Cut the nonc off the model
+    #4.Compress the model
+    #5.Expand the gates
+    res = preprocessing(paramsList$data, paramsList$model,
+        compression=compression, expansion=expansion, cutNONC=cutNONC)
+    NCNOcutCompExp <- res$model
+    IndicesNCNOcutComp <- res$indices
 
-    #4. Find the indices of the non-osb/non-contr
-	NCNOindices<-findNONC(
-		model=paramsList$model,
-		indexes=Indices,
-		verbose=paramsList$verbose)
+    #6.Compute the residual error
+    resE<-residualError(CNOlist=paramsList$data)
 
-    #5.Cut the nonc off the model
-	NCNOcut<-cutNONC(model=paramsList$model, NONCindexes=NCNOindices)
+    #7.Prepare for simulation
+    fields4Sim<-prep4sim(model=NCNOcutCompExp)
 
-    #6.Recompute the indices
-	IndicesNCNOcut<-indexFinder(CNOlist=paramsList$data,model=NCNOcut)
+    #8.Optimisation t1
+    initBstring<-rep(1,length(NCNOcutCompExp$reacID))
+    T1opt<-gaBinaryT1(CNOlist=paramsList$data,
+        model=NCNOcutCompExp,
+        simList=fields4Sim,
+        indexList=IndicesNCNOcutComp,
+        initBstring=initBstring,
+        sizeFac=paramsList$sizeFac,
+        NAFac=paramsList$NAFac,
+        popSize=paramsList$popSize,
+        pMutation=paramsList$pMutation,
+        maxTime=paramsList$maxTime,
+        maxGens=paramsList$maxGens,
+        stallGenMax=paramsList$stallGenMax,
+        selPress=paramsList$selPress,
+        elitism=paramsList$elitism,
+        relTol=paramsList$relTol,
+        verbose=paramsList$verbose)
 
-    #7.Compress the model
-	NCNOcutComp<-compressModel(model=NCNOcut,indexes=IndicesNCNOcut)
+    #9.Plot simulated and experimental results
+    cutAndPlotResultsT1(
+        model=NCNOcutCompExp,
+        bString=T1opt$bString,
+        simList=fields4Sim,
+        CNOlist=paramsList$data,
+        indexList=IndicesNCNOcutComp,
+        plotPDF=TRUE)
 
-    #8.Recompute the indices
-	IndicesNCNOcutComp<-indexFinder(CNOlist=paramsList$data,model=NCNOcutComp)
+    #10.Plot the evolution of fit
+    pdf(paste(Name,"evolFitT1.pdf",sep=""))
+    plotFit(optRes=T1opt)
+    dev.off()
+    plotFit(optRes=T1opt)
 
-    #9.Expand the gates
-	NCNOcutCompExp<-expandGates(model=NCNOcutComp)
+    #11.Optimise t2
+    if(Time==2){
 
-    #10.Compute the residual error
-	resE<-residualError(CNOlist=paramsList$data)
+        T2opt<-gaBinaryT2(
+            CNOlist=paramsList$data,
+            model=NCNOcutCompExp,
+            simList=fields4Sim,
+            indexList=IndicesNCNOcutComp,
+            bStringT1=T1opt$bString,
+            sizeFac=paramsList$sizeFac,
+            NAFac=paramsList$NAFac,
+            popSize=paramsList$popSize,
+            pMutation=paramsList$pMutation,
+            maxTime=paramsList$maxTime,
+            maxGens=paramsList$maxGens,
+            stallGenMax=paramsList$stallGenMax,
+            selPress=paramsList$selPress,
+            elitism=paramsList$elitism,
+            relTol=paramsList$relTol,
+            verbose=paramsList$verbose)
 
-    #11.Prepare for simulation
-	fields4Sim<-prep4sim(model=NCNOcutCompExp)
-
-    #12.Optimisation t1
-	initBstring<-rep(1,length(NCNOcutCompExp$reacID))
-	T1opt<-gaBinaryT1(CNOlist=paramsList$data,
-		model=NCNOcutCompExp,
-		simList=fields4Sim,
-		indexList=IndicesNCNOcutComp,
-		initBstring=initBstring,
-		sizeFac=paramsList$sizeFac,
-		NAFac=paramsList$NAFac,
-		popSize=paramsList$popSize,
-		pMutation=paramsList$pMutation,
-		maxTime=paramsList$maxTime,
-		maxGens=paramsList$maxGens,
-		stallGenMax=paramsList$stallGenMax,
-		selPress=paramsList$selPress,
-		elitism=paramsList$elitism,
-		relTol=paramsList$relTol,
-		verbose=paramsList$verbose)
-
-#13.Plot simulated and experimental results
-	cutAndPlotResultsT1(
-		model=NCNOcutCompExp,
-		bString=T1opt$bString,
-		simList=fields4Sim,
-		CNOlist=paramsList$data,
-		indexList=IndicesNCNOcutComp,
-		plotPDF=TRUE)
-
-#14.Plot the evolution of fit
-	pdf(paste(Name,"evolFitT1.pdf",sep=""))
-	plotFit(optRes=T1opt)
-	dev.off()
-	plotFit(optRes=T1opt)
-
-#15.Optimise t2
-	if(Time==2){
-
-		SimT1<-simulateT1(
-			CNOlist=paramsList$data,
-			model=NCNOcutCompExp,
-			bStringT1=T1opt$bString,
-			simList=fields4Sim,
-			indexList=IndicesNCNOcutComp)
-
-		T2opt<-gaBinaryT2(
-			CNOlist=paramsList$data,
-			model=NCNOcutCompExp,
-			simList=fields4Sim,
-			indexList=IndicesNCNOcutComp,
-			bStringT1=T1opt$bString,
-			simResT1=SimT1,
-			sizeFac=paramsList$sizeFac,
-			NAFac=paramsList$NAFac,
-			popSize=paramsList$popSize,
-			pMutation=paramsList$pMutation,
-			maxTime=paramsList$maxTime,
-			maxGens=paramsList$maxGens,
-			stallGenMax=paramsList$stallGenMax,
-			selPress=paramsList$selPress,
-			elitism=paramsList$elitism,
-			relTol=paramsList$relTol,
-			verbose=paramsList$verbose)
-
-		cutAndPlotResultsT2(model=NCNOcutCompExp,bStringT1=T1opt$bString,
+        cutAndPlotResultsT2(model=NCNOcutCompExp,bStringT1=T1opt$bString,
             bStringT2=T2opt$bString,simList=fields4Sim,CNOlist=paramsList$data,
             indexList=IndicesNCNOcutComp,plotPDF=TRUE)
 
-		pdf(paste(Name,"evolFitT2.pdf",sep=""))
-		plotFit(optRes=T2opt)
-		dev.off()
-		plotFit(optRes=T2opt)
+        pdf(paste(Name,"evolFitT2.pdf",sep=""))
+        plotFit(optRes=T2opt)
+        dev.off()
+        plotFit(optRes=T2opt)
 
-		}else{
+        }
+    else{
+        T2opt<-NA
+    }
+    #13.Write the scaffold and PKN
+    #and
+    #14.Write the report
+    writeScaffold(
+        modelComprExpanded=NCNOcutCompExp,
+        optimResT1=T1opt,
+        optimResT2=T2opt,
+        modelOriginal=paramsList$model,
+        CNOlist=paramsList$data)
+    writeNetwork(
+        modelOriginal=paramsList$model,
+        modelComprExpanded=NCNOcutCompExp,
+        optimResT1=T1opt,
+        optimResT2=T2opt,
+        CNOlist=paramsList$data)
 
-			T2opt<-NA
+    if(Time==2){
 
-			}
-#16.Write the scaffold and PKN
-#and
-#17.Write the report
-	if(Time==2){
+        namesfiles<-list(
+            dataPlot=paste(Name,"DataPlot.pdf",sep=""),
+            evolFitT1=paste(Name,"evolFitT1.pdf",sep=""),
+            evolFitT2=paste(Name,"evolFitT2.pdf",sep=""),
+            simResults2="NCNOcutCompExpSimResultsT1T2.pdf",
+            simResults1="NCNOcutCompExpSimResultsT1.pdf",
+            scaffold="Scaffold.sif",
+            scaffoldDot="Scaffold.dot",
+            tscaffold="TimesScaffold.EA",
+            wscaffold="weightsScaffold.EA",
+            PKN="PKN.sif",
+            PKNdot="PKN.dot",
+            wPKN="TimesPKN.EA",
+            nPKN="nodesPKN.NA")
 
+    }
+    else{
 
-		writeScaffold(
-			modelComprExpanded=NCNOcutCompExp,
-			optimResT1=T1opt,
-			optimResT2=T2opt,
-			modelOriginal=paramsList$model,
-			CNOlist=paramsList$data)
-		writeNetwork(
-			modelOriginal=paramsList$model,
-			modelComprExpanded=NCNOcutCompExp,
-			optimResT1=T1opt,
-			optimResT2=T2opt,
-			CNOlist=paramsList$data)
-		namesfiles<-list(
-			dataPlot=paste(Name,"DataPlot.pdf",sep=""),
-			evolFitT1=paste(Name,"evolFitT1.pdf",sep=""),
-			evolFitT2=paste(Name,"evolFitT2.pdf",sep=""),
-			simResults2="NCNOcutCompExpSimResultsT1T2.pdf",
-			simResults1="NCNOcutCompExpSimResultsT1.pdf",
-			scaffold="Scaffold.sif",
-			scaffoldDot="Scaffold.dot",
-			tscaffold="TimesScaffold.EA",
-			wscaffold="weightsScaffold.EA",
-			PKN="PKN.sif",
-			PKNdot="PKN.dot",
-			wPKN="TimesPKN.EA",
-			nPKN="nodesPKN.NA")
-		writeReport(
-			modelOriginal=paramsList$model,
-			modelOpt=NCNOcutCompExp,
-			optimResT1=T1opt,
-			optimResT2=T2opt,
-			CNOlist=paramsList$data,
-			directory=Name,
-			namesFiles=namesfiles,
-			namesData=NamesData,
-			resE=resE)
+        namesfiles<-list(
+            dataPlot=paste(Name,"DataPlot.pdf",sep=""),
+            evolFitT1=paste(Name,"evolFitT1.pdf",sep=""),
+            evolFitT2=NA,
+            simResults2=NA,
+            simResults1="NCNOcutCompExpSimResultsT1.pdf",
+            scaffold="Scaffold.sif",
+            scaffoldDot="Scaffold.dot",
+            tscaffold="TimesScaffold.EA",
+            wscaffold="weightsScaffold.EA",
+            PKN="PKN.sif",
+            PKNdot="PKN.dot",
+            wPKN="TimesPKN.EA",
+            nPKN="nodesPKN.NA")
+    }
 
-		}else{
+    writeReport(
+        modelOriginal=paramsList$model,
+        modelOpt=NCNOcutCompExp,
+        optimResT1=T1opt,
+        optimResT2=T2opt,
+        CNOlist=paramsList$data,
+        directory=Name,
+        namesFiles=namesfiles,
+        namesData=NamesData,
+        resE=resE)
 
-			writeScaffold(
-				modelComprExpanded=NCNOcutCompExp,
-				optimResT1=T1opt,
-				optimResT2=NA,
-				modelOriginal=paramsList$model,
-				CNOlist=paramsList$data)
-			writeNetwork(
-				modelOriginal=paramsList$model,
-				modelComprExpanded=NCNOcutCompExp,
-				optimResT1=T1opt,
-				optimResT2=NA,
-				CNOlist=paramsList$data)
-			namesfiles<-list(
-				dataPlot=paste(Name,"DataPlot.pdf",sep=""),
-				evolFitT1=paste(Name,"evolFitT1.pdf",sep=""),
-				evolFitT2=NA,simResults2=NA,
-				simResults1="NCNOcutCompExpSimResultsT1.pdf",
-				scaffold="Scaffold.sif",
-				scaffoldDot="Scaffold.dot",
-				tscaffold="TimesScaffold.EA",
-				wscaffold="weightsScaffold.EA",
-				PKN="PKN.sif",
-				PKNdot="PKN.dot",
-				wPKN="TimesPKN.EA",
-				nPKN="nodesPKN.NA")
-			writeReport(
-				modelOriginal=paramsList$model,
-				modelOpt=NCNOcutCompExp,
-				optimResT1=T1opt,
-				optimResT2=NA,
-				CNOlist=paramsList$data,
-				directory=Name,
-				namesFiles=namesfiles,
-				namesData=NamesData,
-				resE=resE)
-
-			}
 }

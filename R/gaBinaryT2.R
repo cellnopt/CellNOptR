@@ -19,7 +19,6 @@ gaBinaryT2 <-function(
     simList,
     indexList,
     bStringT1,
-    simResT1,
     sizeFac=0.0001,
     NAFac=1,
     popSize=50,
@@ -34,13 +33,18 @@ gaBinaryT2 <-function(
     priorBitString=NULL,
     maxSizeHashTable=5000){
 
+    # ---- section related to T2  ----
     #Find the bits to optimise
     bits2optimise<-which(bStringT1 == 0)
-
-    #initialise
     bLength<-length(bits2optimise)
-    Pop<-round(matrix(runif(bLength*(popSize)),
-		nrow=(popSize),ncol=bLength))
+
+    simResT1<-simulateT1(CNOlist=CNOlist, model=model, bStringT1=bStringT1,
+            simList=simList, indexList=indexList)
+    # ---- section related to T2  end ----
+
+
+    Pop <- round(matrix(runif(bLength*(popSize)), nrow=(popSize),ncol=bLength))
+
     Pop <- addPriorKnowledge(Pop, priorBitString)
 
     bestbit<-Pop[1,]
@@ -60,9 +64,9 @@ gaBinaryT2 <-function(
     #Function that produces the score for a specific bitstring
     getObj<-function(x, scoresHash=NULL){
 
-        bitString<-x 
+        bitString<-x
 
-		# the hash table is used to speed up code. gain is guaranteed to be at least equal to elitism/popsize
+        # the hash table is used to speed up code. gain is guaranteed to be at least equal to elitism/popsize
         if (is.null(scoresHash)==FALSE){
             thisScore <- scoresHash[rownames(scoresHash) == paste(unlist(x), collapse=","),1]
              if (length(thisScore) != 0){
@@ -120,6 +124,15 @@ gaBinaryT2 <-function(
         #This holds the probability, for each bit, to be inherited from parent 1 (if TRUE) or 2 (if FALSE)
         InhBit<-matrix(runif((PSize3*bLength)),nrow=PSize3,ncol=bLength)
         InhBit<-InhBit < 0.5
+
+        #Try one point crossover
+        #xover<-ceiling(runif(PSize3)*(bLength-1))
+        #indices<-matrix(1:bLength,nrow=PSize3,ncol=bLength,byrow=TRUE)
+        #InhBit<-matrix(rep(FALSE,PSize3*bLength),nrow=PSize3,ncol=bLength)
+        #for(i in 1:PSize3){
+        #    InhBit[i,]<-indices[i,]<xover[i]
+        #    }
+        #
 
         Pop3par1<-Pop2[mates[,1],]
         Pop3par2<-Pop2[mates[,2],]
@@ -218,7 +231,7 @@ gaBinaryT2 <-function(
     }
 
 
-# same as in gaBinaryT1. needs to be cleanup in future releases
+
 addPriorKnowledge <- function(pop, priorBitString){
     if (is.null(priorBitString) == TRUE){
         return(pop)

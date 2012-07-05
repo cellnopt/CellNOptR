@@ -7,7 +7,7 @@ Genetic algorithm for time point 2
 This is the genetic algorithm for time point 2, that should follow optimisation based on time point 1.
 }
 \usage{
-gaBinaryT2(CNOlist, model, simList, indexList, bStringT1, simResT1, sizeFac = 1e-04, NAFac = 1,
+gaBinaryT2(CNOlist, model, simList, indexList, bStringT1, sizeFac = 1e-04, NAFac = 1,
 popSize = 50, pMutation = 0.5, maxTime = 60, maxGens = 500,
 stallGenMax = 100, selPress = 1.2, elitism = 5, relTol = 0.1, verbose=TRUE,
 priorBitString=NULL, maxSizeHashTable=5000)
@@ -27,9 +27,6 @@ a list of indexes of species stimulated/inhibited/signals, as produced by indexf
 }
   \item{bStringT1}{
 the optimal bitstring from optimisation at time 1 (i.e. a vector of 0s and 1s)
-}
-  \item{simResT1}{
-the results of optimisation at t1 (i.e. the whole list as output by gabinaryT1)
 }
   \item{sizeFac}{
 the scaling factor for the size term in the objective function, default to 0.0001
@@ -79,7 +76,8 @@ with the priorBitString list.
 
 }
 \details{
-This function takes in the same input as the T1 ga, but in addition it takes in the bitstring optimised for T1, and does not take an initial bitstring. It also takes a matrix simResT1, which is the results of simulatorT1 ran on the model optimised for T1. Be aware that the bitString that this function returns is one that only includes the bits that it actually looks at, i.e. the bits that were 0 in the bStringT1
+This function takes in the same input as the T1 ga, but in addition it takes in
+the bitstring optimised for T1, and does not take an initial bitstring. Be aware that the bitString that this function returns is one that only includes the bits that it actually looks at, i.e. the bits that were 0 in the bStringT1
 }
 \value{
 This function returns a list with elements:
@@ -89,7 +87,7 @@ This function returns a list with elements:
 \item{stringsTolScores}{the scores of the above-mentionned strings}
 }
 \author{
-C.Terfve
+C.Terfve, T. Cokelaer
 }
 \seealso{
 \link{getFit}, \link{prep4sim}, \link{indexFinder}, \link{simulatorT1},
@@ -123,12 +121,6 @@ ToyT1opt2<-gaBinaryT1(
 	verbose=FALSE)
 
 #Optimise T2
-SimToyT12<-simulateT1(
-	CNOlist=CNOlistToy2,
-	model=processedModel,
-	bStringT1=ToyT1opt2$bString,
-	simList=ToyFields4Sim2,
-	indexList=indices)
 
 ToyT1opt2T2<-gaBinaryT2(
 	CNOlist=CNOlistToy2,
@@ -136,7 +128,6 @@ ToyT1opt2T2<-gaBinaryT2(
 	simList=ToyFields4Sim2,
 	indexList=indices,
 	bStringT1=ToyT1opt2$bString,
-	simResT1=SimToyT12,
 	maxGens=2,
 	popSize = 5,
 	verbose=FALSE)

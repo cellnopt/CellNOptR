@@ -9,16 +9,10 @@ This function is a wrapper around the whole CNOR analysis, it performs the follo
  \enumerate{
   \item Plot the CNOlist;
   \item Checks data to model compatibility;
-  \item Find the indices, in the model, of the species that are inhibited/stimulated/measured (signals);
-  \item Find the indices of the non-osbervables/non-controllables (nonce);
-  \item Cut the nonc off the model;
-  \item Recompute the indices;
-  \item Compress the model;
-  \item Recompute the indices;
-  \item Expand the gates;
+  \item Call the preprocessing function (Cut the nonc off the model, compress the model and expand the gates);
   \item Compute the residual error;
   \item Prepare for simulation;
-  \item Optimisation;
+  \item Optimisation T1 and T2 (optional);
   \item Plot simulated and experimental results;
   \item Plot the evolution of fit;
   \item Write the scaffold and PKN;
@@ -26,7 +20,8 @@ This function is a wrapper around the whole CNOR analysis, it performs the follo
  }
 }
 \usage{
-CNORwrap(paramsList=NA, data=NA, model=NA, name, namesData=NA, time=1)
+CNORwrap(paramsList=NA, data=NA, model=NA, name, namesData=NA, time=1,
+compression=TRUE, expansion=TRUE, cutNONC=TRUE)
 }
 
 \arguments{
@@ -74,6 +69,18 @@ the name arguments.
 either 1 or 2: Do you want to perform a one time point steady state optimisation
 or a 2 time points pseudo steady state optimisation. By default this is set to 1.
 }
+\item{compression}{
+compress the model (default TRUE)
+}
+\item{expansion}{
+expand the gates (default TRUE)
+
+}
+\item{cutNONC}{
+cut the NONC nodes off the model by (default TRUE)
+
+}
+
 }
 \details{
 If you do not provide a parameters list, you can provide only essential elements,
