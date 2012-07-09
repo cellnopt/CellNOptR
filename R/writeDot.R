@@ -176,10 +176,12 @@ writeDot<-function(dotNodes, dotMatrix, model, filename){
 	cat(';}\n{rank=same;',file=filename,append=TRUE,sep="")
 	cat(which(rankNodes == "1"),file=filename,append=TRUE,sep=";")
 	
-	for(i in 2:max(rankNodes[-which(rankNodes=="source"|rankNodes=="sink")])){
-		cat(';}\n{rank=same;',file=filename,append=TRUE,sep="")
-		cat(which(rankNodes == i),file=filename,append=TRUE,sep=";")
-		}
+	if (length(rankNodes)>=2){
+        for(i in 2:max(rankNodes[-which(rankNodes=="source"|rankNodes=="sink")])){
+		    cat(';}\n{rank=same;',file=filename,append=TRUE,sep="")
+    		cat(which(rankNodes == i),file=filename,append=TRUE,sep=";")
+	    	}
+    }
 		
 	cat(';}\n',file=filename,append=TRUE,sep="")
 	cat('{rank=sink;',file=filename,append=TRUE,sep="")
