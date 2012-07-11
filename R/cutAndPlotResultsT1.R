@@ -79,7 +79,7 @@ cutAndPlotResultsT1 <- function(
     } else {
     	
     	CNOlistSet = list(CNOlist)
-    	simResultsSet = list(simList)
+    	simResultsSet = list(simResults)
     }
 
 	for(f in 1:length(CNOlistSet)) {
