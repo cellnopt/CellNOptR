@@ -12,7 +12,7 @@
 #  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
 #
 ##############################################################################
-# $Id: computeScoreT2.R 1586 2012-06-26 14:59:24Z cokelaer $
+# $Id$
 
 # Function that computes the score of a specific bitstring
 # Although it is very similar to computeScoreT1, there are enough differences to

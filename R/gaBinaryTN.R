@@ -12,7 +12,7 @@
 #  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
 #
 ##############################################################################
-# $Id: gaBinaryT2.R 1586 2012-06-26 14:59:24Z cokelaer $
+# $Id$
 gaBinaryTN <-function(
     CNOlist,
     model,

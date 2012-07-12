@@ -12,7 +12,7 @@
 #  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
 #
 ##############################################################################
-# $Id: simulateT1.R 595 2012-02-22 17:21:47Z cokelaer $
+# $Id$
 simulateTN<-function(CNOlist,model,simResT1,bStringT2,bStringTimes,simList,indexList,timeIndex){
 
 #Made to look more like new SimulateT1 (6/26/12 edits) but old version is left in comments below

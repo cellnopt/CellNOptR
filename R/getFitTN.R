@@ -12,7 +12,7 @@
 #  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
 #
 ##############################################################################
-# $Id: getFit.R 1009 2012-04-17 09:30:36Z cokelaer $
+# $Id$
 getFitTN<-function(
 	simResults,
 	CNOlist,

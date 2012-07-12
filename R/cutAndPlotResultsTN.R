@@ -12,7 +12,7 @@
 #  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
 #
 ##############################################################################
-# $Id: cutAndPlotResultsT2.R 1029 2012-04-19 09:26:09Z aidanmac $
+# $Id$
 
 cutAndPlotResultsTN <-function(
   model,

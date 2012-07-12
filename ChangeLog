@@ -1,3 +1,8 @@
+12/july/2012 1.3.22
+-------------------------
+* add proerties in the TN files
+* Fix in cutAndPlotResultsT1
+
 9/july/2012 1.3.21
 --------------------
 * fixed bug in writeDot when only 1 stimuli present.
