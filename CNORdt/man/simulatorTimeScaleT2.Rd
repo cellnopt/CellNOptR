@@ -7,18 +7,18 @@ Simulation of a boolean time course model for time 2
 This function simulates a boolean model at time 2 where time 2 is the late time phase (late reactions) chosen by the user.
 }
 \usage{
-simulatorTimeScaleT2(SimResultsT1, CNOlist, Model, SimList, indexList, boolUpdates)
+simulatorTimeScaleT2(simResultsT1, CNOlist, model, simList, indexList, boolUpdates)
 }
 \arguments{
-\item{SimResultsT1}{
+\item{simResultsT1}{
 a matrix that is the output of simulatorT1 (i.e. one row per condition and one column per species).
 }
 \item{CNOlist}{
 a CNOlist.
 }
-\item{Model}{
+\item{model}{
 a Model that only contains the reactions to be evaluated.}
-\item{SimList}{
+\item{simList}{
 a SimList as created by prep4sim, that has also already been cut to contain only the reactions to be evaluated.
 }
 \item{indexList}{
@@ -56,17 +56,17 @@ fields4Sim <- prep4sim(Model)
 
 simRes <- simulatorTimeScale(
   CNOlist=CNOlist,
-  Model=Model,
-  SimList=fields4Sim,
+  model=Model,
+  simList=fields4Sim,
   indexList=indexOrig,
   boolUpdates=10
 )
 
 SimRes2 <- simulatorTimeScaleT2(
-  SimResultsT1=simRes[,,dim(simRes)[3]], 
+  simResultsT1=simRes[,,dim(simRes)[3]], 
   CNOlist=CNOlist, 
-  Model=Model, 
-  SimList=fields4Sim,
+  model=Model, 
+  simList=fields4Sim,
   indexList=indexOrig,
   boolUpdates=20)
 }

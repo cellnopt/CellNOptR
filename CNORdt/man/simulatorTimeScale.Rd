@@ -7,16 +7,16 @@ Discrete time simulation of a boolean model
 Simulates multiple time points
 }
 \usage{
-simulatorTimeScale(CNOlist, Model, SimList, indexList, boolUpdates)
+simulatorTimeScale(CNOlist, model, simList, indexList, boolUpdates)
 }
 \arguments{
 \item{CNOlist}{
 a CNOlist.
 }
-\item{Model}{
+\item{model}{
 a Model that only contains the reactions to be evaluated.
 }
-\item{SimList}{
+\item{simList}{
 a SimList as created by prep4sim, that has also already been cut to contain only the reactions to be evaluated.
 }
 \item{indexList}{
@@ -49,13 +49,13 @@ library(CNORdt)
 data(CNOlistPB, package="CNORdt")
 data(ToyModelPB, package="CNORdt")
 
-indexOrig <- indexFinder(CNOlist, Model, verbose=TRUE)
-fields4Sim <- prep4sim(Model)
+indexOrig <- indexFinder(CNOlist, model, verbose=TRUE)
+fields4Sim <- prep4sim(model)
 
 simRes <- simulatorTimeScale(
   CNOlist=CNOlist,
-  Model=Model,
-  SimList=fields4Sim,
+  model=Model,
+  simList=fields4Sim,
   indexList=indexOrig,
   boolUpdates=30
 )

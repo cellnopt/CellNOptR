@@ -7,10 +7,10 @@ Plot the data and simulated values for time course data
 This function is the equivalent of CNOPlotFits, it plots the data and the simulated values,  along with an image plot that tells which cues were present. The plots are colored according to the fit between data and simulated data.
 }
 \usage{
-plotOptimResultsTimeScale(SimResults, yInterpol, xCoords, CNOlist, nsplit=1)
+plotOptimResultsTimeScale(simResults, yInterpol, xCoords, CNOlist, nSplit=1)
 }
 \arguments{
-\item{SimResults}{
+\item{simResults}{
 a list with a field for each time point, each containing a matrix of dimensions (number of conditions) * (number of signals), with the first field being t=0. Typically produced by simulating a model and then extracting the columns that correspond to signals
 }
 \item{yInterpol}{
@@ -22,8 +22,8 @@ the x-coordinates of the data and simulation after the application of the optimi
 \item{CNOlist}{
 a CNOlist on which the score is based (based on all valueSignals).
 }
-\item{nsplit}{
-a value that splits the plot 'nsplit' times.
+\item{nSplit}{
+a value that splits the plot 'nSplit' times.
 }
 }
 \details{
@@ -51,13 +51,13 @@ data(CNOlistPB, package="CNORdt")
 data(ToyModelPB, package="CNORdt")
 boolUpdates=20
 
-indexOrig <- indexFinder(CNOlist, Model, verbose=TRUE)
-fields4Sim <- prep4sim(Model)
+indexOrig <- indexFinder(CNOlist, model, verbose=TRUE)
+fields4Sim <- prep4sim(model)
 
 SimRes <- simulatorTimeScale(
    CNOlist=CNOlist,
-   Model=Model,
-   SimList=fields4Sim,
+   model=Model,
+   simList=fields4Sim,
    indexList=indexOrig,
    boolUpdates=boolUpdates
 )
@@ -65,9 +65,9 @@ SimRes <- simulatorTimeScale(
 SimRes <- SimRes[,indexOrig$signals,]
 
 getFitRes <- getFitTimeScale(
-  SimList=fields4Sim,
+  simList=fields4Sim,
   CNOlist=CNOlist,
-  Model=Model,
+  model=Model,
   indexList=indexOrig,
   boolUpdates=boolUpdates,
   lowerB=0.8,
@@ -75,10 +75,10 @@ getFitRes <- getFitTimeScale(
 )
 
 plotOptimResultsTimeScale(
-   SimResults=SimRes,
+   simResults=SimRes,
    yInterpol=getFitRes$yInter,
    xCoords=getFitRes$xCoords,
    CNOlist=CNOlist,
-   nsplit=1
+   nSplit=1
 )
 }

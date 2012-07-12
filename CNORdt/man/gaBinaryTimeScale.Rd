@@ -7,19 +7,19 @@ Genetic algorithm for optimizing models using multiple time-points with 1 or 2 s
 The genetic algorithm used to optimize a model by fitting to data containing multiple time points. The data can be fitted in 2 ways: applying a single scaling factor to the boolean simulation or, additionally, dividing the data with a user-provided time-point into 2 time frames (that signify early and late reactions).
 }
 \usage{
-gaBinaryTimeScale(CNOlist, Model, SimList, indexList, sizeFac = 1e-04, NAPenFac = 1,
-initBstring, PopSize = 50, Pmutation = 0.5, MaxTime = 60, maxGens = 500, StallGenMax = 100,
-SelPress = 1.2, elitism = 5, RelTol = 0.1, verbose=TRUE, boolUpdates, divTime=NULL,
+gaBinaryTimeScale(CNOlist, model, simList, indexList, sizeFac = 1e-04, NApenFac = 1,
+initBstring, popSize = 50, pMutation = 0.5, maxTime = 60, maxGens = 500, stallGenMax = 100,
+selPress = 1.2, elitism = 5, relTol = 0.1, verbose=TRUE, boolUpdates, divTime=NULL,
 lowerB=lowerB, upperB=upperB)
 }
 \arguments{
 \item{CNOlist}{
 a CNOlist on which the score is based (based on all valueSignals).
 }
-\item{Model}{
+\item{model}{
 a Model list.
 }
-\item{SimList}{
+\item{simList}{
 a list that contains additional fields for the simulator, as created by prep4sim applied to the model above.
 }
 \item{indexList}{
@@ -28,34 +28,34 @@ a list of indexes of species stimulated/inhibited/signals, as produced by indexf
 \item{sizeFac}{
 the scaling factor for the size term in the objective function, default to 0.0001.
 }
-\item{NAPenFac}{
+\item{NApenFac}{
 the scaling factor for the NA term in the objective function, default to 1.
 }
 \item{initBstring}{
 an initial bitstring to be tested, should be of the same size as the number of reactions in the model above.
 }
-\item{PopSize}{
+\item{popSize}{
 the population size for the genetic algorithm, default set to 50.
 }
-\item{Pmutation}{
+\item{pMutation}{
 the mutation probability for the genetic algorithm, default set to 0.5.
 }
-\item{MaxTime}{
+\item{maxTime}{
 the maximum optimisation time in seconds, default set to 60.
 }
 \item{maxGens}{
 the maximum number of generations in the genetic algorithm, default set to 500.
 }
-\item{StallGenMax}{
+\item{stallGenMax}{
 the maximum number of stall generations in the genetic algorithm, default to 100.
 }
-\item{SelPress}{
+\item{selPress}{
 the selective pressure in the genetic algorithm, default set to 1.2.
 }
 \item{elitism}{
 the number of best individuals that are propagated to the next generation in the genetic algorithm, default set to 5.
 }
-\item{RelTol}{
+\item{relTol}{
 the relative tolerance for the best bitstring reported by the genetic algorithm, i.e. how different from the best solution can solutions be to be reported as well, default set to 0.1.
 }
 \item{verbose}{
@@ -99,22 +99,22 @@ data(CNOlistPB, package="CNORdt")
 data(ToyModelPB, package="CNORdt")
 
 # pre-process model
-indexOrig <- indexFinder(CNOlist=CNOlist, Model=Model, verbose=TRUE)
-indexNONC <- findNONC(Model=Model, indexes=indexOrig, verbose=TRUE)
-ModelCut <- cutNONC(Model=Model, NONCindexes=indexNONC)
-indexNONCcut <- indexFinder(CNOlist=CNOlist, Model=ModelCut)
-ModelCutCompress <- compressModel(Model=ModelCut, indexes=indexNONCcut)
-indexNONCcutComp <- indexFinder(CNOlist=CNOlist, Model=ModelCutCompress)
-ModelCutCompressExpand <- expandGates(Model=ModelCutCompress)
-fields4Sim <- prep4sim(Model=ModelCutCompressExpand)
+indexOrig <- indexFinder(CNOlist=CNOlist, model=Model, verbose=TRUE)
+indexNONC <- findNONC(model=Model, indexes=indexOrig, verbose=TRUE)
+ModelCut <- cutNONC(model=Model, NONCindexes=indexNONC)
+indexNONCcut <- indexFinder(CNOlist=CNOlist, model=ModelCut)
+ModelCutCompress <- compressModel(model=ModelCut, indexes=indexNONCcut)
+indexNONCcutComp <- indexFinder(CNOlist=CNOlist, model=ModelCutCompress)
+ModelCutCompressExpand <- expandGates(model=ModelCutCompress)
+fields4Sim <- prep4sim(model=ModelCutCompressExpand)
 initBstring <- rep(1, length(ModelCutCompressExpand$reacID))
 
 # optimize
-opt1 <- gaBinaryTimeScale(CNOlist=CNOlist, Model=ModelCutCompressExpand,
-SimList=fields4Sim, indexList=indexNONCcutComp,
-initBstring=initBstring, verbose=TRUE, boolUpdates=30, MaxTime=100, lowerB=0.8, upperB=10)
+opt1 <- gaBinaryTimeScale(CNOlist=CNOlist, model=ModelCutCompressExpand,
+simList=fields4Sim, indexList=indexNONCcutComp,
+initBstring=initBstring, verbose=TRUE, boolUpdates=30, maxTime=100, lowerB=0.8, upperB=10)
 
 # plot result
-cutAndPlotResultsTimeScale(Model=ModelCutCompressExpand, bString=opt1$bString, SimList=fields4Sim,
+cutAndPlotResultsTimeScale(model=ModelCutCompressExpand, bString=opt1$bString, simList=fields4Sim,
 CNOlist=CNOlist, indexList=indexNONCcutComp, boolUpdates=30, lowerB=0.8, upperB=10)
 }

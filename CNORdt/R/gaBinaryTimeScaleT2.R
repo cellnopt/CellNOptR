@@ -54,7 +54,7 @@ gaBinaryTimeScaleT2 <- function(CNOlist, model, simList, indexList, bStringT1, s
 		simListCut$maxIx <- simListCut$maxIx[as.logical(bitString)]
 	
 		# compute the score	
-		getFitData <- getFitTimeScale(simList=simListCut, CNOlist=CNOlist, model=modelCut, indexList=indexList, boolUpdates, sizeFac=sizeFac, NApenFac=NApenFac, timeSplit="late", divTime, simresultsT1=simResT1, lowerB=lowerB, upperB=upperB)
+		getFitData <- getFitTimeScale(simList=simListCut, CNOlist=CNOlist, model=modelCut, indexList=indexList, boolUpdates, sizeFac=sizeFac, NApenFac=NApenFac, timeSplit="late", divTime, simResultsT1=simResT1, lowerB=lowerB, upperB=upperB)
 		score = getFitData$score
 		# ***** FIX nDataP *****
 		nDataP <- sum(!is.na(CNOlist$valueSignals[[2]]))

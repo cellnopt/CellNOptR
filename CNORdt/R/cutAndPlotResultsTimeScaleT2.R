@@ -44,20 +44,20 @@ CNOlist, indexList, boolUpdates, divTime, lowerB=lowerB, upperB=upperB) {
     BStimes <- bStringT1
     BStimes[which(bStringT1 == 0)] <- bStringT2 * 2
     
-    modelCut <- Model
+    modelCut <- model
     modelCut$interMat <- modelCut$interMat[, as.logical(bitString2)]
     modelCut$notMat <- modelCut$notMat[, as.logical(bitString2)]
     modelCut$reacID <- modelCut$reacID[as.logical(bitString2)]
     modelCut$times <- BStimes[which(BStimes != 0)]
     
-    simListCut <- SimList
+    simListCut <- simList
     simListCut$finalCube <- simListCut$finalCube[as.logical(bitString2),]
     simListCut$ixNeg <- simListCut$ixNeg[as.logical(bitString2),]
     simListCut$ignoreCube <- simListCut$ignoreCube[as.logical(bitString2),]
     simListCut$maxIx <- simListCut$maxIx[as.logical(bitString2)]
     
-    simT2 <- simulatorTimeScaleT2(simResultsT1=SimT1[,,dim(simT1)[3]], 
-	CNOlist=CNOlist, Model=modelCut, simList=simListCut, 
+    simT2 <- simulatorTimeScaleT2(simResultsT1=simT1[,,dim(simT1)[3]], 
+	CNOlist=CNOlist, model=modelCut, simList=simListCut, 
 	indexList=indexList, boolUpdates=boolUpdates[2])
     simResT2 <- simT2[,indexList$signals,]
     

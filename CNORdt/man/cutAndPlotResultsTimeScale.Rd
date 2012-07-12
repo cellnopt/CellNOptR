@@ -7,17 +7,17 @@ Plot the results of a time-course optimization
 This function takes the optimized bit string, cuts the model according to the string and then finds the optimized scaling factor to pass on to plotOptimResultsTimeScale for visualization.
 }
 \usage{
-cutAndPlotResultsTimeScale(Model, bString, SimList, CNOlist,
+cutAndPlotResultsTimeScale(model, bString, simList, CNOlist,
 indexList, boolUpdates=boolUpdates, divTime=NULL, lowerB=lowerB, upperB=upperB)
 }
 \arguments{
-\item{Model}{
+\item{model}{
 the expanded model used as input for gaBinaryTimeScale.
 }
 \item{bString}{
 a bit string for T1 as output by gabinaryTimeScale (i.e. a vector of 1s and 0s).
 }
-\item{SimList}{
+\item{simList}{
 a simlist corresponding to the model, as output by prep4sim.
 }
 \item{CNOlist}{
@@ -54,26 +54,26 @@ data(CNOlistPB, package="CNORdt")
 data(ToyModelPB, package="CNORdt")
 
 # pre-process model
-indexOrig <- indexFinder(CNOlist=CNOlist, Model=Model, verbose=TRUE)
-indexNONC <- findNONC(Model=Model, indexes=indexOrig, verbose=TRUE)
-ModelCut <- cutNONC(Model=Model, NONCindexes=indexNONC)
-indexNONCcut <- indexFinder(CNOlist=CNOlist, Model=ModelCut)
-ModelCutCompress <- compressModel(Model=ModelCut, indexes=indexNONCcut)
-indexNONCcutComp <- indexFinder(CNOlist=CNOlist, Model=ModelCutCompress)
-ModelCutCompressExpand <- expandGates(Model=ModelCutCompress)
-fields4Sim <- prep4sim(Model=ModelCutCompressExpand)
+indexOrig <- indexFinder(CNOlist=CNOlist, model=Model, verbose=TRUE)
+indexNONC <- findNONC(model=Model, indexes=indexOrig, verbose=TRUE)
+ModelCut <- cutNONC(model=Model, NONCindexes=indexNONC)
+indexNONCcut <- indexFinder(CNOlist=CNOlist, model=ModelCut)
+ModelCutCompress <- compressModel(model=ModelCut, indexes=indexNONCcut)
+indexNONCcutComp <- indexFinder(CNOlist=CNOlist, model=ModelCutCompress)
+ModelCutCompressExpand <- expandGates(model=ModelCutCompress)
+fields4Sim <- prep4sim(model=ModelCutCompressExpand)
 initBstring <- rep(1, length(ModelCutCompressExpand$reacID))
 
 # optimize
-opt1 <- gaBinaryTimeScale(CNOlist=CNOlist, Model=ModelCutCompressExpand,
-SimList=fields4Sim, indexList=indexNONCcutComp, initBstring=initBstring,
-verbose=TRUE, boolUpdates=30, MaxTime=100, lowerB=0.8, upperB=10)
+opt1 <- gaBinaryTimeScale(CNOlist=CNOlist, model=ModelCutCompressExpand,
+simList=fields4Sim, indexList=indexNONCcutComp, initBstring=initBstring,
+verbose=TRUE, boolUpdates=30, maxTime=100, lowerB=0.8, upperB=10)
 
 #plot
 cutAndPlotResultsTimeScale(
-  Model=ModelCutCompressExpand,
+  model=ModelCutCompressExpand,
   bString=opt1$bString,
-  SimList=fields4Sim,
+  simList=fields4Sim,
   CNOlist=CNOlist,
   indexList=indexNONCcutComp,
   boolUpdates=30,

@@ -7,17 +7,17 @@ The optimization function that finds the scaling factor for the boolean simulati
 This function is called from gaBinaryTimeScale. Using the model passed as input, it finds a scaling factor that minimizes the mean squared error between the data from the boolean simulation and the experimental data. A spline is fitted to the experimental data to allow this.
 }
 \usage{
-getFitTimeScale(SimList, CNOlist, Model, indexList, sizeFac=0.0001,
-NAPenFac=1, boolUpdates, timeSplit="early", divTime=NULL, SimResultsT1, lowerB=lowerB, upperB=upperB)
+getFitTimeScale(simList, CNOlist, model, indexList, sizeFac=0.0001,
+NApenFac=1, boolUpdates, timeSplit="early", divTime=NULL, simResultsT1, lowerB=lowerB, upperB=upperB)
 }
 \arguments{
-\item{SimList}{
+\item{simList}{
 a list that contains additional fields for the simulator, as created by prep4sim applied to the model above.
 }
 \item{CNOlist}{
 a CNOlist on which the score is based (based on all valueSignals).
 }
-\item{Model}{
+\item{model}{
 a Model list.
 }
 \item{indexList}{
@@ -26,7 +26,7 @@ a list of indexes of species stimulated/inhibited/signals, as produced by indexf
 \item{sizeFac}{
 the scaling factor for the size term in the objective function, default to 0.0001.
 }
-\item{NAPenFac}{
+\item{NApenFac}{
 the scaling factor for the NA term in the objective function, default to 1.
 }
 \item{boolUpdates}{
@@ -38,7 +38,7 @@ If using the 2 steady-state version, this is the user-provided time point that s
 \item{divTime}{
 the experimental time point that divides the early and late steady states, if using the 2-steady state version.
 }
-\item{SimResultsT1}{
+\item{simResultsT1}{
 the results of optimization at the first steady state (i.e. the whole list as output by gaBinaryTimeScale).
 }
 \item{lowerB}{
@@ -75,13 +75,13 @@ data(CNOlistPB, package="CNORdt")
 data(ToyModelPB, package="CNORdt")
 
 # pre-processing
-indexOrig <- indexFinder(CNOlist=CNOlist, Model=Model, verbose=TRUE)
-fields4Sim <- prep4sim(Model=Model)
+indexOrig <- indexFinder(CNOlist=CNOlist, model=model, verbose=TRUE)
+fields4Sim <- prep4sim(model=Model)
 
 getFitRes <- getFitTimeScale(
-  SimList=fields4Sim,
+  simList=fields4Sim,
   CNOlist=CNOlist,
-  Model=Model,
+  model=Model,
   indexList=indexOrig,
   boolUpdates=30,
   lowerB=0.8,

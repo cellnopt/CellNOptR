@@ -7,16 +7,16 @@ Genetic algorithm for optimizing models using multiple time-points with 1 or 2 s
 The genetic algorithm used to optimize a model by fitting to data containing multiple time points. The data can be fitted in 2 ways: applying a single scaling factor to the boolean simulation or, additionally, dividing the data with a user-provided time-point into 2 time phases (that signify early and late reactions).
 }
 \usage{
-gaBinaryTimeScaleT2(CNOlist, Model, SimList, indexList, bStringT1, SimResT1, sizeFac=0.0001, NAPenFac=1, PopSize=50, Pmutation=0.5, MaxTime=60, maxGens=500, StallGenMax=100, SelPress=1.2, elitism=5, RelTol=0.1, verbose=TRUE, boolUpdates, divTime, lowerB=lowerB, upperB=upperB)
+gaBinaryTimeScaleT2(CNOlist, model, simList, indexList, bStringT1, simResT1, sizeFac=0.0001, NApenFac=1, popSize=50, pMutation=0.5, maxTime=60, maxGens=500, stallGenMax=100, selPress=1.2, elitism=5, relTol=0.1, verbose=TRUE, boolUpdates, divTime, lowerB=lowerB, upperB=upperB)
 }
 \arguments{
 \item{CNOlist}{
 a CNOlist on which the score is based (based on all valueSignals).
 }
-\item{Model}{
+\item{model}{
 a Model list.
 }
-\item{SimList}{
+\item{simList}{
 a list that contains additional fields for the simulator, as created by prep4sim applied to the model above.
 }
 \item{indexList}{
@@ -25,37 +25,37 @@ a list of indexes of species stimulated/inhibited/signals, as produced by indexf
 \item{bStringT1}{
 TOADD
 }
-\item{SimResT1}{
+\item{simResT1}{
 TOADD
 }
 \item{sizeFac}{
 the scaling factor for the size term in the objective function, default to 0.0001.
 }
-\item{NAPenFac}{
+\item{NApenFac}{
 the scaling factor for the NA term in the objective function, default to 1.
 }
-\item{PopSize}{
+\item{popSize}{
 the population size for the genetic algorithm, default set to 50.
 }
-\item{Pmutation}{
+\item{pMutation}{
 the mutation probability for the genetic algorithm, default set to 0.5.
 }
-\item{MaxTime}{
+\item{maxTime}{
 the maximum optimisation time in seconds, default set to 60.
 }
 \item{maxGens}{
 the maximum number of generations in the genetic algorithm, default set to 500.
 }
-\item{StallGenMax}{
+\item{stallGenMax}{
 the maximum number of stall generations in the genetic algorithm, default to 100.
 }
-\item{SelPress}{
+\item{selPress}{
 the selective pressure in the genetic algorithm, default set to 1.2.
 }
 \item{elitism}{
 the number of best individuals that are propagated to the next generation in the genetic algorithm, default set to 5.
 }
-\item{RelTol}{
+\item{relTol}{
 the relative tolerance for the best bitstring reported by the genetic algorithm, i.e. how different from the best solution can solutions be to be reported as well, default set to 0.1.
 }
 \item{verbose}{
@@ -101,14 +101,14 @@ data(CNOlistPB, package="CNORdt")
 data(ToyModelPB, package="CNORdt")
 
 # pre-process model
-indexOrig <- indexFinder(CNOlist=CNOlist, Model=Model, verbose=TRUE)
-indexNONC <- findNONC(Model=Model, indexes=indexOrig, verbose=TRUE)
-ModelCut <- cutNONC(Model=Model, NONCindexes=indexNONC)
-indexNONCcut <- indexFinder(CNOlist=CNOlist, Model=ModelCut)
-ModelCutCompress <- compressModel(Model=ModelCut, indexes=indexNONCcut)
-indexNONCcutComp <- indexFinder(CNOlist=CNOlist, Model=ModelCutCompress)
-ModelCutCompressExpand <- expandGates(Model=ModelCutCompress)
-fields4Sim <- prep4sim(Model=ModelCutCompressExpand)
+indexOrig <- indexFinder(CNOlist=CNOlist, model=Model, verbose=TRUE)
+indexNONC <- findNONC(model=Model, indexes=indexOrig, verbose=TRUE)
+ModelCut <- cutNONC(model=Model, NONCindexes=indexNONC)
+indexNONCcut <- indexFinder(CNOlist=CNOlist, model=ModelCut)
+ModelCutCompress <- compressModel(model=ModelCut, indexes=indexNONCcut)
+indexNONCcutComp <- indexFinder(CNOlist=CNOlist, model=ModelCutCompress)
+ModelCutCompressExpand <- expandGates(model=ModelCutCompress)
+fields4Sim <- prep4sim(model=ModelCutCompressExpand)
 initBstring <- rep(1, length(ModelCutCompressExpand$reacID))
 
 # define boolUpdates and divTime
@@ -116,23 +116,23 @@ boolUpdates=c(10,20)
 divTime=10
 
 # optimize T1
-opt1 <- gaBinaryTimeScale(CNOlist=CNOlist, Model=ModelCutCompressExpand,
-SimList=fields4Sim, indexList=indexNONCcutComp, initBstring=initBstring,
-verbose=TRUE, boolUpdates=boolUpdates, divTime=divTime, MaxTime=100,
-lowerB=0.8, upperB=10)
+opt1 <- gaBinaryTimeScale(CNOlist=CNOlist, model=ModelCutCompressExpand,
+    simList=fields4Sim, indexList=indexNONCcutComp, initBstring=initBstring,
+    verbose=TRUE, boolUpdates=boolUpdates, divTime=divTime, maxTime=100,
+    lowerB=0.8, upperB=10)
 
 # simulate the above model to get the starting point for second time phase
-dataStartPoint = cutModel(Model=ModelCutCompressExpand, SimList=fields4Sim, bitString=opt1$bString)
-simT1 = simulatorTimeScale(CNOlist=CNOlist, Model=dataStartPoint[[1]], SimList=dataStartPoint[[2]],
+dataStartPoint = cutModel(model=ModelCutCompressExpand, simList=fields4Sim, bitString=opt1$bString)
+simT1 = simulatorTimeScale(CNOlist=CNOlist, model=dataStartPoint[[1]], simList=dataStartPoint[[2]],
 indexList=indexNONCcutComp, boolUpdates=boolUpdates[1])
 
 # optimize the 'second' network then stitch the results together
-opt2 <- gaBinaryTimeScaleT2(CNOlist=CNOlist, Model=ModelCutCompressExpand,
-SimList=fields4Sim, indexList=indexNONCcutComp,
-bStringT1=opt1$bString, SimResT1=simT1, verbose=TRUE, boolUpdates=boolUpdates, divTime=divTime, lowerB=0.8, upperB=10)
+opt2 <- gaBinaryTimeScaleT2(CNOlist=CNOlist, model=ModelCutCompressExpand,
+    simList=fields4Sim, indexList=indexNONCcutComp,
+    bStringT1=opt1$bString, simResT1=simT1, verbose=TRUE, boolUpdates=boolUpdates, divTime=divTime, lowerB=0.8, upperB=10)
 
 # visualize total result
-cutAndPlotResultsTimeScaleT2(Model=ModelCutCompressExpand, bStringT1=opt1$bString, bStringT2=opt2$bString,
-SimList=fields4Sim, CNOlist=CNOlist, indexList=indexNONCcutComp, boolUpdates=boolUpdates,
-divTime=divTime, lowerB=0.8, upperB=10)
+cutAndPlotResultsTimeScaleT2(model=ModelCutCompressExpand, bStringT1=opt1$bString, bStringT2=opt2$bString,
+    simList=fields4Sim, CNOlist=CNOlist, indexList=indexNONCcutComp, boolUpdates=boolUpdates,
+    divTime=divTime, lowerB=0.8, upperB=10)
 }

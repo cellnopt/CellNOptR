@@ -74,7 +74,7 @@ getFitTimeScale <- function(simList, CNOlist, model, indexList, sizeFac=0.0001, 
 	
 			ySilico = array(dim=dim(yB))
 			numberPoints = dim(yB)[3]
-			xCoords = seq(0,by=whatScale,lengthOut=numberPoints)
+			xCoords = seq(0,by=whatScale,length.out=numberPoints)
    			count.1 = 1
     
     		for(nExper in 1:dim(yB)[1]) {
@@ -97,7 +97,7 @@ getFitTimeScale <- function(simList, CNOlist, model, indexList, sizeFac=0.0001, 
 
 	myEstimate = findTimeScale(yBool, splineStore)
 	yFinal = array(dim = dim(yBool))
-	xCoords = seq(0,by=myEstimate$par,lengthOut=boolUpdates)
+	xCoords = seq(0,by=myEstimate$par,length.out=boolUpdates)
 	
 	count2 = 1
 	for(nExper in 1:dim(yBool)[1]) {
