@@ -11,21 +11,22 @@ simulatorTimeScaleT2(simResultsT1, CNOlist, model, simList, indexList, boolUpdat
 }
 \arguments{
 \item{simResultsT1}{
-a matrix that is the output of simulatorT1 (i.e. one row per condition and one column per species).
+A matrix that is the output of simulatorT1 (i.e. one row per condition and one column per species).
 }
 \item{CNOlist}{
-a CNOlist.
+A CNOlist.
 }
 \item{model}{
-a Model that only contains the reactions to be evaluated.}
+A Model that only contains the reactions to be evaluated.
+}
 \item{simList}{
-a SimList as created by prep4sim, that has also already been cut to contain only the reactions to be evaluated.
+A SimList as created by prep4sim, that has also already been cut to contain only the reactions to be evaluated.
 }
 \item{indexList}{
-an indexList as created by indexFinder.
+An indexList as created by indexFinder.
 }
 \item{boolUpdates}{
-the number of synchronous updates performed by the boolean simulator.
+The number of synchronous updates performed by the boolean simulator.
 }
 }
 \details{
@@ -49,23 +50,23 @@ gaBinaryTimeScaleT2, getFitTimeScale
 library(CellNOptR)
 library(CNORdt)
 data(CNOlistPB, package="CNORdt")
-data(ToyModelPB, package="CNORdt")
+data(modelPB, package="CNORdt")
 
-indexOrig <- indexFinder(CNOlist, Model, verbose=TRUE)
-fields4Sim <- prep4sim(Model)
+indexOrig <- indexFinder(CNOlistPB, modelPB, verbose=TRUE)
+fields4Sim <- prep4sim(modelPB)
 
 simRes <- simulatorTimeScale(
-  CNOlist=CNOlist,
-  model=Model,
+  CNOlist=CNOlistPB,
+  model=modelPB,
   simList=fields4Sim,
   indexList=indexOrig,
   boolUpdates=10
 )
 
-SimRes2 <- simulatorTimeScaleT2(
+simRes2 <- simulatorTimeScaleT2(
   simResultsT1=simRes[,,dim(simRes)[3]], 
-  CNOlist=CNOlist, 
-  model=Model, 
+  CNOlist=CNOlistPB, 
+  model=modelPB, 
   simList=fields4Sim,
   indexList=indexOrig,
   boolUpdates=20)

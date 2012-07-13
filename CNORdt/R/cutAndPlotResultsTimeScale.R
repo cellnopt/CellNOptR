@@ -1,4 +1,4 @@
-#
+ #
 #  This file is part of the CNO software
 #
 #  Copyright (c) 2011-2012 - EBI
@@ -14,28 +14,59 @@
 ##############################################################################
 # $Id: $
 
-cutAndPlotResultsTimeScale <- function (model, bString, simList, CNOlist, indexList, boolUpdates=boolUpdates, 
-divTime=NULL, lowerB=lowerB, upperB=upperB) {
-
+cutAndPlotResultsTimeScale <- function(
+	model,
+	bString,
+	simList,
+	CNOlist,
+	indexList,
+	boolUpdates=boolUpdates,
+	divTime=NULL,
+	lowerB=lowerB,
+	upperB=upperB, 
+	show=TRUE,
+	plotPDF=FALSE,
+	tag=NULL) {
+	
 	modelCut <- model
 	modelCut$interMat <- modelCut$interMat[,as.logical(bString)]
 	modelCut$notMat <- modelCut$notMat[,as.logical(bString)]
 	modelCut$reacID <- modelCut$reacID[as.logical(bString)]
-	
 	simListCut <- simList
 	simListCut$finalCube <- simListCut$finalCube[as.logical(bString),]
 	simListCut$ixNeg <- simListCut$ixNeg[as.logical(bString),]
 	simListCut$ignoreCube <- simListCut$ignoreCube[as.logical(bString),]
-
 	simListCut$maxIx <- simListCut$maxIx[as.logical(bString)]
-	boolUpdates=boolUpdates[1]
-	simRes <- simulatorTimeScale(CNOlist=CNOlist, model=modelCut, 
-	simList = simListCut, indexList=indexList, boolUpdates=boolUpdates)
+	
+	boolUpdates = boolUpdates[1]
+	simRes <- simulatorTimeScale(CNOlist=CNOlist, model=modelCut, simList=simListCut, indexList=indexList, boolUpdates=boolUpdates)
 	simRes = simRes[,indexList$signals,]
-	getFitData <- getFitTimeScale(simList=simListCut, CNOlist=CNOlist, 
-	model = modelCut, indexList=indexList, boolUpdates=boolUpdates, 
-	divTime = divTime, lowerB=lowerB, upperB=upperB)
-    
-    plotOptimResultsTimeScale(simResults=simRes, yInterpol=getFitData$yInter, 
-	xCoords=getFitData$xCoords, CNOlist=CNOlist)
+	getFitData <- getFitTimeScale(simList=simListCut, CNOlist=CNOlist, model=modelCut, indexList=indexList, boolUpdates=boolUpdates, divTime=divTime, lowerB=lowerB, upperB=upperB)
+	
+	if(show==TRUE) {
+		plotOptimResultsPan(simResults=simRes,
+		yInterpol=getFitData$yInter,
+		xCoords=getFitData$xCoords,
+		CNOlist=CNOlist,
+		formalism="dt",
+		tPt=CNOlist$timeSignals[-1]
+		)
+	}
+	if(plotPDF == TRUE) {
+		if(is.null(tag)) {
+			filename <- paste(deparse(substitute(model)),"simResultsT1.pdf",sep="")
+        } else {
+			filename <- paste(tag,"simResultsT1.pdf",sep="_")
+        }
+		plotOptimResultsPan(simResults=simRes,
+			yInterpol=getFitData$yInter,
+			xCoords=getFitData$xCoords,
+			CNOlist=CNOlist,
+			formalism="dt",
+			pdfFileName=filename,
+			pdf=TRUE,
+			tPt=CNOlist$timeSignals[-1]
+		)
+	}
 }
+

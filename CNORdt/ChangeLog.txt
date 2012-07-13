@@ -1,4 +1,8 @@
 version 0.99.2
 ---------------
-* arguments name following convention from CellNOpt. All manual and code 
-  changed accordingly.
+* Arguments' name now following convention from CellNOpt. All manual and code changed accordingly.
+
+TODO:
+* Check color gradient when plotting (comparably too much red?)
+* Add t=0 changes
+* Check spikes in time course caused by NAs

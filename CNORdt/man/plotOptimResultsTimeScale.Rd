@@ -11,19 +11,19 @@ plotOptimResultsTimeScale(simResults, yInterpol, xCoords, CNOlist, nSplit=1)
 }
 \arguments{
 \item{simResults}{
-a list with a field for each time point, each containing a matrix of dimensions (number of conditions) * (number of signals), with the first field being t=0. Typically produced by simulating a model and then extracting the columns that correspond to signals
+A list with a field for each time point, each containing a matrix of dimensions (number of conditions) * (number of signals), with the first field being t=0. Typically produced by simulating a model and then extracting the columns that correspond to signals
 }
 \item{yInterpol}{
-the interpolated experimental data returned by \code{getFitTimeScale}
+The interpolated experimental data returned by \code{getFitTimeScale}
 }
 \item{xCoords}{
-the x-coordinates of the data and simulation after the application of the optimized scaling factor
+The x-coordinates of the data and simulation after the application of the optimized scaling factor
 }
 \item{CNOlist}{
-a CNOlist on which the score is based (based on all valueSignals).
+A CNOlist on which the score is based (based on all valueSignals).
 }
 \item{nSplit}{
-a value that splits the plot 'nSplit' times.
+A value that splits the plot 'nSplit' times.
 }
 }
 \details{
@@ -48,15 +48,15 @@ cutAndPlotResultsTimeScale
 library(CellNOptR)
 library(CNORdt)
 data(CNOlistPB, package="CNORdt")
-data(ToyModelPB, package="CNORdt")
+data(modelPB, package="CNORdt")
 boolUpdates=20
 
-indexOrig <- indexFinder(CNOlist, Model, verbose=TRUE)
-fields4Sim <- prep4sim(Model)
+indexOrig <- indexFinder(CNOlistPB, modelPB, verbose=TRUE)
+fields4Sim <- prep4sim(modelPB)
 
 SimRes <- simulatorTimeScale(
-   CNOlist=CNOlist,
-   model=Model,
+   CNOlist=CNOlistPB,
+   model=modelPB,
    simList=fields4Sim,
    indexList=indexOrig,
    boolUpdates=boolUpdates
@@ -66,8 +66,8 @@ SimRes <- SimRes[,indexOrig$signals,]
 
 getFitRes <- getFitTimeScale(
   simList=fields4Sim,
-  CNOlist=CNOlist,
-  model=Model,
+  CNOlist=CNOlistPB,
+  model=modelPB,
   indexList=indexOrig,
   boolUpdates=boolUpdates,
   lowerB=0.8,
@@ -78,7 +78,7 @@ plotOptimResultsTimeScale(
    simResults=SimRes,
    yInterpol=getFitRes$yInter,
    xCoords=getFitRes$xCoords,
-   CNOlist=CNOlist,
+   CNOlist=CNOlistPB,
    nSplit=1
 )
 }

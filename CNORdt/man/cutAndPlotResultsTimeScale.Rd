@@ -8,35 +8,45 @@ This function takes the optimized bit string, cuts the model according to the st
 }
 \usage{
 cutAndPlotResultsTimeScale(model, bString, simList, CNOlist,
-indexList, boolUpdates=boolUpdates, divTime=NULL, lowerB=lowerB, upperB=upperB)
+indexList, boolUpdates=boolUpdates, divTime=NULL, lowerB=lowerB,
+upperB=upperB, show = TRUE, plotPDF = FALSE, tag = NULL)
 }
 \arguments{
 \item{model}{
-the expanded model used as input for gaBinaryTimeScale.
+The expanded model used as input for gaBinaryTimeScale.
 }
 \item{bString}{
-a bit string for T1 as output by gabinaryTimeScale (i.e. a vector of 1s and 0s).
+A bit string for T1 as output by gabinaryTimeScale (i.e. a vector of 1s and 0s).
 }
 \item{simList}{
-a simlist corresponding to the model, as output by prep4sim.
+A simlist corresponding to the model, as output by prep4sim.
 }
 \item{CNOlist}{
-the CNOlist used in optimization.
+The CNOlist used in optimization.
 }
 \item{indexList}{
-an indexList, produced by indexFinder run on the model and the CNOlist above.
+An indexList, produced by indexFinder run on the model and the CNOlist above.
 }
 \item{boolUpdates}{
-the number of synchronous updates performed by the boolean simulator.
+The number of synchronous updates performed by the boolean simulator.
 }
 \item{divTime}{
-the experimental time point that divides the early and late time phases, if using the 2-time phase version.
+The experimental time point that divides the early and late time phases, if using the 2-time phase version.
 }
 \item{lowerB}{
 The lower bound for the optimized value of the scaling factor.
 }
 \item{upperB}{
 The upper bound for the optimized value of the scaling factor.
+}
+\item{show}{
+TOADD
+}
+\item{plotPDF}{
+TOADD
+}
+\item{tag}{
+TOADD
 }
 }
 
@@ -51,31 +61,25 @@ plotOptimResultsTimeScale
 }
 \examples{
 data(CNOlistPB, package="CNORdt")
-data(ToyModelPB, package="CNORdt")
+data(modelPB, package="CNORdt")
 
 # pre-process model
-indexOrig <- indexFinder(CNOlist=CNOlist, model=Model, verbose=TRUE)
-indexNONC <- findNONC(model=Model, indexes=indexOrig, verbose=TRUE)
-ModelCut <- cutNONC(model=Model, NONCindexes=indexNONC)
-indexNONCcut <- indexFinder(CNOlist=CNOlist, model=ModelCut)
-ModelCutCompress <- compressModel(model=ModelCut, indexes=indexNONCcut)
-indexNONCcutComp <- indexFinder(CNOlist=CNOlist, model=ModelCutCompress)
-ModelCutCompressExpand <- expandGates(model=ModelCutCompress)
-fields4Sim <- prep4sim(model=ModelCutCompressExpand)
-initBstring <- rep(1, length(ModelCutCompressExpand$reacID))
+res <- preprocessing(CNOlistPB, modelPB)
+fields4Sim <- prep4sim(model=res$model)
+initBstring <- rep(1, length(res$model$reacID))
 
 # optimize
-opt1 <- gaBinaryTimeScale(CNOlist=CNOlist, model=ModelCutCompressExpand,
-simList=fields4Sim, indexList=indexNONCcutComp, initBstring=initBstring,
+opt1 <- gaBinaryTimeScale(CNOlist=CNOlistPB, model=res$model,
+simList=fields4Sim, indexList=res$indices, initBstring=initBstring,
 verbose=TRUE, boolUpdates=30, maxTime=100, lowerB=0.8, upperB=10)
 
-#plot
+# plot
 cutAndPlotResultsTimeScale(
-  model=ModelCutCompressExpand,
+  model=res$model,
   bString=opt1$bString,
   simList=fields4Sim,
-  CNOlist=CNOlist,
-  indexList=indexNONCcutComp,
+  CNOlist=CNOlistPB,
+  indexList=res$indices,
   boolUpdates=30,
   lowerB=0.8,
   upperB=10)

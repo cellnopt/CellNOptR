@@ -10,19 +10,19 @@ cutModel(model, simList, bitString)
 }
 \arguments{
 \item{model}{
-a Model that only contains the reactions to be evaluated.
+A Model that only contains the reactions to be evaluated.
 }
 \item{simList}{
-a list that contains additional fields for the simulator, as created by prep4sim applied to the model above.
+A list that contains additional fields for the simulator, as created by prep4sim applied to the model above.
 }
 \item{bitString}{
-a vector of 0s and 1s signifying which hyperedges to cut.
+A vector of 0s and 1s signifying which hyperedges to cut.
 }
 }
 \value{
 This function returns a list with elements:
-\item{modelCut}{the cut model.}
-\item{simListCut}{the cut SimList.}
+\item{modelCut}{The cut model.}
+\item{simListCut}{The cut SimList.}
 }
 
 \author{
@@ -37,19 +37,13 @@ gaBinaryTimeScale, getFitTimeScale
 library(CellNOptR)
 library(CNORdt)
 data(CNOlistPB, package="CNORdt")
-data(ToyModelPB, package="CNORdt")
+data(modelPB, package="CNORdt")
 
 # pre-process model
-indexOrig <- indexFinder(CNOlist=CNOlist, model=Model, verbose=TRUE)
-indexNONC <- findNONC(model=Model, indexes=indexOrig, verbose=TRUE)
-ModelCut <- cutNONC(model=Model, NONCindexes=indexNONC)
-indexNONCcut <- indexFinder(CNOlist=CNOlist, model=ModelCut)
-ModelCutCompress <- compressModel(model=ModelCut, indexes=indexNONCcut)
-indexNONCcutComp <- indexFinder(CNOlist=CNOlist, model=ModelCutCompress)
-ModelCutCompressExpand <- expandGates(model=ModelCutCompress)
-fields4Sim <- prep4sim(model=ModelCutCompressExpand)
-initBstring <- rep(1, length(ModelCutCompressExpand$reacID))
+res <- preprocessing(CNOlistPB, modelPB)
+fields4Sim <- prep4sim(model=res$model)
+initBstring <- rep(1, length(res$model$reacID))
 
-bitString = sample(c(0,1), length(ModelCutCompressExpand$reacID), replace=TRUE)
-dataCut = cutModel(model=ModelCutCompressExpand, simList=fields4Sim, bitString=bitString)
+bitString = sample(c(0,1), length(res$model$reacID), replace=TRUE)
+dataCut = cutModel(model=res$model, simList=fields4Sim, bitString=bitString)
 }
