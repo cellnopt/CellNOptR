@@ -11,16 +11,16 @@ simulatorTimeScale(CNOlist, model, simList, indexList, boolUpdates)
 }
 \arguments{
 \item{CNOlist}{
-a CNOlist.
+A CNOlist.
 }
 \item{model}{
-a Model that only contains the reactions to be evaluated.
+A Model that only contains the reactions to be evaluated.
 }
 \item{simList}{
-a SimList as created by prep4sim, that has also already been cut to contain only the reactions to be evaluated.
+A SimList as created by prep4sim, that has also already been cut to contain only the reactions to be evaluated.
 }
 \item{indexList}{
-an indexList as created by indexFinder.
+An indexList as created by indexFinder.
 }
 \item{boolUpdates}{
 The number of update rounds the simulator should run for.
@@ -47,14 +47,14 @@ gaBinaryTimeScale, getFitTimeScale
 library(CellNOptR)
 library(CNORdt)
 data(CNOlistPB, package="CNORdt")
-data(ToyModelPB, package="CNORdt")
+data(modelPB, package="CNORdt")
 
-indexOrig <- indexFinder(CNOlist, Model, verbose=TRUE)
-fields4Sim <- prep4sim(Model)
+indexOrig <- indexFinder(CNOlistPB, modelPB, verbose=TRUE)
+fields4Sim <- prep4sim(modelPB)
 
 simRes <- simulatorTimeScale(
-  CNOlist=CNOlist,
-  model=Model,
+  CNOlist=CNOlistPB,
+  model=modelPB,
   simList=fields4Sim,
   indexList=indexOrig,
   boolUpdates=30
