@@ -49,8 +49,8 @@ library(CNORdt)
 data(CNOlistPB, package="CNORdt")
 data(ToyModelPB, package="CNORdt")
 
-indexOrig <- indexFinder(CNOlist, model, verbose=TRUE)
-fields4Sim <- prep4sim(model)
+indexOrig <- indexFinder(CNOlist, Model, verbose=TRUE)
+fields4Sim <- prep4sim(Model)
 
 simRes <- simulatorTimeScale(
   CNOlist=CNOlist,
