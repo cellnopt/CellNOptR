@@ -18,7 +18,8 @@ simulatorT2 <-function(
     CNOlist,
     model,
     simList,
-    indexList){
+    indexList,
+    timeIndex=3){
 
     nSp<-dim(model$interMat)[1]
     nReacs<-dim(model$interMat)[2]
@@ -78,7 +79,7 @@ simulatorT2 <-function(
 
         #rewrite anything that comes to a node that also receives a t2 branch,ie set it to the same
         #as our t2 reac for those reacs, so that they won't influence the OR
-    reacsT2<-which(model$times == 2)
+    reacsT2<-which(model$times == (timeIndex-1))
 
     if(length(reacsT2) > 0){
 

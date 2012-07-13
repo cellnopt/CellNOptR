@@ -30,7 +30,7 @@ computeScoreTN<-function(CNOlist, model, simList, indexList, simResPrev, bString
 
 
     # We may want to to use the T0 information.
-    simResults <- simulatorTN(
+    simResults <- simulatorT2(
         simResultsT1=simResPrev,
         CNOlist=CNOlist,
         model=modelCut,
@@ -39,7 +39,7 @@ computeScoreTN<-function(CNOlist, model, simList, indexList, simResPrev, bString
         timeIndex=timeIndex)
 
     #Compute the score
-    Score <- getFitTN(
+    Score <- getFit(
         simResults=simResults,
         CNOlist=CNOlist,
         model=modelCut,
