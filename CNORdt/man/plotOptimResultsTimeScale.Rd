@@ -51,8 +51,8 @@ data(CNOlistPB, package="CNORdt")
 data(ToyModelPB, package="CNORdt")
 boolUpdates=20
 
-indexOrig <- indexFinder(CNOlist, model, verbose=TRUE)
-fields4Sim <- prep4sim(model)
+indexOrig <- indexFinder(CNOlist, Model, verbose=TRUE)
+fields4Sim <- prep4sim(Model)
 
 SimRes <- simulatorTimeScale(
    CNOlist=CNOlist,
