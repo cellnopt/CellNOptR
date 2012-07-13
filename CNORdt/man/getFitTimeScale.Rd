@@ -75,7 +75,7 @@ data(CNOlistPB, package="CNORdt")
 data(ToyModelPB, package="CNORdt")
 
 # pre-processing
-indexOrig <- indexFinder(CNOlist=CNOlist, model=model, verbose=TRUE)
+indexOrig <- indexFinder(CNOlist=CNOlist, model=Model, verbose=TRUE)
 fields4Sim <- prep4sim(model=Model)
 
 getFitRes <- getFitTimeScale(
