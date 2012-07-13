@@ -1,3 +1,7 @@
+version 0.99.3
+------------------
+* refactoring of example/man due to modificaitons of the data filename.
+
 version 0.99.2
 ---------------
 * Arguments' name now following convention from CellNOpt. All manual and code changed accordingly.
