@@ -27,9 +27,19 @@ getFit<-function(
 
     simResults<-simResults[,indexList$signals]
 
-    if(timePoint == "t1") tPt<-2
-    if(timePoint == "t2") tPt<-3
-    else tPt<-timePoint
+
+    if(timePoint == "t1"){
+        tPt<-2
+    }
+    else{
+        if(timePoint == "t2"){
+            tPt<-3
+        }
+        else{
+            tPt<-timePoint
+        }
+    }
+
 
     # if t0 is provided and we are interested in t1
     # then  score is based on t1 but also t0
