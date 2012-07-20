@@ -1,21 +1,25 @@
 library(CellNOptR)
 library(CNORdt)
 
-source("../CNORdt/R/simulatorPause.R")
-source("../CNORdt/R/getFitPause.R")
-
+# load data
 load("CNOlistDelay.RData")
-modelDelay = readSif("toyDelay.sif")
-
+modelDelay = readSIF("toyDelay3.sif")
 indexDelay = indexFinder(CNOlist=CNOlistDelay, model=modelDelay, verbose=T)
 simDelay = prep4sim(modelDelay)
-delayThresh = rep(0,6)
+delayThresh = rep(0,10)
+negEdges = rep(0,10)
+delayThresh[9] = 5
+negEdges[9] = 1
+
+simList= simDelay
+model = modelDelay
+indexList = indexDelay
+CNOlist = CNOlistDelay
+boolUpdates = 30
 
 # add feedback finder here
-
 source("../CNORdt/R/feedbackFinder1.R")
 source("../CNORdt/R/feedbackWrapper.R")
-
 negEdges = feedbackWrapper(modelDelay)
 
 # simulate with delays
@@ -25,17 +29,19 @@ boolUpdates=30, delayThresh, strongWeak=negEdges)
 sim1 = sim1[,indexDelay$signals,]
 plotCNOlist(plotData(CNOlistDelay, sim1))
 
-# pass to simulator
-CNOlist = CNOlistDelay
-Model = modelDelay
-SimList = simDelay
-indexList = indexDelay
-boolUpdates = 30
-# "B=C"    "C=D"    "!D=B"   "F=G"    "G=H"    "E1=E"   "A=B"    "A1=A"   "!H+E=F"
-delayThresh = c(3,0,0,0,0,0,0,0,0)
-strongWeak = c(0,0,1,0,0,0,0,0,0)
 
 
+
+
+
+
+
+
+
+
+
+sim1 = simulatorPause(CNOlistDelay, modelDelay, simDelay, indexDelay,
+boolUpdates=10, delayThresh)
 
 # make list from bool.sim
 valueSignals = list()
@@ -46,7 +52,6 @@ CNOlistBool = CNOlistDelay
 CNOlistBool$valueSignals = valueSignals
 CNOlistBool$timeSignals = 0:(boolUpdates-1)
 plotCNOlist(CNOlistBool)
-
 
 
 sim1 = system.time(replicate(100,simulatorPause(CNOlistDelay, modelDelay, simDelay, indexDelay,
@@ -76,9 +81,6 @@ plotData <- function(CNOlist, data) {
 }
 
 
-
-
-
 optDelay = list()
 optDelay$bString = c(1,0,0,0,1,0,1,1,0,1,1,1,1,1,1,0,0,0,1,1)
 cutData = cutModel(ModelCutCompressExpand,SimList=fields4Sim,bitString=optDelay$bString)
@@ -86,7 +88,6 @@ simDelay = cutData[[2]]
 ModelDelay = cutData[[1]]
 
 indexDelay = indexFinder(CNOlist=CNOlist, Model=ModelDelay, verbose=T)
-
 
 load("objects/CNOlist.RData")
 load("objects/ModelDelay.RData")

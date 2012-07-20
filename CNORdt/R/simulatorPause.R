@@ -1,29 +1,46 @@
-simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, delayThresh, strongWeak) {
+#
+#  This file is part of the CNO software
+#
+#  Copyright (c) 2011-2012 - EBI
+#
+#  File author(s): CNO developers (cno-dev@ebi.ac.uk)
+#
+#  Distributed under the GPLv2 License.
+#  See accompanying file LICENSE.txt or copy at
+#      http://www.gnu.org/licenses/gpl-2.0.html
+#
+#  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
+#
+##############################################################################
+# $Id: $
 
-	nSp <- dim(Model$interMat)[1]
-	nReacs <- dim(Model$interMat)[2]	
+simulatorPause <- function(CNOlist, model, simList, indexList, boolUpdates, delayThresh, strongWeak) {
+
+	nSp <- dim(model$interMat)[1]
+	nReacs <- dim(model$interMat)[2]	
 	nCond <- dim(CNOlist$valueStimuli)[1]
 
 	yBool = array(dim=c(nCond, nSp, boolUpdates))
+	colnames(yBool) = model$namesSpecies
 	yBool[,,1] = 0
 
-	if(is.null(dim(Model$interMat))) { 
-		nSp <- length(Model$interMat)
+	if(is.null(dim(model$interMat))) { 
+		nSp <- length(model$interMat)
 		nReacs <- 1
 	}
 		
 	endIx <- rep(NA,nSp)
 	for(i in 1:nSp){
-		endIx[i] <- length(which(SimList$maxIx == i))
+		endIx[i] <- length(which(simList$maxIx == i))
 	}
 		
 	##############################	FUNCTIONS	##############################
 		
 	compOR <- function(x){
-		if(all(is.na(x[which(SimList$maxIx == s)]))){
+		if(all(is.na(x[which(simList$maxIx == s)]))){
 			res <- NA
 		} else {
-			res <- max(x[which(SimList$maxIx == s)], na.rm=TRUE)
+			res <- max(x[which(simList$maxIx == s)], na.rm=TRUE)
 		}
 			return(res)
 	}
@@ -50,7 +67,7 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 
 	# create an initial values matrix	
 	initValues <- matrix(data=NA, nrow=nCond, ncol=nSp)
-	colnames(initValues) <- Model$namesSpecies
+	colnames(initValues) <- model$namesSpecies
 
 	# set the initial values of the stimuli
 	initValues[,indexList$stimulated] <- CNOlist$valueStimuli
@@ -77,7 +94,7 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 	
 	# make a matrix to store outputCubes
 	allCubes = matrix(NA, nrow=nReacs*nCond, ncol=boolUpdates)
-	rownames(allCubes) = rep(Model$reacID,1,each=nCond)
+	rownames(allCubes) = rep(model$reacID,1,each=nCond)
 	allCubes[,1]=0
 
 	############################## MAIN LOOP ##############################
@@ -91,13 +108,13 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 		# all concatenated into one long column
 				
 		if(nReacs > 1) {
-			tempStore <- apply(SimList$finalCube, 2, function(x){return(outputPrev[,x])})
-			tempIxNeg <- apply(SimList$ixNeg, 2, filltempCube)
-			tempIgnore <- apply(SimList$ignoreCube, 2, filltempCube)
+			tempStore <- apply(simList$finalCube, 2, function(x){return(outputPrev[,x])})
+			tempIxNeg <- apply(simList$ixNeg, 2, filltempCube)
+			tempIgnore <- apply(simList$ignoreCube, 2, filltempCube)
 		} else {
-			tempStore <- outputPrev[,SimList$finalCube]
-			tempIxNeg <- matrix(SimList$ixNeg, nrow=nCond, ncol=length(SimList$ixNeg), byrow=TRUE)
-			tempIgnore <- matrix(SimList$ignoreCube, nrow=nCond, ncol=length(SimList$ignoreCube), byrow=TRUE)
+			tempStore <- outputPrev[,simList$finalCube]
+			tempIxNeg <- matrix(simList$ixNeg, nrow=nCond, ncol=length(simList$ixNeg), byrow=TRUE)
+			tempIgnore <- matrix(simList$ignoreCube, nrow=nCond, ncol=length(simList$ignoreCube), byrow=TRUE)
 		}
 
 		# set to NA the values that are "dummies", so they won't influence the min
@@ -138,18 +155,26 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 			# need to overwrite other inputs as well
 			if(length(strongWeakOn)) {
 				for(b in strongWeakOn) {
-					if(!is.na(allCubes[b,countBool]))
-		
-						whatReac = round(b/nCond)
-						whatCond = floor(b/whatReac)
+					if(!is.na(allCubes[b,countBool])) {
+				#	if(allCubes[b,countBool] == 0) {			
+				#	if(allCubes[b,countBool]==0 || allCubes[b,countBool]==1) {
 						
-						output1 = which(Model$interMat[,whatReac] > 0)
-						reacsToFreeze = which(Model$interMat[output1,] > 0)
+						range1 = countBool:boolUpdates
+						toChange = which(is.na(allCubes[b,range1]))
+						allCubes[b,range1[toChange]] = outputCube[b]
 						
+						# also need to override other reacs with same output
+						whatReac = ceiling(b/nCond)
+						whatCond = b %% nCond
+						output1 = which(model$interMat[,whatReac] > 0)
+						reacsToFreeze = which(model$interMat[output1,] > 0)
 						bPlus = (reacsToFreeze-1)*nCond + whatCond
-						toChange = which(is.na(allCubes[b,countBool:boolUpdates]))
-						allCubes[bPlus,toChange] = outputCube[b]
-									
+						bPlus = setdiff(bPlus,b)
+						if(length(bPlus)) {
+							allCubes[bPlus,range1[toChange]] = outputCube[b]
+						}
+						strongWeakCount = setdiff(strongWeakCount, b)
+					}
 				}	
 			}
 			
@@ -179,7 +204,7 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 							
 		} else {
 			outputCube <- ifelse(all(is.na(tempStore)), NA, min(tempStore,na.rm=TRUE))
-			newInput[,SimList$maxIx] <- outputCube
+			newInput[,simList$maxIx] <- outputCube
 		}
 	
 		# reset the inhibitors and stimuli
@@ -198,10 +223,10 @@ simulatorPause <- function(CNOlist, Model, SimList, indexList, boolUpdates, dela
 		yBool[,,countBool] = readout
 		
 		###
+		allCubes
+		yBool[,,1:countBool]
 		countBool
 		countBool = countBool+1
-		allCubes
-		readout
 		###
 	}
 
