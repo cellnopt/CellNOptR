@@ -329,16 +329,23 @@ SEXP CellNOptR (
 		
 	}
 	
+	// set non-resolved bits to 2 (NA)
+	for(i = 0; i < nCond; i++) {
+		for(j = 0; j < nSpecies; j++) {
+			if(new_input[i][j] != output_prev[i][j])
+				new_input[i][j] = 2;
+		}
+	}
+	
 	PROTECT(simResults = allocMatrix(REALSXP, nCond, nSpecies));
 	rans = REAL(simResults);
 	for(i = 0; i < nCond; i++) {
 		for(j = 0; j < nSpecies; j++) {
-			rans[i + nCond*j] = new_input[i][j];
+			if(new_input[i][j] == 2) rans[i + nCond*j] = NA_REAL;
+			else rans[i + nCond*j] = new_input[i][j];
 		}
 	} 
 
-//	PROTECT(simResults = allocVector(REALSXP, 1));
-//	REAL(simResults)[0] = new_input[1][1];
 	
 	free(maxIx);
 	free(indexStimuli);
