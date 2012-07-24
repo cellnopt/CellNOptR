@@ -15,21 +15,20 @@ SEXP CellNOptR (
 
 	SEXP nStimuli_in,
 	SEXP nInhibitors_in,
-	SEXP nSignals_in,
 	SEXP nCond_in,
-	SEXP nTimes_in,
 	SEXP nReacs_in,
 	SEXP nSpecies_in,
 	SEXP nMaxInputs_in,
 	
+	SEXP finalCube_in,
+	SEXP ixNeg_in,
+	SEXP ignoreCube_in,
 	SEXP maxIx_in,		
+	
 	SEXP indexSignals_in, 
 	SEXP indexStimuli_in, 
 	SEXP indexInhibitors_in,
 			
-	SEXP finalCube_in,
-	SEXP ixNeg_in,
-	SEXP ignoreCube_in,
 	SEXP valueInhibitors_in,
 	SEXP valueStimuli_in
 ) {
@@ -47,9 +46,7 @@ SEXP CellNOptR (
 	
 	int nStimuli = INTEGER(nStimuli_in)[0];
 	int nInhibitors = INTEGER(nInhibitors_in)[0];
-	int nSignals = INTEGER(nSignals_in)[0];
 	int nCond = INTEGER(nCond_in)[0];
-	int nTimes = INTEGER(nTimes_in)[0];
 	int nReacs = INTEGER(nReacs_in)[0];
 	int nSpecies = INTEGER(nSpecies_in)[0];
 	int nMaxInputs = INTEGER(nMaxInputs_in)[0];

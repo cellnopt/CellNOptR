@@ -17,19 +17,14 @@
 cSimulator <- function(CNOlist, model, simList, indices) {
 	
 	# CONSTANTS
-	# cnolist
 	nStimuli <- as.integer(length(indices$stimulated))
 	nInhibitors <- as.integer(length(indices$inhibited))
-	nSignals <- as.integer(length(indices$signals))
-	nCond <- as.integer(dim(CNOlist$valueSignals[[1]])[1])
-	nTimes <- as.integer(length(CNOlist$timeSignals))
-
-	# model
+	nCond <- as.integer(dim(CNOlist$valueStimuli[[1]])[1])
 	nReacs <- as.integer(length(model$reacID))
 	nSpecies <- as.integer(length(model$namesSpecies))
-
-	# simList
 	nMaxInputs <- as.integer(dim(simList$finalCube)[2])
+	
+	# simList
 	finalCube = as.integer(as.vector(t(simList$finalCube))-1)
 	ixNeg = as.integer(as.vector(t(simList$ixNeg)))
 	ignoreCube = as.integer(as.vector(t(simList$ignoreCube)))
@@ -40,7 +35,6 @@ cSimulator <- function(CNOlist, model, simList, indices) {
 	indexStimuli <- as.integer(as.vector(indices$stimulated)-1)
 	indexInhibitors <- as.integer(as.vector(indices$inhibited)-1)
 
-	# STRUCTURES
 	# cnolist
 	valueInhibitors <- as.integer(t(CNOlist$valueInhibitors))
 	valueStimuli <- as.integer(t(CNOlist$valueStimuli))
@@ -49,21 +43,20 @@ cSimulator <- function(CNOlist, model, simList, indices) {
 		# variables	
 		nStimuli,
 		nInhibitors,
-		nSignals,
 		nCond,
-		nTimes,
 		nReacs,
 		nSpecies,
 		nMaxInputs,
-		# vectors
-		maxIx,		
-		indexSignals, 
-		indexStimuli, 
-		indexInhibitors,
-		# matrices
+		
 		finalCube,
 		ixNeg,
 		ignoreCube,
+		maxIx,		
+		
+		indexSignals, 
+		indexStimuli, 
+		indexInhibitors,
+
 		valueInhibitors,
 		valueStimuli
 	)
