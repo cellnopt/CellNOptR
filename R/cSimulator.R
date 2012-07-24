@@ -19,7 +19,7 @@ cSimulator <- function(CNOlist, model, simList, indices) {
 	# CONSTANTS
 	nStimuli <- as.integer(length(indices$stimulated))
 	nInhibitors <- as.integer(length(indices$inhibited))
-	nCond <- as.integer(dim(CNOlist$valueStimuli[[1]])[1])
+	nCond <- as.integer(dim(CNOlist$valueStimuli)[1])
 	nReacs <- as.integer(length(model$reacID))
 	nSpecies <- as.integer(length(model$namesSpecies))
 	nMaxInputs <- as.integer(dim(simList$finalCube)[2])
