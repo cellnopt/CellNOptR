@@ -179,6 +179,7 @@ SEXP CellNOptR (
 	}
 	
 	// initialize main loop
+	int output_prev[nCond][nSpecies];
 	int new_input[nCond][nSpecies];
 	memcpy(new_input, init_values, sizeof(new_input));
 	int term_check_1 = 1;
@@ -195,8 +196,7 @@ SEXP CellNOptR (
 	// start simulation loop
 	while(term_check_1 && term_check_2) {
 		
-		// define outputPrev
-		int output_prev[nCond][nSpecies];
+		// copy to outputPrev
 		memcpy(output_prev, new_input, sizeof(output_prev));
 		
 		// fill temp store
