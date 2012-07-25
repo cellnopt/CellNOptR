@@ -16,7 +16,16 @@
 
 cSimulator <- function(CNOlist, model, simList, indices) {
 	
-	# CONSTANTS
+	# check the structures
+	if(is.null(CNOlist$valueStimuli) || is.null(CNOlist$valueInhibitors)) {
+		stop("This function needs 'valueStimuli' and 'valueInhibitors' in CNOlist")
+	}
+	
+	if(is.null(model$reacID) || is.null(model$namesSpecies)) {
+		stop("This function needs 'reacID' and 'namesSpecies' in model")
+	}
+	
+	# variables
 	nStimuli <- as.integer(length(indices$stimulated))
 	nInhibitors <- as.integer(length(indices$inhibited))
 	nCond <- as.integer(dim(CNOlist$valueStimuli)[1])
@@ -47,16 +56,16 @@ cSimulator <- function(CNOlist, model, simList, indices) {
 		nReacs,
 		nSpecies,
 		nMaxInputs,
-		
+		# simList
 		finalCube,
 		ixNeg,
 		ignoreCube,
 		maxIx,		
-		
+		# index
 		indexSignals, 
 		indexStimuli, 
 		indexInhibitors,
-
+		# cnolist
 		valueInhibitors,
 		valueStimuli
 	)
