@@ -17,10 +17,11 @@
 cutModel <- function(model, bString){
 
     bs = as.logical(bString)
-    newmodel<-list()
-    newmodel$interMat<-model$interMat[, bs]
-    newmodel$notMat<-model$notMat[, bs]
-    newmodel$reacID<-model$reacID[bs]
+    newmodel <- list()
+    newmodel$interMat <- model$interMat[, bs]
+    newmodel$notMat <- model$notMat[, bs]
+    newmodel$reacID <- model$reacID[bs]
+    newmodel$namesSpecies <- model$namesSpecies
     # namespecies is not needed
     # could also add the times used in gaBinaryT2
 

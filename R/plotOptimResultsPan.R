@@ -294,34 +294,3 @@ pdfFileName="", tPt=NULL) {
 	close.screen(all.screens=TRUE)
 	par(oldPar)
 }
-
-
-
-	########## TO ADD ##########
-
-
-#	splits <- dim(CNOlist$valueCues)[1]/nsplit
-#	splits <- floor(splits)
-#	CNOlistOriginal <- CNOlist
-#	simResultsOriginal <- simResults
-
-# 	for(i in 1:nsplit) {
-# 		if(nsplit > 1) {
-# 			CNOlist <- CNOlistOriginal
-# 		if(i == nsplit) {
-#			indices <- (indices[length(indices)]+1):dim(CNOlistOriginal$valueCues)[1]
-# 		}
-
-# 		indices <- ((1:splits)+((i-1)*splits))
-# 		CNOlist$valueCues <- CNOlist$valueCues[indices,]
-# 		CNOlist$valueStimuli <- CNOlist$valueStimuli[indices,]
-# 		CNOlist$valueInhibitors <- CNOlist$valueInhibitors[indices,]
-
-# 		for(n in 1:length(CNOlist$valueSignals)) {
-# 			CNOlist$valueSignals[[n]] <- CNOlist$valueSignals[[n]][indices,]
-# 		}
-#		for(n in 1:length(simResults)) {
-#			simResults[[n]] <- simResults[[n]][indices,]
-# 		}
-# 	}
-
