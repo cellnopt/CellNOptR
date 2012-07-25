@@ -48,7 +48,7 @@ cSimulator <- function(CNOlist, model, simList, indices) {
 	valueInhibitors <- as.integer(t(CNOlist$valueInhibitors))
 	valueStimuli <- as.integer(t(CNOlist$valueStimuli))
 
-	res = .Call("CellNOptR",
+	res = .Call("simulatorT1",
 		# variables	
 		nStimuli,
 		nInhibitors,

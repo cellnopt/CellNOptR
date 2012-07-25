@@ -1,5 +1,5 @@
 //============================================================================
-// Name        : CellNOptR.c
+// Name        : simulatorT1.c
 // Author      : Aidan MacNamara
 // Version     : 0.1
 // Copyright   :
@@ -11,7 +11,7 @@
 #include <stdio.h>
 
 
-SEXP CellNOptR (
+SEXP simulatorT1 (
 
 	SEXP nStimuli_in,
 	SEXP nInhibitors_in,
