@@ -28,6 +28,8 @@ getFit<-function(
     simResults<-simResults[,indexList$signals]
 
 
+    # for back compatibility, timePoint ca be "t1" or "t2" but developers should
+    # use an integer.
     if(timePoint == "t1"){
         tPt<-2
     }
