@@ -183,7 +183,7 @@ rSimulatorT1 <- function(CNOlist, model, simList, indexList) {
     }
 
 	# set the non-resolved bits to NA
-    newInput[which(abs(outputPrev-newInput) > testVal)] < -NA
+    newInput[which(abs(outputPrev-newInput) > testVal)] <- NA
 
     return(newInput)
 }
