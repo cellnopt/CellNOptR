@@ -313,15 +313,20 @@ SEXP simulatorT1 (
 			}
 		}
 		
-		diff = 0;
-		for(i = 0; i < nCond; i++) {
-			for(j = 0; j < nSpecies; j++) {
-				diff = diff + (new_input[i][j] - output_prev[i][j]);
-			}
-		}
-		
-		term_check_1 = !(abs(diff) < test_val);
-		term_check_2 = (count < (nSpecies * 1.2));
+
+        term_check_1 = 0;
+        for(i = 0; i < nCond; i++) {
+            for(j = 0; j < nSpecies; j++) {
+                diff = abs((new_input[i][j] - output_prev[i][j]));
+                if (diff > test_val){
+                    term_check_1 = 1;
+                    break;  /*  no need to keep going checking other values if 
+                                one is greater than test_val */
+                }
+            }
+        }
+        /*term_check_1 = !(abs(diff) < test_val);*/
+        term_check_2 = (count < (nSpecies * 1.2));
 		count++;		
 		
 	}

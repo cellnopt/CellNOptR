@@ -1,10 +1,16 @@
-//============================================================================
-// Name        : CellNOptR.c
-// Author      : Aidan MacNamara
-// Version     : 0.1
-// Copyright   :
-// Description :
-//============================================================================
+/* ============================================================================
+ *  Name        : simulatorTN.c
+ *  Author      : Thomas Cokelaer based on simulatorT1 (Aidan MacNamara)
+ *  Version     : 0.1
+ *  Copyright   :
+ *  Description : Requires slightly more inputs (e.g., previous results at TN-1,
+ *   interMat that may be
+ *   replaced by the contents of other variables, and times variables.). The
+ *   main difference being in the requirement of some initialisation. This
+ *   implementation is similar to the R version to ease debugging. Once stable,
+ *   it may diverge from the R version around 1800).
+ *
+ * =========================================================================== */
 
 #include <R.h>
 #include <Rinternals.h>
@@ -22,9 +28,9 @@ SEXP simulatorTN (
     SEXP nTimes_in,
 
 
-	SEXP timeIndex_in,
+    SEXP timeIndex_in,
     SEXP times_in,
-	SEXP interMat_in,
+    SEXP interMat_in,
 
     SEXP prevSimResults_in,
 
@@ -199,7 +205,7 @@ SEXP simulatorTN (
         }
     }
 
-    // flip and redefine inhibitors
+    // flip and redefine inhibitors NOT NEEDED AT TIME TN
     //if(nInhibitors) {
     //    for(i = 0; i < nCond; i++) {
     //        for(j = 0; j < nInhibitors; j++) {
@@ -218,12 +224,14 @@ SEXP simulatorTN (
         }
     }
 
-    // initialize main loop
+    // First iteration before main loop. Different from T1 !
     int output_prev[nCond][nSpecies];
     int new_input[nCond][nSpecies];
     int first_iter[nCond][nSpecies];
+    int temp_store[nCond * nReacs][nMaxInputs];
+    int output_cube[nCond][nReacs]; // declare output_cube
 
-
+    /* get back previous results */
     for (i=0; i<nCond ;i++){
         for (j=0; j<nSpecies ;j++){
             new_input[i][j] = prevSimResults[i][j];
@@ -231,10 +239,6 @@ SEXP simulatorTN (
      }
 
 
-    int term_check_1 = 1;
-    float term_check_2 = 1;
-    int count = 1;
-    int diff;
 
 
     for (i=0; i<nCond ;i++){
@@ -243,19 +247,11 @@ SEXP simulatorTN (
          }
      }
 
-    // define the temp data
-    int temp_store[nCond * nReacs][nMaxInputs];
-    int output_cube[nCond][nReacs]; // declare output_cube
-
-
-    // Time T2 and above require an initial iteration
-
 
     // 1. need to compute tempStore
-    // this is different to R version, through a single loop
-    // with conditions 
+
     /* R code
-	  tempStore<-apply(simList$finalCube,2,function(x){return(outputPrev[,x])})
+      tempStore<-apply(simList$finalCube,2,function(x){return(outputPrev[,x])})
       tempIxNeg<-apply(simList$ixNeg,2,filltempCube)
       tempIgnore<-apply(simList$ignoreCube,2,filltempCube)
       tempStore[tempIgnore]<-NA
@@ -286,8 +282,8 @@ SEXP simulatorTN (
     }
 
 
-    // 2. Need to compute OutputCube            
-    /* R code : 
+    // 2. Need to compute OutputCube
+    /* R code :
        outputCube <- apply(tempStore, 1, minNA)
        outputCube<-matrix(outputCube, nrow=nCond,ncol=nReacs)
     */
@@ -304,47 +300,49 @@ SEXP simulatorTN (
         dial_cond++;
         if(dial_cond==nCond) {dial_cond = 0; dial_reac++;}
     }
-    
+
 
     // 3. figure out the reacsTN
     counter = 0;
-	for (i=0; i<nTimes; i++){
+    for (i=0; i<nTimes; i++){
 
-		if (timeIndex - 1 == times[i]){
-			counter++;
+        if (timeIndex - 1 == times[i]){
+            counter++;
         }
     }
     int nreacsTN = counter;
     int *reacsTN;
     reacsTN = (int*) malloc(nreacsTN * sizeof(int));
 
-	counter = 0 ;
-
-	for (i=0; i<nTimes; i++){
-		if (timeIndex - 1 == times[i]){
+    counter = 0 ;
+    for (i=0; i<nTimes; i++){
+        if (timeIndex - 1 == times[i]){
             reacsTN[counter] = i;
-			counter++;
+            counter++;
         }
     }
 
 
-
-
-
-
-    //intermat ok
+    // scan the interMat looking for specific reactions (reacsTN) that have
+    // interMat positive (i.e, search for B in A=B)
     for (i=0; i<nreacsTN; i++){
-        for(j=0; j<nSpecies; j++){
+        for (j=0; j<nSpecies; j++){
             if (interMat[j][reacsTN[i]]>0){
-				for (int k=0; k<nCond; k++){
-                    output_cube[k][j] = output_cube[k][reacsTN[i]];
-                }
-            }
+                // outNode is the B in A=B
+                int outNode = j;
+                // now we scan again the interMAt looking for A (multiple
+                // solution possible)
+                for (int r=0; r<nReacs; r++){
+                    if (interMat[outNode][r]>0){
+                        for (int k=0; k<nCond; k++){
+                            output_cube[k][r] = output_cube[k][reacsTN[i]];
+                         }
+                     }
+                 }
+             }
         }
     }
 
-
-    
     // 4. compute or gate
     // Note that we populate the matrix by columns and then rows which is not optimal...
     selCounter = 0;
@@ -382,22 +380,24 @@ SEXP simulatorTN (
             }
         }
     }
-
     // 5. compute and gate
 
+    // reset the stimuli
+    for(i = 0; i < nCond; i++) {
+         for(j = 0; j < nStimuli; j++) {
+             curr_max = valueStimuli[i][j];
+             if(new_input[i][indexStimuli[j]] > curr_max && new_input[i][indexStimuli[j]] < 2) {
+                 curr_max = new_input[i][indexStimuli[j]];
+             }
+             new_input[i][indexStimuli[j]] = curr_max;
+         }
+     }
 
     //indexInhibitors = (int*) malloc(nInhibitors * sizeof(int));
-    //for (i = 0; i < nInhibitors; i++) {
-    //
-    //for (i = 0; i < nCond; i++) {
-    //    valueInhibitors[i] = (int*) malloc(nInhibitors * sizeof(int));
-    //    for (j = 0; j < nInhibitors; j++) {
-    //
-    //valueInhibitors<-1-CNOlist$valueInhibitors
     for (i=0; i<nCond; i++){
         for (j=0; j<nInhibitors; j++){
-		            valueInhibitors[i][j] = 1 - valueInhibitors[i][j] ;
-		}
+                    valueInhibitors[i][j] = 1 - valueInhibitors[i][j] ;
+        }
     }
     for (i=0; i<nInhibitors; i++){
         for (j=0; j<nCond; j++){
@@ -412,13 +412,6 @@ SEXP simulatorTN (
         }
     }
 
-    //newInput[,indexList$inhibited]<-valueInhibitors*newInput[,indexList$inhibited]
-    //newInput[is.na(newInput)]<-0
-    
-
-    //useless since outputPrev = newInput in the loop : outputPrev[is.na(outputPrev)]<-0
-    
-
     for (i=0; i<nCond ;i++){
         for (j=0; j<nSpecies ;j++){
             first_iter[i][j] = new_input[i][j];
@@ -428,17 +421,26 @@ SEXP simulatorTN (
     //============================================================================
 
 
- // define the temp data
+    // reset output_cube
     for (i=0; i<nCond; i++){
         for (j=0; j<nReacs; j++){
         output_cube[nCond][nReacs] = 0.;
-}
-}
+        }
+    }
+
+
+    int term_check_1 = 1;
+    float term_check_2 = 1;
+    int count = 1;
+    int diff;
+
+
     // start simulation loop
     while(term_check_1 && term_check_2) {
 
         // copy to outputPrev
         memcpy(output_prev, new_input, sizeof(output_prev));
+
 
         // fill temp store
         // this is different to R version, through a single loop
@@ -549,7 +551,7 @@ SEXP simulatorTN (
        for (i=0; i<nSpecies; i++){
            for (j=0; j<nreacsTN; j++){
               if (interMat[i][reacsTN[j]]>0){
-				for (int k=0; k<nCond; k++){
+                for (int k=0; k<nCond; k++){
                   new_input[k][i] = first_iter[k][i];
                  }
               }
@@ -564,20 +566,22 @@ SEXP simulatorTN (
             }
         }
 
-        diff = 0;
+        term_check_1 = 0;
         for(i = 0; i < nCond; i++) {
             for(j = 0; j < nSpecies; j++) {
-                diff = diff + (new_input[i][j] - output_prev[i][j]);
+                diff = abs((new_input[i][j] - output_prev[i][j]));
+                if (diff > test_val){
+                    term_check_1 = 1;
+                    break;  /*  no need to keep going checking other values if 
+                                one is greater than test_val */
+                }
             }
         }
-
-
-        term_check_1 = !(abs(diff) < test_val);
+        /*term_check_1 = !(abs(diff) < test_val);*/
         term_check_2 = (count < (nSpecies * 1.2));
         count++;
 
     } // end of main loop
-
     // set non-resolved bits to 2 (NA)
     for(i = 0; i < nCond; i++) {
         for(j = 0; j < nSpecies; j++) {
