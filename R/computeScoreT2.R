@@ -20,19 +20,20 @@
 computeScoreT2<-function(CNOlist, model, simList, indexList, simResT1, bStringT1,
     bStringT2, sizeFac=0.0001, NAFac=1){
 
+	timeIndex = 3 # i.e., "t2"
+
     bitString <- bStringT1
-    bitString[which(bStringT1 == 0)]<- bStringT2
+    bitString[which(bStringT1 == 0)] <- bStringT2
     bStringTimes <- bStringT1
-    bStringTimes[which(bStringT1 == 0)]<-bStringT2*2
+    bStringTimes[which(bStringT1 == 0)] <- bStringT2 * (timeIndex-1)
 
     modelCut = cutModel(model, bitString)
     modelCut$times <- bStringTimes[which(bStringTimes != 0)]
     simListCut <- cutSimList(simList, bitString)
 
-
-    # We may want to to use the T0 information.
+    # Compute the simulated results
     simResults <- simulatorT2(
-        simResultsT1=simResT1,
+        simResT1,
         CNOlist=CNOlist,
         model=modelCut,
         simList=simListCut,
@@ -44,13 +45,15 @@ computeScoreT2<-function(CNOlist, model, simList, indexList, simResT1, bStringT1
         CNOlist=CNOlist,
         model=modelCut,
         indexList=indexList,
-        timePoint="t2",
+        timePoint=timeIndex,
         sizeFac=sizeFac,
         NAFac=NAFac,
-        nInTot=length(which(model$interMat == -1)))
+        nInTot=length(which(model$interMat == -1)),
+		simResultsT0=NA)
 
   nDataP <- sum(!is.na(CNOlist$valueSignals[[2]]))
   Score <- Score/nDataP
+
 
   return(Score)
 }

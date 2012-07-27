@@ -12,7 +12,7 @@
 #  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
 #
 ##############################################################################
-# $Id: $
+# $Id$
 
 #Function that computes the score of a specific bitstring
 # todo: this is similar to wha is done in gaBinaryT1. need to do the same for T2
@@ -20,11 +20,18 @@
 computeScoreT1<-function(CNOlist, model, simList, indexList, bitString,
     sizeFac=0.0001, NAFac=1){
 
+	timeIndex = 2 # i.e., "t1"
+
+
+
+
+
 
     modelCut = cutModel(model, bitString)
-    simListCut<-cutSimList(simList, bitString)
 
-    #compute the simulated results
+    simListCut <- cutSimList(simList, bitString)
+
+    # Compute the simulated results
     simResults<-simulatorT1(
         CNOlist=CNOlist,
         model=modelCut,
@@ -38,20 +45,25 @@ computeScoreT1<-function(CNOlist, model, simList, indexList, bitString,
         simList=simListCut,
         indexList=indexList)
 
+
+
     #Compute the score
-    Score<-getFit(
+    Score <- getFit(
         simResults=simResults,
-        simResultsT0=simResultsT0,
         CNOlist=CNOlist,
         model=modelCut,
         indexList=indexList,
-        timePoint="t1",
+        timePoint=timeIndex,
         sizeFac=sizeFac,
         NAFac=NAFac,
-        nInTot=length(which(model$interMat == -1)))
+        nInTot=length(which(model$interMat == -1)),
+        simResultsT0=simResultsT0)
 
-    nDataP<-sum(!is.na(CNOlist$valueSignals[[2]]))
-    Score<-Score/nDataP
 
-    return(Score)
+
+  nDataP <- sum(!is.na(CNOlist$valueSignals[[2]]))
+  Score <- Score/nDataP
+
+
+  return(Score)
 }
