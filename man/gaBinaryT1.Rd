@@ -7,14 +7,15 @@ Genetic algorithm used to optimise a model
 This function is the genetic algorithm to be used to optimise a model by fitting to data containing one time point.
 }
 \usage{
-gaBinaryT1(CNOlist, model, simList, indexList, initBstring, sizeFac = 1e-04, NAFac = 1,
- popSize = 50, pMutation = 0.5, maxTime = 60, maxGens = 500,
-stallGenMax = 100, selPress = 1.2, elitism = 5, relTol = 0.1, verbose=TRUE,
-priorBitString=NULL, maxSizeHashTable=5000)
+gaBinaryT1(CNOlist, model, simList, indexList, initBstring, sizeFac = 1e-04, 
+    NAFac = 1, popSize = 50, pMutation = 0.5, maxTime = 60, maxGens = 500,
+    stallGenMax = 100, selPress = 1.2, elitism = 5, relTol = 0.1, verbose=TRUE,
+    priorBitString=NULL, maxSizeHashTable=5000)
 }
 \arguments{
   \item{CNOlist}{
-a CNOlist on which the score is based (based on valueSignals[[2]], i.e. data at t1)
+a CNOlist on which the score is based (based on valueSignals[[2]], i.e. data at
+time 1)
 }
   \item{model}{
 a model structure, as created by \code{readSIF}, normally pre-processed but that
@@ -27,7 +28,8 @@ a list that contains additional fields for the simulator, as created by prep4sim
 a list of indexes of species stimulated/inhibited/signals, as produced by indexfinder applied on the model and CNOlist above
 }
   \item{initBstring}{
-an initial bitsrting to be tested, should be of the same size as the number of reactions in the model above
+an initial bitstring to be tested, should be of the same size as the number of
+reactions in the model above (model$reacID).
 }
   \item{sizeFac}{
 the scaling factor for the size term in the objective function, default to 0.0001
@@ -64,10 +66,13 @@ i.e., how different from the best solution, default set to 0.1
 logical (default to TRUE) do you want the statistics of each generation to be printed on the screen?
 }
   \item{priorBitString}{
-A bitString of same length at the initial bitstring made of 0, 1 or NA. By
-default, this bitstring is set to NULL (equivalent to setting all bits to NA).
-If provided, all bitstring in a population will be changed to be in agreement
-with the priorBitString list.
+At each generation, the GA algorithm creates a population of bitstrings that
+will be used to perform the optimisation. If the user knows the values of some
+bits, they can be used to overwrite bit values proposed by the GA algorithm. If
+provided, the priorBitString must have the same length as the initial bitstring and
+be made of 0, 1 or NA (by default, this bitstring is set to NULL, which is
+equivalent to setting all bits to NA). Bits that are set
+to 0 or 1 are used to replace the bits created by the GA itself (see example).
 }
   \item{maxSizeHashTable}{a hash table is use to store bitstring and related
 score. This allows the GA to be very efficient is the case of small models. The
@@ -109,7 +114,7 @@ indices = results$indices
 #optimise
 
 ToyFields4Sim<-prep4sim(processedModel)
-initBstring<-rep(1,length(processedModel))
+initBstring<-rep(1,length(processedModel$reacID))
 ToyT1opt<-gaBinaryT1(
 	CNOlist=CNOlistToy,
 	model=processedModel,
@@ -117,4 +122,17 @@ ToyT1opt<-gaBinaryT1(
 	indexList=indices,
 	initBstring=initBstring,
 	maxGens=2, popSize=5, verbose=FALSE)
+
+# During the optimisation, some bits can be overwritten by your prior knowledge 
+# First, you need to create a priorBitString made of NA where known bit values
+# are replaced by 0 or 1
+priorBitString = rep(NA, length(processedModel$reacID))
+priorBitString[1] = 0
+priorBitString[2] = 1
+
+# Second, you call the gaBinaryT1 function by providing the priorBitString
+# argument:
+ToyT1opt<-gaBinaryT1(CNOlist=CNOlistToy, model=processedModel,	simList=ToyFields4Sim,	
+    indexList=indices, initBstring=initBstring,	maxGens=2, popSize=5, verbose=FALSE, 
+    priorBitString=priorBitString)
 }
