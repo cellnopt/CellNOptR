@@ -33,7 +33,7 @@ nSteadyStates <-function(
   # stop("There is not more than one time point to optimize")
   # }
   bStringPrev<-bStringT1
-  for(i in 3:length(cnolist$valueSignals))
+  for(i in 3:length(CNOlist$valueSignals))
   {
     Opt[[i]]<-gaBinaryTN(CNOlist=CNOlist,
                          Model=Model,
