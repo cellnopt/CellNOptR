@@ -32,7 +32,7 @@ parEstimationLBodeGA<-function (cnolist, model, ode_parameters = NULL, indices =
             }
     }
     else{
-        monitor_func=NA;
+        monitor_func=NULL;
     }
 
     res=rbga(x_L, x_U,popSize=popSize, iters=iters,monitorFunc=monitor_func, evalFunc=f_obj,
