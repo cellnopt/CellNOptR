@@ -95,7 +95,7 @@ cutAndPlotResultsT1 <- function(
 
         if(plotPDF == TRUE) {
             if(is.null(tag)) {
-                filename <- paste(deparse(substitute(model)),"SimResultsT1",f,".pdf",sep="")
+                filename <- "SimResultsT1.pdf"
             } else {
                 filename <- paste(tag,"SimResultsT1",f,".pdf",sep="")
             }

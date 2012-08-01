@@ -81,7 +81,7 @@ cutAndPlotResultsT2 <-function(model, bStringT1, bStringT2, simList, CNOlist,
 
     if(plotPDF == TRUE) {
         if(is.null(tag)) {
-            filename <- paste(deparse(substitute(model)),"SimResultsT1T2.pdf",sep="")
+            filename <- "SimResultsT1T2.pdf"
         }
         else {
             filename<-paste(tag, "SimResultsT1T2.pdf", sep="_")
