@@ -120,6 +120,9 @@ rSimulatorT1 <- function(CNOlist, model, simList, indexList) {
             # flip the values that enter with a negative sign
             tempStore[tempIxNeg] <- 1-tempStore[tempIxNeg]
 
+            # IMPORTANT NOTE: when multiple inputs and one or more is NA, then
+            # this code should return NA (not the case in this frozen code). The
+            # C simulator has the fix.
             outputCube <- apply(tempStore, 1, min)
 
             # outputCube is now a vector of length (nCond*nReacs) that contains the input of each reaction in
