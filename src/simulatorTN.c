@@ -294,15 +294,8 @@ SEXP simulatorTN (
     for(i = 0; i < nCond * nReacs; i++) {
         current_min = temp_store[i][0];
         for(j = 1; j < nMaxInputs; j++) {
-			// a condition to maintain NA (2) in AND gate output
-			// if any input == 2
-			if(temp_store[j][k] == 2 && ignoreCube[reactions_from_node[i]][k] == 0) {
-				current_min = 2;
-				break;
-			}
-			else if(temp_store[j][k] < current_min) {current_min = temp_store[j][k];}
-        
-		}
+            if(temp_store[i][j] < current_min) {current_min = temp_store[i][j];}
+        }
         output_cube[dial_cond][dial_reac] = current_min;
         dial_cond++;
         if(dial_cond==nCond) {dial_cond = 0; dial_reac++;}
