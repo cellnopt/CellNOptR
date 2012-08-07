@@ -15,27 +15,15 @@
 # $Id$
 simulateT1<-function(CNOlist, model, bStringT1, simList, indexList){
 
-    Modelcut<-cutModel(model, bStringT1)
+    # cut the model
+    modelCut <- cutModel(model, bStringT1)
 
+    # cut the model
+    newSimList = cutSimList(simList, bStringT1)
 
-    simListcut<-simList
-    simListcut$finalCube<-simListcut$finalCube[as.logical(bStringT1),]
-    simListcut$ixNeg<-simListcut$ixNeg[as.logical(bStringT1),]
-    simListcut$ignoreCube<-simListcut$ignoreCube[as.logical(bStringT1),]
-    simListcut$maxIx<-simListcut$maxIx[as.logical(bStringT1)]
-
-    if(is.null(dim(simListcut$finalCube))){
-        simListcut$finalCube<-matrix(simListcut$finalCube,ncol=1)
-        simListcut$ixNeg<-matrix(simListcut$ixNeg,ncol=1)
-        simListcut$ignoreCube<-matrix(simListcut$ignoreCube,ncol=1)
-        }
-
-    simRes<-simulatorT1(
-        CNOlist=CNOlist,
-        model=Modelcut,
-        simList=simListcut,
+    # compute the results
+    simRes <- simulatorT1(CNOlist=CNOlist, model=modelCut, simList=newSimList, 
         indexList=indexList)
 
     return(simRes)
 }
-
