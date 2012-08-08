@@ -15,7 +15,7 @@
 # $Id$
 plotModel <- function(model, CNOlist=NULL, bString=NULL, indexIntegr=NULL,
     signals=NULL, stimuli=NULL, inhibitors=NULL, NCNO=NULL, compressed=NULL,
-    output="STDOUT", filename=NULL,graphvizParams=list()){
+    output="STDOUT", filename=NULL,graphvizParams=list(), remove_dot=FALSE){
 # Quick example:
 # ---------------
 #   filename = "ToyPKNMMB.sif"
@@ -359,6 +359,7 @@ compressed, nodeLabels=graphvizParams$nodeLabels)
     }
 
     if (output != "STDOUT"){dev.off()}
+    if (remove_dot==TRUE){file.remove(output_dot)}
     output = list(graph=g, attrs=attrs, nodeAttrs=nodeAttrs, edgeAttrs=edgeAttrs,clusters=clusters, v1=v1, v2=v2, edges=edges)
 }
 
