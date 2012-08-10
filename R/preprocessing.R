@@ -13,38 +13,45 @@
 #
 ##############################################################################
 
-preprocessing<-function(data, model, cutNONC=TRUE, compression=TRUE,
+preprocessing<-function(data=NULL, model, cutNONC=TRUE, compression=TRUE,
     expansion=TRUE, ignoreList=NA, maxInputsPerGate=2,verbose=TRUE){
 
     # why not doing this check here ? Does not cost too much
-	checkSignals(CNOlist=data,model=model)
+    if (is.NULL(data)!=TRUE){
+        checkSignals(CNOlist=data,model=model)
+    }
 
-    # a copy of the model 
+    # a copy of the model
     cutModel <- model
 
-    if (cutNONC==TRUE){
+    if (cutNONC==TRUE && is.NULL(data)!=TRUE){
         # Find the indices, in the model, of the species that are inh/stim/sign
-	    indices<-indexFinder(CNOlist=data, model=model,	verbose=verbose)
+        indices<-indexFinder(CNOlist=data, model=model,    verbose=verbose)
 
-        # Find the indices of the non-osb/non-contr	
-	    temp_indices <- findNONC(model=model, indexes=indices,verbose=verbose)
+        # Find the indices of the non-osb/non-contr
+        temp_indices <- findNONC(model=model, indexes=indices,verbose=verbose)
         # Cut the nonc off the model
         cutModel <-cutNONC(model=model, NONCindexes=temp_indices)
     }
 
-    if (compression == TRUE){
+    if (compression == TRUE && is.null(data)!=TRUE){
         # Recompute the indices
-	    temp_indices<-indexFinder(CNOlist=data, model=cutModel)
+        temp_indices<-indexFinder(CNOlist=data, model=cutModel)
 
         # Compress the model
-    	cutModel<-compressModel(model=cutModel,indexes=temp_indices)
+        cutModel<-compressModel(model=cutModel,indexes=temp_indices)
     }
 
     # Recompute the indices. We can do it now because the expanson gate does not
     # remove species but only add and gates.
-	indices<-indexFinder(CNOlist=data,model=cutModel)
+    if (is.NULL(data)!=TRUE){
+        indices<-indexFinder(CNOlist=data,model=cutModel)
+    }
+    else{
+        indices <- NULL
+    }
 
-    # Expand the gates	
+    # Expand the gates
     if (expansion == TRUE){
         cutModel <- expandGates(model=cutModel, ignoreList=ignoreList,maxInputsPerGate=maxInputsPerGate)
     }

@@ -1,11 +1,21 @@
+
+1.3
+=======
+10/aug/2012 1.3.26
+----------------------
+* preprocessing can now handle model without cnolist provided (e.g. for expansion only)
+
+
+
 27/july/2012 1.3.25
+---------------------
 * cSimulator for T2 (and TN)
-* add simulatorTN (T2->TN that uses c Simulator)
+* rev1873 add simulatorTN (T2->TN that uses c Simulator)
 * cleanup computeScoreT1,T2, TN to make same similar (future release will merge T2 and TN)
 
 26/july/2012 1.3.24
 ---------------------
-* cSimulator implemented
+* rev1870,1844,1842,1841,1839,1838,1831 cSimulator implemented
 * T3 data added
 
 
@@ -96,11 +106,16 @@
 * CNOR released on devel of bioconductor with revision 1.3.0, so change the
   version to 1.3.1
 
+1.2
+=======
 
 29/March/2012 1.2.0
 ----------------------
 * rev865: Increase the version to be in agreement with bioconductor
 
+
+1.0
+=======
 
 27/March/2012 0.99.30
 ---------------------
