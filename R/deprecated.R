@@ -4,6 +4,6 @@ readSif <- function(sifFile){
 }
 
 prep4Sim <- function(model, params){
-    warning("readSif is a deprecated function. Use readSIF instead. ")
+    warning("prep4Sim is a deprecated function. Use prep4sim instead. ")
     return(prep4sim(model))
 }
