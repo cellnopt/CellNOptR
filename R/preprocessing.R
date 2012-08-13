@@ -17,14 +17,14 @@ preprocessing<-function(data=NULL, model, cutNONC=TRUE, compression=TRUE,
     expansion=TRUE, ignoreList=NA, maxInputsPerGate=2,verbose=TRUE){
 
     # why not doing this check here ? Does not cost too much
-    if (is.NULL(data)!=TRUE){
+    if (is.null(data)!=TRUE){
         checkSignals(CNOlist=data,model=model)
     }
 
     # a copy of the model
     cutModel <- model
 
-    if (cutNONC==TRUE && is.NULL(data)!=TRUE){
+    if (cutNONC==TRUE && is.null(data)!=TRUE){
         # Find the indices, in the model, of the species that are inh/stim/sign
         indices<-indexFinder(CNOlist=data, model=model,    verbose=verbose)
 
@@ -44,7 +44,7 @@ preprocessing<-function(data=NULL, model, cutNONC=TRUE, compression=TRUE,
 
     # Recompute the indices. We can do it now because the expanson gate does not
     # remove species but only add and gates.
-    if (is.NULL(data)!=TRUE){
+    if (is.null(data)!=TRUE){
         indices<-indexFinder(CNOlist=data,model=cutModel)
     }
     else{
