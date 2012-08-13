@@ -15,25 +15,12 @@
 # $Id$
 
 cutAndPlotResultsT2 <-function(model, bStringT1, bStringT2, simList, CNOlist,
-    indexList, plotPDF=FALSE, tag=NULL, tPt=CNOlist$timeSignals[2:3])
+    indexList, plotPDF=FALSE, tag=NULL, 
+    tPt=CNOlist$timeSignals[2:3])
 {
-
-    # simulate T1
-    # prepare the model (i.e. cut)
-
-    modelcut <- model
-    modelcut$interMat <- modelcut$interMat[,as.logical(bStringT1)]
-    modelcut$notMat <- modelcut$notMat[,as.logical(bStringT1)]
-    modelcut$reacID <- modelcut$reacID[as.logical(bStringT1)]
-
+    modelCut <- cutModel(model, bStringT1)
     simListCut <- cutSimList(simList, bStringT1)
-
-    # simulate
-    SimT1 <- simulatorT1(
-        CNOlist=CNOlist,
-        model=modelcut,
-        simList=simListCut,
-        indexList=indexList)
+    SimT1 <- simulatorT1(CNOlist=CNOlist, model=modelCut, simList=simListCut, indexList=indexList)
     simResT1 <- as.matrix(SimT1[,indexList$signals])
 
     # simulate T2
