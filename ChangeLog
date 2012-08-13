@@ -1,6 +1,11 @@
 
 1.3
 =======
+
+13/Aug/2012 1.3.27
+----------------------
+* add cutAndPlot that will replace all cutAndPlot families for the user interface.
+
 10/aug/2012 1.3.26
 ----------------------
 * preprocessing can now handle model without cnolist provided (e.g. for expansion only)
