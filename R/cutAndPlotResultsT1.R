@@ -14,21 +14,15 @@
 ##############################################################################
 # $Id$
 
-cutAndPlotResultsT1 <- function(
-    model,
-    bString,
-    simList,
-    CNOlist,
-    indexList,
-    plotPDF=FALSE,
-    tag=NULL,
-    show=TRUE,
+cutAndPlotResultsT1 <- function(model, bString, simList, CNOlist,
+    indexList, plotPDF=FALSE, tag=NULL, show=TRUE,
     tPt=CNOlist$timeSignals[2]
     )
 {
+    # tPt is always 2 so why having this argument ?
 
     modelCut <- cutModel(model, bString)
-    simListCut<-cutSimList(simList, bString)
+    simListCut <- cutSimList(simList, bString)
     Sim <- simulatorT1(CNOlist=CNOlist, model=modelCut, simList=simListCut, indexList=indexList)
     simRes <- as.matrix(Sim[,indexList$signals])
 
