@@ -20,6 +20,10 @@
 computeScoreT2<-function(CNOlist, model, simList, indexList, simResT1, bStringT1,
     bStringT2, sizeFac=0.0001, NAFac=1){
 
+    warning("computeScoreT2 is deprecated. Use TN version instead, which has the
+same prototype and is using a C simulator. You can still use this function but
+it is not giong to be maintained after version 1.4.0. " )
+
 	timeIndex = 3 # i.e., "t2"
 
     bitString <- bStringT1

@@ -17,15 +17,17 @@
 # Function that computes the score of a specific bitstring
 # Although it is very similar to computeScoreT1, there are enough differences to
 # have a different function.
-computeScoreTN<-function(CNOlist, model, simList, indexList, simResPrev, bStringPrev, bStringTimes, timeIndex,
-    bString, sizeFac=0.0001, NAFac=1){
+computeScoreTN<-function(CNOlist, model, simList, indexList, simResPrev, bStringPrev, 
+    bStringNext, timeIndex=3, sizeFac=0.0001, NAFac=1){
 
-    timeIndex = timeIndex # i.e., "tN"
+    # by default same behaviour as computeScoreT2
+    # timeIndex=3 stands for T2 by default.
+    #timeIndex = timeIndex # i.e., "tN"
 
     bitString <- bStringPrev
-    bitString[which(bStringPrev == 0)] <- bString
-
-    bStringTimes[which(bStringTimes == 0)] <- bString * (timeIndex-1)
+    bitString[which(bStringPrev == 0)] <- bStringNext
+    bStringTimes = bStringPrev
+    bStringTimes[which(bStringPrev == 0)] <- bStringNext * (timeIndex-1)
 
 
     modelCut = cutModel(model, bitString)
