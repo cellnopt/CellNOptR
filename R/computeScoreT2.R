@@ -17,12 +17,24 @@
 # Function that computes the score of a specific bitstring
 # Although it is very similar to computeScoreT1, there are enough differences to
 # have a different function.
-computeScoreT2<-function(CNOlist, model, simList, indexList, simResT1, bStringT1,
+computeScoreT2<-function(CNOlist, model, simList=NULL, indexList=NULL, simResT1, bStringT1,
     bStringT2, sizeFac=0.0001, NAFac=1){
 
     warning("computeScoreT2 is deprecated. Use TN version instead, which has the
 same prototype and is using a C simulator. You can still use this function but
 it is not giong to be maintained after version 1.4.0. " )
+
+    # simList and indexList are computed inside this function. 
+    # However, for back-compatibility, we keep the arguments so that if
+    # provided, we can still use them.
+    if (is.null(simList)==TRUE){
+        simList = prep4sim(model)
+    }   
+    if (is.null(indexList)==TRUE){
+        indexList = indexFinder(CNOlist, model)
+    }   
+
+
 
 	timeIndex = 3 # i.e., "t2"
 
