@@ -118,14 +118,11 @@ compression=TRUE, expansion=TRUE, cutNONC=TRUE)
     resE<-residualError(CNOlist=paramsList$data)
 
     #7.Prepare for simulation
-    fields4Sim<-prep4sim(model=NCNOcutCompExp)
 
     #8.Optimisation t1
     initBstring<-rep(1,length(NCNOcutCompExp$reacID))
     T1opt<-gaBinaryT1(CNOlist=paramsList$data,
         model=NCNOcutCompExp,
-        simList=fields4Sim,
-        indexList=IndicesNCNOcutComp,
         initBstring=initBstring,
         sizeFac=paramsList$sizeFac,
         NAFac=paramsList$NAFac,
@@ -140,13 +137,14 @@ compression=TRUE, expansion=TRUE, cutNONC=TRUE)
         verbose=paramsList$verbose)
 
     #9.Plot simulated and experimental results
-    cutAndPlotResultsT1(
+    cutAndPlot(
         model=NCNOcutCompExp,
-        bString=T1opt$bString,
-        simList=fields4Sim,
+        bStringT1=T1opt$bString,
         CNOlist=paramsList$data,
-        indexList=IndicesNCNOcutComp,
         plotPDF=TRUE)
+
+
+
 
     #10.Plot the evolution of fit
     pdf(paste(Name,"evolFitT1.pdf",sep=""))
@@ -160,8 +158,6 @@ compression=TRUE, expansion=TRUE, cutNONC=TRUE)
         T2opt<-gaBinaryT2(
             CNOlist=paramsList$data,
             model=NCNOcutCompExp,
-            simList=fields4Sim,
-            indexList=IndicesNCNOcutComp,
             bStringT1=T1opt$bString,
             sizeFac=paramsList$sizeFac,
             NAFac=paramsList$NAFac,
@@ -175,9 +171,8 @@ compression=TRUE, expansion=TRUE, cutNONC=TRUE)
             relTol=paramsList$relTol,
             verbose=paramsList$verbose)
 
-        cutAndPlotResultsT2(model=NCNOcutCompExp,bStringT1=T1opt$bString,
-            bStringT2=T2opt$bString,simList=fields4Sim,CNOlist=paramsList$data,
-            indexList=IndicesNCNOcutComp,plotPDF=TRUE)
+        cutAndPlot(model=NCNOcutCompExp,CNOlist=paramsList$data, bStringT1=T1opt$bString,
+            bStringT2=T2opt$bString, plotPDF=TRUE)
 
         pdf(paste(Name,"evolFitT2.pdf",sep=""))
         plotFit(optRes=T2opt)

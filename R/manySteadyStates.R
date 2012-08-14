@@ -25,8 +25,6 @@ bString<-list()
 simRes<-list()
 T1opt<-gaBinaryT1(CNOlist=CNOlist,
                   model=model,
-                  simList=simList,
-                  indexList=indexList,
                   initBstring=initBstring,
                   stallGenMax=stallGenMax,
                   sizeFac=sizeFac,

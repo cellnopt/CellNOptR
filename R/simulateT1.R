@@ -13,10 +13,20 @@
 #
 ##############################################################################
 # $Id$
-simulateT1<-function(CNOlist, model, bStringT1, simList, indexList){
+simulateT1<-function(CNOlist, model, bStringT1, simList=NULL, indexList=NULL){
+    # simList and indexList are computed inside this function. 
+    # However, for back-compatibility, we keep the arguments so that if
+    # provided, we can still use them.
+
 
     # cut the model
     modelCut <- cutModel(model, bStringT1)
+    if (is.NULL(simList)==TRUE){
+        simList = prep4sim(model)
+    }
+    if (is.NULL(indexList)==TRUE){
+        indexList = indexFinder(CNOlist, model)
+    }
 
     # cut the model
     newSimList = cutSimList(simList, bStringT1)

@@ -16,8 +16,6 @@
 gaBinaryT2 <-function(
     CNOlist,
     model,
-    simList,
-    indexList,
     bStringT1,
     sizeFac=0.0001,
     NAFac=1,
@@ -38,12 +36,15 @@ gaBinaryT2 <-function(
     bits2optimise<-which(bStringT1 == 0)
     bLength<-length(bits2optimise)
 
-    simResT1<-simulateT1(CNOlist=CNOlist, model=model, bStringT1=bStringT1,
-            simList=simList, indexList=indexList)
+    simList = prep4sim(model)
+    indexList = indexFinder(CNOlist, model)
+
+    simResT1<-simulateT1(CNOlist=CNOlist, model=model, bStringT1=bStringT1)
     # ---- section related to T2  end ----
 
 
-    Pop <- round(matrix(runif(bLength*(popSize)), nrow=(popSize),ncol=bLength))
+    Pop <- round(matrix(runif(bLength*(popSize)), 
+        nrow=(popSize),ncol=bLength))
 
     Pop <- addPriorKnowledge(Pop, priorBitString)
 
@@ -74,8 +75,8 @@ gaBinaryT2 <-function(
             } # otherwise let us keep going
         }
 
-        Score = computeScoreT2(CNOlist, model, simList, indexList, simResT1,
-                    bStringT1, bitString, sizeFac, NAFac)
+        Score = computeScoreT2(CNOlist, model, simList, indexList, 
+			simResT1, bStringT1, bitString, sizeFac, NAFac)
 
         return(Score)
     }

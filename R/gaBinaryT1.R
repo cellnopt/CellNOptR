@@ -16,8 +16,6 @@
 gaBinaryT1<-function(
     CNOlist,
     model,
-    simList,
-    indexList,
     initBstring,
     sizeFac=0.0001,
     NAFac=1,
@@ -36,11 +34,13 @@ gaBinaryT1<-function(
     # ---- section related to T1  ----
     bLength<-length(initBstring)
 
-
+    simList = prep4sim(model)
+    indexList = indexFinder(CNOlist, model)
 
     Pop<-rbind(
         initBstring,
-        round(matrix(runif(bLength*(popSize-1)), nrow=(popSize-1),ncol=bLength))
+        round(matrix(runif(bLength*(popSize-1)), 
+        nrow=(popSize-1),ncol=bLength))
 	)
     # ---- section related to T1  end ----
 
@@ -73,7 +73,7 @@ gaBinaryT1<-function(
             } # otherwise let us keep going
         }
 
-        Score = computeScoreT1(CNOlist, model, simList, indexList, 
+        Score = computeScoreT1(CNOlist, model, simList, indexList,
 			bitString, sizeFac, NAFac)
 
         return(Score)
