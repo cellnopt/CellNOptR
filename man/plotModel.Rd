@@ -12,7 +12,7 @@ It can also be used to plot optimised model given the optimisation bitstring.}
 \usage{
 plotModel(model, CNOlist=NULL, bString=NULL, indexIntegr=NULL, signals=NULL, stimuli=NULL,
 inhibitors=NULL, NCNO=NULL, compressed=NULL, output="STDOUT",filename=NULL, 
-graphvizParams=list())
+graphvizParams=list(), remove_dot=FALSE)
 
 }
 \arguments{
@@ -54,7 +54,10 @@ the type of output (PNG, PDF, SVG accepted)
 Accepted arguments are: \code{arrowsize} (default is 2); 
 \code{size} (a string for the dot output default is "15,15");\code{fontsize}
 (default is 22);\code{edgecolor} (default is "black").
-}}
+}
+  \item{remove_dot}{remove the dot file that has been created .default if
+False)}
+}
 
 
 
