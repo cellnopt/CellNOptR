@@ -14,9 +14,11 @@
 ##############################################################################
 # $Id$
 
-cutAndPlot <- function(model, CNOlist, bStringT1, bStringT2=NULL, 
-    plotPDF=FALSE, tag=NULL, show=TRUE, tPt=2)
+cutAndPlot <- function(model, CNOlist, bitStrings=NULL, plotPDF=FALSE, tag=NULL, show=TRUE)
 {
+
+    # bitStrings must be a list of bitString (T1, T2, ...TN)
+    tPt = length(bitStrings)+1
 
     simList <- prep4sim(model)
     indexList <- indexFinder(CNOlist=CNOlist,model=model)
@@ -28,16 +30,17 @@ cutAndPlot <- function(model, CNOlist, bStringT1, bStringT2=NULL,
 
     # if tPt=2 (default), call cutAndPlotResultsT1
     if (tPt == 2){
-       cutAndPlotResultsT1(model=model, bString=bStringT1, simList=simList, 
+       cutAndPlotResultsT1(model=model, bString=bitStrings[[1]], simList=simList, 
             CNOlist=CNOlist, indexList=indexList, plotPDF=plotPDF, tag=tag, 
             show=show)
     }
+
     # if tPt=2 (default), call cutAndPlotResultsT2
     if (tPt==3){
        cutAndPlotResultsT2(
          model=model,
-         bStringT1=bStringT1,
-         bStringT2=bStringT2,
+         bStringT1=bitStrings[[1]],
+         bStringT2=bitStrings[[2]],
          simList=simList,
          CNOlist=CNOlist,
          indexList=indexList,
@@ -45,11 +48,10 @@ cutAndPlot <- function(model, CNOlist, bStringT1, bStringT2=NULL,
          tag=tag) 
     }
 
-    if (tPt>=3){
+    if (tPt>3){
        cutAndPlotResultsTN(
          model=model,
-         bStringT1=bStringT1,
-         bStringT2=bStringT2,
+         bitStrings=bitStrings,
          simList=simList,
          CNOlist=CNOlist,
          indexList=indexList,
