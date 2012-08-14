@@ -21,6 +21,10 @@ simulatorT2 <-function(
     indexList,
     timeIndex=3){
 
+    warning("simulatorT2 is deprecated. Use simulatorTN instead, which has the
+same prototype and is using a C simulator. You can still use this function but
+it is not giong to be maintained after version 1.4.0. " )
+
     nSp<-dim(model$interMat)[1]
     nReacs<-dim(model$interMat)[2]
     nCond<-dim(CNOlist$valueStimuli)[1]
