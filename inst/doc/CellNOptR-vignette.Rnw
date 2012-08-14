@@ -7,11 +7,19 @@
 \usepackage{url}
 
 
-\title{ Training of boolean logic models of signalling networks using prior knowledge networks and perturbation data with \emph{CellNOptR}}
-\author{ Camille Terfve, Thomas Cokelaer, Julio Saez-Rodriguez}
+\title{Training of boolean logic models of signalling networks using prior
+knowledge networks and perturbation data with \emph{CellNOptR} \\\small{(version 1.3.27
+and above)}}
+
+
+
+
+\author{Camille Terfve, Thomas Cokelaer, Julio Saez-Rodriguez}
 
 \begin{document}
 \maketitle
+
+
 
 
 \tableofcontents
@@ -68,8 +76,8 @@ The example that we use is the toy model example from CellNOpt, which is a data 
 <<getData, eval=TRUE>>=
 cpfile<-dir(system.file("ToyModel",package="CellNOptR"),full=TRUE)
 file.copy(from=cpfile,to=getwd(),overwrite=TRUE)
-dataToy<-readMIDAS(MIDASfile='ToyDataMMB.csv')
-CNOlistToy<-makeCNOlist(dataset=dataToy,subfield=FALSE)
+dataToy<-readMIDAS('ToyDataMMB.csv')
+CNOlistToy<-makeCNOlist(dataToy,subfield=FALSE)
 @
 
 Alternatively, you can also load the data already formatted as a CNOlist.
@@ -108,7 +116,7 @@ Alternatively, you can create your network file as a text file formatted as a SI
 
 
 <<getModel, eval=TRUE>>=
-ToyModel<-readSIF(sifFile="ToyPKNMMB.sif")
+ToyModel<-readSIF("ToyPKNMMB.sif")
 @
 
 <<getModel2, eval=TRUE>>=
@@ -206,23 +214,30 @@ The optimisation itself is done using a genetic algorithm that tries to optimise
 
 The genetic algorithm function returns a list object that collects a number of informations such as the best string and corresponding score at each iteration, the average fit at each generation, etc.  The function also returns strings that were obtained across the whole optimisation process and that obtained scores that were closed to the best string, where 'close' is defined by a relative tolerance on the score which is set by the parameter \emph{relTol}.  This is an important piece of information because when the data cannot constrain the model tightly then many strings are obtained with a fit that is close to the optimal one, and interpretation of edges present in the optimal model is therefore more subtle. 
 
-We start off by computing the residual error, which is the minimum error that is unavoidable with a boolean network and comes from the discrete nature of such a model (please remember that although the data is normalised in this pipeline, it is not discretised, and therefore we compare 0/1 values to continuous values between 0 and 1). This value is important because however good is our optimisation, the value of the goodness of fit term cannot go under this residual error. Then we prepare the model for simulation by applying the function \emph{prep4sim} which adds fields that are needed for the simulation engine. We also create an initial bit string for the optimisation, which in this case is just a string of 1s, but could be a meaningful string if you have prior expectation about the topology of the model.  
+We start off by computing the residual error, which is the minimum error that is
+unavoidable with a boolean network and comes from the discrete nature of such a
+model (please remember that although the data is normalised in this pipeline, it
+is not discretised, and therefore we compare 0/1 values to continuous values
+between 0 and 1). This value is important because however good is our
+optimisation, the value of the goodness of fit term cannot go under this
+residual error. Then, we create an initial bit string for the optimisation,
+which in this case is just a string of 1s, but could be a meaningful string if
+you have prior expectation about the topology of the model.
 
 <<misc4Sim, eval=TRUE>>=
 resECNOlistToy<-residualError(CNOlistToy)
-ToyFields4Sim<-prep4sim(ToyNCNOcutCompExp)
+#ToyFields4Sim<-prep4sim(ToyNCNOcutCompExp)
 initBstring<-rep(1,length(ToyNCNOcutCompExp$reacID))
 @
 
 We can now start the optimisation, in this case with default values for all non essential parameters of the genetic algorithm. If you set the argument verbose to TRUE, this function will print the following information, at each generation: generation number, best score and best string at this generation, stall generation number, average score of this generation and iteration time. You can also find these informations in the object that is returned by this function, as well as the best string the b\emph{bString} field, and strings within the relative tolerance limits in \emph{StringsTol}.
+
 
 %TOSWITCH
 <<optim, eval=TRUE>>=
 ToyT1opt<-gaBinaryT1(
 	CNOlist=CNOlistToy,
 	model=ToyNCNOcutCompExp,
-	simList=ToyFields4Sim,
-	indexList=indicesToyNCNOcutComp,
 	initBstring=initBstring,
 	verbose=FALSE)
 @
@@ -231,13 +246,8 @@ We will now produce plots of our analysis.  First, we plot the results of simula
 
 \begin{center}
 <<resSim, fig=FALSE, eval=FALSE>>=
-cutAndPlotResultsT1(
-	model=ToyNCNOcutCompExp,
-	bString=ToyT1opt$bString,
-	simList=ToyFields4Sim,
-	CNOlist=CNOlistToy,
-	indexList=indicesToyNCNOcutComp,
-	plotPDF=FALSE)
+cutAndPlot(model=ToyNCNOcutCompExp, bStringT1=ToyT1opt$bString,
+    CNOlist=CNOlistToy,plotPDF=FALSE)
 @ 
 \end{center}
 \begin{center}
@@ -252,12 +262,10 @@ Setting the plotPDF argument to "TRUE" means that a PDF figure will be produced 
 
 %TOSWITCH
 <<simFitPDF, results=hide, eval=TRUE>>=
-cutAndPlotResultsT1(
+cutAndPlot(
 	model=ToyNCNOcutCompExp,
-	bString=ToyT1opt$bString,
-	simList=ToyFields4Sim,
+	bStringT1=ToyT1opt$bString,
 	CNOlist=CNOlistToy,
-	indexList=indicesToyNCNOcutComp,
 	plotPDF=TRUE)
 pdf("evolFitToyT1.pdf")
 plotFit(optRes=ToyT1opt)
@@ -345,9 +353,9 @@ unlink("testToy",recursive=TRUE)
 If you do not want to bother with all of these steps, there is a function that allows you to do the whole analysis in one step.  In order to do this, you must first load the model and data, as above (assuming that you have already loaded the library and have copied the relevant files in your working directory).  
 
 <<getToy, eval=TRUE>>=
-dataToy<-readMIDAS(MIDASfile='ToyDataMMB.csv')
-CNOlistToy<-makeCNOlist(dataset=dataToy,subfield=FALSE)
-ToyModel<-readSIF(sifFile="ToyPKNMMB.sif")
+dataToy<-readMIDAS("ToyDataMMB.csv")
+CNOlistToy<-makeCNOlist(dataToy,subfield=FALSE)
+ToyModel<-readSIF("ToyPKNMMB.sif")
 @
 
 Then you have two possibilities, either you keep all optimisation parameters to their default values and just type
@@ -373,10 +381,10 @@ pList<-list(
 	model=ToyModel,
 	sizeFac = 1e-04, 
 	NAFac = 1, 
-	popSize = 10, 
+	popSize = 50, 
 	pMutation = 0.5, 
 	maxTime = 60, 
-	maxGens = 5, 
+	maxGens = 20, 
 	stallGenMax = 5, 
 	selPress = 1.2, 
 	elitism = 5, 
@@ -458,34 +466,26 @@ plotCNOlistPDF(CNOlist=CNOlistToy2,filename="ToyModelGraphT2.pdf")
 %TOSWITCH
 <<t2Opt1, eval=TRUE>>=
 checkSignals(CNOlistToy2,ToyModel2)
-indicesToy2<-indexFinder(CNOlistToy2,ToyModel2,verbose=FALSE)
-ToyNCNOindices2<-findNONC(ToyModel2,indicesToy2,verbose=FALSE)
-ToyNCNOcut2<-cutNONC(ToyModel2,ToyNCNOindices2)
-indicesToyNCNOcut2<-indexFinder(CNOlistToy2,ToyNCNOcut2)
-ToyNCNOcutComp2<-compressModel(ToyNCNOcut2,indicesToyNCNOcut2)
-indicesToyNCNOcutComp2<-indexFinder(CNOlistToy2,ToyNCNOcutComp2)
-ToyNCNOcutCompExp2<-expandGates(ToyNCNOcutComp2)
+results = preprocessing(CNOlistToy2,ToyModel2, verbose=FALSE)
+indicesToyNCNOcutComp2<-results$indices
+ToyNCNOcutCompExp2<-results$model
 resECNOlistToy2<-residualError(CNOlistToy2)
-ToyFields4Sim2<-prep4sim(ToyNCNOcutCompExp2)
+#ToyFields4Sim2<-prep4sim(ToyNCNOcutCompExp2)
 initBstring2<-rep(1,length(ToyNCNOcutCompExp2$reacID))
 ToyT1opt2<-gaBinaryT1(
 	CNOlist=CNOlistToy2,
 	model=ToyNCNOcutCompExp2,
-	simList=ToyFields4Sim2,
-	indexList=indicesToyNCNOcutComp2,
 	initBstring=initBstring2,
 	stallGenMax=10,
 	maxTime=60,
 	verbose=FALSE)
 @
 
-<<t2OptT1plot, eval=FALSE>>=
-cutAndPlotResultsT1(
+<<t2OptT1plot, eval=TRUE>>=
+cutAndPlot(
 	model=ToyNCNOcutCompExp2,
-	bString=ToyT1opt2$bString,
-	simList=ToyFields4Sim2,
+	bStringT1=ToyT1opt2$bString,
 	CNOlist=CNOlistToy2,
-	indexList=indicesToyNCNOcutComp2,
 	plotPDF=TRUE)
 pdf("evolFitToy2T1.pdf")
 plotFit(optRes=ToyT1opt2)
@@ -500,8 +500,6 @@ We can now optimise the second time point.
 ToyT1opt2T2<-gaBinaryT2(
 	CNOlist=CNOlistToy2,
 	model=ToyNCNOcutCompExp2,
-	simList=ToyFields4Sim2,
-	indexList=indicesToyNCNOcutComp2,
 	bStringT1=ToyT1opt2$bString,
 	stallGenMax=10,
 	maxTime=60,
@@ -514,13 +512,11 @@ Finally, we produce all the plots and write the report.
 
 %TOSWITCH
 <<resSimT2, eval=TRUE, fig=TRUE>>=	
-cutAndPlotResultsT2(
+cutAndPlot(
 	model=ToyNCNOcutCompExp2,
 	bStringT1=ToyT1opt2$bString,
 	bStringT2=ToyT1opt2T2$bString,
-	simList=ToyFields4Sim2,
 	CNOlist=CNOlistToy2,
-	indexList=indicesToyNCNOcutComp2,
 	plotPDF=FALSE)
 @
 
