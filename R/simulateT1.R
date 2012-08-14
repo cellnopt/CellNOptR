@@ -21,10 +21,10 @@ simulateT1<-function(CNOlist, model, bStringT1, simList=NULL, indexList=NULL){
 
     # cut the model
     modelCut <- cutModel(model, bStringT1)
-    if (is.NULL(simList)==TRUE){
+    if (is.null(simList)==TRUE){
         simList = prep4sim(model)
     }
-    if (is.NULL(indexList)==TRUE){
+    if (is.null(indexList)==TRUE){
         indexList = indexFinder(CNOlist, model)
     }
 
