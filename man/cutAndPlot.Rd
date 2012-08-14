@@ -21,8 +21,8 @@ a CNOlist, corresponding to the optimisation one
   \item{bStringT1}{
 a bitstring for T1  as output by gaBinaryT1 (i.e. a vector of 1s and 0s)
 }
-  \item{bStringT1}{
-a bitstring for T1  as output by gaBinaryT1 (i.e. a vector of 1s and 0s)
+  \item{bStringT2}{
+a bitstring for T2  as output by gaBinaryT2 (i.e. a vector of 1s and 0s)
 }
   \item{plotPDF}{
 TRUE or FALSE; tells whether you want a pdf to be produced or not
