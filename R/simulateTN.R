@@ -13,43 +13,87 @@
 #
 ##############################################################################
 # $Id$
-simulateTN<-function(CNOlist,model,simResT1,bStringT2,bStringTimes,simList,indexList,timeIndex){
+simulate<-function(CNOlist, model, bStrings){
+#simResT1,bStringT2,bStringTimes,simList,indexList,timeIndex){
 
-#Made to look more like new SimulateT1 (6/26/12 edits) but old version is left in comments below
-  
-  modelCut<-cutModel(model, bStringT2)
-  
-  
+    if (is.list(bStrings)==FALSE){
+        stop("CellNOpt Error: 3d argument called bStrings must be a list of vectors. Each vector representing a bit string")
+    }
+
+    if (length(bStrings) == 1){
+        print("simulateT1")
+        simPrev = internal_simulateT1(CNOlist, model, bStrings[[1]])
+    }
+    else if (length(bStrings) > 1){
+        print("simulateTN")
+        # T1 first
+        simPrev = internal_simulateT1(CNOlist, model, bStrings[[1]])
+        # Then, loop over T2 to TN
+        for (i in 2:length(bStrings)){
+            res = buildBitString(bStrings[1:i])
+            simPrev = internal_simulateTN(CNOlist, model, simPrev, res$bs, res$bsTimes, i+1)
+        }
+    }
+
+    return(simPrev)
+}
+
+internal_simulateTN <- function(CNOlist, model, simPrev, bStringPrev, bStringTimes, timeIndex){
+
+  simList = prep4sim(model)
+  indexList = indexFinder(CNOlist, model)
+  modelCut<-cutModel(model, bStringPrev)
+
+
   simListCut<-simList
-  simListCut$finalCube<-simListCut$finalCube[as.logical(bStringT2),]
-  simListCut$ixNeg<-simListCut$ixNeg[as.logical(bStringT2),]
-  simListCut$ignoreCube<-simListCut$ignoreCube[as.logical(bStringT2),]
-  simListCut$maxIx<-simListCut$maxIx[as.logical(bStringT2)]
-  
+  simListCut$finalCube<-simListCut$finalCube[as.logical(bStringPrev),]
+  simListCut$ixNeg<-simListCut$ixNeg[as.logical(bStringPrev),]
+  simListCut$ignoreCube<-simListCut$ignoreCube[as.logical(bStringPrev),]
+  simListCut$maxIx<-simListCut$maxIx[as.logical(bStringPrev)]
+
   if(is.null(dim(simListCut$finalCube))){
     simListCut$finalCube<-matrix(simListcut$finalCube,ncol=1)
     simListCut$ixNeg<-matrix(simListcut$ixNeg,ncol=1)
     simListCut$ignoreCube<-matrix(simListcut$ignoreCube,ncol=1)
   }
-  
-  
-#   bitString2<-bStringT2
-#   modelCut <- model
-#   modelCut$interMat <- modelCut$interMat[,as.logical(bitString2)]
-#   modelCut$notMat <- modelCut$notMat[,as.logical(bitString2)]
-#   modelCut$reacID <- modelCut$reacID[as.logical(bitString2)]
   modelCut$times <- bStringTimes[which(bStringTimes != 0)]
-  
-#   simListCut <- cutSimList(simList, bitString2)
-  
+
+
   # simulate
   SimT2 <- simulatorTN(
-    simResultsT1=simResT1,
+    simResultsPrev=simPrev,
     CNOlist=CNOlist,
     model=modelCut,
     simList=simListCut,
     indexList=indexList,
     timeIndex=timeIndex)
-  
+
   return(SimT2)
+}
+
+
+
+
+internal_simulateT1<-function(CNOlist, model, bStringT1, simList=NULL, indexList=NULL){
+    # simList and indexList are computed inside this function. 
+    # However, for back-compatibility, we keep the arguments so that if
+    # provided, we can still use them.
+
+    # cut the model
+    modelCut <- cutModel(model, bStringT1)
+    if (is.null(simList)==TRUE){
+        simList = prep4sim(model)
+    }
+    if (is.null(indexList)==TRUE){
+        indexList = indexFinder(CNOlist, model)
+    }
+
+    # cut the model
+    newSimList = cutSimList(simList, bStringT1)
+
+    # compute the results
+    simRes <- simulatorT1(CNOlist=CNOlist, model=modelCut, simList=newSimList, 
+        indexList=indexList)
+
+    return(simRes)
 }
