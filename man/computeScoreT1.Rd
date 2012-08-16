@@ -13,7 +13,7 @@ sizeFac and NAFac are penalties added to the final score as described in
 }
 
 \usage{
-computeScoreT1(CNOlist, model, simList, indexList, bitString, sizeFac=0.0001, NAFac=1)
+computeScoreT1(CNOlist, model, simList, indexList, bString, sizeFac=0.0001, NAFac=1)
 
 }
 
@@ -34,7 +34,7 @@ computeScoreT1(CNOlist, model, simList, indexList, bitString, sizeFac=0.0001, NA
         a list of indexes of the species stimulated/inhibited/measured in the 
         model, as created by \code{indexFinder}.
     }
-    \item{bitString}{
+    \item{bString}{
         a bitstring of the same size as the number of reactions in the model above
     }
     \item{sizeFac}{
