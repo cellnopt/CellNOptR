@@ -10,7 +10,7 @@ prep4Sim <- function(model, params){
 
 simulateT1 <- function(CNOlist, model, bStringT1,simList, indexList){
     warning("simulateT1 is a deprecated function. Use simulate instead. ")
-    return(simulate(CNOlist, model, bStrings=list(bStringT1)))
+    return(simulateTN(CNOlist, model, bStrings=list(bStringT1)))
 }
 
 computeScoreT2 <- function(CNOlist, model, simList=NULL, indexList=NULL, 
