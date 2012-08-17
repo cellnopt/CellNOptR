@@ -13,15 +13,10 @@
 #
 ##############################################################################
 # $Id$
-gaBinaryTNtest <-function(
+gaBinaryTN <-function(
     CNOlist,
     model,
-    simList,
-    indexList,
-    bStringPrev,
-    simResPrev,
-    timeIndex,
-    bStringTimes,
+    bStrings,
     sizeFac=0.0001,
     NAFac=1,
     popSize=50,
@@ -38,13 +33,19 @@ gaBinaryTNtest <-function(
 
     # ---- section related to T2  ----
     #Find the bits to optimise
+    N = length(bStrings)
+    bStringPrev = bStrings[[N]]
+    timeIndex = N + 2   # +1 for T0 and +1 for the current time (bStrings length is N-1 indeed)
+
     bits2optimise<-which(bStringPrev == 0)
     bLength<-length(bits2optimise)
 
-#     simResT1<-simulateT1(CNOlist=CNOlist, model=model, bStringT1=bStringT1,
-#             simList=simList, indexList=indexList)
-    # ---- section related to T2  end ----
+    simList = prep4sim(model)
+    indexList = indexFinder(CNOlist, model)
 
+    simResPrev<-simulateTN(CNOlist=CNOlist, model=model, bStrings=bStrings)
+
+    # ---- section related to T2  end ----
 
     Pop <- round(matrix(runif(bLength*(popSize)), nrow=(popSize),ncol=bLength))
 
@@ -77,8 +78,14 @@ gaBinaryTNtest <-function(
             } # otherwise let us keep going
         }
 
-        Score = computeScoreTN(CNOlist, model, simList, indexList, simResPrev,
-                    bStringPrev, bStringTimes, timeIndex, bitString, sizeFac, NAFac)
+        # must use bstrings concatenate with the proposal not just the previous
+        # and next. Works for T2 but not for TN.
+        #Score = computeScoreTN(CNOlist, model, simList, indexList, 
+	    #	simResPrev, bStringPrev, bitString, timeIndex=timeIndex, sizeFac=sizeFac, NAFac=NAFac)
+        bStrings[[N+1]] = bitString
+
+        Score = computeScoreTN(CNOlist, model, simList, indexList, simResPrev, bStringPrev=NULL,  bStringNext=NULL,
+            bStrings=bStrings, timeIndex=timeIndex, sizeFac=sizeFac, NAFac=NAFac)
 
         return(Score)
     }
