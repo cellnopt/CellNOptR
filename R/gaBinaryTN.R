@@ -31,7 +31,6 @@ gaBinaryTN <-function(
     priorBitString=NULL,
     maxSizeHashTable=5000){
 
-    # ---- section related to T2  ----
     #Find the bits to optimise
     N = length(bStrings)
     bStringPrev = bStrings[[N]]
@@ -40,10 +39,14 @@ gaBinaryTN <-function(
     bits2optimise<-which(bStringPrev == 0)
     bLength<-length(bits2optimise)
 
+   if (is.list(bStrings)==FALSE){
+         stop("CellNOpt Error: 3d argument called bStrings must be a list of vectors. Each vector representing a bit string")
+     }
+
+    # compute it once for all (recomputed many times in computeScore otherwise)
+    simResPrev<-simulateTN(CNOlist=CNOlist, model=model, bStrings=bStrings)
     simList = prep4sim(model)
     indexList = indexFinder(CNOlist, model)
-
-    simResPrev<-simulateTN(CNOlist=CNOlist, model=model, bStrings=bStrings)
 
     # ---- section related to T2  end ----
 
