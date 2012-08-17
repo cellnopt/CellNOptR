@@ -13,7 +13,7 @@
 #
 ##############################################################################
 # $Id$
-simulate<-function(CNOlist, model, bStrings){
+simulateTN<-function(CNOlist, model, bStrings){
 #simResT1,bStringT2,bStringTimes,simList,indexList,timeIndex){
 
     if (is.list(bStrings)==FALSE){
