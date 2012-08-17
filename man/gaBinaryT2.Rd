@@ -7,7 +7,7 @@ Genetic algorithm for time point 2
 This is the genetic algorithm for time point 2, that should follow optimisation based on time point 1.
 }
 \usage{
-gaBinaryT2(CNOlist, model, simList, indexList, bStringT1, sizeFac = 1e-04, NAFac = 1,
+gaBinaryT2(CNOlist, model, indexList, bStringT1, sizeFac = 1e-04, NAFac = 1,
 popSize = 50, pMutation = 0.5, maxTime = 60, maxGens = 500,
 stallGenMax = 100, selPress = 1.2, elitism = 5, relTol = 0.1, verbose=TRUE,
 priorBitString=NULL, maxSizeHashTable=5000)
@@ -19,8 +19,6 @@ a CNOlist on which the score is based (based on valueSignals[[3]], i.e. data at 
   \item{model}{
 a model structure, as created by \code{readSIF}, normally pre-processed but that
 is not a requirement of this function
-}
-  \item{simList}{a simList structure as created by \code{prep4sim}.
 }
   \item{indexList}{
 a list of indexes of species stimulated/inhibited/signals, as produced by indexfinder applied on teh model and CNOlist above
@@ -105,19 +103,15 @@ data(ToyModel2,package="CellNOptR")
 checkSignals(CNOlistToy2,ToyModel2)
 results = preprocessing(CNOlistToy2, ToyModel2)
 processedModel = results$model
-indices = results$indices
 
 #optimise t1
-ToyFields4Sim2<-prep4sim(processedModel)
 initBstring2<-rep(1,length(processedModel$reacID))
 ToyT1opt2<-gaBinaryT1(
 	CNOlist=CNOlistToy2,
 	model=processedModel,
-	simList=ToyFields4Sim2,
-	indexList=indices,
 	initBstring=initBstring2,
-	maxGens=2,
-	popSize = 5,
+	maxGens=10,
+	popSize = 10,
 	verbose=FALSE)
 
 #Optimise T2
@@ -125,10 +119,8 @@ ToyT1opt2<-gaBinaryT1(
 ToyT1opt2T2<-gaBinaryT2(
 	CNOlist=CNOlistToy2,
 	model=processedModel,
-	simList=ToyFields4Sim2,
-	indexList=indices,
 	bStringT1=ToyT1opt2$bString,
-	maxGens=2,
-	popSize = 5,
+	maxGens=10,
+	popSize = 10,
 	verbose=FALSE)
 }

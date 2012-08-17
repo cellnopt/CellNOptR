@@ -49,7 +49,7 @@ Inflammatory Stimuli, PLoS Comp. Biol., 7(3): e1001099, 2011.}
 C. Terfve
 }
 \seealso{
-simulateT1, cutAndPlotResultsT1
+\link{simulateTN}, \link{cutAndPlotResultsT1}
 }
 \examples{
 #This computes the output of the full model, which is normally not done on a stand alone basis, but if you have a model and would like to visualise its output compared to your data, then this is what you should do

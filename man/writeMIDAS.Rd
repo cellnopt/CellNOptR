@@ -1,6 +1,5 @@
 \name{writeMIDAS}
 \alias{writeMIDAS}
-\alias{readMidas}
 \title{Write a CNOlist structure into a MIDAS file}
 \description{
 This function takes a CNOlist structure (output of makeCNOlist and readMIDAS) and save it a MIDAS format.
@@ -22,7 +21,7 @@ writeMIDAS(CNOlist, filename)
 T. Cokelaer
 }
 \seealso{
-\link{makeCNOlist}, \link{readMIDAS}
+\link{makeCNOlist}, \link{readMIDAS}, \link{CNOlist}
 }
 \examples{
    tmpdir<-tempdir()

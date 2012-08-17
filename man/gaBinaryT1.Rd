@@ -7,7 +7,7 @@ Genetic algorithm used to optimise a model
 This function is the genetic algorithm to be used to optimise a model by fitting to data containing one time point.
 }
 \usage{
-gaBinaryT1(CNOlist, model, simList, indexList, initBstring, sizeFac = 1e-04, 
+gaBinaryT1(CNOlist, model, initBstring=NULL, sizeFac = 1e-04, 
     NAFac = 1, popSize = 50, pMutation = 0.5, maxTime = 60, maxGens = 500,
     stallGenMax = 100, selPress = 1.2, elitism = 5, relTol = 0.1, verbose=TRUE,
     priorBitString=NULL, maxSizeHashTable=5000)
@@ -21,15 +21,9 @@ time 1)
 a model structure, as created by \code{readSIF}, normally pre-processed but that
 is not a requirement of this function
 }
-  \item{simList}{
-a list that contains additional fields for the simulator, as created by prep4sim applied to the model above
-}
-  \item{indexList}{
-a list of indexes of species stimulated/inhibited/signals, as produced by indexfinder applied on the model and CNOlist above
-}
   \item{initBstring}{
 an initial bitstring to be tested, should be of the same size as the number of
-reactions in the model above (model$reacID).
+reactions in the model above (model$reacID). Default is all ones.
 }
   \item{sizeFac}{
 the scaling factor for the size term in the objective function, default to 0.0001
@@ -113,15 +107,12 @@ indices = results$indices
 
 #optimise
 
-ToyFields4Sim<-prep4sim(processedModel)
 initBstring<-rep(1,length(processedModel$reacID))
 ToyT1opt<-gaBinaryT1(
 	CNOlist=CNOlistToy,
 	model=processedModel,
-	simList=ToyFields4Sim,
-	indexList=indices,
 	initBstring=initBstring,
-	maxGens=2, popSize=5, verbose=FALSE)
+	maxGens=10, popSize=10, verbose=FALSE)
 
 # During the optimisation, some bits can be overwritten by your prior knowledge 
 # First, you need to create a priorBitString made of NA where known bit values
@@ -132,7 +123,7 @@ priorBitString[2] = 1
 
 # Second, you call the gaBinaryT1 function by providing the priorBitString
 # argument:
-ToyT1opt<-gaBinaryT1(CNOlist=CNOlistToy, model=processedModel,	simList=ToyFields4Sim,	
-    indexList=indices, initBstring=initBstring,	maxGens=2, popSize=5, verbose=FALSE, 
+ToyT1opt<-gaBinaryT1(CNOlist=CNOlistToy, model=processedModel,
+     initBstring=initBstring,	maxGens=10, popSize=10, verbose=FALSE, 
     priorBitString=priorBitString)
 }

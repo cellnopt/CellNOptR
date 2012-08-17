@@ -43,7 +43,7 @@ T. Cokelaer
 # Considering the optimised bitstrings at T1, T2 and T3 to be c(1,1,0,1,0,0),
 # c(0,1,0) and c(0,1), then we can build the overall bitStrings as follows:
 
-res = buildBitString(c(1,1,0,1,0,0), c(0,1,0), c(0,1))
+res = buildBitString(list(c(1,1,0,1,0,0), c(0,1,0), c(0,1)))
 
 # The results bit string is accessed through the bs field:
 res$bs
