@@ -16,7 +16,7 @@
 gaBinaryT1<-function(
     CNOlist,
     model,
-    initBstring,
+    initBstring=NULL,
     sizeFac=0.0001,
     NAFac=1,
     popSize=50,
@@ -30,6 +30,11 @@ gaBinaryT1<-function(
     verbose=TRUE,
     priorBitString=NULL,
     maxSizeHashTable=5000){
+
+    # by default initial bit string is made of ones.
+    if (is.null(initBstring)==TRUE){
+        initBstring<-rep(1,length(model$reacID))
+    }
 
     # ---- section related to T1  ----
     bLength<-length(initBstring)
