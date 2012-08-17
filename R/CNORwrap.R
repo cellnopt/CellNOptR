@@ -139,7 +139,7 @@ compression=TRUE, expansion=TRUE, cutNONC=TRUE)
     #9.Plot simulated and experimental results
     cutAndPlot(
         model=NCNOcutCompExp,
-        bStringT1=T1opt$bString,
+        bStrings=list(T1opt$bString),
         CNOlist=paramsList$data,
         plotPDF=TRUE)
 
@@ -171,8 +171,8 @@ compression=TRUE, expansion=TRUE, cutNONC=TRUE)
             relTol=paramsList$relTol,
             verbose=paramsList$verbose)
 
-        cutAndPlot(model=NCNOcutCompExp,CNOlist=paramsList$data, bStringT1=T1opt$bString,
-            bStringT2=T2opt$bString, plotPDF=TRUE)
+        cutAndPlot(model=NCNOcutCompExp,CNOlist=paramsList$data,
+            bStrings=list(T1opt$bString, bStringT2=T2opt$bString), plotPDF=TRUE)
 
         pdf(paste(Name,"evolFitT2.pdf",sep=""))
         plotFit(optRes=T2opt)
