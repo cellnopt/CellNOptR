@@ -17,8 +17,9 @@
 # Function that computes the score of a specific bitstring
 # Although it is very similar to computeScoreT1, there are enough differences to
 # have a different function.
-computeScoreTN<-function(CNOlist, model, simList=NULL, indexList=NULL, simResPrev, bStringPrev, 
-    bStringNext, timeIndex=3, sizeFac=0.0001, NAFac=1){
+computeScoreTN<-function(CNOlist, model, simList=NULL, indexList=NULL,
+    simResPrev=NULL, bStringPrev=NULL, 
+    bStringNext=NULL, timeIndex=3, sizeFac=0.0001, NAFac=1, bStrings=NULL){
 
     # by default same behaviour as computeScoreT2
     # timeIndex=3 stands for T2 by default.
@@ -30,24 +31,53 @@ computeScoreTN<-function(CNOlist, model, simList=NULL, indexList=NULL, simResPre
         indexList = indexFinder(CNOlist, model)
     }
 
-    bitString <- bStringPrev
-    bitString[which(bStringPrev == 0)] <- bStringNext
-    bStringTimes = bStringPrev
-    bStringTimes[which(bStringPrev == 0)] <- bStringNext * (timeIndex-1)
+    # if no previous results provided, we must recompute simulated results at
+    # each time. This is slower but provides an easy user interface. Just
+    # cnolist, model and list of bitStrings is required.
+    if (is.null(simResPrev) == TRUE){
+        res = buildBitString(bStrings)
+        bitString = res$bs
+        bStringTimes = res$bsTimes
+        if (is.null(bStrings)==FALSE){
+            simResults = simulateTN(CNOlist, model, bStrings)
+        }
+
+        modelCut = cutModel(model, bitString)
+        modelCut$times <- bStringTimes[which(bStringTimes != 0)]
+        simListCut <- cutSimList(simList, bitString)
+
+    }
+    else{
 
 
-    modelCut = cutModel(model, bitString)
-    modelCut$times <- bStringTimes[which(bStringTimes != 0)]
-    simListCut <- cutSimList(simList, bitString)
+        if (is.null(bStrings)==TRUE){
+            # if no bStrings, we have prev and next bistring that must be
+            # provided and it should correspond to T2 analysis
+            # TODO: sanity checl that timeIndex is correct
+            bStrings = list(bStringPrev, bStringNext)
+        } else {
+            # need to check that length of bStrings is in agreement with
+            # timeIndex.
+        }
 
-    # Compute the simulated results
-    simResults <- simulatorTN(
-        simResultsPrev=simResPrev,
-        CNOlist=CNOlist,
-        model=modelCut,
-        simList=simListCut,
-        indexList=indexList,
-        timeIndex=timeIndex)
+        res = buildBitString(bStrings)
+        bitString = res$bs
+        bStringTimes = res$bsTimes
+
+        modelCut = cutModel(model, bitString)
+        modelCut$times <- bStringTimes[which(bStringTimes != 0)]
+        simListCut <- cutSimList(simList, bitString)
+        # Compute the simulated results
+        simResults <- simulatorTN(
+            simResultsPrev=simResPrev,
+            CNOlist=CNOlist,
+            model=modelCut,
+            simList=simListCut,
+            indexList=indexList,
+            timeIndex=timeIndex)
+    }
+
+
 
     #Compute the score
     Score <- getFit(
