@@ -14,74 +14,102 @@
 ##############################################################################
 # $Id$
 
-cutAndPlotResultsT2 <-function(model, bStringT1, bStringT2, simList, CNOlist,
-    indexList, plotPDF=FALSE, tag=NULL, 
+cutAndPlotResultsT2 <-function(CNOlist, model, bStringT1, bStringT2, simList,
+    indexList, plotPDF=FALSE, tag=NULL, show=TRUE, 
     tPt=CNOlist$timeSignals[2:3])
 {
+
     modelCut <- cutModel(model, bStringT1)
     simListCut <- cutSimList(simList, bStringT1)
-    SimT1 <- simulatorT1(CNOlist=CNOlist, model=modelCut, simList=simListCut, indexList=indexList)
+
+    # t0
+    Sim0 <- simulatorT0(CNOlist=CNOlist,model=modelCut,simList=simListCut,indexList=indexList)
+    simResT0 <- as.matrix(Sim0[,indexList$signals])
+
+    # t1
+    # same as simulateTN followed by selection of indexList$signals
+    # SimT1 = simulatorT1(CNOlist=CNOlist, model=modelCut, simList=simListCut, indexList=indexList)
+    SimT1 = simulateTN(CNOlist, model, bStrings=list(bStringT1))
     simResT1 <- as.matrix(SimT1[,indexList$signals])
 
-    # simulate T2
+    SimT2 = simulateTN(CNOlist, model, bStrings=list(bStringT1, bStringT2))
+    simResT2 <- as.matrix(SimT2[,indexList$signals])
 
-    # prepare the model
-    bitString2 <- bStringT1
-    bitString2[which(bStringT1 == 0)] <- bStringT2
-    BStimes <- bStringT1
-    BStimes[which(bStringT1 == 0)] <- bStringT2*2
-
-    modelcut <- model
-    modelcut$interMat <- modelcut$interMat[,as.logical(bitString2)]
-    modelcut$notMat <- modelcut$notMat[,as.logical(bitString2)]
-    modelcut$reacID <- modelcut$reacID[as.logical(bitString2)]
-    modelcut$times <- BStimes[which(BStimes != 0)]
-
-    simListCut <- cutSimList(simList, bitString2)
-
-    # simulate
-    SimT2 <- simulatorT2(
-        simResultsT1=SimT1,
-        CNOlist=CNOlist,
-        model=modelcut,
-        simList=simListCut,
-        indexList=indexList)
-    simResT2 <- SimT2[,indexList$signals]
 
     # put it all together
-
-    Sim0 <- simulatorT0(CNOlist=CNOlist,model=modelcut,simList=simListCut,indexList=indexList)
-    simResT0 <- as.matrix(Sim0[,indexList$signals])
 
     simResults <- list(
         t0=simResT0,
         t1=simResT1,
         t2=simResT2)
 
+    # if there is a lot of data, split up cnolist
+    # make the max dimensions 10 x 10
 
-    plotOptimResultsPan(
-        simResults=simResults,
-        CNOlist=CNOlist,
-        formalism="ss2",
-        tPt=tPt
-    )
+    dim1 = dim(CNOlist$valueSignals[[1]])[1]
+    dim2 = dim(CNOlist$valueSignals[[1]])[2]
 
-    if(plotPDF == TRUE) {
-        if(is.null(tag)) {
-            filename <- "SimResultsT1T2.pdf"
+    CNOlistSet = list()
+    simResultsSet = list()
+
+    if(dim1 > 10) { #|| dim2 > 10) {
+
+        par1 = ceiling(dim1/10)
+        div1 = ceiling(dim1/par1)
+        par2 = ceiling(dim2/10)
+        div2 = ceiling(dim2/par2)
+
+        count1 = 1
+        for(a in 1:par1) {
+            CNOdiv = CNOlist
+            simDiv = simResults
+            finalN = div1 * a
+            if(finalN > dim1) {finalN = dim1}
+            CNOdiv$valueCues = CNOdiv$valueCues[count1:finalN,]
+            CNOdiv$valueStimuli = CNOdiv$valueStimuli[count1:finalN,]
+            CNOdiv$valueInhibitors = CNOdiv$valueInhibitors[count1:finalN,]
+            for(b in 1:length(CNOdiv$valueSignals)) {
+                CNOdiv$valueSignals[[b]] = CNOdiv$valueSignals[[b]][count1:finalN,]
+            }
+            for(d in 1:length(simDiv)) {
+                simDiv[[d]] = simDiv[[d]][count1:finalN,]
+            }
+            count1 = count1 + div1
+            CNOlistSet = c(CNOlistSet, list(CNOdiv))
+            simResultsSet = c(simResultsSet, list(simDiv))
         }
-        else {
-            filename<-paste(tag, "SimResultsT1T2.pdf", sep="_")
-        }
+    } else {
 
-        plotOptimResultsPan(
-            simResults=simResults,
-            CNOlist=CNOlist,
+        CNOlistSet = list(CNOlist)
+        simResultsSet = list(simResults)
+    }
+
+    for(f in 1:length(CNOlistSet)) {
+
+        if(show==TRUE) {
+            plotOptimResultsPan(
+            simResults=simResultsSet[[f]],
+            CNOlist=CNOlistSet[[f]],
             formalism="ss2",
-            tPt=tPt,
-            pdfFileName=filename,
-            pdf=TRUE
-        )
+            tPt=tPt
+            )
+        }
+
+        if(plotPDF == TRUE) {
+            if(is.null(tag)) {
+                filename <- paste("SimResultsT2", f, ".pdf", sep="")
+            } else {
+                filename <- paste(tag,"SimResultsT2", f, ".pdf", sep="_")
+            }
+            plotOptimResultsPan(
+                simResults=simResultsSet[[f]],
+                CNOlist=CNOlistSet[[f]],
+                pdf=TRUE,
+                formalism="ss2",
+                pdfFileName=filename,
+                tPt=tPt
+            )
+        }
     }
 }
 
