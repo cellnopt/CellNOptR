@@ -14,102 +14,44 @@
 ##############################################################################
 # $Id$
 
-cutAndPlotResultsTN <-function(
-  model,
-  res,
-  simList,
-  CNOlist,
-  indexList,
-  plotPDF=FALSE, 
-  tag=NULL,
-  tPt=CNOlist$timeSignals[2:length(CNOlist$timeSignals)]){
-  
+cutAndPlotResultsTN <-function(CNOlist, model,bStrings, simList,
+ indexList, plotPDF=FALSE,  tag=NULL, show=True,
+  tPt=CNOlist$timeSignals[2:length(CNOlist$timeSignals)])
+{
+    modelCut <- cutModel(model, bStrings[[1]])
+    simListCut <- cutSimList(simList, bStrings[[1]])
 
-  # prepare the model (i.e. cut)
-  bStringT1<-res$Opt[[2]]$bString
-  modelCut <- model
-  modelCut$interMat <- modelCut$interMat[,as.logical(bStringT1)]
-  modelCut$notMat <- modelCut$notMat[,as.logical(bStringT1)]
-  modelCut$reacID <- modelCut$reacID[as.logical(bStringT1)]
-  
-  simListCut <- cutSimList(simList, res$Opt[[2]]$bString)
-  
-  # simulate
-  
-  Sim0 <- simulatorT0(CNOlist=CNOlist,model=modelCut,simList=simListCut,indexList=indexList)
-  SimResT0 <- as.matrix(Sim0[,indexList$signals])
-  simResults<-list()
-  simResults[[1]]<-SimResT0
-  for(i in 2:length(res$simRes)){
-    simResTN<-res$simRes[[i]]
-    cutRes<-simResTN[,indexList$signals]
-    simResults[[i]]<-cutRes
-  
-  }
-  
-#   SimResults <- list(
-#     t0=SimResT0,
-#     t1=SimResT1)
-#   
-#   
-#   # simulate T2
-#   bStringPrev<-bStringT1
-#   # prepare the model
-#   SimResPrev<-SimT1
-#   for(i in 3:length(bStringTN)){
-#     SimResTN<-Res$simRes[[i]]
-#     cutRes<-SimResTN[,indexList$signals]
-#     SimResults[[i]]<-cutRes
-# #   bitStringCurr <- bStringPrev
-# #   bitStringCurr[which(bStringPrev == 0)] <- bStringTN[[i]]
-# #   BStimes <- bStringT1
-# #   BStimes[which(bStringPrev == 0)] <- bStringTN[[i]]*(i-1)
-# #   
-# #   Modelcut <- Model
-#   Modelcut$interMat <- Modelcut$interMat[,as.logical(bitStringCurr)]
-#   Modelcut$notMat <- Modelcut$notMat[,as.logical(bitStringCurr)]
-#   Modelcut$reacID <- Modelcut$reacID[as.logical(bitStringCurr)]
-#   Modelcut$times <- BStimes[which(BStimes != 0)]
-#   
-#   SimListCut <- cutSimList(SimList, bitStringCurr)
-#   
-# #   # simulate
-# #   simTN<-simulateTN(CNOlist=CNOlist,
-# #                           Model=Model,
-# #                           bStringTN=bStringTN[[i]],
-# #                           SimList=SimListCut,
-# #                           indexList=indexList,
-# #                           SimResultsPrev=SimResPrev)
-# #   
-# #   
-#   SimTN <- simulatorTN(
-#     SimResultsPrev=SimResPrev,
-#     CNOlist=CNOlist,
-#     Model=Modelcut,
-#     SimList=SimListCut,
-#     indexList=indexList,
-#     TimePoint=(i-1))
-#   SimResPrev<-SimTN
-#   SimResults[[i]] <- SimTN[,indexList$signals]
-#   bStringPrev<-bitStringCurr
-# }
+    # t0
+    Sim0 <- simulatorT0(CNOlist=CNOlist,model=modelCut,simList=simListCut,indexList=indexList)
+    simResT0 <- as.matrix(Sim0[,indexList$signals])
 
-  plotOptimResultsPan(
-    simResults=simResults,
-    CNOlist=CNOlist,
-    formalism="ssN",
-    tPt=tPt,
-    #timePoints=length(tPt)
-  )
-  
+    # simulate
+    simResults<-list()
+    simResults[[1]]<-simResT0
+
+    for(i in 1:length(bStrings)){
+      simRes = simulateTN(CNOlist, model, bStrings[1:i])
+      cutRes<-simRes[,indexList$signals]
+      simResults[[i+1]]<-cutRes
+    }
+
+
+    plotOptimResultsPan(
+      simResults=simResults,
+      CNOlist=CNOlist,
+      formalism="ssN",
+      tPt=tPt,
+      #timePoints=length(tPt)
+    )
+
   if(plotPDF == TRUE) {
-    if(is.null(tag)) {
-      filename <- paste(deparse(substitute(Model)),"SimResultsT1T2.pdf",sep="")
+    if(is.null(tag)==TRUE) {
+      filename <- paste("SimResultsTN", ".pdf", sep="")
     }
     else {
-      filename<-paste(tag, "SimResultsT1T2.pdf", sep="_")
+      filename<-paste(tag, "SimResultsTN.pdf", sep="_")
     }
-    
+
     plotOptimResultsPan(
       simResults=simResults,
       CNOlist=CNOlist,
@@ -119,5 +61,5 @@ cutAndPlotResultsTN <-function(
       pdf=TRUE,
       #TimePoints=length(tPt)
     )
-  }		
+  }
 }
