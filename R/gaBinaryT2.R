@@ -33,18 +33,19 @@ gaBinaryT2 <-function(
 
     # ---- section related to T2  ----
     #Find the bits to optimise
+    timeIndex = 3
+
     bits2optimise<-which(bStringT1 == 0)
     bLength<-length(bits2optimise)
 
     simList = prep4sim(model)
     indexList = indexFinder(CNOlist, model)
 
-    simResT1<-simulateT1(CNOlist=CNOlist, model=model, bStringT1=bStringT1)
+    simResT1<-simulateTN(CNOlist=CNOlist, model=model, bStrings=list(bStringT1))
+
     # ---- section related to T2  end ----
 
-
-    Pop <- round(matrix(runif(bLength*(popSize)), 
-        nrow=(popSize),ncol=bLength))
+    Pop <- round(matrix(runif(bLength*(popSize)), nrow=(popSize),ncol=bLength))
 
     Pop <- addPriorKnowledge(Pop, priorBitString)
 
@@ -75,8 +76,8 @@ gaBinaryT2 <-function(
             } # otherwise let us keep going
         }
 
-        Score = computeScoreT2(CNOlist, model, simList, indexList, 
-			simResT1, bStringT1, bitString, sizeFac, NAFac)
+        Score = computeScoreTN(CNOlist, model, simList, indexList, 
+			simResT1, bStringT1, bitString, timeIndex=timeIndex, sizeFac=sizeFac, NAFac=NAFac)
 
         return(Score)
     }
