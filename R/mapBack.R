@@ -13,8 +13,8 @@
 #
 ##############################################################################
 # $Id$
-MapBack <-
-  function(model,PKN,bString){
+mapBack <-
+  function(model, PKN, bString){
     #the mapback for each link A->B in the compressed model is done looking
     #at the PKN as a graph and considering a subgraph of it including only
     #node A, node B and compressed nodes. All paths going from A to B in this
