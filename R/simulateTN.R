@@ -21,11 +21,9 @@ simulateTN<-function(CNOlist, model, bStrings){
     }
 
     if (length(bStrings) == 1){
-        print("simulateT1")
         simPrev = internal_simulateT1(CNOlist, model, bStrings[[1]])
     }
     else if (length(bStrings) > 1){
-        print("simulateTN")
         # T1 first
         simPrev = internal_simulateT1(CNOlist, model, bStrings[[1]])
         # Then, loop over T2 to TN
