@@ -14,25 +14,23 @@
 ##############################################################################
 # $Id$
 
-cutAndPlotResultsT1 <- function(model, bString, simList, CNOlist,
+cutAndPlotResultsT1 <- function(CNOlist, model, bString, simList,
     indexList, plotPDF=FALSE, tag=NULL, show=TRUE,
     tPt=CNOlist$timeSignals[2]
     )
 {
-    # tPt is always 2 so why having this argument ?
 
     modelCut <- cutModel(model, bString)
     simListCut <- cutSimList(simList, bString)
+
+    # t0
+    Sim0 <- simulatorT0(CNOlist=CNOlist, model=modelCut, simList=simListCut, indexList=indexList)
+    simRes0 <- as.matrix(Sim0[,indexList$signals])
+
+    # t1
     Sim <- simulatorT1(CNOlist=CNOlist, model=modelCut, simList=simListCut, indexList=indexList)
     simRes <- as.matrix(Sim[,indexList$signals])
 
-    # former code when t0 was not taken into account (everything set to zero)
-    # simResults <- list(t0=matrix(data=0,nrow=dim(simRes)[1],ncol=dim(simRes)[2]),t1=simRes)
-
-    # new code
-    Sim0 <- simulatorT0(CNOlist=CNOlist, model=modelCut,
-    simList=simListCut, indexList=indexList)
-    simRes0 <- as.matrix(Sim0[,indexList$signals])
     simResults <- list(t0=simRes0, t1=simRes)
 
     # if there is a lot of data, split up cnolist
@@ -89,9 +87,9 @@ cutAndPlotResultsT1 <- function(model, bString, simList, CNOlist,
 
         if(plotPDF == TRUE) {
             if(is.null(tag)) {
-                filename <- paste("SimResultsT1", f, ".pdf", sep="")
+                filename <- paste("SimResultsT1_", f, ".pdf", sep="")
             } else {
-                filename <- paste(tag,"SimResultsT1",f,".pdf",sep="")
+                filename <- paste(tag,"SimResultsT1",f,".pdf",sep="_")
             }
             plotOptimResultsPan(
                 simResults=simResultsSet[[f]],
