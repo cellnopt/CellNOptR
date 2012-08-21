@@ -70,8 +70,6 @@ initBstring<-rep(1,length(ToyNCNOcutCompExp$reacID))
 ToyT1opt<-gaBinaryT1(
 	CNOlist=CNOlistToy,
 	model=ToyNCNOcutCompExp,
-	simList=ToyFields4Sim,
-	indexList=indicesToyNCNOcutComp,
 	initBstring=initBstring, 
 	maxGens=3,
 	popSize=5,

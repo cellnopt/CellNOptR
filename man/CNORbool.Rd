@@ -14,11 +14,20 @@ This function is a wrapper around the whole CNOR analysis, it performs the follo
  }
 }
 \usage{
-CNORbool(paramsList=NA, data=NA, model=NA, name, namesData=NA, time=1,
-compression=TRUE, expansion=TRUE, cutNONC=TRUE, html=FALSE)
+CNORbool(CNOlist, model, paramsList=defaultParameters(),
+    compression=TRUE, expansion=TRUE, cutNONC=TRUE, verbose=FALSE)
+
+
 }
 
 \arguments{
+\item{CNOlist}{
+
+}
+
+\item{model}{
+
+}
 
   \item{paramsList}{
     A list of parameters related to the Genetic Algorithm parameters:
@@ -34,34 +43,9 @@ compression=TRUE, expansion=TRUE, cutNONC=TRUE, html=FALSE)
      \item relTol: default to 0.1;
      \item verbose: default to FALSE (default to true in the functions used by CNORbool but CNORbool sets them to false by default).
    }
-  }
-  and the Data and Model structure.
+  
 
   If paramsList is not provided (NA), it is filled internally with the \link{defaultParameters} function.
-
-  If Data and Model are not provided in \code{paramList}, the function looks for Data and Model arguments.
-
-  If Data and Model are provided, the function overwrites the field \code{data} and \code{model} in \code{paramsList}.
-
-
-  \item{data}{
-a CNOlist structure, as created by \link{makeCNOlist}
-}
-  \item{model}{
-a model structure, as created by \link{readSIF}.
-}
- \item{name}{
-a string that will be used to name the project and all graphs produced
-}
- \item{namesData}{
-a list with two elements:CNOlist and Model, each containing a string that is a
-reference for the user to know which model/data set was used (it will be
-included in the report). If not provided, the list is built automatically using
-the name arguments.
-}
- \item{time}{
-either 1 or 2: Do you want to perform a one time point steady state optimisation
-or a 2 time points pseudo steady state optimisation. By default this is set to 1.
 }
 \item{compression}{
 compress the model (default TRUE)
@@ -72,9 +56,9 @@ expand the gates (default TRUE)
 }
 \item{cutNONC}{
 cut the NONC nodes off the model by (default TRUE)
-
 }
-
+\item{verbose}{
+FALSE}
 }
 \details{
 If you do not provide a parameters list, you can provide only essential elements,

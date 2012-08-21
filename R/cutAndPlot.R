@@ -14,7 +14,7 @@
 ##############################################################################
 # $Id$
 
-cutAndPlot <- function(CNOlist, model, bStrings=NULL, plotPDF=FALSE, tag=NULL, show=TRUE)
+cutAndPlot <- function(CNOlist, model, bStrings, plotPDF=FALSE, tag=NULL, show=TRUE)
 {
 
     # bitStrings must be a list of bitString (T1, T2, ...TN)
@@ -30,29 +30,20 @@ cutAndPlot <- function(CNOlist, model, bStrings=NULL, plotPDF=FALSE, tag=NULL, s
 
     # if tPt=2 (default), call cutAndPlotResultsT1
     if (tPt == 2){
-       cutAndPlotResultsT1(CNOlist=CNOlist, model=model, bString=bStrings[[1]], simList=simList, 
-             indexList=indexList, plotPDF=plotPDF, tag=tag, show=show)
+
+       cutAndPlotResultsT1(model=model, bString=bStrings[[1]], simList=simList, 
+            CNOlist=CNOlist, indexList=indexList, plotPDF=plotPDF, tag=tag, show=show)
     }
 
-    # if tPt=2 (default), call cutAndPlotResultsT2
-    if (tPt==3){ # use TN variant now.
-       #print("Entering cutAndPlotResultsT2")
-       cutAndPlotResultsT2(CNOlist, model=model, bStringT1=bStrings[[1]], 
-         bStringT2=bStrings[[2]],  simList=simList, indexList=indexList,  plotPDF=plotPDF, tag=tag) 
-    }
-
-    if (tPt>3){
-       #print("Entering cutAndPlotResultsTN")
+    if (tPt>=3){
+       print("Entering cutAndPlotResultsTN")
        cutAndPlotResultsTN(
          CNOlist=CNOlist,
          model=model,
          bStrings=bStrings,
-         simList=simList,
-         indexList=indexList,
          plotPDF=plotPDF,
          tag=tag) 
     }
     # if tPt=2 (default), call cutAndPlotResultsT2
-
 
 }

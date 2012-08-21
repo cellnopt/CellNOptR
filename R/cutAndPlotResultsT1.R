@@ -14,12 +14,20 @@
 ##############################################################################
 # $Id$
 
-cutAndPlotResultsT1 <- function(CNOlist, model, bString, simList,
-    indexList, plotPDF=FALSE, tag=NULL, show=TRUE,
+cutAndPlotResultsT1 <- function(model, bString, simList=NULL, CNOlist, indexList=NULL,
+ plotPDF=FALSE, tag=NULL, show=TRUE,
     tPt=CNOlist$timeSignals[2]
     )
 {
 
+    if (is.null(simList)==TRUE){
+        simList = prep4sim(model)
+    }
+    if (is.null(indexList)==TRUE){
+        indexList = indexFinder(CNOlist, model)
+    }
+
+    # keep simList and indxList for back compatibility ?
     modelCut <- cutModel(model, bString)
     simListCut <- cutSimList(simList, bString)
 

@@ -18,12 +18,18 @@
 # Although it is very similar to computeScoreT1, there are enough differences to
 # have a different function.
 computeScoreTN<-function(CNOlist, model, simList=NULL, indexList=NULL,
-    simResPrev=NULL, bStringPrev=NULL, 
-    bStringNext=NULL, timeIndex=3, sizeFac=0.0001, NAFac=1, bStrings=NULL){
+    simResPrev=NULL, bStringPrev=NULL, bStringNext=NULL, timeIndex=NULL,
+    sizeFac=0.0001, NAFac=1, bStrings=NULL){
 
     # by default same behaviour as computeScoreT2
     # timeIndex=3 stands for T2 by default.
     #timeIndex = timeIndex # i.e., "tN"
+    if (is.null(timeIndex)==TRUE){
+        timeIndex = length(bStrings) + 1
+    }
+
+#    print(timeIndex)
+
     if (is.null(simList)==TRUE){
         simList = prep4sim(model)
     }
@@ -38,13 +44,17 @@ computeScoreTN<-function(CNOlist, model, simList=NULL, indexList=NULL,
         res = buildBitString(bStrings)
         bitString = res$bs
         bStringTimes = res$bsTimes
-        if (is.null(bStrings)==FALSE){
-            simResults = simulateTN(CNOlist, model, bStrings)
-        }
 
         modelCut = cutModel(model, bitString)
         modelCut$times <- bStringTimes[which(bStringTimes != 0)]
         simListCut <- cutSimList(simList, bitString)
+
+        if (is.null(bStrings)==FALSE){
+            simResults = simulateTN(CNOlist, model, bStrings)
+        }
+        else{
+            stop("CellNOpt erro:: you must provide either bStrings or (simResPrev, bStringPrev, bStringNext) arguments)")
+        }
 
     }
     else{

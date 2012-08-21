@@ -103,7 +103,6 @@ data(ToyModel,package="CellNOptR")
 
 results = preprocessing(CNOlistToy, ToyModel)
 processedModel = results$model
-indices = results$indices
 
 #optimise
 

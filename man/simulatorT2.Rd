@@ -1,6 +1,7 @@
 \name{simulatorT2}
 \alias{simulatorT2}
 \title{
+Deprecated since 1.3.28. Use \link{simulateTN} function instead.
 Simulation of a boolean model for time 2
 }
 \description{
@@ -45,23 +46,24 @@ C. Terfve
 }
 \examples{
 
-#This computes the output of the full model, which is normally not done on a stand alone basis, but if you have a model and would like to visualise its output compared to your data, then this is what you should do
+# This computes the output of the full model, which is normally not done on a
+# stand alone basis, but if you have a model and would like to visualise its
+# output compared to your data, then this is what you should do
 
 data(CNOlistToy2,package="CellNOptR")
 data(ToyModel2,package="CellNOptR")
 
-indicesToy<-indexFinder(CNOlistToy2,ToyModel2,verbose=FALSE)
-ToyFields4Sim<-prep4sim(ToyModel2)
+#Sim<-simulatorTN(
+#   CNOlist=CNOlistToy2,
+#   model=ToyModel2)
 
-Sim<-simulatorT1(
-	CNOlist=CNOlistToy2,
-	model=ToyModel2,
-	simList=ToyFields4Sim,
-	indexList=indicesToy)
-Sim2<-simulatorT2(
-	simResultsT1=Sim, 
-	CNOlist=CNOlistToy2, 
-	model=ToyModel2, 
-	simList=ToyFields4Sim, 
-	indexList=indicesToy)
+#Sim2<-simulatorTN(
+#   simResultsT1=Sim, 
+#  CNOlist=CNOlistToy2, 
+#   model=ToyModel2, 
+#   simList=ToyFields4Sim, 
+#   indexList=indicesToy, timeIndex=3)
+
+
 }
+

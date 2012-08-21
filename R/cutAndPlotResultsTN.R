@@ -14,10 +14,15 @@
 ##############################################################################
 # $Id$
 
-cutAndPlotResultsTN <-function(CNOlist, model,bStrings, simList,
- indexList, plotPDF=FALSE,  tag=NULL, show=True,
-  tPt=CNOlist$timeSignals[2:length(CNOlist$timeSignals)])
+cutAndPlotResultsTN <-function(CNOlist, model,bStrings, plotPDF=FALSE,
+    tag=NULL, show=TRUE)
 {
+
+  tPt=CNOlist$timeSignals[1:length(bStrings)+1]
+  simList = prep4sim(model)
+  indexList = indexFinder(CNOlist, model)
+
+
     modelCut <- cutModel(model, bStrings[[1]])
     simListCut <- cutSimList(simList, bStrings[[1]])
 

@@ -12,7 +12,7 @@ It can also be used to plot optimised model given the optimisation bitstring.}
 \usage{
 plotModel(model, CNOlist=NULL, bString=NULL, indexIntegr=NULL, signals=NULL, stimuli=NULL,
 inhibitors=NULL, NCNO=NULL, compressed=NULL, output="STDOUT",filename=NULL, 
-graphvizParams=list(), remove_dot=FALSE)
+graphvizParams=list(), remove_dot=TRUE)
 
 }
 \arguments{

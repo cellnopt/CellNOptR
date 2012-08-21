@@ -8,7 +8,7 @@ This function cuts a model according to a bitstring optimised at T1, and
 simulates the model accordingly.
 }
 \usage{
-simulateTN(CNOlist, model, bStringT1, simList, indexList)
+simulateTN(CNOlist, model, bStrings)
 }
 \arguments{
   \item{CNOlist}{
@@ -46,5 +46,5 @@ data(ToyModel,package="CellNOptR")
 simRes<-simulateTN(
 	CNOlist=CNOlistToy, 
 	model=ToyModel, 
-	bStrings=round(runif(length(ToyModel$reacID))))
+	bStrings=list(round(runif(length(ToyModel$reacID)))))
 }

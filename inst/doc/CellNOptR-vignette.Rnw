@@ -76,7 +76,7 @@ The example that we use is the toy model example from CellNOpt, which is a data 
 <<getData, eval=TRUE>>=
 cpfile<-dir(system.file("ToyModel",package="CellNOptR"),full=TRUE)
 file.copy(from=cpfile,to=getwd(),overwrite=TRUE)
-dataToy<-readMIDAS('ToyDataMMB.csv')
+dataToy<-readMIDAS("ToyDataMMB.csv")
 CNOlistToy<-makeCNOlist(dataToy,subfield=FALSE)
 @
 
@@ -246,7 +246,7 @@ We will now produce plots of our analysis.  First, we plot the results of simula
 
 \begin{center}
 <<resSim, fig=FALSE, eval=FALSE>>=
-cutAndPlot(model=ToyNCNOcutCompExp, bStringT1=ToyT1opt$bString,
+cutAndPlot(model=ToyNCNOcutCompExp, bStrings=list(ToyT1opt$bString),
     CNOlist=CNOlistToy,plotPDF=FALSE)
 @ 
 \end{center}
@@ -264,7 +264,7 @@ Setting the plotPDF argument to "TRUE" means that a PDF figure will be produced 
 <<simFitPDF, results=hide, eval=TRUE>>=
 cutAndPlot(
 	model=ToyNCNOcutCompExp,
-	bStringT1=ToyT1opt$bString,
+	bStrings=list(ToyT1opt$bString),
 	CNOlist=CNOlistToy,
 	plotPDF=TRUE)
 pdf("evolFitToyT1.pdf")
@@ -423,7 +423,7 @@ data(DreamModel,package="CellNOptR")
 
 Having loaded both data and model, you can now visualise your data using \emph{plotCNOlist} and \emph{plotCNOlistPDF}.  Then, you check that the data matches the model (\emph{checkSignals}), and get the indices of measured/inhibited/stimulated species (\emph{indexFinder}). You can now start the preprocessing of the model, i.e. find the non-observable/non-controllable species (\emph{findNONC}), cut them (\emph{cutNONC}), recompute the indices (\emph{indexFinder}), compress the model (\emph{compressModel}), recompute the indices (\emph{indexFinder}), and expand the gates (\emph{expandGates}).
 
-Having obtained a pre-processed model, we compute the residual error (\emph{residualError}), prepare the model for simulation (\emph{prep4sim}), and run the training function (\emph{gaBinaryT1}). Finally,we plot the results of our training (\emph{cutAndPlotResultsT1}, see figure \ref{fig:DREAMres}) as well as the information about the evolution of fit during optimisation (\emph{plotFit}).
+Having obtained a pre-processed model, we compute the residual error (\emph{residualError}), prepare the model for simulation (\emph{prep4sim}), and run the training function (\emph{gaBinaryT1}). Finally,we plot the results of our training (\emph{cutAndPlot}, see figure \ref{fig:DREAMres}) as well as the information about the evolution of fit during optimisation (\emph{plotFit}).
 
 \begin{figure*}
 \centerline{\includegraphics[width=\textwidth]{Fig4.pdf}}
@@ -484,7 +484,7 @@ ToyT1opt2<-gaBinaryT1(
 <<t2OptT1plot, eval=TRUE>>=
 cutAndPlot(
 	model=ToyNCNOcutCompExp2,
-	bStringT1=ToyT1opt2$bString,
+	bStrings=list(ToyT1opt2$bString),
 	CNOlist=CNOlistToy2,
 	plotPDF=TRUE)
 pdf("evolFitToy2T1.pdf")
@@ -497,10 +497,10 @@ We can now optimise the second time point.
 
 %TOSWITCH
 <<t2OptT2, eval=TRUE>>=
-ToyT1opt2T2<-gaBinaryT2(
+ToyT1opt2T2<-gaBinaryTN(
 	CNOlist=CNOlistToy2,
 	model=ToyNCNOcutCompExp2,
-	bStringT1=ToyT1opt2$bString,
+	bStrings=list(ToyT1opt2$bString),
 	stallGenMax=10,
 	maxTime=60,
 	verbose=FALSE)
@@ -514,8 +514,7 @@ Finally, we produce all the plots and write the report.
 <<resSimT2, eval=TRUE, fig=TRUE>>=	
 cutAndPlot(
 	model=ToyNCNOcutCompExp2,
-	bStringT1=ToyT1opt2$bString,
-	bStringT2=ToyT1opt2T2$bString,
+	bStrings=list(ToyT1opt2$bString, ToyT1opt2T2$bString),
 	CNOlist=CNOlistToy2,
 	plotPDF=FALSE)
 @

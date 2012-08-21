@@ -1,12 +1,15 @@
 \name{CNOlist}
+\docType{class}
+
+\alias{CNOlist-class}
 \alias{CNOlist}
-\title{
-Create an instance of CNOlist class.
-}
+\title{CNOlist objects}
 \description{
 This function takes as input the filename of a MIDAS file and returns an
 instance of CNOlist class.
 }
+
+
 \usage{
 CNOlist(MIDASfile, subfield, verbose=FALSE)
 }
@@ -15,7 +18,7 @@ CNOlist(MIDASfile, subfield, verbose=FALSE)
 filename of a MIDAS file
 }
   \item{subfield}{
-TRUE or FALSE, specifies if the column headers contain subfields or not i.e. if I should look for TR:sthg:sthg or just TR:sthg
+TRUE or FALSE, specifies if the column headers contain subfields or not i.e. if headers are of the form TR:sthg:sthg or just TR:sthg
 }
   \item{verbose}{
 (default to FALSE)
@@ -23,17 +26,12 @@ TRUE or FALSE, specifies if the column headers contain subfields or not i.e. if 
 }
 \details{
 This function is equivalent to reading the filename with \link{readMIDAS} and
-converting with \link{makeCNOlist} and creating a CNOlist class. 
+converting with \link{makeCNOlist} and creating a CNOlist class. See the two functions above for details.
 
-See the two functions above for details.
+This class is not yet used but new functionalities (aftr version 1.3.28) should use it.
 }
 \value{
-a CNOlist with fields
-\item{cues}{a vector of names of cues}
-\item{timuli}{a vector of names of stimuli}
-\item{Inhibitors}{a vector of names of inhibitors}
-\item{Signals}{a vector of names of signals}
-\item{timeSignals}{a vector of times}
+An instance of CNOlist class. The methods associated to this class are called cues, inhibitors, stimuli, timepoints, signals.
 }
 \author{
 T. Cokelaer

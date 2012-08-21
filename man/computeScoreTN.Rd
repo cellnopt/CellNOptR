@@ -13,9 +13,11 @@ sizeFac and NAFac are penalties added to the final score as described in
 }
 
 \usage{
-computeScoreTN(CNOlist, model, simList=NULL, indexList=NULL, simResPrev,
-    bStringPrev, bStringNext, sizeFac=0.0001, NAFac=1)
+computeScoreTN(CNOlist, model, simList=NULL, indexList=NULL, simResPrev=NULL,
+    bStringPrev=NULL, bStringNext=NULL, timeIndex=NULL, sizeFac=0.0001, NAFac=1, bStrings=NULL)
 }
+
+
 
 
 \arguments{
@@ -45,11 +47,18 @@ computeScoreTN(CNOlist, model, simList=NULL, indexList=NULL, simResPrev,
     \item{bStringNext}{
         the bitString to use to compute the score at time TN
     }
+    \item{timeIndex}{
+    Future feature will allows timeIndex to provide the exact list of indices to cut and plot. For now,
+it is based on the bitStrings provided. 
+    }
     \item{sizeFac}{
     the scaling factor for the size term in the objective function, default to 0.0001
     }
     \item{NAFac}{
     the scaling factor for the NA term in the objective function, default to 1    
+    }
+    \item{bStrings}{
+    todo    
     }
 }
 
@@ -72,9 +81,9 @@ computeScoreTN(CNOlist, model, simList=NULL, indexList=NULL, simResPrev,
     simT1<-simulateTN(CNOlist=CNOlistToy2, model=res$model, bStrings=list(bStringT1))
 
 
-    score = computeScoreTN(CNOlistToy2, res$model, bStrings=list(bStringT1,c(1,0,1,0)))
+    score1 = computeScoreTN(CNOlistToy2, res$model, bStrings=list(bStringT1,c(1,0,1,0)))
     #equivalent to 
-    score = computeScoreTN(CNOlistToy2, res$model, simResPrev=simT1,
+    score2 = computeScoreTN(CNOlistToy2, res$model, simResPrev=simT1,
         bStringPrev=bStringT1, bStringNext=c(1,0,1,0))
 }
 

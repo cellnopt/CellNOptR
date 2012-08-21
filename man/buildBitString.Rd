@@ -21,10 +21,10 @@ However, it may be useful for post processing.
 
 }
 \usage{
-buildBitString(bitStrings)
+buildBitString(bStrings)
 }
 \arguments{
-    \item{bitStrings}{
+    \item{bStrings}{
         a list of bit strings as returned by the optimisation at different time points.
     }
 }

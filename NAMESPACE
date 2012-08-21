@@ -4,7 +4,6 @@ useDynLib(CellNOptR)
 
 export(
     "buildBitString",
-    "cues",
     "checkSignals",
     "CNORwrap",
     "CNORbool",
@@ -15,6 +14,7 @@ export(
     "cSimulator",
     "cutAndPlot",
     "cutAndPlotResultsT1",
+    "cutAndPlotResultsT2",
     "cutAndPlotResultsTN",
     "cutNONC",
     "cutSimList",
@@ -49,6 +49,7 @@ export(
     "readSif",
     "residualError",
     "sif2graph",
+    "simulateT1",
     "simulateTN",
     "simulatorT0",
     "simulatorT1",
@@ -59,4 +60,9 @@ export(
     "writeNetwork",
     "writeReport",
     "writeScaffold", 
-     "plotModel")
+    "plotModel")
+
+# CNOlist class
+exportClasses("CNOList")
+exportMethods("cues")
+

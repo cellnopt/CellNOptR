@@ -14,10 +14,20 @@
 ##############################################################################
 # $Id$
 
-cutAndPlotResultsT2 <-function(CNOlist, model, bStringT1, bStringT2, simList,
-    indexList, plotPDF=FALSE, tag=NULL, show=TRUE, 
+cutAndPlotResultsT2 <-function(model, bStringT1, bStringT2, CNOlist, simList=NULL,
+    indexList=NULL, plotPDF=FALSE, tag=NULL, show=TRUE, 
     tPt=CNOlist$timeSignals[2:3])
 {
+    warning("cutAndPlotResultsT2 is a deprecated function. Use cutAndPlotResultsTN instead. ")
+
+    # ideally, CNOlist must be first argument but this function is deprecated
+    # anyway, so keep as it is for back compatibility.
+    if (is.null(simList)==TRUE){
+        simList = prep4sim(model)
+    }
+    if (is.null(indexList)==TRUE){
+        indexList = indexFinder(CNOlist, model)
+    }
 
     modelCut <- cutModel(model, bStringT1)
     simListCut <- cutSimList(simList, bStringT1)
@@ -35,13 +45,12 @@ cutAndPlotResultsT2 <-function(CNOlist, model, bStringT1, bStringT2, simList,
     SimT2 = simulateTN(CNOlist, model, bStrings=list(bStringT1, bStringT2))
     simResT2 <- as.matrix(SimT2[,indexList$signals])
 
-
     # put it all together
-
     simResults <- list(
         t0=simResT0,
         t1=simResT1,
         t2=simResT2)
+
 
     # if there is a lot of data, split up cnolist
     # make the max dimensions 10 x 10
@@ -97,9 +106,9 @@ cutAndPlotResultsT2 <-function(CNOlist, model, bStringT1, bStringT2, simList,
 
         if(plotPDF == TRUE) {
             if(is.null(tag)) {
-                filename <- paste("SimResultsT2", f, ".pdf", sep="")
+                filename <- paste("SimResultsT1T2", f, ".pdf", sep="")
             } else {
-                filename <- paste(tag,"SimResultsT2", f, ".pdf", sep="_")
+                filename <- paste(tag,"SimResultsT1T2", f, ".pdf", sep="_")
             }
             plotOptimResultsPan(
                 simResults=simResultsSet[[f]],

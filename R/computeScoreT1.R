@@ -16,7 +16,7 @@
 
 #Function that computes the score of a specific bitstring
 # todo: this is similar to wha is done in gaBinaryT1. need to do the same for T2
-computeScoreT1<-function(CNOlist, model, simList=NULL, indexList=NULL, bString,
+computeScoreT1<-function(CNOlist, model, bString, simList=NULL, indexList=NULL, 
     sizeFac=0.0001, NAFac=1){
 
     # simList and indexList are computed inside this function. 

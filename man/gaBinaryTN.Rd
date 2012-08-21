@@ -1,13 +1,13 @@
-\name{gaBinaryT2}
-\alias{gaBinaryT2}
+\name{gaBinaryTN}
+\alias{gaBinaryTN}
 \title{
-Genetic algorithm for time point 2
+Genetic algorithm for time point N
 }
 \description{
-This is the genetic algorithm for time point 2, that should follow optimisation based on time point 1.
+This is the genetic algorithm for time point N, that should follow optimisation based on time point 1.
 }
 \usage{
-gaBinaryT2(CNOlist, model,  bStringT1, sizeFac = 1e-04, NAFac = 1,
+gaBinaryTN(CNOlist, model,  bStrings, sizeFac = 1e-04, NAFac = 1,
 popSize = 50, pMutation = 0.5, maxTime = 60, maxGens = 500,
 stallGenMax = 100, selPress = 1.2, elitism = 5, relTol = 0.1, verbose=TRUE,
 priorBitString=NULL, maxSizeHashTable=5000)
@@ -20,7 +20,7 @@ a CNOlist on which the score is based (based on valueSignals[[3]], i.e. data at 
 a model structure, as created by \code{readSIF}, normally pre-processed but that
 is not a requirement of this function
 }
-  \item{bStringT1}{
+  \item{bStrings}{
 the optimal bitstring from optimisation at time 1 (i.e. a vector of 0s and 1s)
 }
   \item{sizeFac}{
@@ -113,10 +113,10 @@ ToyT1opt2<-gaBinaryT1(
 
 #Optimise T2
 
-ToyT1opt2T2<-gaBinaryT2(
+ToyT1opt2T2<-gaBinaryTN(
 	CNOlist=CNOlistToy2,
 	model=processedModel,
-	bStringT1=ToyT1opt2$bString,
+	bStrings=list(ToyT1opt2$bString),
 	maxGens=10,
 	popSize = 10,
 	verbose=FALSE)

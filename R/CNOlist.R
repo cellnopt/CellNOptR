@@ -83,7 +83,7 @@ setMethod(show, "CNOList", function(object) {
     cat("cues:", colnames(cues(object)), "\n")
     cat("inhibitors:", colnames(inhibitors(object)), "\n")
     cat("stimuli:", colnames(stimuli(object)), "\n")
-    cat("signal timepoints:", names(signals(object)), "\n")
+    cat("timepoints:", names(signals(object)), "\n")
     cat("signals:", colnames(signals(object)[[1]]), "\n")
 })
 

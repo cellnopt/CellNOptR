@@ -9,11 +9,11 @@
 The bitString made of 0 and 1 allows to select a submodel from the model provided. 
 Then, the simulator function are called to compute the objective function. The 
 sizeFac and NAFac are penalties added to the final score as described in 
-\code{gaBinaryT1}.
+\code{gaBinaryT1}. The indexList and simList arguments can be provided to speed up the code otherwise, they are recomputed from the CNOlist and model.
 }
 
 \usage{
-computeScoreT1(CNOlist, model, simList, indexList, bString, sizeFac=0.0001, NAFac=1)
+computeScoreT1(CNOlist, model, bString, simList=NULL, indexList=NULL, sizeFac=0.0001, NAFac=1)
 
 }
 
@@ -26,16 +26,16 @@ computeScoreT1(CNOlist, model, simList, indexList, bString, sizeFac=0.0001, NAFa
         a model structure, as created by code{readSIF}, normally pre-processed 
         but that is not a requirement of this function.
     }
-    \item{simList}{
-        a SimList as created by \code{prep4sim}, that has also already been cut to 
-        contain only the reactions to be evaluated.
-    }
-    \item{indexList}{
-        a list of indexes of the species stimulated/inhibited/measured in the 
-        model, as created by \code{indexFinder}.
-    }
     \item{bString}{
         a bitstring of the same size as the number of reactions in the model above
+    }
+    \item{simList}{
+        If provided, simList should be created by \code{prep4sim}, that has also already been cut to 
+        contain only the reactions to be evaluated. 
+    }
+    \item{indexList}{
+        If provided, indexList should contain a list of indexes of the species stimulated/inhibited/measured in the 
+        model, as created by \code{indexFinder}.
     }
     \item{sizeFac}{
     the scaling factor for the size term in the objective function, default to 0.0001
@@ -59,8 +59,7 @@ computeScoreT1(CNOlist, model, simList, indexList, bString, sizeFac=0.0001, NAFa
     data(CNOlistToy,package="CellNOptR")
     data(ToyModel,package="CellNOptR")
     res <- preprocessing(CNOlistToy,ToyModel)
-    simlist  <-prep4sim(res$model)
-    score = computeScoreT1(CNOlistToy, res$model, simlist, res$indices, rep(1,16))
+    score = computeScoreT1(CNOlistToy, res$model, bString=rep(1,16))
 }
 
 

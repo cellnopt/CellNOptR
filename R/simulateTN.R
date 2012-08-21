@@ -50,9 +50,9 @@ internal_simulateTN <- function(CNOlist, model, simPrev, bStringPrev, bStringTim
   simListCut$maxIx<-simListCut$maxIx[as.logical(bStringPrev)]
 
   if(is.null(dim(simListCut$finalCube))){
-    simListCut$finalCube<-matrix(simListcut$finalCube,ncol=1)
-    simListCut$ixNeg<-matrix(simListcut$ixNeg,ncol=1)
-    simListCut$ignoreCube<-matrix(simListcut$ignoreCube,ncol=1)
+    simListCut$finalCube<-matrix(simListCut$finalCube,ncol=1)
+    simListCut$ixNeg<-matrix(simListCut$ixNeg,ncol=1)
+    simListCut$ignoreCube<-matrix(simListCut$ignoreCube,ncol=1)
   }
   modelCut$times <- bStringTimes[which(bStringTimes != 0)]
 

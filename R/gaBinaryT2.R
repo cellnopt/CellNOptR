@@ -234,15 +234,15 @@ gaBinaryT2 <-function(
 
 
 
-addPriorKnowledge <- function(pop, priorBitString){
-    if (is.null(priorBitString) == TRUE){
-        return(pop)
-    }
-    else{
-        for (i in 1:dim(pop)[1]){
-            pop[i,!is.na(priorBitString)] = priorBitString[!is.na(priorBitString)]
-        }
-    }
-   return(pop)
-}
+#addPriorKnowledge <- function(pop, priorBitString){
+#    if (is.null(priorBitString) == TRUE){
+#        return(pop)
+#    }
+#    else{
+#        for (i in 1:dim(pop)[1]){
+#            pop[i,!is.na(priorBitString)] = priorBitString[!is.na(priorBitString)]
+#        }
+#    }
+#   return(pop)
+#}
 
