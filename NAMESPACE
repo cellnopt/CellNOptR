@@ -64,5 +64,4 @@ export(
 
 # CNOlist class
 exportClasses("CNOList")
-exportMethods("cues")
 
