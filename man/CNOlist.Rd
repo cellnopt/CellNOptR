@@ -42,6 +42,5 @@ T. Cokelaer
 \examples{
 files<-dir(system.file("ToyModel",package="CellNOptR"),full=TRUE)
 cnolist  = CNOlist(files[[1]])
-cues(cnolist)
 }
 
