@@ -4,22 +4,35 @@
 
 1.3.28
 -----------
-* add class CNOlist
-* gaBinary default initBstring set to ones
-* MAJOR refactoring to merge T1, T2, TN functions
+
+* add a TODO file
+* add a .Rinstignore file.
+* add a test suite in tests directory
+* add class CNOlist (to fulfill bioconductor request)
+* gaBinary default initBstring set to ones so no need to provide it anymore
+* MAJOR refactoring to merge T1, T2, TN functions (cutAnPlot, gaBinary,
+  simulator).
 * computeScoreT1, cutSimList had an argument called bitString. it is now called
   bString and this convention is used throughout the code (e.g., bStringT1 not
   bitStringT1) simlist and indexlist are now optional are after the bString
   argument.
+* indexList and simList are removed from the arguments and recomputede within
+  all functions. It may be slower but this is negligeable compared to the
+  simplification provided to the users. However, for back compatibilty these 2
+  arguments are usually kept and set to NULL.
 * computeScoreT2 is now deprecated and computeScoreTN should be use instead.
 * cutSimList argument called bitString renamed bString
 * simulateTN  combines simulateT1 and simulateTN so only one function is
-required.
+  required.
 * add new function to make the code modular: buildBitString
 * MapBack function renamed in mapBack to follow CNOdocs convention.
 * fix bug in gaBinaryTN when computing score.
 * gaBinaryT2 is deprecated. USe TN version instead.
 * gaBinaryT1 and TN do no need the indexList and simList parameters anymore
+* add missing documenation
+* preprocessing now returns only the model. indices are not required anymore.
+* add a cutAnPlot dispatcher that calls the proper cutandPlotResultsTX function.
+* R CMD build check has no warnings or errors. All tests successful.
 
 13/Aug/2012 1.3.27
 ----------------------
@@ -71,6 +84,11 @@ required.
 * add writeMIDAS function
 * major update that changes API to uniformise the code
 * computeScoreT1 and T2 are not used inside gaBinaryT1 and gaBinaryT2
+
+20/June/2012 1.3.16
+--------------------
+
+* rev1530: add cutModel
 
 
 19/June/2012: 1.3.14

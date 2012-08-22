@@ -1,0 +1,7 @@
+1. cutAndPlotResultsTN should use multi plot for large data sets like in T1
+   version.
+2. computeScoreTN: can provide simResPrev only for T2. TN N>2 does not work
+   properly. Only the full bistrings option works, which is not efficient in
+   gaBinaryTN
+3. cleanup plotOptimResults family.
+4. use timeValues instead of timeIndex everywhere.

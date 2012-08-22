@@ -30,7 +30,6 @@ export(
     "indexFinder",
     "mapBack", 
     "makeCNOlist",
-    "manySteadyStates",
     "model2sif",
     "normaliseCNOlist",
     "plotCNOlist",
@@ -63,5 +62,5 @@ export(
     "plotModel")
 
 # CNOlist class
-exportClasses("CNOlist")
+exportClasses(CNOlist)
 
