@@ -58,8 +58,8 @@ computeScoreT1(CNOlist, model, bString, simList=NULL, indexList=NULL, sizeFac=0.
 \examples{
     data(CNOlistToy,package="CellNOptR")
     data(ToyModel,package="CellNOptR")
-    res <- preprocessing(CNOlistToy,ToyModel)
-    score = computeScoreT1(CNOlistToy, res$model, bString=rep(1,16))
+    model <- preprocessing(CNOlistToy,ToyModel)
+    score = computeScoreT1(CNOlistToy, model, bString=rep(1,16))
 }
 
 

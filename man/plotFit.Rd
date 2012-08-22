@@ -24,29 +24,22 @@ This function doesn't return anything, it just produces a plot in your graphics 
 C. Terfve
 }
 \seealso{
-gaBinaryT1
+\link{gaBinaryT1}
 }
 \examples{
 data(CNOlistToy,package="CellNOptR")
 data(ToyModel,package="CellNOptR")
 
 #process the model
-
-indicesToy<-indexFinder(CNOlistToy,ToyModel,verbose=FALSE)
-ToyComp<-compressModel(ToyModel,indicesToy)
-indicesToyComp<-indexFinder(CNOlistToy,ToyComp)
-ToyCompExp<-expandGates(ToyComp)
+model = preprocessing(CNOlistToy,ToyModel)
 
 #optimise
 
-ToyFields4Sim<-prep4sim(ToyCompExp)
-initBstring<-rep(1,length(ToyCompExp$reacID))
 ToyT1opt<-gaBinaryT1(
 	CNOlist=CNOlistToy,
-	model=ToyCompExp,
-	initBstring=initBstring,
-	maxGens=2,
-	popSize=5,
+	model=model,
+	maxGens=10,
+	popSize=10,
 	verbose=FALSE)
 
 plotFit(optRes=ToyT1opt)

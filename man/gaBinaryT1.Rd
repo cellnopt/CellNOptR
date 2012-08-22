@@ -93,7 +93,7 @@ mammalian signal transduction, Molecular Systems Biology, 5:331, 2009.
 C. Terfve. T. Cokelaer
 }
 \seealso{
-\link{getFit}, \link{prep4sim}, \link{indexFinder}, \link{simulatorT1}
+\link{gaBinaryTN}, \link{simulatorT1}
 }
 \examples{
 data(CNOlistToy,package="CellNOptR")
@@ -101,28 +101,27 @@ data(ToyModel,package="CellNOptR")
 
 #pre-process model
 
-results = preprocessing(CNOlistToy, ToyModel)
-processedModel = results$model
+model = preprocessing(CNOlistToy, ToyModel)
 
 #optimise
 
-initBstring<-rep(1,length(processedModel$reacID))
+initBstring<-rep(1,length(model$reacID))
 ToyT1opt<-gaBinaryT1(
 	CNOlist=CNOlistToy,
-	model=processedModel,
+	model=model,
 	initBstring=initBstring,
 	maxGens=10, popSize=10, verbose=FALSE)
 
 # During the optimisation, some bits can be overwritten by your prior knowledge 
 # First, you need to create a priorBitString made of NA where known bit values
 # are replaced by 0 or 1
-priorBitString = rep(NA, length(processedModel$reacID))
+priorBitString = rep(NA, length(model$reacID))
 priorBitString[1] = 0
 priorBitString[2] = 1
 
 # Second, you call the gaBinaryT1 function by providing the priorBitString
 # argument:
-ToyT1opt<-gaBinaryT1(CNOlist=CNOlistToy, model=processedModel,
+ToyT1opt<-gaBinaryT1(CNOlist=CNOlistToy, model=model,
      initBstring=initBstring,	maxGens=10, popSize=10, verbose=FALSE, 
     priorBitString=priorBitString)
 }

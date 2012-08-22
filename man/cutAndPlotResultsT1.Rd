@@ -45,13 +45,13 @@ todo
 }
 
 \value{
-This function doesn't return anything, it only plots the graph in your graphic window, and in a pdf file if asked
+This function returns a list of filenames that have been created.
 }
 \author{
 C.Terfve, T. Cokelaer,A. MacNamara
 }
 \seealso{
-gaBinaryT1, prep4sim
+\link{gaBinaryT1}
 }
 \examples{
 #load data
@@ -60,20 +60,19 @@ data(CNOlistToy,package="CellNOptR")
 data(ToyModel,package="CellNOptR")
 
 #pre-process model
-results = preprocessing(CNOlistToy, ToyModel)
-processedModel = results$model
+model = preprocessing(CNOlistToy, ToyModel)
 
 #optimise
 ToyT1opt<-gaBinaryT1(
 	CNOlist=CNOlistToy,
-	model=processedModel,
+	model=model,
 	maxGens=2, 
 	popSize = 5,
 	verbose=FALSE)
 
 #plotting
 cutAndPlotResultsT1(
-	model=processedModel,
+	model=model,
 	CNOlist=CNOlistToy,
 	bString=ToyT1opt$bString,
 	plotPDF=FALSE)

@@ -32,6 +32,7 @@ C. Terfve
 \seealso{
 \link{makeCNOlist}, \link{readSIF}
 }
+\note{For internal usage since version 1.3.28}
 \examples{
 data(CNOlistToy,package="CellNOptR")
 data(ToyModel,package="CellNOptR")

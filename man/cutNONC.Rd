@@ -27,8 +27,11 @@ a model
 C.Terfve
 }
 \seealso{
-findNONC, readSIF
+\link{findNONC}, \link{readSIF}
 }
+\note{No need to call this function directly since version 0.99.24. Use
+\link{preprocessing} instead.}
+
 \examples{
 data(CNOlistToy,package="CellNOptR")
 data(ToyModel,package="CellNOptR")

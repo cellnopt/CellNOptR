@@ -2,11 +2,11 @@
 \alias{graph2sif}
 
 \title{
-Convert graph to sif
+Convert graph to SIF
 }
 
 \description{
-  This function converts a network form graph format to sif format. The resulting table can also be saved in a sif file.
+  This function converts a network form graph format to SIF format. The resulting table can also be saved in a SIF file.
 }
 
 \usage{
@@ -20,10 +20,10 @@ graph2sif(graph, writeSif=FALSE, filename="Graph")
 a graph, as generated using \link{sif2graph}
 }
   \item{writeSif}{
-if writeSif=FALSE (default) the sif file is not saved. If writeSif=TRUE it is saved.
+if writeSif=FALSE (default) the SIF file is not saved. If writeSif=TRUE it is saved.
 }
   \item{filename}{
-the name of the sif file saved if writeSif=TRUE. Default is Model.sif.
+the name of the SIF file saved if writeSif=TRUE. Default is Model.sif.
 }
 
 }

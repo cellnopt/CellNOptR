@@ -47,9 +47,8 @@ data(CNOlistToy,package="CellNOptR")
 data(ToyModel,package="CellNOptR")
 
 #pre-process model
-results = preprocessing(CNOlistToy, ToyModel)
-processedModel = results$model
+model = preprocessing(CNOlistToy, ToyModel)
 
-cutAndPlot(CNOlistToy, processedModel,
-    bStrings=list(rep(1,length(processedModel$reacID))),	plotPDF=FALSE)
+cutAndPlot(CNOlistToy, model,
+    bStrings=list(rep(1,length(model$reacID))),	plotPDF=FALSE)
 }

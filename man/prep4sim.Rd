@@ -30,8 +30,9 @@ this function returns a list with fields:
 C. Terfve
 }
 \seealso{
-simulatorT1
+\link{simulatorT1}
 }
+\note{For internal usage since version 1.3.28}
 \examples{
 data(ToyModel,package="CellNOptR")
 ToyFields4Sim<-prep4sim(ToyModel)

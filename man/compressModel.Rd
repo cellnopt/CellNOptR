@@ -35,8 +35,11 @@ that contains the names of the species that have been compressed
 C. Terfve
 }
 \seealso{
-\link{indexFinder}, \link{readSIF}.\link{preprocessing}
+\link{indexFinder}, \link{readSIF}, \link{preprocessing}
 }
+\note{No need to call this function directly since version 0.99.24. Use 
+ \link{preprocessing} instead.}
+
 \examples{
 #load data
 

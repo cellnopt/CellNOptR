@@ -32,6 +32,7 @@ the default behaviour).
 todo
 }
 }
+\note{New in version 1.3.28}
 \value{
 This function doesn't return anything, it only plots the graph in your graphic window, and in a pdf file if asked
 }
@@ -48,29 +49,28 @@ data(CNOlistToy2,package="CellNOptR")
 data(ToyModel2,package="CellNOptR")
 
 #pre-process model
-results = preprocessing(CNOlistToy2, ToyModel2)
-processedModel = results$model
+model = preprocessing(CNOlistToy2, ToyModel2)
 
 #optimise t1
-ToyT1opt2<-gaBinaryT1(
+ToyT1<-gaBinaryT1(
 	CNOlist=CNOlistToy2,
-	model=processedModel,
+	model=model,
 	maxGens=2, 
 	popSize = 5,
 	verbose=FALSE)
 
 #Optimise T2
-ToyT1opt2T2<-gaBinaryTN(
+ToyT2<-gaBinaryTN(
 	CNOlist=CNOlistToy2,
-	model=processedModel,
-	bString=list(ToyT1opt2$bString),
+	model=model,
+	bString=list(ToyT1$bString),
 	maxGens=2, 
 	popSize = 5,
 	verbose=FALSE)
 
 cutAndPlotResultsTN(
 	CNOlist=CNOlistToy2,
-	model=processedModel,
-	bStrings=list(ToyT1opt2$bString, bStringT2=ToyT1opt2T2$bString),
+	model=model,
+	bStrings=list(ToyT1$bString, bStringT2=ToyT2$bString),
 	plotPDF=FALSE)
 }

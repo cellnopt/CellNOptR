@@ -53,7 +53,7 @@ This function doesn't return anything, it only plots the graph in your graphic w
 C. Terfve, T. Cokelaer, A. MacNamara}
 
 \seealso{
-\link{gaBinaryT1}, \link{prep4sim}, \link{cutAndPlotResultsT1}
+\link{gaBinaryT1}, \link{cutAndPlotResultsT1}
 }
 \examples{
 #load data
@@ -62,33 +62,30 @@ data(CNOlistToy2,package="CellNOptR")
 data(ToyModel2,package="CellNOptR")
 
 #pre-process model
-
+model = preprocessing(CNOlistToy2, ToyModel2)
 
 #optimise t1
-results = preprocessing(CNOlistToy2, ToyModel2)
-processedModel = results$model
-
-ToyT1opt2<-gaBinaryT1(
+ToyT1<-gaBinaryT1(
 	CNOlist=CNOlistToy2,
-	model=processedModel,
+	model=model,
 	maxGens=2, 
 	popSize = 5,
 	verbose=FALSE)
 
 #Optimise T2
 
-ToyT1opt2T2<-gaBinaryT2(
+ToyT2<-gaBinaryT2(
 	CNOlist=CNOlistToy2,
-	model=processedModel,
-	bStringT1=ToyT1opt2$bString,
+	model=model,
+	bStringT1=ToyT1$bString,
 	maxGens=2, 
 	popSize = 5,
 	verbose=FALSE)
 
 cutAndPlotResultsT2(
 	CNOlist=CNOlistToy2,
-	model=processedModel,
-	bStringT1=ToyT1opt2$bString,
-	bStringT2=ToyT1opt2T2$bString,
+	model=model,
+	bStringT1=ToyT1$bString,
+	bStringT2=ToyT2$bString,
 	plotPDF=FALSE)
 }

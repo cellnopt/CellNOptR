@@ -19,10 +19,9 @@ LazyLoad: \tab yes\cr
 }
 }
 \author{
-C.Terfve, T.Cokelaer, A.MacNamara, F. Eduati
+T. Cokelaer, A. MacNamara, F. Eduati, S. Schrier, C. Terfve
 
-
-Maintainer: T.Cokelaer <cokelaer@ebi.ac.uk>
+Maintainer: T. Cokelaer <cokelaer@ebi.ac.uk>
 }
 \references{
 J. Saez-Rodriguez, L. G. Alexopoulos, J. Epperlein, R. Samaga, D. A. Lauffenburger, S. Klamt and P. K. Sorger. Discrete logic modeling as a means to link protein signaling networks with functional analysis of
@@ -33,27 +32,15 @@ mammalian signal transduction, Molecular Systems Biology, 5:331, 2009.
 \examples{
 library(CellNOptR)
 
-#version with paramslist
-
-tmpdir<-tempdir()
-setwd(tmpdir)
-
+# quick 1 time point optimisation of a Prior Knowledge Network to MIDAS data. 
 data(CNOlistToy,package="CellNOptR")
 data(ToyModel,package="CellNOptR")
+model = preprocessing(CNOlistToy, ToyModel)
+results = gaBinaryT1(CNOlistToy, model, verbose=FALSE)
+plotFit(results)
+cutAndPlot(CNOlistToy, model, list(results$bString))
 
-pList = defaultParameters()
-pList$data = CNOlistToy
-pList$model = ToyModel
-pList$maxGens = 5
-pList$popSize = 5
-
-CNORwrap(paramsList=pList, name="Toy", 
-    namesData=list(CNOlist="ToyData", model="ToyModel"))
-
-\dontrun{
-#version with default parameters
-
-
+# Same as above and HTML report
 CNORwrap(name="Toy", 
     namesData=list(CNOlist="ToyData",model="ToyModel"),
     data=CNOlistToy, model=ToyModel)

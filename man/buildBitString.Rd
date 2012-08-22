@@ -1,24 +1,25 @@
 \name{buildBitString}
 \alias{buildBitString}
 \title{
-Concatenate final bit string and times of optimiation from a list of optimised bit strings at different
-times.
+Build the final bit string vector and times vector based on a list of optimised bit strings at different
+time points.
 }
 \description{
 This function takes as input a list of vectors (can be only one). Each vector
-represent an optimised bit strings at different time points (as returned by 
-the gaBinary functions). The first optimised bit string must represent your
-model (i.e., have the same length). The length of the following vectors must
-correspond to the number of zeros in the previous bitstring. For instance,
+represents an optimised bit string at a different time point (as returned by 
+the gaBinary functions). The first optimised bit string have the same length as
+the model to be optimised. The length of the following vectors corresponds to
+the number of zeros found in the previous bitstring. For instance,
 the following list of bit strings \code{bStrings = list(c(1,1,1,0,0,0),
 c(1,0,0))} is correct whereas \code{bStrings = list(c(1,1,1,0,0,0), c(1,0))} is
 incorrect.
 
 
-This function is used internally \link{computeScoreTN} and
+This function is used internally by \link{computeScoreTN} and
 \link{simulateTN}. It should not be used by a user in principle.
 However, it may be useful for post processing.
 
+New in version 1.3.28.
 }
 \usage{
 buildBitString(bStrings)
@@ -31,9 +32,10 @@ buildBitString(bStrings)
 
 
 \value{
-This function returns 2 vectors of same length as the first input vector. 
-The first vector maps each vector on top of the first one. The second vector 
-indicates the time point at which each bit was optimised (see example).
+This function returns 2 components. The first one as explained in the
+description is a vector of same length as the first input vector in the
+bStrings argument. The second component is a vector that keeps track 
+of the time point at which each bit was optimised (see example).
 }
 \author{
 T. Cokelaer

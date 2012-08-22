@@ -45,7 +45,7 @@ J. Saez-Rodriguez, A. Goldsipe, J. Muhlich, L. Alexopoulos, B. Millard, D. A. La
 C.Terfve
 }
 \seealso{
-makeCNOlist
+\link{makeCNOlist}
 }
 \examples{
    tmpdir<-tempdir()

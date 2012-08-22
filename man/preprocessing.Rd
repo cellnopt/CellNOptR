@@ -51,9 +51,7 @@ new model and the indices returned by indexFinder.
 }
 
 \value{
-  \item{model}{the new model}
-  \item{indices}{the indices of the new model found in the CNOlist object using
-indexFinder.}
+  the new model
 }
 
 \author{
@@ -69,7 +67,5 @@ indexFinder.}
 \examples{
 data(ToyModel,package="CellNOptR")
 data(CNOlistToy,package="CellNOptR")
-res = preprocessing(CNOlistToy, ToyModel, cutNONC=FALSE)
-# res is a list containing the new model (res$model) and its indices
-# (res$indices).
+model = preprocessing(CNOlistToy, ToyModel, cutNONC=FALSE)
 }

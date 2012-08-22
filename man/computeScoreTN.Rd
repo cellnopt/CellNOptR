@@ -58,7 +58,7 @@ it is based on the bitStrings provided.
     the scaling factor for the NA term in the objective function, default to 1    
     }
     \item{bStrings}{
-    todo    
+    list of optimised bitstrings found at the previous time points
     }
 }
 
@@ -69,22 +69,17 @@ it is based on the bitStrings provided.
 }
 
 \author{
-    T. Cokelaer
+    T. Cokelaer, S.Schrier
 }
 
 \examples{
     data(CNOlistToy2,package="CellNOptR")
     data(ToyModel2,package="CellNOptR")
-    res <- preprocessing(CNOlistToy2, ToyModel2)
-    simlist <-prep4sim(res$model)
+    model <- preprocessing(CNOlistToy2, ToyModel2)
     bStringT1 = c(0,0,1,1,1,1,1,1,0,0,1,1,1,1,1,1)
-    simT1<-simulateTN(CNOlist=CNOlistToy2, model=res$model, bStrings=list(bStringT1))
+    simT1<-simulateTN(CNOlist=CNOlistToy2, model=model, bStrings=list(bStringT1))
 
-
-    score1 = computeScoreTN(CNOlistToy2, res$model, bStrings=list(bStringT1,c(1,0,1,0)))
-    #equivalent to 
-    score2 = computeScoreTN(CNOlistToy2, res$model, simResPrev=simT1,
-        bStringPrev=bStringT1, bStringNext=c(1,0,1,0))
+    score1 = computeScoreTN(CNOlistToy2, model, bStrings=list(bStringT1,c(1,0,1,0)))
 }
 
 

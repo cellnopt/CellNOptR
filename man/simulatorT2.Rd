@@ -42,7 +42,7 @@ This function outputs a single matrix of format similar to valueSignals in the C
 C. Terfve
 }
 \seealso{
-\link{simulateTN}, cutAndPlotResultsT1, \link{simulatorT1}
+\link{simulateTN}, \link{cutAndPlotResultsT1}, \link{simulatorT1}
 }
 \examples{
 

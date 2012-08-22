@@ -36,7 +36,7 @@ Emden R. Gansner ,  Stephen C. North. An Open Graph Visualization System and Its
 C. Terfve
 }
 \seealso{
-writeNetwork, writeScaffold
+\link{writeNetwork}, \link{writeScaffold}
 }
 \examples{
 tmpdir<-tempdir()

@@ -4,7 +4,7 @@
 Check the CNOlist and model matching
 }
 \description{
-This function checks that all the signals in the CNOlist match to species in the 
+This function checks that all the signals in a CNOlist match to species in the 
 model. It also checks that the CNOlist and Model lists have the right format and 
 contain the right fields. It is called by the \link{preprocessing} function so there is 
 no need to call it directly anymore if you use the \link{preprocessing} function.
@@ -23,9 +23,9 @@ checkSignals(CNOlist, model)
     }
 }
 \details{
-If the formats are wrong, this function produces an error with an explanation
-message. If the signals/inhibitors/stimuli do not match the species, this function produces a 
-warning that explains which signals does no match any species. 
+If the formats are wrong, this function produces an error. If the
+signals/inhibitors/stimuli do not match the species, this function produces a
+warning that explains which signals does no match any species.
 }
 
 \author{

@@ -31,7 +31,7 @@ Use the field called total instead.
 C. Terfve, T. Cokelaer
 }
 \seealso{
-makeCNOlist, normaliseCNOlist, getFit
+\link{makeCNOlist}, \link{normaliseCNOlist}, \link{getFit}
 }
 \examples{
 data(CNOlistToy,package="CellNOptR")

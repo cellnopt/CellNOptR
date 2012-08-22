@@ -5,6 +5,8 @@ Genetic algorithm for time point 2
 }
 \description{
 This is the genetic algorithm for time point 2, that should follow optimisation based on time point 1.
+
+Deprecated in version 1.3.28. Use \link{gaBinaryTN} instead.
 }
 \usage{
 gaBinaryT2(CNOlist, model,  bStringT1, sizeFac = 1e-04, NAFac = 1,
@@ -98,25 +100,22 @@ data(ToyModel2,package="CellNOptR")
 #pre-process model
 
 checkSignals(CNOlistToy2,ToyModel2)
-results = preprocessing(CNOlistToy2, ToyModel2)
-processedModel = results$model
+model = preprocessing(CNOlistToy2, ToyModel2)
 
 #optimise t1
-initBstring2<-rep(1,length(processedModel$reacID))
-ToyT1opt2<-gaBinaryT1(
+ToyT1<-gaBinaryT1(
 	CNOlist=CNOlistToy2,
-	model=processedModel,
-	initBstring=initBstring2,
+	model=model,
 	maxGens=10,
 	popSize = 10,
 	verbose=FALSE)
 
 #Optimise T2
 
-ToyT1opt2T2<-gaBinaryT2(
+ToyT2<-gaBinaryT2(
 	CNOlist=CNOlistToy2,
-	model=processedModel,
-	bStringT1=ToyT1opt2$bString,
+	model=model,
+	bStringT1=ToyT1$bString,
 	maxGens=10,
 	popSize = 10,
 	verbose=FALSE)

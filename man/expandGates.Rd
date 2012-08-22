@@ -27,11 +27,12 @@ returns a model, with additional fields:
 \item{newANDs}{list that contains an element for each new '&' gate, named by the name of this new and reac, and containing a vector of the names of the reactions from which it was created (contains all the reacs in that pool, not the particular ones, this could be improved)}
 }
 \author{
-C.Terfve. T. Cokelaer
+C.Terfve. T. Cokelaer, A.MacNamara
 }
-\note{
-This function could be simplified in the future.
-}
+\note{No need to call this function directly since version 0.99.24. Use 
+ \link{preprocessing} instead.}
+
+
 \examples{
 #load data
 

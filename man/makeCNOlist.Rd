@@ -53,7 +53,7 @@ mammalian signal transduction, Molecular Systems Biology, 5:331, 2009.
 C. Terfve
 }
 \seealso{
-readMIDAS
+\link{readMIDAS}, \link{CNOlist-class}
 }
 \examples{
 tmpdir<-tempdir()

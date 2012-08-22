@@ -20,6 +20,8 @@ cutModel(model, bString)
   \item{cutModel}{the new model object}
 }
 
+\note{added in version 1.3.16}
+
 \author{
  T. Cokelaer
 }
