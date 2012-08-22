@@ -39,7 +39,7 @@ writeReport<-function(
 	
 #Create a report directory and copy css and logos in there
 	dir.create(directory)	
-	cpfile<-dir(system.file("templates",package="CellNOptR"),full=TRUE)
+	cpfile<-dir(system.file("templates",package="CellNOptR"),full.names=TRUE)
 	resultsdir<-file.path(getwd(),directory)
 	file.copy(from=cpfile,to=resultsdir,overwrite=TRUE)
 	

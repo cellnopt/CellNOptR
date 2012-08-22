@@ -14,7 +14,7 @@
 ##############################################################################
 # $Id$
 
-cSimulator <- function(CNOlist, model, simList, indices) {
+cSimulator <- function(CNOlist, model, simList, indexList) {
 	
 	# check the structures
 	if(is.null(CNOlist$valueStimuli) || is.null(CNOlist$valueInhibitors)) {
@@ -26,8 +26,8 @@ cSimulator <- function(CNOlist, model, simList, indices) {
 	}
 	
 	# variables
-	nStimuli <- as.integer(length(indices$stimulated))
-	nInhibitors <- as.integer(length(indices$inhibited))
+	nStimuli <- as.integer(length(indexList$stimulated))
+	nInhibitors <- as.integer(length(indexList$inhibited))
 	nCond <- as.integer(dim(CNOlist$valueStimuli)[1])
 	nReacs <- as.integer(length(model$reacID))
 	nSpecies <- as.integer(length(model$namesSpecies))
@@ -40,9 +40,9 @@ cSimulator <- function(CNOlist, model, simList, indices) {
 	maxIx = as.integer(simList$maxIx-1)
 	
 	# index
-	indexSignals <- as.integer(as.vector(indices$signals)-1)
-	indexStimuli <- as.integer(as.vector(indices$stimulated)-1)
-	indexInhibitors <- as.integer(as.vector(indices$inhibited)-1)
+	indexSignals <- as.integer(as.vector(indexList$signals)-1)
+	indexStimuli <- as.integer(as.vector(indexList$stimulated)-1)
+	indexInhibitors <- as.integer(as.vector(indexList$inhibited)-1)
 
 	# cnolist
 	valueInhibitors <- as.integer(t(CNOlist$valueInhibitors))

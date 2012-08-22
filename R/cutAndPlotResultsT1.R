@@ -82,6 +82,7 @@ cutAndPlotResultsT1 <- function(model, bString, simList=NULL, CNOlist, indexList
         simResultsSet = list(simResults)
     }
 
+    outputFilenames = list()
     for(f in 1:length(CNOlistSet)) {
 
         if(show==TRUE) {
@@ -107,7 +108,9 @@ cutAndPlotResultsT1 <- function(model, bString, simList=NULL, CNOlist, indexList
                 pdfFileName=filename,
                 tPt=tPt
             )
+            outputFilenames[[f]] = filename
         }
     }
+    return(outputFilenames)
 }
 

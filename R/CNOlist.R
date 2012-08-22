@@ -20,6 +20,72 @@
 
 
 
+
+
+## Class definition
+setClass("CNOlist",
+    representation(
+        cues="matrix",
+        inhibitors="matrix",
+        stimuli="matrix",
+        signals="list",
+        timepoints="vector"),
+    ## validity method
+    validity=function(object) {
+        msg <- NULL
+        nrow <- nrow(cues(object))
+        signalNrows <- unique(sapply(signals(object), nrow))
+        if (nrow != nrow(inhibitors(object)) ||
+            nrow != nrow(stimuli(object)) ||
+            length(signalNrows) != 1 ||
+            nrow != signalNrows)
+        {
+            msg <- "'nrow' differs between elements"
+        }
+        if (is.null(msg)) TRUE else msg
+    })
+
+
+## constructor
+#CNOlist <-function(cues, inhibitors, stimuli, signals, ...){
+#    new("CNOlist", cues=cues, inhibitors=inhibitors,
+#        stimuli=stimuli, signals=signals, ...)
+#}
+CNOlist <-function(MIDASfile, subfield=FALSE, verbose=FALSE){
+    res = internal_CNOlist(MIDASfile, subfield, verbose)
+    new("CNOlist", cues=res$cues, inhibitors=res$inhibitors,
+        stimuli=res$stimuli, signals=res$signals, timepoints=res$timepoints)
+}
+
+
+
+## accessors
+cues <- function(cnoList, ...) cnoList@cues
+inhibitors <- function(cnoList, ...) cnoList@inhibitors
+stimuli <- function(cnoList, ...) cnoList@stimuli
+signals <- function(cnoList, ...) cnoList@signals
+timepoints <- function(cnoList, ...) cnoList@timepoints
+#plot <- function(cnoList, ...) plotCNOlist(cnoList)
+
+
+## show method
+setMethod(show, "CNOlist", function(object) {
+    cat("class:", class(object), "\n")
+    cat("cues:", colnames(cues(object)), "\n")
+    cat("inhibitors:", colnames(inhibitors(object)), "\n")
+    cat("stimuli:", colnames(stimuli(object)), "\n")
+    cat("timepoints:", names(signals(object)), "\n")
+    cat("signals:", colnames(signals(object)[[1]]), "\n")
+})
+
+
+
+
+
+
+
+
+# used by the constructor not for export.
 internal_CNOlist <- function(MIDASfile, subfield=FALSE, verbose=FALSE)
 {
     x <- readMIDAS(MIDASfile, verbose=verbose)
@@ -39,65 +105,10 @@ internal_CNOlist <- function(MIDASfile, subfield=FALSE, verbose=FALSE)
     mySignals <-
         lapply(mySignals, "colnames<-", y$namesSignals)
 
+    myTimePoints <- y$timeSignals
+
     #CNOlist(myCues, myInhibitors, myStimuli, mySignals)
-    return( list(cues=myCues, inhibitors=myInhibitors, stimuli=myStimuli, signals=mySignals))
+    return( list(cues=myCues, inhibitors=myInhibitors, stimuli=myStimuli,
+        signals=mySignals, timepoints=myTimePoints))
 }
-
-
-
-## Class definition
-setClass("CNOlist",
-    representation(
-        cues="matrix",
-        inhibitors="matrix",
-        stimuli="matrix",
-        signals="list"),
-    ## validity method
-    validity=function(object) {
-        msg <- NULL
-        nrow <- nrow(cues(object))
-        signalNrows <- unique(sapply(signals(object), nrow))
-        if (nrow != nrow(inhibitors(object)) ||
-            nrow != nrow(stimuli(object)) ||
-            length(signalNrows) != 1 ||
-            nrow != signalNrows)
-        {
-            msg <- "'nrow' differs between elements"
-        }            
-        if (is.null(msg)) TRUE else msg
-    })
-
-
-## constructor
-#CNOlist <-function(cues, inhibitors, stimuli, signals, ...){
-#    new("CNOlist", cues=cues, inhibitors=inhibitors,
-#        stimuli=stimuli, signals=signals, ...)
-#}
-
-CNOlist <-function(MIDASfile, subfield=FALSE, verbose=FALSE, ...){
-    res = internal_CNOlist(MIDASfile, subfield, verbose)
-    new("CNOlist", cues=res$cues, inhibitors=res$inhibitors,
-        stimuli=res$stimuli, signals=res$signals, ...)
-}
-
-
-
-## accessors
-cues <- function(cnoList, ...) cnoList@cues
-inhibitors <- function(cnoList, ...) cnoList@inhibitors
-stimuli <- function(cnoList, ...) cnoList@stimuli
-signals <- function(cnoList, ...) cnoList@signals
-
-
-## show method
-setMethod(show, "CNOlist", function(object) {
-    cat("class:", class(object), "\n")
-    cat("cues:", colnames(cues(object)), "\n")
-    cat("inhibitors:", colnames(inhibitors(object)), "\n")
-    cat("stimuli:", colnames(stimuli(object)), "\n")
-    cat("timepoints:", names(signals(object)), "\n")
-    cat("signals:", colnames(signals(object)[[1]]), "\n")
-})
-
-
 

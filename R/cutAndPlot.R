@@ -31,13 +31,13 @@ cutAndPlot <- function(CNOlist, model, bStrings, plotPDF=FALSE, tag=NULL, show=T
     # if tPt=2 (default), call cutAndPlotResultsT1
     if (tPt == 2){
 
-       cutAndPlotResultsT1(model=model, bString=bStrings[[1]], simList=simList, 
+       outputs = cutAndPlotResultsT1(model=model, bString=bStrings[[1]], simList=simList, 
             CNOlist=CNOlist, indexList=indexList, plotPDF=plotPDF, tag=tag, show=show)
     }
 
     if (tPt>=3){
        print("Entering cutAndPlotResultsTN")
-       cutAndPlotResultsTN(
+       outputs = cutAndPlotResultsTN(
          CNOlist=CNOlist,
          model=model,
          bStrings=bStrings,
@@ -45,5 +45,5 @@ cutAndPlot <- function(CNOlist, model, bStrings, plotPDF=FALSE, tag=NULL, show=T
          tag=tag) 
     }
     # if tPt=2 (default), call cutAndPlotResultsT2
-
+    #return(outputs)
 }

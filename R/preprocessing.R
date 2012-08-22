@@ -44,17 +44,19 @@ preprocessing<-function(data=NULL, model, cutNONC=TRUE, compression=TRUE,
 
     # Recompute the indices. We can do it now because the expanson gate does not
     # remove species but only add and gates.
-    if (is.null(data)!=TRUE){
-        indices<-indexFinder(CNOlist=data,model=cutModel)
-    }
-    else{
-        indices <- NULL
-    }
+    #if (is.null(data)!=TRUE){
+    #    indices<-indexFinder(CNOlist=data,model=cutModel)
+    #}
+    #else{
+    #    indices <- NULL
+    #}
 
     # Expand the gates
     if (expansion == TRUE){
         cutModel <- expandGates(model=cutModel, ignoreList=ignoreList,maxInputsPerGate=maxInputsPerGate)
     }
 
-    return( list(model=cutModel, indices=indices))
+    # since version 1.3.28 return only model, indices are recomputed in other
+    # functions
+    return(cutModel)
 }

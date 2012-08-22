@@ -17,12 +17,26 @@ plotCNOlist<-function(CNOlist){
 
 #check that CNOlist is a CNOlist
 
+    if(is.list(CNOlist)==FALSE && class(CNOlist)!="CNOlist"){
+        stop("This function expects as input a CNOlist as output by makeCNOlist or normaliseCNOlist")
+        }
     # save current par() and recall at end to avoid permanent changes
     oldPar = par(no.readonly = TRUE)
 
-    if(!is.list(CNOlist)){
-        stop("This function expects as input a CNOlist as output by makeCNOlist or normaliseCNOlist")
-        }
+    if (class(CNOlist)=="CNOlist"){
+        temp = list(
+             namesCues=colnames(CNOlist@cues),
+             namesStimuli=colnames(CNOlist@stimuli),
+             namesInhibitors=colnames(CNOlist@inhibitors),
+             namesSignals=colnames(CNOlist@signals[[1]]),
+             timeSignals=CNOlist@timepoints,
+             valueCues=CNOlist@cues,
+             valueInhibitors=CNOlist@inhibitors,
+             valueStimuli=CNOlist@stimuli,
+             valueSignals=CNOlist@signals)
+        CNOlist = temp
+    }
+
     if(all(names(CNOlist) != c(
         "namesCues",
         "namesStimuli",

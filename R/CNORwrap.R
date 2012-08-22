@@ -109,10 +109,9 @@ compression=TRUE, expansion=TRUE, cutNONC=TRUE)
     #3.Cut the nonc off the model
     #4.Compress the model
     #5.Expand the gates
-    res = preprocessing(paramsList$data, paramsList$model,
+    newmodel = preprocessing(paramsList$data, paramsList$model,
         compression=compression, expansion=expansion, cutNONC=cutNONC)
-    NCNOcutCompExp <- res$model
-    IndicesNCNOcutComp <- res$indices
+    NCNOcutCompExp <- newmodel
 
     #6.Compute the residual error
     resE<-residualError(CNOlist=paramsList$data)
@@ -142,8 +141,6 @@ compression=TRUE, expansion=TRUE, cutNONC=TRUE)
         bStrings=list(T1opt$bString),
         CNOlist=paramsList$data,
         plotPDF=TRUE)
-
-
 
 
     #10.Plot the evolution of fit
@@ -205,8 +202,8 @@ compression=TRUE, expansion=TRUE, cutNONC=TRUE)
             dataPlot=paste(Name,"DataPlot.pdf",sep=""),
             evolFitT1=paste(Name,"evolFitT1.pdf",sep=""),
             evolFitT2=paste(Name,"evolFitT2.pdf",sep=""),
-            simResults2="NCNOcutCompExpSimResultsT1T2.pdf",
-            simResults1="NCNOcutCompExpSimResultsT1.pdf",
+            simResultsT2="SimResultsTN.pdf",
+            simResultsT1="SimResultsT1_1.pdf",
             scaffold="Scaffold.sif",
             scaffoldDot="Scaffold.dot",
             tscaffold="TimesScaffold.EA",
@@ -218,13 +215,12 @@ compression=TRUE, expansion=TRUE, cutNONC=TRUE)
 
     }
     else{
-
         namesfiles<-list(
             dataPlot=paste(Name,"DataPlot.pdf",sep=""),
             evolFitT1=paste(Name,"evolFitT1.pdf",sep=""),
             evolFitT2=NA,
-            simResults2=NA,
-            simResults1="NCNOcutCompExpSimResultsT1.pdf",
+            simResultsT2=NA,
+            simResultsT1="SimResultsT1_1.pdf",
             scaffold="Scaffold.sif",
             scaffoldDot="Scaffold.dot",
             tscaffold="TimesScaffold.EA",
