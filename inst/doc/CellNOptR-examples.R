@@ -35,27 +35,21 @@ namesFilesToy<-list(dataPlot="ToyModelGraph.pdf",evolFit1="evolFitToyT1.pdf",evo
 
 
 ################################################ ############The one step version################
-library(CellNOptR)
-dir.create("CNOR_analysis")
-setwd("CNOR_analysis")
-#If loading the data from the MIDAS file and the model from the sif file, type:
-#cpfile<-dir(system.file("ToyModel",package="CellNOptR"),full=TRUE)
-#file.copy(from=cpfile,to=getwd(),overwrite=TRUE)
-#dataToy<-readMIDAS(MIDASfile='ToyDataMMB.csv')
-#CNOlistToy<-makeCNOlist(dataset=dataToy,subfield=FALSE)
-#ToyModel<-readSIF(sifFile="ToyPKNMMB.sif")
-#If loading data and model directly from the package:
 data(CNOlistToy,package="CellNOptR")
 data(ToyModel,package="CellNOptR")
 CNORwrap(paramsList=NA,name="Toy",namesData=list(CNOlist="ToyData",model="ToyModel"),data=CNOlistToy,model=ToyModel)
+
 #version 2
-pList<-list(data=CNOlistToy,model=ToyModel,sizeFac = 1e-04, NAFac = 1, popSize = 50, pMutation = 0.5, maxTime = 60, maxGens = 500, stallGenMax = 100, selPress = 1.2, elitism = 5, RelTol = 0.1,verbose=TRUE)
-CNORwrap(paramsList=pList,name="Toy",namesData=list(CNOlist="ToyData",model="ToyModel"),data=NA,model=NA)
+#pList<-list(data=CNOlistToy,model=ToyModel,sizeFac=1e-04, NAFac=1, popSize=50, pMutation=0.5, maxTime= 60, maxGens = 500, stallGenMax = 100, selPress=1.2, elitism=5, RelTol=0.1,verbose=FALSE)
+#CNORwrap(paramsList=pList,name="Toy",namesData=list(CNOlist="ToyData",model="ToyModel"),data=NA,model=NA)
+
+
+
+
 ######################################################
 ############The DREAM data and network################
 ################################################
 ############The 2 time points################
-library(CellNOptR)
 dir.create("CNOR_analysis")
 setwd("CNOR_analysis")
 ######
@@ -74,18 +68,18 @@ CNOlistToy2$timeSignals<-c(CNOlistToy2$timeSignals, 100)
 
 #In this model I added a negative fedback between cJun and Jnk (!cJun=Jnk)
 #this is the model to use with the data CNOlistToy2
-ToyModel2<-readSIF(sifFile="ToyModelMMB2.sif")
+#ToyModel2<-readSIF(sifFile="ToyModelMMB2.sif")
 #####
-data(CNOlistToy2,package="CellNOptR")
-data(ToyModel2,package="CellNOptR")
-ToyNCNOcutCompExp2 = preprocessing(CNOlistToy2, ToyModel2)
-#
-plotCNOlist(CNOlistToy2)
-plotCNOlistPDF(CNOlist=CNOlistToy2,filename="ToyModelGraphT2.pdf")
-checkSignals(CNOlistToy2,ToyModel2)
-resECNOlistToy2<-residualError(CNOlistToy2)
-initBstring2<-rep(1,length(ToyNCNOcutCompExp2$reacID))
-ToyT1opt2<-gaBinaryT1(CNOlist=CNOlistToy2,model=ToyNCNOcutCompExp2,initBstring=initBstring2,maxTime=18)
+#data(CNOlistToy2,package="CellNOptR")
+#data(ToyModel2,package="CellNOptR")
+#ToyNCNOcutCompExp2 = preprocessing(CNOlistToy2, ToyModel2)
+##
+#plotCNOlist(CNOlistToy2)
+#plotCNOlistPDF(CNOlist=CNOlistToy2,filename="ToyModelGraphT2.pdf")
+#checkSignals(CNOlistToy2,ToyModel2)
+#resECNOlistToy2<-residualError(CNOlistToy2)
+#initBstring2<-rep(1,length(ToyNCNOcutCompExp2$reacID))
+#ToyT1opt2<-gaBinaryT1(CNOlist=CNOlistToy2,model=ToyNCNOcutCompExp2,initBstring=initBstring2,maxTime=18)
 #cutAndPlotResultsT1(model=ToyNCNOcutCompExp2,bString=ToyT1opt2$bString,CNOlist=CNOlistToy2,plotPDF=TRUE)
 #pdf("evolFitToy2T1.pdf")
 #plotFit(optRes=ToyT1opt2)
