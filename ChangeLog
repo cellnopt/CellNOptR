@@ -9,7 +9,8 @@
 * MAJOR refactoring to merge T1, T2, TN functions
 * computeScoreT1, cutSimList had an argument called bitString. it is now called
   bString and this convention is used throughout the code (e.g., bStringT1 not
-  bitStringT1)
+  bitStringT1) simlist and indexlist are now optional are after the bString
+  argument.
 * computeScoreT2 is now deprecated and computeScoreTN should be use instead.
 * cutSimList argument called bitString renamed bString
 * simulateTN  combines simulateT1 and simulateTN so only one function is

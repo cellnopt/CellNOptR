@@ -17,7 +17,10 @@
 ## given a MIDAS file, returns a CNOlist object
 ## You may want to make this (and the existing readMIDAS)
 ## into S4 generics in order to avoid a name conflict.
-CNOlist <- function(MIDASfile, subfield=FALSE, verbose=FALSE)
+
+
+
+internal_CNOlist <- function(MIDASfile, subfield=FALSE, verbose=FALSE)
 {
     x <- readMIDAS(MIDASfile, verbose=verbose)
     y <- makeCNOlist(x, subfield=subfield, verbose=verbose)
@@ -36,13 +39,14 @@ CNOlist <- function(MIDASfile, subfield=FALSE, verbose=FALSE)
     mySignals <-
         lapply(mySignals, "colnames<-", y$namesSignals)
 
-    CNOList(myCues, myInhibitors, myStimuli, mySignals)
+    #CNOlist(myCues, myInhibitors, myStimuli, mySignals)
+    return( list(cues=myCues, inhibitors=myInhibitors, stimuli=myStimuli, signals=mySignals))
 }
 
 
 
 ## Class definition
-setClass("CNOList",
+setClass("CNOlist",
     representation(
         cues="matrix",
         inhibitors="matrix",
@@ -65,10 +69,18 @@ setClass("CNOList",
 
 
 ## constructor
-CNOList <-function(cues, inhibitors, stimuli, signals, ...){
-    new("CNOList", cues=cues, inhibitors=inhibitors,
-        stimuli=stimuli, signals=signals, ...)
+#CNOlist <-function(cues, inhibitors, stimuli, signals, ...){
+#    new("CNOlist", cues=cues, inhibitors=inhibitors,
+#        stimuli=stimuli, signals=signals, ...)
+#}
+
+CNOlist <-function(MIDASfile, subfield=FALSE, verbose=FALSE, ...){
+    res = internal_CNOlist(MIDASfile, subfield, verbose)
+    new("CNOlist", cues=res$cues, inhibitors=res$inhibitors,
+        stimuli=res$stimuli, signals=res$signals, ...)
 }
+
+
 
 ## accessors
 cues <- function(cnoList, ...) cnoList@cues
@@ -78,7 +90,7 @@ signals <- function(cnoList, ...) cnoList@signals
 
 
 ## show method
-setMethod(show, "CNOList", function(object) {
+setMethod(show, "CNOlist", function(object) {
     cat("class:", class(object), "\n")
     cat("cues:", colnames(cues(object)), "\n")
     cat("inhibitors:", colnames(inhibitors(object)), "\n")

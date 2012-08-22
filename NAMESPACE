@@ -63,5 +63,5 @@ export(
     "plotModel")
 
 # CNOlist class
-exportClasses("CNOList")
+exportClasses("CNOlist")
 
