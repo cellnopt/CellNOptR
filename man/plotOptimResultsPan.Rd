@@ -1,55 +1,47 @@
 \name{plotOptimResultsPan}
 \alias{plotOptimResultsPan}
 \title{
-Plot the data and simulated values
+Plots the data and simulated values from any CellNOptR formalism
 }
 \description{
-This function is the equivalent of CNOPlotFits, it plots the data and the simulated values,  along with an image plot that tells which cues were present.  The plots are coloured according to the fit between data and simulated data.
+This function plots the data and simulated values according to each experiment in CNOlist. The data is shown as black triangles and the simulation by a blue dashed line. The combination of cues is given by a panel where black denotes the presence and white the absence of the cue. The goodness-of-fit between model and data is color-coded on a continuous scale from white to red.
 }
 \usage{
 plotOptimResultsPan(simResults, yInterpol=NULL, xCoords=NULL,
-    CNOlist=CNOlist, nsplit=1, formalism=c("ss1","ss2","ssN","dt","ode"), pdf=FALSE,
-    pdfFileName="", tPt=NULL)
-
-
+CNOlist=CNOlist,  formalism=c("ss1","ss2","ssN","dt","ode"), pdf=FALSE,
+pdfFileName="", tPt=NULL)
 }
 \arguments{
-  \item{simResults}{
-a list with a field for each time point, each containing a matrix of dimensions (number of conditions) * (number of signals), with the first field being t0.  Typically produced by simulating a model and then extracting the columns that correspond to signals
+\item{simResults}{
+A list with a field for each time point, each containing a matrix of dimensions (number of conditions) * (number of signals), with the first field being t0.  Typically produced by simulating a model and then extracting the columns that correspond to signals.
 }
-  \item{yInterpol}{
-todo
+\item{yInterpol}{
+If using CNORdt, these are the interpolated experimental results from getFitTimeScale() that are needed to compare against the Boolean simulation.
 }
-  \item{xCoords}{
-todo
+\item{xCoords}{
+These are the x-coordinates obtained from the optimized scaling factor in CNORdt that allow for comparison between time course experimental data and a Boolean model.
 }
-
-  \item{CNOlist}{
-todo
+\item{CNOlist}{
+A CNOlist. 
 }
-  \item{nsplit}{
-todo
+\item{formalism}{
+An abbreviation of the CellNOptR formalism being used.
 }
-  \item{formalism}{
-todo
+\item{pdf}{
+A Boolean argument denoting whether to print the figure produced by this function to file.
 }
-  \item{pdf}{
-todo
+\item{pdfFileName}{
+If printing to file, the filename to be used.
 }
-  \item{pdfFileName}{
-todo
-}
-  \item{tPt}{
-todo
+\item{tPt}{
+The number of time points in the data.
 }
 }
 \details{
-The colouring of the background is done as follows: the mean absolute difference
-between observed and simulated values are computed, and colours are chosen based
-on this value: red (1), yellow/orange (0.5),  white(0). This function is used inside \code{cutAndPlot}.
+Depending on the logic formalism, this function is generally called from cutAndPlotResults*(). As shown in the example below however, it can plot the fit of any data and corresponding compatible model. The color denotes the goodness-of-fit, where white shows no difference between simulation and data and red is the maximum error from all conditions and readouts.
 }
 \value{
-This function doesn't return anything, it just produces a plot in your graphics window.
+This function does not return a value.
 }
 \references{
 J. Saez-Rodriguez, L. G. Alexopoulos, J. Epperlein, R. Samaga, D. A. Lauffenburger, S. Klamt and P. K. Sorger. Discrete logic modeling as a means to link protein signaling networks with functional analysis of
@@ -59,44 +51,28 @@ mammalian signal transduction, Molecular Systems Biology, 5:331, 2009.
 A. MacNamara
 }
 \seealso{
-cutAndPlotResultsT1, plotOptimResults
+cutAndPlotResultsT1
 }
 \examples{
-tmpdir<-tempdir()
-setwd(tmpdir)
-
-#We will plot the fit of the full initial model compared to the data, without any optimisation
-#This is normally not done on a stand alone basis, but if you have a model and would like to visualise its output compared to your data, then this is what you should do
-
-#load and prepare data
 
 data(CNOlistToy,package="CellNOptR")
 data(ToyModel,package="CellNOptR")
+indicesToy <- indexFinder(CNOlistToy, ToyModel, verbose=TRUE)
+ToyFields4Sim <- prep4sim(ToyModel)
 
-simList = prep4sim(ToyModel)
-indexList = indexFinder(CNOlistToy, ToyModel)
-#simulate model
+# simulate model
+Sim <- simulatorT1(CNOlist=CNOlistToy, model=ToyModel, simList=ToyFields4Sim, indexList=indicesToy)
 
-#Sim<-simulatorTN(CNOlist=CNOlistToy,model=ToyModel, indexList=indexList, simList=simList)
+# format data and results
 
+simRes <- Sim[,indicesToy$signals]
+simResults <- list(t0=matrix(data=0, nrow=dim(simRes)[1], ncol=dim(simRes)[2]), t1=simRes)
 
-## keep simList and indxList for back compatibility ?
-#modelCut <- cutModel(model, bString)
-#simListCut <- cutSimList(simList, bString)
-#
-    # t0
-#Sim0 <- simulatorT0(CNOlist=CNOlist, model=modelCut, simList=simListCut, indexList=indexList)
-#simRes0 <- as.matrix(Sim0[,indexList$signals])
-
-# t1
-#Sim <- simulatorT1(CNOlist=CNOlist, model=modelCut, simList=simListCut, indexList=indexList)
-#simResults <- as.matrix(Sim[,indexList$signals])
-#simResults <- list(t0=simRes0, t1=simRes)
-#plot
-
-#plotOptimResultsPan(
-#	simResults=simResults,
-#    CNOlist=CNOlistToy,
-#    formalism="ss1",
-#    tPt=1)
+# plot
+plotOptimResultsPan(simResults,
+  CNOlist=CNOlistToy,
+  formalism="ss1",
+  pdf=FALSE,
+  tPt=10
+)
 }
