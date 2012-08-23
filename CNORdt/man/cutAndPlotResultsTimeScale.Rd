@@ -64,22 +64,23 @@ data(CNOlistPB, package="CNORdt")
 data(modelPB, package="CNORdt")
 
 # pre-process model
-res <- preprocessing(CNOlistPB, modelPB)
-fields4Sim <- prep4sim(model=res$model)
-initBstring <- rep(1, length(res$model$reacID))
+model <- preprocessing(CNOlistPB, modelPB)
+indices = indexFinder(CNOlistPB, model)
+fields4Sim <- prep4sim(model=model)
+initBstring <- rep(1, length(model$reacID))
 
 # optimize
-opt1 <- gaBinaryTimeScale(CNOlist=CNOlistPB, model=res$model,
-simList=fields4Sim, indexList=res$indices, initBstring=initBstring,
+opt1 <- gaBinaryTimeScale(CNOlist=CNOlistPB, model=model,
+simList=fields4Sim, indexList=indices, initBstring=initBstring,
 verbose=TRUE, boolUpdates=30, maxTime=100, lowerB=0.8, upperB=10)
 
 # plot
 cutAndPlotResultsTimeScale(
-  model=res$model,
+  model=model,
   bString=opt1$bString,
   simList=fields4Sim,
   CNOlist=CNOlistPB,
-  indexList=res$indices,
+  indexList=indices,
   boolUpdates=30,
   lowerB=0.8,
   upperB=10)

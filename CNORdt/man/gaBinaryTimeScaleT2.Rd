@@ -101,31 +101,31 @@ data(CNOlistPB, package="CNORdt")
 data(modelPB, package="CNORdt")
 
 # pre-process model
-res <- preprocessing(CNOlistPB, modelPB)
-fields4Sim <- prep4sim(model=res$model)
-initBstring <- rep(1, length(res$model$reacID))
-
+model <- preprocessing(CNOlistPB, modelPB)
+fields4Sim <- prep4sim(model=model)
+initBstring <- rep(1, length(model$reacID))
+indices = indexFinder(CNOlistPB, model)
 # define boolUpdates and divTime
 boolUpdates=c(10,20)
 divTime=10
 
 # optimize T1
-opt1 <- gaBinaryTimeScale(CNOlist=CNOlistPB, model=res$model,
-simList=fields4Sim, indexList=res$indices, initBstring=initBstring,
+opt1 <- gaBinaryTimeScale(CNOlist=CNOlistPB, model=model,
+simList=fields4Sim, indexList=indices, initBstring=initBstring,
 verbose=TRUE, boolUpdates=boolUpdates, divTime=divTime, maxTime=100,
 lowerB=0.8, upperB=10)
 
 # simulate the above model to get the starting point for second time phase
-dataStartPoint = cutModel(model=res$model, simList=fields4Sim, bitString=opt1$bString)
+dataStartPoint = cutModel(model=model, simList=fields4Sim, bitString=opt1$bString)
 simT1 = simulatorTimeScale(CNOlist=CNOlistPB, model=dataStartPoint[[1]], simList=dataStartPoint[[2]],
-indexList=res$indices, boolUpdates=boolUpdates[1])
+indexList=indices, boolUpdates=boolUpdates[1])
 
 # optimize the 'second' network then stitch the results together
-opt2 <- gaBinaryTimeScaleT2(CNOlist=CNOlistPB, model=res$model,
-simList=fields4Sim, indexList=res$indices, bStringT1=opt1$bString, simResT1=simT1, verbose=TRUE, boolUpdates=boolUpdates, divTime=divTime, lowerB=0.8, upperB=10)
+opt2 <- gaBinaryTimeScaleT2(CNOlist=CNOlistPB, model=model,
+simList=fields4Sim, indexList=indices, bStringT1=opt1$bString, simResT1=simT1, verbose=TRUE, boolUpdates=boolUpdates, divTime=divTime, lowerB=0.8, upperB=10)
 
 # visualize total result
-cutAndPlotResultsTimeScaleT2(model=res$model, bStringT1=opt1$bString, bStringT2=opt2$bString,
-simList=fields4Sim, CNOlist=CNOlistPB, indexList=res$indices, boolUpdates=boolUpdates,
+cutAndPlotResultsTimeScaleT2(model=model, bStringT1=opt1$bString, bStringT2=opt2$bString,
+simList=fields4Sim, CNOlist=CNOlistPB, indexList=indices, boolUpdates=boolUpdates,
 divTime=divTime, lowerB=0.8, upperB=10)
 }

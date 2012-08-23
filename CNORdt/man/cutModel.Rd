@@ -40,10 +40,10 @@ data(CNOlistPB, package="CNORdt")
 data(modelPB, package="CNORdt")
 
 # pre-process model
-res <- preprocessing(CNOlistPB, modelPB)
-fields4Sim <- prep4sim(model=res$model)
-initBstring <- rep(1, length(res$model$reacID))
+model <- preprocessing(CNOlistPB, modelPB)
+fields4Sim <- prep4sim(model=model)
+initBstring <- rep(1, length(model$reacID))
 
-bitString = sample(c(0,1), length(res$model$reacID), replace=TRUE)
-dataCut = cutModel(model=res$model, simList=fields4Sim, bitString=bitString)
+bitString = sample(c(0,1), length(model$reacID), replace=TRUE)
+dataCut = cutModel(model=model, simList=fields4Sim, bitString=bitString)
 }
