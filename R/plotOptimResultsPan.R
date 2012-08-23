@@ -15,7 +15,7 @@
 # $Id: plotOptimResultsPan.R 802 2012-03-22 16:44:12Z cokelaer $
 
 plotOptimResultsPan <- function(simResults, yInterpol=NULL, xCoords=NULL,
-CNOlist=CNOlist, nsplit=1, formalism=c("ss1","ss2","ssN","dt","ode"), pdf=FALSE,
+CNOlist=CNOlist, formalism=c("ss1","ss2","ssN","dt","ode"), pdf=FALSE,
 pdfFileName="", tPt=NULL) {
 
 	# check that CNOlist is a CNOlist

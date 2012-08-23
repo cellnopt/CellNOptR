@@ -29,7 +29,7 @@ NULL or string; tells whether you want to prefix filenames with a tag (replaces
 the default behaviour).
 }
   \item{show}{
-todo
+show the plot
 }
 }
 \note{New in version 1.3.28}

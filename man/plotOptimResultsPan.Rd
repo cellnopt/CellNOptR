@@ -8,7 +8,7 @@ This function plots the data and simulated values according to each experiment i
 }
 \usage{
 plotOptimResultsPan(simResults, yInterpol=NULL, xCoords=NULL,
-CNOlist=CNOlist,  formalism=c("ss1","ss2","ssN","dt","ode"), pdf=FALSE,
+CNOlist=CNOlist, formalism=c("ss1","ss2","ssN","dt","ode"), pdf=FALSE,
 pdfFileName="", tPt=NULL)
 }
 \arguments{

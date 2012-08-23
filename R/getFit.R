@@ -25,6 +25,9 @@ getFit<-function(
     simResultsT0=NA
     ){
 
+
+
+
     simResults<-simResults[,indexList$signals]
 
 

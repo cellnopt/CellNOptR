@@ -42,7 +42,8 @@ the default behaviour).
 TRUE/FALSE 
 }
   \item{tPt}{
-todo.
+The number of time points in the data.
+
 }
 }
 

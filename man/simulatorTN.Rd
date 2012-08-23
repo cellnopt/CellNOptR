@@ -13,7 +13,9 @@ simulatorTN(simResultsPrev, CNOlist, model, simList, indexList, timeIndex=3)
 }
 \arguments{
   \item{simResultsPrev}{
-todo
+a matrix that is the output of simulatorTN (i.e. one row per condition and one
+column per species IN THE MODEL)
+
 }
 
   \item{CNOlist}{

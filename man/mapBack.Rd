@@ -28,9 +28,6 @@ the optimised bitString
 }
 
 
-\details{
-todo
-}
 
 \value{
 \item{bStringPKN}{the corresponding bitstring corresponding to the original PKN.

@@ -40,8 +40,7 @@ the default behaviour).
 TRUE of FALSE; FALSE tells not to show the plot, which can be useful when scripting.
 }
   \item{tPt}{
-todo
-}
+The number of time points in the data.}
 }
 
 \value{
