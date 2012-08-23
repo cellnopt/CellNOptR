@@ -45,4 +45,4 @@ CNORwrap(name="Toy",
     namesData=list(CNOlist="ToyData",model="ToyModel"),
     data=CNOlistToy, model=ToyModel)
 }
-}
+
