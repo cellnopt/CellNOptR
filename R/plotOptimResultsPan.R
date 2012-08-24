@@ -126,8 +126,8 @@ pdfFileName="", tPt=NULL) {
 		}
 	}
     
-	print(allDiff)
-    print(norm)
+	#print(allDiff)
+    #print(norm)
 	# max difference between sim and exper
 	#diffMax = max(unlist(!is.na(allDiff)))
 
