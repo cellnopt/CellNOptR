@@ -18,7 +18,8 @@
 	plotLBodeFitness(cnolist, model, ode_parameters = NULL, indices = NULL,
  		adjMatrix = NULL, time = 1, verbose = 0, transfer_function = 3, reltol = 1e-04,
 		atol = 0.001, maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails = 50,
-   		plot_index_signals = NULL, plot_index_experiments = NULL, plot_index_cues = NULL)
+   		plot_index_signals = NULL, plot_index_experiments = NULL,
+plot_index_cues = NULL, colormap="heat")
 }
 
 %- maybe also 'usage' for other objects documented here.
@@ -75,6 +76,9 @@
   	\item{plot_index_cues}{
 		In case you only want to plot some cues, provide an integer vector with  the indexes.
 	}
+    \item{colormap}{
+    Uses the same colormap as in CellNOptR by default. If set to "green", it uses the deprecated colormap.
+    }
 }
 
 \details{

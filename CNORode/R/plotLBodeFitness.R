@@ -20,7 +20,7 @@ plotLBodeFitness <-function
 		verbose=0, 				    transfer_function=3,		reltol=1e-4,
 		atol=1e-3,				    maxStepSize=Inf,		 	maxNumSteps=100000,
 		maxErrTestsFails=50,		plot_index_signals=NULL,	plot_index_experiments=NULL,
-		plot_index_cues=NULL
+		plot_index_cues=NULL, colormap="heat"
 )
 {
 	if(is.null(plot_index_experiments))plot_index_experiments=1:dim(cnolist$valueCues)[1];
@@ -47,9 +47,17 @@ plotLBodeFitness <-function
 	valueCues=valueCues[plot_index_experiments,plot_index_cues];
 	names(valueCues)=namesCues[plot_index_cues];
 
-	plotOptimResults(simResults=sim_data,expResults=expResults,
-			times=times,namesCues=namesCues,namesSignals=namesSignals,
-			valueCues=valueCues);
-			
+	if (colormap=="green"){
+        plotOptimResults(simResults=sim_data,expResults=expResults,
+    	times=times,namesCues=namesCues,namesSignals=namesSignals,
+    	valueCues=valueCues);
+    } else{
+        plotOptimResultsPan(sim_data, yInterpol=NULL, xCoords=NULL,
+             CNOlist=cnolist, formalism="ode", pdf=FALSE,
+             pdfFileName="", tPt=NULL)
+    }
+
+
+
   return(sim_data);
 }
