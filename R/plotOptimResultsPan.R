@@ -77,12 +77,22 @@ pdfFileName="", tPt=NULL) {
 	xVal <- CNOlist$timeSignals[valueSignalsI]
 	if(formalism=="dt") {
 		xValS = xCoords
+        norm = length(CNOlist$timeSignals)
 	} else if (formalism == "ss1") {
 		xValS = c(0,tPt[1])
+        norm = 2
 	} else if (formalism == "ss2") {
 		xValS = c(0,tPt[1:2])
+        norm = 3
 	} else if (formalism == "ssN") {
+      stop("not implemented")
 	  xValS = c(0,tPt)
+      norm = 3 # should be number of time points.
+	} else if (formalism == "ode") {
+        xValS = CNOlist$timeSignals
+	    xVal <- CNOlist$timeSignals
+        valueSignalsI = seq(1, length(xValS))
+        norm = length(CNOlist$timeSignals)
 	}else {
 		xValS = xVal
 	}
@@ -101,21 +111,25 @@ pdfFileName="", tPt=NULL) {
 	# calculate the MSE
 	allDiff = matrix(NA, nrow=dim(simResults)[1], ncol=dim(simResults)[2])
 	if(formalism != "dt") {
+        # ss1, ss2, ssN
 		for(a in 1:dim(simResults)[1]) {
 			for(b in 1:dim(simResults)[2]) {
-				allDiff[a,b] = sum((simResults[a,b,]-valueSignalsArr[a,b,valueSignalsI])^2)
+				allDiff[a,b] = sum((simResults[a,b,]-valueSignalsArr[a,b,valueSignalsI])^2)/norm
 			}
 		}
 	} else {
+        # dt and ode
 		for(a in 1:dim(simResults)[1]) {
 			for(b in 1:dim(simResults)[2]) {
-				allDiff[a,b] = sum((simResults[a,b,]-yInterpol[a,b,])^2)
+				allDiff[a,b] = sum((simResults[a,b,]-yInterpol[a,b,])^2) / norm
 			}
 		}
 	}
-	#print(allDiff)
+    
+	print(allDiff)
+    print(norm)
 	# max difference between sim and exper
-	diffMax = max(unlist(!is.na(allDiff)))
+	#diffMax = max(unlist(!is.na(allDiff)))
 
 	# set the count for the split screen window
 	count1 = dim(CNOlist$valueSignals[[1]])[2]+4
@@ -137,6 +151,7 @@ pdfFileName="", tPt=NULL) {
 	}
 
 	# stim + inhib
+
 	screen(count1)
 	par(fg="blue",mar=c(0.5,0.5,0.7,0))
 	plot(
@@ -151,18 +166,19 @@ pdfFileName="", tPt=NULL) {
 		y = (yMin+((yMax-yMin)/2)),cex=1.6
 	)
 
-	count1 = count1 + dim(CNOlist$valueSignals[[1]])[1]+1
-	screen(count1)
-	par(fg="blue",mar=c(0.5,0.5,0.7,0))
-	plot(
-		x = xVal, y=rep(-5,length(xVal)),
-		ylim = c(yMin, yMax),
-		xlab = NA,ylab=NA,xaxt="n",yaxt="n")
-	text(
-		labels="Inh",
-		x=((xVal[length(xVal)]-xVal[1])/2),
-		y=(yMin+((yMax-yMin)/2)),cex=1.6
-	)
+    count1 = count1 + dim(CNOlist$valueSignals[[1]])[1]+1
+   	screen(count1)
+    par(fg="blue",mar=c(0.5,0.5,0.7,0))
+   	plot(
+    	x = xVal, y=rep(-5,length(xVal)),
+	    ylim = c(yMin, yMax),
+   		xlab = NA,ylab=NA,xaxt="n",yaxt="n")
+    text(
+	    labels="Inh",
+     	x=((xVal[length(xVal)]-xVal[1])/2),
+	   	y=(yMin+((yMax-yMin)/2)),cex=1.6
+   	)
+   
 
 	# new count for plotting results
 	countRow = dim(CNOlist$valueSignals[[1]])[2]+4
@@ -176,7 +192,8 @@ pdfFileName="", tPt=NULL) {
 			yVal <- lapply(CNOlist$valueSignals[valueSignalsI], function(x) {x[r,c]})
 			yValS <- simResults[r,c,]
 			if(!is.na(allDiff[r,c])) {
-				diff = (1 - (allDiff[r,c] / diffMax)) * 1000
+				#diff = (1 - (allDiff[r,c] / diffMax)) * 1000
+				diff = (1 - (allDiff[r,c] / 1.)) * 1000
 			} else {
 				diff = 0
 			}
@@ -186,7 +203,6 @@ pdfFileName="", tPt=NULL) {
 			plot(x=xVal,y=yVal,ylim=c(yMin,yMax),xlab=NA,ylab=NA,xaxt="n",yaxt="n",)
 			rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4], col=bgcolor)
 			points(x=xVal,y=yVal,ylim=c(yMin, yMax),xlab=NA,ylab=NA,xaxt="n",yaxt="n",pch=2)
-
 			lines(xValS, yValS, xlim=c(0,xValMax), ylim=c(yMin, yMax),
 			xlab=NA, ylab=NA, xaxt="n", yaxt="n", col="blue", lty=2, lwd=3)
 			points(xValS, yValS, xlim=c(0,xValMax), ylim=c(yMin, yMax),
@@ -234,43 +250,44 @@ pdfFileName="", tPt=NULL) {
 	}
 
 	sInhib = sStim+1
-	for(i1 in 1:dim(CNOlist$valueSignals[[1]])[1]) {
-		screen(sInhib)
-		par(mar=c(0.5,0.5,0,0))
+   	for(i1 in 1:dim(CNOlist$valueSignals[[1]])[1]) {
+    	screen(sInhib)
+	    par(mar=c(0.5,0.5,0,0))
 
-		image(
-			t(matrix(CNOlist$valueInhibitors[i1,],nrow=1)),
-			col=c("white","black"),xaxt="n",yaxt="n"
-		)
-		if(i1 == dim(CNOlist$valueSignals[[1]])[1]) {
-			axis(
-				side=1,
-				at=seq(from=0, to=1,length.out=length(CNOlist$namesInhibitors)),
-				labels=paste(CNOlist$namesInhibitors,"i",sep=""),
-				las=3,cex.axis=1.2
-			)
-		}
-		sInhib = sInhib+1
-	}
-
+    	if (length(CNOlist$namesInhibitors) >1){
+    		image(
+	    		t(matrix(CNOlist$valueInhibitors[i1,],nrow=1)),
+		    	col=c("white","black"),xaxt="n",yaxt="n"
+	    	)
+    		if(i1 == dim(CNOlist$valueSignals[[1]])[1]) {
+		    	axis(
+			    	side=1,
+				    at=seq(from=0, to=1,length.out=length(CNOlist$namesInhibitors)),
+		    		labels=paste(CNOlist$namesInhibitors,"i",sep=""),
+    				las=3,cex.axis=1.2
+	    		)
+    		}
+        }
+	    sInhib = sInhib+1
+    }
+     
 	screen(dim(CNOlist$valueSignals[[1]])[2]+3)
-	splitProp = 1/(dim(CNOlist$valueSignals[[1]])[1]+1)
-	sSplit = matrix(c(0,1,(1-splitProp),1,0,1,0,(1-splitProp)),
-	ncol=4, byrow=T)
-	split.screen(sSplit)
-	screen(sInhib)
-	par(fg="blue",mar=c(0.5,0.5,0.7,0))
-	plot(
-		x = xVal,
-		y = rep(-5,length(xVal)),
-		ylim = c(yMin, yMax),
-		xlab = NA,ylab=NA,xaxt="n",yaxt="n"
-	)
-	text(
-		labels = "Error",
-		x = ((xVal[length(xVal)]-xVal[1])/2),
-		y = (yMin+((yMax-yMin)/2)),cex=1.6
-	)
+    splitProp = 1/(dim(CNOlist$valueSignals[[1]])[1]+1)
+    sSplit = matrix(c(0,1,(1-splitProp),1,0,1,0,(1-splitProp)),ncol=4, byrow=T)
+   	split.screen(sSplit)
+    screen(sInhib)
+   	par(fg="blue",mar=c(0.5,0.5,0.7,0))
+    plot(
+    		x = xVal,
+    	y = rep(-5,length(xVal)),
+	    ylim = c(yMin, yMax),
+  		xlab = NA,ylab=NA,xaxt="n",yaxt="n"
+    )
+   	text(
+    		labels = "Error",
+   	x = ((xVal[length(xVal)]-xVal[1])/2),
+   		y = (yMin+((yMax-yMin)/2)),cex=1.6
+	    )
 
 	screen(sInhib+1)
 	colbar = heat.colors(100)
