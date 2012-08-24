@@ -15,7 +15,7 @@
 
 \usage{
 	parEstimationLBode(cnolist, model, method="ga", ode_parameters = NULL, indices = NULL,
-	paramsGA=NULL, paramsSSM=NULL)
+	paramsGA=NULL, paramsSSm=NULL)
 }
 
 %- maybe also 'usage' for other objects documented here.
@@ -38,7 +38,7 @@
 	\item{paramsGA}{
 		 A list of GA parameters. default is the list returned by \code{defaultParametersGA}.
 	} 
-	\item{paramsSSM}{
+	\item{paramsSSm}{
 		 A list of SSm parameters. default is the list returned by\code{defaultParametersSSm}.
 	} 
 }
