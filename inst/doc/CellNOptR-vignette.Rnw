@@ -41,7 +41,8 @@ biocLite("CellNOptR")
 
 or from a tar ball as follows:
 <<installPackage, eval=FALSE>>=
-install.packages("path_to_CellNOptR/CellNOptR_1.0.0.tar.gz",repos=NULL, type="source")
+install.packages("path_to_CellNOptR/CellNOptR_1.0.0.tar.gz",
+    repos=NULL, type="source")
 @
 or, using the R GUI by clicking on "Packages \& Data" then "Package installer", then choosing "local source" from the dropdown menu, clicking "install", choosing \emph{CellNOptR\_1.0.0.tar.gz} and finally clicking "open".
 
@@ -444,7 +445,7 @@ unlink("ToyModelMMB2.sif")
 
 This package also contains a slightly larger and more realistic data set, which is a part of the network analysed in \cite{julio2009} and comprises 40 species and 58 interactions in the PKN. This network was also used for the signaling challenge in DREAM 4 (see \url{http://www.the-dream-project.org/}).  The associated data was collected in hepatocellular carcinoma cell line HepG2 (see \cite{alexopoulos_networks_2010}).   The same analysis as above can be performed on this data set.  In order to load this data, you need to copy the files in the "DREAMModel" directory to you working directory (see below) then use \emph{readMIDAS}, \emph{readSIF} and \emph{makeCNOlist}, or load the pre-formatted model and CNOlist objects, as above.
 
-<<getDREAM, eval=FALSE>>=
+<<getDREAM, eval=TRUE>>=
 #Option 1: copy the SIF and MIDAS files (followed by readMIDAS, makeCNOlist and readSIF)
 cpfile<-dir(system.file("DREAMModel",package="CellNOptR"),full=TRUE)
 file.copy(from=cpfile,to=getwd(),overwrite=TRUE)
@@ -453,9 +454,24 @@ data(CNOlistDREAM,package="CellNOptR")
 data(DreamModel,package="CellNOptR")
 @
 
-Having loaded both data and model, you can now visualise your data using \emph{plotCNOlist} and \emph{plotCNOlistPDF}.  Then, you check that the data matches the model (\emph{checkSignals}), and get the indices of measured/inhibited/stimulated species (\emph{indexFinder}). You can now start the preprocessing of the model, i.e. find the non-observable/non-controllable species (\emph{findNONC}), cut them (\emph{cutNONC}), recompute the indices (\emph{indexFinder}), compress the model (\emph{compressModel}), recompute the indices (\emph{indexFinder}), and expand the gates (\emph{expandGates}).
+Having loaded both data and model, you can now visualise your data using
+\emph{plotCNOlist} and \emph{plotCNOlistPDF}.  You can now start the
+preprocessing of the model, i.e. find the non-observable/non-controllable
+species, compress the model, and expand the gates (\emph{preprocessing}).
 
-Having obtained a pre-processed model, we compute the residual error (\emph{residualError}), prepare the model for simulation (\emph{prep4sim}), and run the training function (\emph{gaBinaryT1}). Finally,we plot the results of our training (\emph{cutAndPlot}, see figure \ref{fig:DREAMres}) as well as the information about the evolution of fit during optimisation (\emph{plotFit}).
+Having obtained a pre-processed model, we compute the residual error (\emph{residualError}), and run the training function (\emph{gaBinaryT1}). Finally,we plot the results of our training (\emph{cutAndPlot}, see figure \ref{fig:DREAMres}) as well as the information about the evolution of fit during optimisation (\emph{plotFit}).
+
+
+
+
+<<DREAMAnalysis, eval=FALSE>>=
+model = preprocessing(CNOlistDREAM, DreamModel, verbose=FALSE)
+res = gaBinaryT1(CNOlistDREAM, model, verbose=FALSE, maxTime=10)
+cutAndPlot(CNOlistDREAM, model, bStrings=list(res$bString), plotPDF=TRUE,
+plotParams=list(maxrow=25, margin=0.1, width=20, height=20))
+
+
+@
 
 \begin{figure*}
 \centerline{\includegraphics[width=\textwidth]{Fig4.pdf}}
