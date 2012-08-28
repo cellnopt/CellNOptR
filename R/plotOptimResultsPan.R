@@ -51,14 +51,21 @@ pdfFileName="", tPt=NULL, plotParams=list(margin=0.1, width=15, height=12)) {
 	#####	/functions/	#####
 
 
-	oldPar = par(no.readonly=TRUE)
+    opar = par(no.readonly = TRUE)
+    on.exit(par(opar))
+
 	if(pdf==TRUE) {
 		pdf(file=pdfFileName, width=plotParams$width, height=plotParams$height)
 	}
-	split.screen(c(1,dim(CNOlist$valueSignals[[1]])[2]+3))
-	for(a in 1:(dim(CNOlist$valueSignals[[1]])[2]+2)) {
-		split.screen(c(dim(CNOlist$valueSignals[[1]])[1]+1,1),a)
+
+    Ncols = dim(CNOlist$valueSignals[[1]])[2]
+    Nrows = dim(CNOlist$valueSignals[[1]])[1]
+
+	split.screen(c(1, Ncols+3))
+	for(a in 1:(Ncols+2)) {
+		split.screen(c(Nrows+1,1),a) # why +2 ?
 	}
+
 
 	# TODO - do i need all these with split.screen?
 	par(
@@ -128,8 +135,6 @@ pdfFileName="", tPt=NULL, plotParams=list(margin=0.1, width=15, height=12)) {
 		}
 	}
     
-	#print(allDiff)
-    #print(norm)
 	# max difference between sim and exper
 	#diffMax = max(unlist(!is.na(allDiff)))
 
@@ -273,7 +278,6 @@ pdfFileName="", tPt=NULL, plotParams=list(margin=0.1, width=15, height=12)) {
         }
 	    sInhib = sInhib+1
     }
-     
 	screen(dim(CNOlist$valueSignals[[1]])[2]+3)
     splitProp = 1/(dim(CNOlist$valueSignals[[1]])[1]+1)
     sSplit = matrix(c(0,1,(1-splitProp),1,0,1,0,(1-splitProp)),ncol=4, byrow=T)
@@ -309,8 +313,7 @@ pdfFileName="", tPt=NULL, plotParams=list(margin=0.1, width=15, height=12)) {
 	rect(0, 0, rhs, 1, border="black")
 	segments(rhs, at, rhs2, at)
 	text(x=rhs2, y=at, labels=labels, pos=4, offset=0.2)
-	par(oldPar)
 
-
+#	par(oldPar)
 	close.screen(all.screens=TRUE)
 }
