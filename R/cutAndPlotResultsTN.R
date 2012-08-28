@@ -15,7 +15,7 @@
 # $Id$
 
 cutAndPlotResultsTN <-function(CNOlist, model,bStrings, plotPDF=FALSE,
-    tag=NULL, show=TRUE)
+    tag=NULL, show=TRUE, maxrow=maxrow)
 {
 
   tPt=CNOlist$timeSignals[1:length(bStrings)+1]
