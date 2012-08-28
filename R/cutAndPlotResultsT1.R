@@ -15,8 +15,7 @@
 # $Id$
 
 cutAndPlotResultsT1 <- function(model, bString, simList=NULL, CNOlist, indexList=NULL,
- plotPDF=FALSE, tag=NULL, show=TRUE,
-    tPt=CNOlist$timeSignals[2]
+ plotPDF=FALSE, tag=NULL, tPt=CNOlist$timeSignals[2], plotParams=list(maxrow=10)
     )
 {
 
@@ -50,12 +49,12 @@ cutAndPlotResultsT1 <- function(model, bString, simList=NULL, CNOlist, indexList
     CNOlistSet = list()
     simResultsSet = list()
 
-    if(dim1 > 10) { #|| dim2 > 10) {
+    if(dim1 > plotParams$maxrow) { #|| dim2 > 10) {
 
-        par1 = ceiling(dim1/10)
+        par1 = ceiling(dim1/plotParams$maxrow)
         div1 = ceiling(dim1/par1)
-        par2 = ceiling(dim2/10)
-        div2 = ceiling(dim2/par2)
+        #par2 = ceiling(dim2/plotParams$maxrow)
+        #div2 = ceiling(dim2/par2)
 
         count1 = 1
         for(a in 1:par1) {
@@ -85,14 +84,12 @@ cutAndPlotResultsT1 <- function(model, bString, simList=NULL, CNOlist, indexList
     outputFilenames = list()
     for(f in 1:length(CNOlistSet)) {
 
-        if(show==TRUE) {
-            plotOptimResultsPan(
-                simResults=simResultsSet[[f]],
-                CNOlist=CNOlistSet[[f]],
-                formalism="ss1",
-                tPt=tPt
+        plotOptimResultsPan(
+            simResults=simResultsSet[[f]],
+            CNOlist=CNOlistSet[[f]],
+            formalism="ss1",
+            tPt=tPt
             )
-        }
 
         if(plotPDF == TRUE) {
             if(is.null(tag)) {
@@ -103,10 +100,11 @@ cutAndPlotResultsT1 <- function(model, bString, simList=NULL, CNOlist, indexList
             plotOptimResultsPan(
                 simResults=simResultsSet[[f]],
                 CNOlist=CNOlistSet[[f]],
-                pdf=TRUE,
+                pdf=plotPDF,
                 formalism="ss1",
                 pdfFileName=filename,
-                tPt=tPt
+                tPt=tPt,
+				plotParams=plotParams
             )
             outputFilenames[[f]] = filename
         }
