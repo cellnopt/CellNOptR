@@ -14,7 +14,8 @@
 ##############################################################################
 # $Id$
 
-cutAndPlot <- function(CNOlist, model, bStrings, plotPDF=FALSE, tag=NULL, show=TRUE)
+cutAndPlot <- function(CNOlist, model, bStrings, plotPDF=FALSE, tag=NULL,
+ plotParams=list(maxrow=10, margin=0.1))
 {
 
     # bitStrings must be a list of bitString (T1, T2, ...TN)
@@ -23,6 +24,8 @@ cutAndPlot <- function(CNOlist, model, bStrings, plotPDF=FALSE, tag=NULL, show=T
     simList <- prep4sim(model)
     indexList <- indexFinder(CNOlist=CNOlist,model=model)
 
+    
+
     # if tPt nothing to plot
     if (tPt==1){
         stop("noting to do with time data at time 0")
@@ -30,13 +33,15 @@ cutAndPlot <- function(CNOlist, model, bStrings, plotPDF=FALSE, tag=NULL, show=T
 
     # if tPt=2 (default), call cutAndPlotResultsT1
     if (tPt == 2){
+       #print("Entering cutAndPlotResultsT1")
 
        outputs = cutAndPlotResultsT1(model=model, bString=bStrings[[1]], simList=simList, 
-            CNOlist=CNOlist, indexList=indexList, plotPDF=plotPDF, tag=tag, show=show)
+            CNOlist=CNOlist, indexList=indexList, plotPDF=plotPDF, tag=tag,
+            plotParams=plotParams)
     }
 
     if (tPt>=3){
-       print("Entering cutAndPlotResultsTN")
+       #print("Entering cutAndPlotResultsTN")
        outputs = cutAndPlotResultsTN(
          CNOlist=CNOlist,
          model=model,
