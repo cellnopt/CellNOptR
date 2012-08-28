@@ -16,7 +16,7 @@
 
 plotOptimResultsPan <- function(simResults, yInterpol=NULL, xCoords=NULL,
 CNOlist=CNOlist, formalism=c("ss1","ss2","ssN","dt","ode"), pdf=FALSE,
-pdfFileName="", tPt=NULL) {
+pdfFileName="", tPt=NULL, plotParams=list(margin=0.1, width=15, height=12)) {
 
 	# check that CNOlist is a CNOlist
 	if(!is.list(CNOlist)) {
@@ -39,6 +39,8 @@ pdfFileName="", tPt=NULL) {
 	# index valueSignals according to tPt
 	valueSignalsI = sapply(c(0,tPt), function(x) which(CNOlist$timeSignals==x))
 
+    margin = plotParams$margin
+
 	#####	functions	#####
 
 	list2Array = function(x, dim) {
@@ -48,9 +50,10 @@ pdfFileName="", tPt=NULL) {
 
 	#####	/functions/	#####
 
+
 	oldPar = par(no.readonly=TRUE)
 	if(pdf==TRUE) {
-		pdf(file=pdfFileName, width=14.5,height=11)
+		pdf(file=pdfFileName, width=plotParams$width, height=plotParams$height)
 	}
 	split.screen(c(1,dim(CNOlist$valueSignals[[1]])[2]+3))
 	for(a in 1:(dim(CNOlist$valueSignals[[1]])[2]+2)) {
@@ -136,7 +139,7 @@ pdfFileName="", tPt=NULL) {
 	# plot headers
 	for(c in 1:dim(CNOlist$valueSignals[[1]])[2]) {
 		screen(count1)
-		par(fg="blue",mar=c(0.5,0.5,0.7,0))
+		par(fg="blue",mar=c(margin, margin, margin, margin))
 		plot(x=xVal, y=rep(-5,length(xVal)), ylim=c(yMin, yMax),
 		xlab=NA,ylab=NA,xaxt="n",yaxt="n")
 
@@ -152,7 +155,7 @@ pdfFileName="", tPt=NULL) {
 	# stim + inhib
 
 	screen(count1)
-	par(fg="blue",mar=c(0.5,0.5,0.7,0))
+    par(fg="blue",mar=c(margin, margin, margin, margin))
 	plot(
 		x = xVal,
 		y = rep(-5,length(xVal)),
@@ -167,7 +170,8 @@ pdfFileName="", tPt=NULL) {
 
     count1 = count1 + dim(CNOlist$valueSignals[[1]])[1]+1
    	screen(count1)
-    par(fg="blue",mar=c(0.5,0.5,0.7,0))
+    #par(fg="blue",mar=c(0.5,0.5,0.7,0))
+    par(fg="blue",mar=c(margin, margin, margin, margin))
    	plot(
     	x = xVal, y=rep(-5,length(xVal)),
 	    ylim = c(yMin, yMax),
@@ -275,7 +279,8 @@ pdfFileName="", tPt=NULL) {
     sSplit = matrix(c(0,1,(1-splitProp),1,0,1,0,(1-splitProp)),ncol=4, byrow=T)
    	split.screen(sSplit)
     screen(sInhib)
-   	par(fg="blue",mar=c(0.5,0.5,0.7,0))
+#   	par(fg="blue",mar=c(0.5,0.5,0.7,0))
+   	par(fg="blue",mar=c(margin, margin, margin, margin))
     plot(
     		x = xVal,
     	y = rep(-5,length(xVal)),
@@ -304,9 +309,8 @@ pdfFileName="", tPt=NULL) {
 	rect(0, 0, rhs, 1, border="black")
 	segments(rhs, at, rhs2, at)
 	text(x=rhs2, y=at, labels=labels, pos=4, offset=0.2)
-	if(pdf==TRUE) {
-		dev.off()
-	}
-	close.screen(all.screens=TRUE)
 	par(oldPar)
+
+
+	close.screen(all.screens=TRUE)
 }
