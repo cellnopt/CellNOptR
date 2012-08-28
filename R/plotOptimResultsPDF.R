@@ -20,7 +20,7 @@ plotOptimResultsPDF<-function(
     namesCues=namesCues,
     namesSignals=namesSignals,
     valueCues=valueCues,
-    filename){
+    filename, formalism="new"){
 
     if(sum(dim(simResults[[1]])) < 20){
 
@@ -38,7 +38,8 @@ plotOptimResultsPDF<-function(
         times=times,
         namesCues=namesCues,
         namesSignals=namesSignals,
-        valueCues=valueCues)
+        valueCues=valueCues, 
+        formalism=formalism)
 
     dev.off()
     }
