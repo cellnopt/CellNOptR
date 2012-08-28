@@ -85,9 +85,8 @@ pdfFileName="", tPt=NULL) {
 		xValS = c(0,tPt[1:2])
         norm = 3
 	} else if (formalism == "ssN") {
-      stop("not implemented")
 	  xValS = c(0,tPt)
-      norm = 3 # should be number of time points.
+      norm = length(tPt)+1 # should be number of time points.
 	} else if (formalism == "ode") {
         xValS = CNOlist$timeSignals
 	    xVal <- CNOlist$timeSignals
