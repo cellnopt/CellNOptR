@@ -21,6 +21,9 @@ plotOptimResults<-function(
     namesSignals=namesSignals,
     valueCues=valueCues, formalism="new"){
 
+    oldPar = par(no.readonly = TRUE)
+    on.exit(par(oldPar))
+
 #Set graphical parameters
     par(
         mfrow=c(nr=dim(simResults[[1]])[1]+1,nc=dim(simResults[[1]])[2]+1),
