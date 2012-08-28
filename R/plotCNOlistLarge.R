@@ -18,6 +18,9 @@
 
 plotCNOlistLarge<-function(CNOlist,nsplit=4, newDevice=FALSE){
 
+    opar = par(no.readonly = TRUE)
+    on.exit(par(opar))
+
 #check that CNOlist is a CNOlist
     if(!is.list(CNOlist)){
         stop("This function expects as input a CNOlist as output by makeCNOlist or normaliseCNOlist")
