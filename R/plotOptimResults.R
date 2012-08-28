@@ -19,7 +19,7 @@ plotOptimResults<-function(
     times=times,
     namesCues=namesCues,
     namesSignals=namesSignals,
-    valueCues=valueCues){
+    valueCues=valueCues, formalism="new"){
 
 #Set graphical parameters
     par(
@@ -97,7 +97,12 @@ plotOptimResults<-function(
                     }
 
 #Compute the mean difference between data and simulation, taking into account t0 but not NAs
-            diff<-mean(abs(unlist(yVal4Diff)[1:length(yVal4Diff)]-unlist(yValS4Diff)[1:length(yValS4Diff)]),na.rm=TRUE)
+            if (formalism == "new"){
+                diff<-mean(abs(unlist(yVal4Diff)[1:length(yVal4Diff)]-unlist(yValS4Diff)[1:length(yValS4Diff)]),na.rm=TRUE)
+            }
+            else{
+                diff<-mean(abs(unlist(yVal4Diff)[2:length(yVal4Diff)]-unlist(yValS4Diff)[2:length(yValS4Diff)]),na.rm=TRUE)
+           } 
 
 #Set the bg colour based on the above
             if(is.na(diff)){
