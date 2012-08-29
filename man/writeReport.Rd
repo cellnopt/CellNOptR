@@ -11,7 +11,7 @@ writeReport(modelOriginal, modelOpt, optimResT1, optimResT2, CNOlist, directory,
     namesFiles = list(dataPlot = NA, evolFitT1=NA, evolFitT2=NA, simResultsT1=NA,
     simResultsT2=NA, scaffold=NA, scaffoldDot=NA, tscaffold=NA, wscaffold=NA,
     PKN=NA, PKNdot=NA, wPKN=NA,nPKN=NA), namesData = list(CNOlist=NA, model=NA),
-    resE)
+    resE=NULL)
 }
 
 
@@ -48,7 +48,8 @@ own record).
   \item{resE}{
 a vector with named entries t1, t2 t1andt2, as produced by the function
 \code{ResidualError}, that contains the residual error associated with the
-discretisation of the data.
+discretisation of the data. Since version 1.3.29, there is no need to provide
+this argument. Kept for back compatibility.
 }
 }
 \details{

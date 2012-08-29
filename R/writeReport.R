@@ -35,7 +35,12 @@ writeReport<-function(
 		wPKN=NA,
 		nPKN=NA),
 	namesData=list(CNOlist=NA,model=NA),
-	resE){
+	resE=NULL){
+
+    if (is.null(resE)==TRUE){
+        resE<-residualError(CNOlist)
+    }
+
 	
 #Create a report directory and copy css and logos in there
 	dir.create(directory)	

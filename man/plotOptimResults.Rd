@@ -7,7 +7,8 @@ Plot the data and simulated values
 This function is the equivalent of CNOPlotFits, it plots the data and the simulated values,  along with an image plot that tells which cues were present.  The plots are coloured according to the fit between data and simulated data.
 }
 \usage{
-plotOptimResults(simResults, expResults, times, namesCues, namesSignals, valueCues)
+plotOptimResults(simResults, expResults, times, namesCues, namesSignals,
+valueCues, formalism="new")
 }
 \arguments{
   \item{simResults}{
@@ -27,6 +28,11 @@ a vector of names, typically \code{CNOlist$namesSignals}
 }
   \item{valueCues}{
 a matrix of dimensions (number of conditions) * (number of cues), typically \code{CNOlist$valueCues}
+}
+  \item{formalism}{
+New convention is to take the time=0 data set into account to compute the MSE.
+you can use the previous convetion by setting this argument to something
+different from the default value.
 }
 }
 \details{

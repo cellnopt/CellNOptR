@@ -15,7 +15,7 @@
 # $Id$
 
 cutAndPlot <- function(CNOlist, model, bStrings, plotPDF=FALSE, tag=NULL,
- plotParams=list(maxrow=10, margin=0.1))
+ plotParams=list(maxrow=10))
 {
 
     # bitStrings must be a list of bitString (T1, T2, ...TN)

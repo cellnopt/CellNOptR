@@ -103,9 +103,7 @@ setwd(tmpdir)
 data(CNOlistToy,package="CellNOptR")
 data(ToyModel,package="CellNOptR")
 
-pList = defaultParameters()
-pList$data = CNOlistToy
-pList$model = ToyModel
+pList = defaultParameters(CNOlistToy, ToyModel)
 pList$maxGens = 5
 pList$popSize = 5
 

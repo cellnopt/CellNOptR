@@ -7,7 +7,9 @@ Interface to cutAndPlotResults functions.
 This function takes a model and cnolist as well as a list of optimised bitstring at different time points. It calls the appropriate cutAndPlotResultsTX function.
 }
 \usage{
-cutAndPlot(CNOlist, model,  bStrings, plotPDF=FALSE, tag=NULL, show=TRUE  )
+cutAndPlot(CNOlist, model,  bStrings, plotPDF=FALSE, tag=NULL,
+plotParams = list(maxrow = 10))
+ 
 }
 \arguments{
   \item{CNOlist}{
@@ -26,11 +28,13 @@ TRUE or FALSE; tells whether you want a pdf to be produced or not
 NULL or string; tells whether you want to prefix filenames with a tag (replaces
 the default behaviour).
 }
-  \item{show}{
-TRUE of FALSE; FALSE tells not to show the plot, which can be useful when scripting.
-}
+\item{plotParams}{
+a list of option related to the PDF and plotting outputs. (1) maxrow
+is the maximum number of row used to plot the results. See
+\link{plotOptimResultsPan} for other fields.
 }
 
+}
 \value{
 This function returns nothing. It plots a graph in your graphic window and sqve it in a file if asked
 }

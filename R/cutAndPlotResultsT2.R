@@ -15,8 +15,8 @@
 # $Id$
 
 cutAndPlotResultsT2 <-function(model, bStringT1, bStringT2, CNOlist, simList=NULL,
-    indexList=NULL, plotPDF=FALSE, tag=NULL, show=TRUE, 
-    tPt=CNOlist$timeSignals[2:3])
+    indexList=NULL, plotPDF=FALSE, tag=NULL, 
+    tPt=CNOlist$timeSignals[2:3], plotParams=list(maxrow=10))
 {
     warning("cutAndPlotResultsT2 is a deprecated function. Use cutAndPlotResultsTN instead. ")
 
@@ -28,6 +28,12 @@ cutAndPlotResultsT2 <-function(model, bStringT1, bStringT2, CNOlist, simList=NUL
     if (is.null(indexList)==TRUE){
         indexList = indexFinder(CNOlist, model)
     }
+
+    if ("maxrow" %in% names(plotParams) == FALSE){
+        plotParams$maxrow = 10
+    }   
+
+
 
     modelCut <- cutModel(model, bStringT1)
     simListCut <- cutSimList(simList, bStringT1)
@@ -61,11 +67,11 @@ cutAndPlotResultsT2 <-function(model, bStringT1, bStringT2, CNOlist, simList=NUL
     CNOlistSet = list()
     simResultsSet = list()
 
-    if(dim1 > 10) { #|| dim2 > 10) {
+    if(dim1 > plotParams$maxrow) { #|| dim2 > 10) {
 
-        par1 = ceiling(dim1/10)
+        par1 = ceiling(dim1/plotParams$maxrow)
         div1 = ceiling(dim1/par1)
-        par2 = ceiling(dim2/10)
+        par2 = ceiling(dim2/plotParams$maxrow)
         div2 = ceiling(dim2/par2)
 
         count1 = 1
@@ -95,14 +101,12 @@ cutAndPlotResultsT2 <-function(model, bStringT1, bStringT2, CNOlist, simList=NUL
 
     for(f in 1:length(CNOlistSet)) {
 
-        if(show==TRUE) {
             plotOptimResultsPan(
             simResults=simResultsSet[[f]],
             CNOlist=CNOlistSet[[f]],
             formalism="ss2",
-            tPt=tPt
+            tPt=tPt,plotParams=plotParams
             )
-        }
 
         if(plotPDF == TRUE) {
             if(is.null(tag)) {
@@ -116,7 +120,7 @@ cutAndPlotResultsT2 <-function(model, bStringT1, bStringT2, CNOlist, simList=NUL
                 pdf=TRUE,
                 formalism="ss2",
                 pdfFileName=filename,
-                tPt=tPt
+                tPt=tPt, plotParams=plotParams
             )
         }
     }

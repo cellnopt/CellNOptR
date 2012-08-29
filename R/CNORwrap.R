@@ -114,7 +114,6 @@ compression=TRUE, expansion=TRUE, cutNONC=TRUE)
     NCNOcutCompExp <- newmodel
 
     #6.Compute the residual error
-    resE<-residualError(CNOlist=paramsList$data)
 
     #7.Prepare for simulation
 
@@ -239,7 +238,6 @@ compression=TRUE, expansion=TRUE, cutNONC=TRUE)
         CNOlist=paramsList$data,
         directory=Name,
         namesFiles=namesfiles,
-        namesData=NamesData,
-        resE=resE)
+        namesData=NamesData)
 
 }

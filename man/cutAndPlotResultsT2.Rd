@@ -7,7 +7,10 @@ This function takes a model and an optimised bitstring, it cuts the model accord
 }
 \usage{
 cutAndPlotResultsT2(model, bStringT1, bStringT2, CNOlist, simList=NULL, indexList=NULL,
-plotPDF = FALSE, tag=NULL, show=TRUE, tPt=CNOlist$timeSignals[2:3])
+plotPDF = FALSE, tag=NULL, tPt=CNOlist$timeSignals[2:3],
+plotParams = list(maxrow = 10))
+
+
 }
 
 \arguments{
@@ -38,13 +41,16 @@ TRUE or FALSE, tells whether you want a pdf to be produced or not
 NULL or string; tells whether you want to prefix filenames with a tag (replaces
 the default behaviour).
 }
-  \item{show}{
-TRUE/FALSE 
-}
   \item{tPt}{
 The number of time points in the data.
-
 }
+
+\item{plotParams}{
+a list of option related to the PDF and plotting outputs. (1) maxrow
+is the maximum number of row used to plot the results. See
+\link{plotOptimResultsPan} for other fields.
+}
+
 }
 
 \value{

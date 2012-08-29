@@ -9,7 +9,8 @@ This function takes a model and an optimised bitstring, it cuts the model accord
 
 
 \usage{
-cutAndPlotResultsTN(CNOlist, model, bStrings, plotPDF = FALSE, tag=NULL, show=TRUE)
+cutAndPlotResultsTN(CNOlist, model, bStrings, plotPDF = FALSE, tag=NULL, 
+    plotParams = list(maxrow = 10))
 }
 \arguments{
   \item{CNOlist}{
@@ -28,9 +29,13 @@ TRUE or FALSE, tells whether you want a pdf to be produced or not
 NULL or string; tells whether you want to prefix filenames with a tag (replaces
 the default behaviour).
 }
-  \item{show}{
-show the plot
+  \item{maxrow}{
+maximum number of row in the plot. 
 }
+\item{plotParams}{
+a list of option related to the PDF and plotting outputs. (1) maxrow
+is the maximum number of row used to plot the results. See  \link{plotOptimResultsPan}
+for other fields.}
 }
 \note{New in version 1.3.28}
 \value{

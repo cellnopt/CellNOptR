@@ -15,12 +15,17 @@
 # $Id$
 
 cutAndPlotResultsTN <-function(CNOlist, model,bStrings, plotPDF=FALSE,
-    tag=NULL, show=TRUE, maxrow=maxrow)
+    tag=NULL, plotParams=list(maxrow=10))
 {
 
   tPt=CNOlist$timeSignals[1:length(bStrings)+1]
   simList = prep4sim(model)
   indexList = indexFinder(CNOlist, model)
+
+    if ("maxrow" %in% names(plotParams) == FALSE){
+        plotParams$maxrow = 10
+    }   
+
 
 
     modelCut <- cutModel(model, bStrings[[1]])
@@ -46,6 +51,7 @@ cutAndPlotResultsTN <-function(CNOlist, model,bStrings, plotPDF=FALSE,
       CNOlist=CNOlist,
       formalism="ssN",
       tPt=tPt,
+        plotParams=plotParams
       #timePoints=length(tPt)
     )
 
@@ -64,6 +70,7 @@ cutAndPlotResultsTN <-function(CNOlist, model,bStrings, plotPDF=FALSE,
       tPt=tPt,
       pdfFileName=filename,
       pdf=TRUE,
+        plotParams=plotParams
       #TimePoints=length(tPt)
     )
   }

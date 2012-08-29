@@ -15,8 +15,7 @@
 # $Id$
 
 cutAndPlotResultsT1 <- function(model, bString, simList=NULL, CNOlist, indexList=NULL,
- plotPDF=FALSE, tag=NULL, tPt=CNOlist$timeSignals[2], plotParams=list(maxrow=10)
-    )
+ plotPDF=FALSE, tag=NULL, tPt=CNOlist$timeSignals[2], plotParams=list(maxrow=10))
 {
 
     if (is.null(simList)==TRUE){
@@ -25,6 +24,11 @@ cutAndPlotResultsT1 <- function(model, bString, simList=NULL, CNOlist, indexList
     if (is.null(indexList)==TRUE){
         indexList = indexFinder(CNOlist, model)
     }
+
+    if ("maxrow" %in% names(plotParams) == FALSE){
+        plotParams$maxrow = 10
+    }
+
 
     # keep simList and indxList for back compatibility ?
     modelCut <- cutModel(model, bString)
@@ -88,7 +92,8 @@ cutAndPlotResultsT1 <- function(model, bString, simList=NULL, CNOlist, indexList
             simResults=simResultsSet[[f]],
             CNOlist=CNOlistSet[[f]],
             formalism="ss1",
-            tPt=tPt
+            tPt=tPt,
+            plotParams=plotParams
             )
 
         if(plotPDF == TRUE) {
@@ -100,11 +105,11 @@ cutAndPlotResultsT1 <- function(model, bString, simList=NULL, CNOlist, indexList
             plotOptimResultsPan(
                 simResults=simResultsSet[[f]],
                 CNOlist=CNOlistSet[[f]],
-                pdf=plotPDF,
+                pdf=TRUE,
                 formalism="ss1",
                 pdfFileName=filename,
                 tPt=tPt,
-				plotParams=plotParams
+                plotParams=plotParams
             )
             outputFilenames[[f]] = filename
         }

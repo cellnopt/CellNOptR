@@ -1,96 +1,115 @@
+
+# First, let us do the analysis manually, from scratch
+# ----------------------------------------------------
+#  
 library(CellNOptR)
 dir.create("CNOR_analysis")
 setwd("CNOR_analysis")
-#If loading the data from the MIDAS file and the model from the sif file, type:
-#cpfile<-dir(system.file("ToyModel",package="CellNOptR"),full=TRUE)
-#file.copy(from=cpfile,to=getwd(),overwrite=TRUE)
-#dataToy<-readMIDAS(MIDASfile='ToyDataMMB.csv')
-#CNOlistToy<-makeCNOlist(dataset=dataToy,subfield=FALSE)
-#ToyModel<-readSIF(sifFile="ToyPKNMMB.sif")
-#If loading data and model directly from the package:
-
+cpfile<-dir(system.file("ToyModel",package="CellNOptR"),full=TRUE)
+file.copy(from=cpfile,to=getwd(),overwrite=TRUE)
+dataToy<-readMIDAS("ToyDataMMB.csv")
+dataToy<-readMIDAS("ToyDataMMB.csv", verbose=FALSE)
+CNOlistToy<-makeCNOlist(dataToy,subfield=FALSE)
 data(CNOlistToy,package="CellNOptR")
-data(ToyModel,package="CellNOptR")
 plotCNOlist(CNOlistToy)
 plotCNOlistPDF(CNOlist=CNOlistToy,filename="ToyModelGraph.pdf")
+ToyModel<-readSIF("ToyPKNMMB.sif")
+data(ToyModel,package="CellNOptR")
 checkSignals(CNOlistToy,ToyModel)
-ToyNCNOcutCompExp = preprocessing(CNOlistToy, ToyModel)
-
-
+ToyNCNOcutCompExp <- preprocessing(CNOlistToy, ToyModel, expansion=TRUE, compression=TRUE, cutNONC=TRUE, verbose=FALSE)
 resECNOlistToy<-residualError(CNOlistToy)
-ToyT1opt<-gaBinaryT1(CNOlist=CNOlistToy,model=ToyNCNOcutCompExp,verbose=FALSE)
-cutAndPlotResultsT1(model=ToyNCNOcutCompExp,bString=ToyT1opt$bString,CNOlist=CNOlistToy,plotPDF=TRUE)
+initBstring<-rep(1,length(ToyNCNOcutCompExp$reacID))
+
+ToyT1opt<-gaBinaryT1(CNOlist=CNOlistToy, model=ToyNCNOcutCompExp,initBstring=initBstring, verbose=FALSE)
+
+cutAndPlot(model=ToyNCNOcutCompExp, bStrings=list(ToyT1opt$bString),CNOlist=CNOlistToy, plotPDF=TRUE)
+
 plotFit(optRes=ToyT1opt)
-cutAndPlotResultsT1(model=ToyNCNOcutCompExp,bString=ToyT1opt$bString,CNOlist=CNOlistToy,plotPDF=TRUE)
 pdf("evolFitToyT1.pdf")
 plotFit(optRes=ToyT1opt)
 dev.off()
-writeScaffold(modelComprExpanded=ToyNCNOcutCompExp,optimResT1=ToyT1opt,optimResT2=NA,modelOriginal=ToyModel,CNOlist=CNOlistToy)
+
+
+writeScaffold(modelComprExpanded=ToyNCNOcutCompExp,optimResT1=ToyT1opt,optimResT2=NA, modelOriginal=ToyModel,CNOlist=CNOlistToy)
+
 writeNetwork(modelOriginal=ToyModel,modelComprExpanded=ToyNCNOcutCompExp,optimResT1=ToyT1opt,optimResT2=NA,CNOlist=CNOlistToy)
-namesFilesToy<-list(dataPlot="ToyModelGraph.pdf",evolFit1="evolFitToyT1.pdf",evolFit2=NA,SimResults1="SimResultsT1_1.pdf",SimResults2=NA,Scaffold="ToyNCNOcutCompExpScaffold.sif",ScaffoldDot="ModelModelComprExpandedScaffold.dot",tscaffold="ToyNCNOcutCompExpTimesScaffold.EA",wscaffold="ToyNCNOcutCompExpweightsScaffold.EA",PKN="ToyModelPKN.sif",PKNdot="ToyModelPKN.dot",wPKN="ToyModelTimesPKN.EA",nPKN="ToyModelnodesPKN.NA")
-#writeReport(modelOriginal=ToyModel,modelOpt=ToyNCNOcutCompExp,optimResT1=ToyT1opt,optimResT2=NA,CNOlist=CNOlistToy,directory="testToy",namesFiles=namesFilesToy,namesData=list(CNOlist="Toy",model="ToyModel"),resE=resECNOlistToy)
 
+namesFilesToy<-list(dataPlot="ToyModelGraph.pdf",evolFitT1="evolFitToyT1.pdf",evolFitT2=NA,simResultsT1="SimResultsT1_1.pdf",simResultsT2=NA,scaffold="Scaffold.sif",scaffoldDot="Scaffold.dot",tscaffold="TimesScaffold.EA",wscaffold="weightsScaffold.EA",PKN="PKN.sif",PKNdot="PKN.dot",wPKN="TimesPKN.EA",nPKN="nodesPKN.NA")
 
+writeReport(modelOriginal=ToyModel,modelOpt=ToyNCNOcutCompExp,optimResT1=ToyT1opt,optimResT2=NA,CNOlist=CNOlistToy,directory="testToy",namesFiles=namesFilesToy,namesData=list(CNOlist="Toy",model="ToyModel"),resE=resECNOlistToy)
 
+# The one step version --------------------------------
+dataToy<-readMIDAS("ToyDataMMB.csv")
+CNOlistToy<-makeCNOlist(dataToy,subfield=FALSE)
+ToyModel<-readSIF("ToyPKNMMB.sif")
 
+res <- CNORwrap(paramsList=NA, name="Toy", namesData=list(CNOlist="ToyData",model="ToyModel"),data=CNOlistToy, model=ToyModel)
 
-################################################ ############The one step version################
-data(CNOlistToy,package="CellNOptR")
-data(ToyModel,package="CellNOptR")
-CNORwrap(paramsList=NA,name="Toy",namesData=list(CNOlist="ToyData",model="ToyModel"),data=CNOlistToy,model=ToyModel)
+pList = defaultParameters(CNOlistToy, ToyModel)
+res <- CNORwrap( paramsList=pList,    name="Toy1Step",    namesData=list(CNOlist="ToyData",model="ToyModel"),    data=CNOlistToy,    model=ToyModel)
 
-#version 2
-#pList<-list(data=CNOlistToy,model=ToyModel,sizeFac=1e-04, NAFac=1, popSize=50, pMutation=0.5, maxTime= 60, maxGens = 500, stallGenMax = 100, selPress=1.2, elitism=5, RelTol=0.1,verbose=FALSE)
-#CNORwrap(paramsList=pList,name="Toy",namesData=list(CNOlist="ToyData",model="ToyModel"),data=NA,model=NA)
-
-
-
-
-######################################################
-############The DREAM data and network################
-################################################
-############The 2 time points################
-dir.create("CNOR_analysis")
-setwd("CNOR_analysis")
-######
-cpfile<-dir(system.file("ToyModel",package="CellNOptR"),full=TRUE)
+# real example -----------------------------
+cpfile<-dir(system.file("DREAMModel",package="CellNOptR"),full=TRUE)
 file.copy(from=cpfile,to=getwd(),overwrite=TRUE)
-dataToy<-readMIDAS(MIDASfile='ToyDataMMB.csv')
-CNOlistToy<-makeCNOlist(dataset=dataToy,subfield=FALSE)
-CNOlistToy
-#Transform data for multiple time points
-CNOlistToy2<-CNOlistToy
-CNOlistToy2$valueSignals[[3]]<-CNOlistToy2$valueSignals[[2]]
-CNOlistToy2$valueSignals[[3]][,6:7]<-0
-CNOlistToy2$valueSignals[[2]][which(CNOlistToy2$valueSignals[[2]][,6] > 0),6]<-0.5
-CNOlistToy2$valueSignals[[2]][which(CNOlistToy2$valueSignals[[2]][,7] > 0),7]<-0.77118
-CNOlistToy2$timeSignals<-c(CNOlistToy2$timeSignals, 100)
+data(CNOlistDREAM,package="CellNOptR")
+data(DreamModel,package="CellNOptR")
+model = preprocessing(CNOlistDREAM, DreamModel, verbose=FALSE)
+res = gaBinaryT1(CNOlistDREAM, model, verbose=FALSE, maxTime=10)
+cutAndPlot(CNOlistDREAM, model, bStrings=list(res$bString), plotPDF=TRUE, plotParams=list(maxrow=25, margin=0.1, width=20, height=20))
 
-#In this model I added a negative fedback between cJun and Jnk (!cJun=Jnk)
-#this is the model to use with the data CNOlistToy2
-#ToyModel2<-readSIF(sifFile="ToyModelMMB2.sif")
-#####
-#data(CNOlistToy2,package="CellNOptR")
-#data(ToyModel2,package="CellNOptR")
-#ToyNCNOcutCompExp2 = preprocessing(CNOlistToy2, ToyModel2)
-##
-#plotCNOlist(CNOlistToy2)
-#plotCNOlistPDF(CNOlist=CNOlistToy2,filename="ToyModelGraphT2.pdf")
-#checkSignals(CNOlistToy2,ToyModel2)
-#resECNOlistToy2<-residualError(CNOlistToy2)
-#initBstring2<-rep(1,length(ToyNCNOcutCompExp2$reacID))
-#ToyT1opt2<-gaBinaryT1(CNOlist=CNOlistToy2,model=ToyNCNOcutCompExp2,initBstring=initBstring2,maxTime=18)
-#cutAndPlotResultsT1(model=ToyNCNOcutCompExp2,bString=ToyT1opt2$bString,CNOlist=CNOlistToy2,plotPDF=TRUE)
-#pdf("evolFitToy2T1.pdf")
-#plotFit(optRes=ToyT1opt2)
-#dev.off()
-#plotFit(optRes=ToyT1opt2)
-#ptimise T2
-#SimToyT12<-simulateT1(CNOlist=CNOlistToy2,model=ToyNCNOcutCompExp2,bStringT1=ToyT1opt2$bString)
-#ToyT1opt2T2<-gaBinaryT2(CNOlist=CNOlistToy2,model=ToyNCNOcutCompExp2,bStringT1=ToyT1opt2$bString,maxTime=18)
-#cutAndPlotResultsT2(model=ToyNCNOcutCompExp2,bStringT1=ToyT1opt2$bString,bStringT2=ToyT1opt2T2$bString,CNOlist=CNOlistToy2,plotPDF=TRUE)
-#pdf("evolFitToy2T2.pdf")
-#plotFit(optRes=ToyT1opt2T2)
-#dev.off()
-#plotFit(optRes=ToyT1opt2T2)
+
+# 2 time points -------------------------------
+data(CNOlistToy2,package="CellNOptR")
+data(ToyModel2,package="CellNOptR")
+plotCNOlist(CNOlistToy2)
+plotCNOlistPDF(CNOlist=CNOlistToy2,filename="ToyModelGraphT2.pdf")
+ToyNCNOcutCompExp2 = preprocessing(CNOlistToy2,ToyModel2, verbose=FALSE)
+initBstring2<-rep(1,length(ToyNCNOcutCompExp2$reacID))
+ToyT1opt2<-gaBinaryT1(CNOlist=CNOlistToy2, model=ToyNCNOcutCompExp2, initBstring=initBstring2, stallGenMax=10, maxTime=60, verbose=FALSE)
+cutAndPlot(model=ToyNCNOcutCompExp2, bStrings=list(ToyT1opt2$bString), CNOlist=CNOlistToy2, plotPDF=TRUE)
+
+
+cutAndPlot(model=ToyNCNOcutCompExp2, bStrings=list(ToyT1opt2$bString), CNOlist=CNOlistToy2,  plotPDF=TRUE)
+pdf("evolFitToy2T1.pdf")
+plotFit(optRes=ToyT1opt2)
+dev.off()
+plotFit(optRes=ToyT1opt2)
+
+
+ToyT1opt2T2<-gaBinaryTN(
+    CNOlist=CNOlistToy2,
+    model=ToyNCNOcutCompExp2,
+    bStrings=list(ToyT1opt2$bString),
+    stallGenMax=10,
+    maxTime=60,
+    verbose=FALSE)
+
+cutAndPlot( model=ToyNCNOcutCompExp2, bStrings=list(ToyT1opt2$bString, ToyT1opt2T2$bString), CNOlist=CNOlistToy2,  plotPDF=TRUE)
+
+
+pdf("evolFitToy2T2.pdf")
+plotFit(optRes=ToyT1opt2T2)
+dev.off()
+plotFit(optRes=ToyT1opt2T2)
+
+writeScaffold(
+    modelComprExpanded=ToyNCNOcutCompExp2,
+    optimResT1=ToyT1opt2,
+    optimResT2=ToyT1opt2T2,
+    modelOriginal=ToyModel2,
+    CNOlist=CNOlistToy2)
+
+writeNetwork(
+    modelOriginal=ToyModel2,
+    modelComprExpanded=ToyNCNOcutCompExp2,
+    optimResT1=ToyT1opt2,
+    optimResT2=ToyT1opt2T2,
+    CNOlist=CNOlistToy2)
+
+namesFilesToy<-list( dataPlot="ToyModelGraphT2.pdf", evolFitT1="evolFitToy2T1.pdf",   evolFitT2="evolFitToy2T2.pdf", simResultsT2="SimResultsTN.pdf",
+    simResultsT1="SimResultsT1_1.pdf",    scaffold="Scaffold.sif",    scaffoldDot="Scaffold.dot",    tscaffold="TimesScaffold.EA",
+    wscaffold="weightsScaffold.EA",    PKN="PKN.sif",    PKNdot="PKN.dot",   wPKN="TimesPKN.EA",    nPKN="nodesPKN.NA")
+
+writeReport(modelOriginal=ToyModel2,    modelOpt=ToyNCNOcutCompExp2,optimResT1=ToyT1opt2,    optimResT2=ToyT1opt2T2,    CNOlist=CNOlistToy2,directory="testToy2",    namesFiles=namesFilesToy,namesData=list(CNOlist="ToyModified4T2",model="ToyModified4T2"))
+
 

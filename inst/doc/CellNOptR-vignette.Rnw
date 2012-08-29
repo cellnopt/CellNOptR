@@ -8,7 +8,7 @@
 
 
 \title{Training of boolean logic models of signalling networks using prior
-knowledge networks and perturbation data with \emph{CellNOptR} \\\small{(version 1.3.28
+knowledge networks and perturbation data with \emph{CellNOptR} \\\small{(version 1.3.29
 and above)}}
 
 
@@ -234,7 +234,7 @@ In \emph{CellNOptR} (from version 1.2), a function called
 line:
 
 <<expand, eval=TRUE>>=
-ToyNCNOcutComp <- preprocessing(CNOlistToy, ToyModel, expansion=TRUE,
+ToyNCNOcutCompExp <- preprocessing(CNOlistToy, ToyModel, expansion=TRUE,
     compression=TRUE, cutNONC=TRUE, verbose=FALSE)
 @
 In the previous commands, although the default behaviour of the preprocessing function is to perform the expansion, compression and removing of
@@ -280,7 +280,7 @@ We will now produce plots of our analysis.  First, we plot the results of simula
 \begin{center}
 <<resSim, fig=FALSE, eval=FALSE>>=
 cutAndPlot(model=ToyNCNOcutCompExp, bStrings=list(ToyT1opt$bString),
-    CNOlist=CNOlistToy,plotPDF=FALSE)
+    CNOlist=CNOlistToy,plotPDF=TRUE)
 @
 \end{center}
 \begin{center}
@@ -304,6 +304,13 @@ pdf("evolFitToyT1.pdf")
 plotFit(optRes=ToyT1opt)
 dev.off()
 @
+
+Note that for now, you can not set the output filename. It is going to be named
+\emph{SimResultsT1\_1.pdf} (if several plots are generated, you get
+\emph{SimResultsT1\_2.pdf}
+and so on). In the future, users should be able to provide the name. You can
+still call \emph{cutAndPlot} without the PDF option and use the R pdf function like in
+the example above when calling \emph{plotFit} function.
 
 
 \section{Writing your results}
@@ -354,7 +361,7 @@ namesFilesToy<-list(
     dataPlot="ToyModelGraph.pdf",
     evolFitT1="evolFitToyT1.pdf",
     evolFitT2=NA,
-    simResultsT1="ToyNCNOcutCompExpSimResultsT1.pdf",
+    simResultsT1="SimResultsT1_1.pdf",
     simResultsT2=NA,
     scaffold="Scaffold.sif",
     scaffoldDot="Scaffold.dot",
@@ -365,16 +372,15 @@ namesFilesToy<-list(
     wPKN="TimesPKN.EA",
     nPKN="nodesPKN.NA")
 
-#writeReport(
-#    modelOriginal=ToyModel,
-#    modelOpt=ToyNCNOcutCompExp,
-#    optimResT1=ToyT1opt,
-#    optimResT2=NA,
-#    CNOlist=CNOlistToy,
-#    directory="testToy",
-#    namesFiles=namesFilesToy,
-#    namesData=list(CNOlist="Toy",model="ToyModel"),
-#    resE=resECNOlistToy)
+writeReport(
+    modelOriginal=ToyModel,
+    modelOpt=ToyNCNOcutCompExp,
+    optimResT1=ToyT1opt,
+    optimResT2=NA,
+    CNOlist=CNOlistToy,
+    directory="testToy",
+    namesFiles=namesFilesToy,
+    namesData=list(CNOlist="Toy",model="ToyModel"))
 @
 
 <<eraseDir, eval=TRUE, echo=FALSE>>=
@@ -409,27 +415,16 @@ unlink("Toy",recursive=TRUE)
 @
 
 <<wrap2, eval=TRUE>>=
-pList<-list(
-    data=CNOlistToy,
-    model=ToyModel,
-    sizeFac = 1e-04,
-    NAFac = 1,
-    popSize = 50,
-    pMutation = 0.5,
-    maxTime = 60,
-    maxGens = 20,
-    stallGenMax = 5,
-    selPress = 1.2,
-    elitism = 5,
-    relTol = 0.1,
-    verbose=FALSE)
+pList<-defaultParameters(CNOlistToy, ToyModel)
+#pList$data = CNOlistToy
+#pList$model = ToyModel
+
+
 
 res <- CNORwrap(
     paramsList=pList,
-    name="Toy",
-    namesData=list(CNOlist="ToyData",model="ToyModel"),
-    data=NA,
-    model=NA)
+    name="Toy1Step",
+    namesData=list(CNOlist="ToyData",model="ToyModel"))
 @
 
 Both of these versions will generate the graphs produced above on your graphics window, and as PDF's that will be hyperlinked to your html report, and you will be able to find all of these hyperlinked with your html report, all in a directory called by the \emph{Name} parameter, in your working directory.
@@ -459,16 +454,14 @@ Having loaded both data and model, you can now visualise your data using
 preprocessing of the model, i.e. find the non-observable/non-controllable
 species, compress the model, and expand the gates (\emph{preprocessing}).
 
-Having obtained a pre-processed model, we compute the residual error (\emph{residualError}), and run the training function (\emph{gaBinaryT1}). Finally,we plot the results of our training (\emph{cutAndPlot}, see figure \ref{fig:DREAMres}) as well as the information about the evolution of fit during optimisation (\emph{plotFit}).
-
-
+Having obtained a pre-processed model, we run the training function (\emph{gaBinaryT1}). Finally, we plot the results of our training (\emph{cutAndPlot}, see figure \ref{fig:DREAMres}) as well as the information about the evolution of fit during optimisation (\emph{plotFit}).
 
 
 <<DREAMAnalysis, eval=FALSE>>=
 model = preprocessing(CNOlistDREAM, DreamModel, verbose=FALSE)
 res = gaBinaryT1(CNOlistDREAM, model, verbose=FALSE, maxTime=10)
 cutAndPlot(CNOlistDREAM, model, bStrings=list(res$bString), plotPDF=TRUE,
-plotParams=list(maxrow=25, margin=0.1, width=20, height=20))
+    plotParams=list(maxrow=25, margin=0.1, width=20, height=20))
 
 
 @
@@ -513,10 +506,7 @@ plotCNOlistPDF(CNOlist=CNOlistToy2,filename="ToyModelGraphT2.pdf")
 
 %TOSWITCH
 <<t2Opt1, eval=TRUE>>=
-checkSignals(CNOlistToy2,ToyModel2)
 ToyNCNOcutCompExp2 = preprocessing(CNOlistToy2,ToyModel2, verbose=FALSE)
-resECNOlistToy2<-residualError(CNOlistToy2)
-#ToyFields4Sim2<-prep4sim(ToyNCNOcutCompExp2)
 initBstring2<-rep(1,length(ToyNCNOcutCompExp2$reacID))
 ToyT1opt2<-gaBinaryT1(
     CNOlist=CNOlistToy2,
@@ -562,7 +552,7 @@ cutAndPlot(
     model=ToyNCNOcutCompExp2,
     bStrings=list(ToyT1opt2$bString, ToyT1opt2T2$bString),
     CNOlist=CNOlistToy2,
-    plotPDF=FALSE)
+    plotPDF=TRUE)
 @
 
 <<t2OptT2plot, eval=FALSE>>=
@@ -586,8 +576,8 @@ namesFilesToy<-list(
     dataPlot="ToyModelGraphT2.pdf",
     evolFitT1="evolFitToy2T1.pdf",
     evolFitT2="evolFitToy2T2.pdf",
-    simResultsT2="ToyNCNOcutCompExp2SimResultsT1T2.pdf",
-    simResultsT1="ToyNCNOcutCompExp2SimResultsT1.pdf",
+    simResultsT2="SimResultsTN.pdf",
+    simResultsT1="SimResultsT1_1.pdf",
     scaffold="Scaffold.sif",
     scaffoldDot="Scaffold.dot",
     tscaffold="TimesScaffold.EA",
@@ -604,8 +594,7 @@ writeReport(
     CNOlist=CNOlistToy2,
     directory="testToy2",
     namesFiles=namesFilesToy,
-    namesData=list(CNOlist="ToyModified4T2",model="ToyModified4T2"),
-    resE=resECNOlistToy2)
+    namesData=list(CNOlist="ToyModified4T2",model="ToyModified4T2"))
 @
 
 \clearpage

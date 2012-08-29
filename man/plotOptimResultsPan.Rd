@@ -9,7 +9,9 @@ This function plots the data and simulated values according to each experiment i
 \usage{
 plotOptimResultsPan(simResults, yInterpol=NULL, xCoords=NULL,
 CNOlist=CNOlist, formalism=c("ss1","ss2","ssN","dt","ode"), pdf=FALSE,
-pdfFileName="", tPt=NULL)
+pdfFileName="", tPt=NULL, 
+plotParams = list(margin = 0.1, width=15, height=12, cmap_scale=1, cex=1.6))
+
 }
 \arguments{
 \item{simResults}{
@@ -35,6 +37,15 @@ If printing to file, the filename to be used.
 }
 \item{tPt}{
 The number of time points in the data.
+}
+
+
+\item{plotParams}{
+a list of option related to the PDF and plotting outputs. Currently, the
+following attributes are used: (1) margin of the boxes, (2) width and heigth used while creating the
+PDF, (3) cmap_scale a value that scales the colors towards small errors (<1) or
+large errors (>1); default is 1 (linear colormap) (4) cex is the fontsize used
+in the header.
 }
 }
 \details{
