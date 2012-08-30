@@ -190,39 +190,6 @@ SEXP simulatorTN (
     // see stop conditions
     float test_val = 1e-3;
 
-    // create an initial values matrix
-    int init_values[nCond][nSpecies];
-    for(i = 0; i < nCond; i++) {
-        for(j = 0; j < nSpecies; j++) {
-            init_values[i][j] = prevSimResults[i][j];
-        }
-    }
-
-    // set the initial values of the stimuli
-    for(i = 0; i < nCond; i++) {
-        for(j = 0; j < nStimuli; j++) {
-            init_values[i][indexStimuli[j]] = valueStimuli[i][j];
-        }
-    }
-
-    // flip and redefine inhibitors NOT NEEDED AT TIME TN
-    //if(nInhibitors) {
-    //    for(i = 0; i < nCond; i++) {
-    //        for(j = 0; j < nInhibitors; j++) {
-    //            valueInhibitors[i][j] = 1 - valueInhibitors[i][j];
-    //            if(valueInhibitors[i][j] == 1) {
-    //                valueInhibitors[i][j] = 2;
-    //            }
-    //        }
-    //    }
-    //}
-
-    // set the initial values of the inhibitors
-    for(i = 0; i < nCond; i++) {
-        for(j = 0; j < nInhibitors; j++) {
-            init_values[i][indexInhibitors[j]] = valueInhibitors[i][j];
-        }
-    }
 
     // First iteration before main loop. Different from T1 !
     int output_prev[nCond][nSpecies];
