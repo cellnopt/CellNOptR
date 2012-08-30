@@ -30,8 +30,7 @@ writeScaffold<-function(
     sif<-getSifInfo(modelComprExpanded=modelComprExpanded,
         optimResT1=optimResT1,
         optimResT2=optimResT2,
-        modelOriginal=modelOriginal,
-        CNOlist=CNOlist)
+        modelOriginal=modelOriginal)
 
 #get the stuff that I need for the dot file
     dot<-getDotInfo(
@@ -142,8 +141,7 @@ getDotInfo<-function(modelComprExpanded,modelOriginal,CNOlist,sifFile){
 getSifInfo<-function(modelComprExpanded,
     optimResT1,
     optimResT2,
-    modelOriginal,
-    CNOlist){
+    modelOriginal){
 
     bString1<-optimResT1$bString
 

@@ -17,9 +17,8 @@ indexFinder<-function(CNOlist, model, verbose=FALSE){
 
     if ((class(CNOlist)=="CNOlist")==FALSE){
         CNOlist = CellNOptR::CNOlist(CNOlist)
-    } else {
-        stop("This function expects as input a CNOlist as output by makeCNOlist or normaliseCNOlist")
-        }
+    } 
+
 
     #check that Model is a model list
 
