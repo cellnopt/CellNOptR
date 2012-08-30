@@ -418,9 +418,6 @@ unlink("Toy",recursive=TRUE)
 pList<-defaultParameters(CNOlistToy, ToyModel)
 #pList$data = CNOlistToy
 #pList$model = ToyModel
-
-
-
 res <- CNORwrap(
     paramsList=pList,
     name="Toy1Step",
@@ -432,7 +429,7 @@ Both of these versions will generate the graphs produced above on your graphics 
 <<eraseData, eval=TRUE, echo=FALSE>>=
 unlink("ToyDataMMB.csv")
 unlink("ToyPKNMMB.sif")
-unlink("Toy",recursive=TRUE)
+unlink("Toy1Step",recursive=TRUE)
 unlink("ToyModelMMB2.sif")
 @
 
@@ -546,14 +543,22 @@ ToyT1opt2T2<-gaBinaryTN(
 
 Finally, we produce all the plots and write the report.
 
-%TOSWITCH
-<<resSimT2, eval=TRUE, fig=TRUE>>=
+%
+<<resSimT2, eval=TRUE, fig=FALSE>>=
 cutAndPlot(
     model=ToyNCNOcutCompExp2,
     bStrings=list(ToyT1opt2$bString, ToyT1opt2T2$bString),
     CNOlist=CNOlistToy2,
-    plotPDF=TRUE)
+    plotPDF=TRUE, plotParams=list(cex=0.8, cmap_scale=0.5))
 @
+
+\begin{figure*}
+\centerline{\includegraphics[width=\textwidth]{Fig7.pdf}}
+\caption{output of the cutAndPlot function on the 2-time dat set.}
+\label{fig:DREAMscaffold}
+\end{figure*}
+
+\clearpage
 
 <<t2OptT2plot, eval=FALSE>>=
 pdf("evolFitToy2T2.pdf")
