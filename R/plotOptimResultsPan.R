@@ -346,10 +346,10 @@ cmap_scale=1, cex=1.6)) {
     segments(rhs, at, rhs2, at)
     text(x=rhs2, y=at, labels=labels, pos=4, offset=0.2)
 
+    close.screen(all.screens=TRUE)
+#    par(oldPar)
     if(pdf==TRUE) {
         dev.off()
     }
-#    par(oldPar)
-    close.screen(all.screens=TRUE)
 
 }
