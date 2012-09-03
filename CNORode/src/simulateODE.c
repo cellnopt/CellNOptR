@@ -49,7 +49,7 @@ int simulateODE
     /* Initialize y */
 	for(i=0; i<(*data).nRows; i++)
 	{
-		(*data).state_array[i] = 0;
+		(*data).state_array[i] = 0.1;
 		(*data).inhibitor_array[i]=0;
 	}
 
