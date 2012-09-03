@@ -63,7 +63,7 @@ indexFinder<-function(CNOlist, model, verbose=FALSE){
         }
 
     #Return a list of indexes
-    indexes<-list(signals=signals,stimulated=stimulated,inhibited=inhibited)
+    return(list(signals=signals,stimulated=stimulated,inhibited=inhibited))
 
 }
 

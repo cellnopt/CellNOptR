@@ -71,7 +71,7 @@ cutAndPlotResultsT1 <- function(model, bString, simList=NULL, CNOlist, indexList
             if(finalN > dim1) {finalN = dim1}
             CNOdiv@cues = CNOdiv@cues[count1:finalN,]
             CNOdiv@stimuli = CNOdiv@stimuli[count1:finalN,]
-            CNOdiv:inhibitors = CNOdiv@inhibitors[count1:finalN,]
+            CNOdiv@inhibitors = CNOdiv@inhibitors[count1:finalN,]
             for(b in 1:length(CNOdiv@signals)) {
                 CNOdiv@signals[[b]] = CNOdiv@signals[[b]][count1:finalN,]
             }
