@@ -168,7 +168,8 @@ ode_parameters=createLBodeContPars(model,random=TRUE);
 
 #Visualize initial solution
 simulatedData=plotLBodeFitness(cnolist, model,ode_parameters,indices=indices)
-ode_parameters=minlpLBodeSSm(cnolist,model)
+ode_parameters=minlpLBodeSSm(cnolist,model,ode_parameters);
+
 model=ode_parameters$model;
 
 #Visualize fitted solution
