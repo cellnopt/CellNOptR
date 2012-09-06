@@ -24,7 +24,9 @@ createLBodeContPars <-function
 )
 {
 	namesSpecies=model$namesSpecies;
+	#convert the graph in incidence matrix to adjacency format
 	adjMat=incidence2Adjacency(model);
+	#Check what species are dynamic state states and which are inputs to the system
 	isState=getStates(adjMat);
 	numStates=as.integer(sqrt(length(adjMat)));
 	parNames=c();
@@ -36,16 +38,23 @@ createLBodeContPars <-function
 	UB=c();
 	index_opt_pars=c();
 	
+	#Iterate over all species
 	count=0;
 	for(j in 1:numStates)
 	{ 
+		#According to the odefy method, if it a state there must one Tau, 
+		#and one k and n for each input to that state
+		#Important note: Don't change the parameter ordering scheme. These are
+		#ordered according to the adjacency matrix. The names are just for guidance
 		if(isState[j])
 		{
 			jCol=adjMat[,j];
 			inputs=which(as.logical(jCol));
 			numInputs=length(inputs);
+			#Add k's and n's for each input
 			for(i in 1:numInputs)
 			{
+				#Add n
 				count=count+1;
 				parNames[count]=paste(namesSpecies[inputs[i]],"_n_",namesSpecies[j],sep="");
 				parValues[count]=default_n;
@@ -54,6 +63,7 @@ createLBodeContPars <-function
 				UB[count]=UB_n;
 				if(opt_n)index_opt_pars=c(index_opt_pars,count);
 				
+				#add k
 				count=count+1;
 				parNames[count]=paste(namesSpecies[inputs[i]],"_k_",namesSpecies[j],sep="");
 				parValues[count]=default_k;
@@ -62,6 +72,7 @@ createLBodeContPars <-function
 				UB[count]=UB_k;
 				if(opt_k)index_opt_pars=c(index_opt_pars,count);
 			}
+			#Add tau
 			count=count+1;
 			parNames[count]=paste("tau_",namesSpecies[j],sep="");
 			parValues[count]=default_tau;
@@ -71,9 +82,13 @@ createLBodeContPars <-function
 			if(opt_tau)index_opt_pars=c(index_opt_pars,count);
 		}
 	}
+	
+	#You pass your predefined vectors of upper al lower bounds
 	if(length(LB_in)==length(LB))LB=LB_in;
 	if(length(UB_in)==length(UB))UB=UB_in;
-	if(random)parValues=LB[index_opt_pars]+((UB[index_opt_pars]-LB[index_opt_pars])*runif(length(index_opt_pars)));
+	
+	#Create a new uniform random solution if random==TRUE
+	if(random)parValues[index_opt_pars]=LB[index_opt_pars]+((UB[index_opt_pars]-LB[index_opt_pars])*runif(length(index_opt_pars)));
 	
 	parList=list(parNames=parNames,parValues=parValues,
 			index_opt_pars=index_opt_pars,index_n=index_n,

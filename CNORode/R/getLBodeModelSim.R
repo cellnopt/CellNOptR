@@ -28,5 +28,7 @@ getLBodeModelSim<-function
 			indices, ode_parameters$parValues, time,verbose,
 			transfer_function,reltol,atol,maxStepSize,
 			maxNumSteps,maxErrTestsFails);
-	return(sim_function(cnolist,model,ode_parameters$parValues));
+	sim_data=sim_function(cnolist,model,ode_parameters$parValues)
+	sim_data=lapply(sim_data, function(x) as.matrix(x))
+	return(sim_data);
 }

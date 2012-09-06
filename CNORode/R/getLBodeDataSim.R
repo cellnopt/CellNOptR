@@ -30,5 +30,6 @@ getLBodeDataSim<-function
 			maxNumSteps1=maxNumSteps,maxErrTestsFails1=maxErrTestsFails);
 	sim=sim_function(cnolist,model,ode_parameters$parValues);
 	sim=lapply(sim,function(x) x[,indices$signals]);
+	sim=lapply(sim,function(x) as.matrix(x));
 	return(sim);
 }
