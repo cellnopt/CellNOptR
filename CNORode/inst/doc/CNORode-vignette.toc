@@ -1,0 +1,8 @@
+\contentsline {section}{\numberline {1}Introduction}{1}{section.1}
+\contentsline {section}{\numberline {2}Installation}{1}{section.2}
+\contentsline {section}{\numberline {3}Quick Start}{2}{section.3}
+\contentsline {section}{\numberline {4}Detailled example}{3}{section.4}
+\contentsline {subsection}{\numberline {4.1}The PKN model and data}{3}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}Parameters}{3}{subsection.4.2}
+\contentsline {subsection}{\numberline {4.3}Analysis}{4}{subsection.4.3}
+\contentsline {section}{\numberline {A}Default parameters}{6}{appendix.A}
