@@ -16,9 +16,9 @@
 
 \usage{
 	plotLBodeModelSim(cnolist, model, ode_parameters = NULL, indices = NULL, 
-	adjMatrix = NULL, time = 1, verbose = 0, transfer_function = 3, reltol = 1e-04, 
-	atol = 0.001, maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails = 50, 
-	large = FALSE, nsplit = 4)
+	adjMatrix = NULL, timeSignals=NULL, time = 1, verbose = 0, transfer_function = 3,
+	reltol = 1e-04, atol = 0.001, maxStepSize = Inf, maxNumSteps = 1e+05,
+	maxErrTestsFails = 50, large = FALSE, nsplit = 4)
 }
 %- maybe also 'usage' for other objects documented here.
 
@@ -38,6 +38,10 @@
 	\item{adjMatrix}{
 		Model representation in the form of an adjacency matrix. When not provided
 		will be automatically computed based in the model.
+	}
+	\item{timeSignals}{
+		An array containing a different timeSignals. If you use this argument, it will also
+		modify the dimensions from valueSignals.
 	}
 	\item{time}{
 		An integer with the index of the time point to start the simulation. Default is 1.
