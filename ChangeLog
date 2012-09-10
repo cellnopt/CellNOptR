@@ -1,6 +1,25 @@
 
 1.3
 =======
+
+1.3.32
+----------
+
+* simulatorT1 and TN have additional check for AND gates with any NA inputs (see
+  comments line 261 i nTN and 234 in 234)
+
+
+1.3.31 
+--------------
+* Updating NEW.Rd
+* typo in checkSignals in warning message.
+* indexFinder.R return list specifically
+* fixing bug (typo) in cutAndPlotResultsT1
+* writeMIDAS: nCues not used so commented
+* CNOlist plot method prottotype simplified.
+* buildBitString has now internal documentation.
+
+
 1.3.30 30Aug2012
 -------------------
 * use CNOlist class everywhere in CellNOptR
