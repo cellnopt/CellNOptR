@@ -83,7 +83,8 @@ characteristics, it is based on a boolean formalism where protein species are
 characterised as being fully active or inactive. In contrast, logic-based ordinary
 differential equations allow a quantitive description of a given Boolean model.
 
-The method used here was first published by Wittmann et al. \cite{wittman} by the name of odefy.
+The method used here was first published by Wittmann et al. \cite{wittman} by
+the name of \emph{odefy}.
 For a detailed description of the methodology the user is adressed to \cite{wittman} and for 
 a published application example to \cite{wittmanJS}.
 
@@ -91,50 +92,36 @@ This package implements the Odefy method and focus mainly extending the \emph{Ce
 capabilities in order to simulate and calibrate logic-based ordinary differential 
 equation model. We provide direct and easy to use interface to optimization methods 
 available in R such as \emph{eSSR} \cite{eSSR1} (enhanced Scatter Search Metaheuristic for R) and an R genetic
-algorithm implementation by the name of genalg in order to perform parameter estimation.
-Additionally we were specially carerful in tackling the main computanional bottlenecks
-by implementing CNORode simulation engine in the C languange using the CVODES library \cite{cvodes}.
+algorithm implementation by the name of \emph{genalg} in order to perform parameter estimation.
+Additionally we were specially careful in tackling the main computanional bottlenecks
+by implementing CNORode simulation engine in the C language using the
+\emph{CVODES} library \cite{cvodes}.
 
-This brief tutorial shows how to use CNORode using as a starting point a Boolean model 
+This brief tutorial shows how to use \emph{CNORode} using as a starting point a Boolean model 
 and a dataset consisting in a time-series of several proteins. 
 
 \section{Installation}
 
-\emph{CNORode} depends on \emph{CellNOptR} and its dependencies (bioconductor
-packages), which can be installed in R. In order to install \emph{CellNOptR}, open a R
+\emph{CNORode} depends on \emph{CellNOptR} and \emph{genalg}, which are 2 bioconductor
+packages. Therefore, in order to install \emph{CNORode}, open a R
 session and type:
 
 <<installCNOR, eval=FALSE, pgf=TRUE, echo=TRUE>>=
 source("http://bioconductor.org/biocLite.R")
-biocLite("CellNOptR")
-@
-
-It may take a few minutes to install all dependencies if you start from scratch
-(i.e, none of the R packages are installed on your system). Then, you can install
-\emph{CNOROde} similarly:
-
-<<installCNORode, eval=FALSE>>=
-source("http://bioconductor.org/biocLite.R")
 biocLite("CNORode")
 @
 
-These two packages depends on other R packages (e.g., \emph{RBGL},
-\emph{nloptr}), which installation should be smooth. Note, however, that there
-is also an optional dependency on the \emph{Rgraphviz} package, whose compilation 
-may be tricky under some systems such as Windows (e.g., if the graphviz library
-is not installed or compiler not compatible). Next release of Rgraphviz shoudl
-fix this issue. Meanwhile, if Rgraphviz cannot be installed on your sytem, you
-should still be able to install \emph{CellNOptR} and \emph{CNORode} packages and
-to access most of the functionalities of these packages. Note also that under
+It may take a few minutes to install all dependencies if you start from scratch
+(i.e, none of the R packages are installed on your system). Note also that under
 Linux system, some of these packages necessitate the R-devel package to be
 installed (e.g., under Fedora type \emph{sudo yum install R-devel}).
 
-Additionally, for parameter estimation we recommend the use of eSSR. This algorithm 
-algorithm is part of the MEIGOR toolbox. Although to the date, this package is
-not available in an oficial repository, it can be downloded from 
-\url{http://www.ebi.ac.uk/saezrodriguez/cno/meigo/}.
+Additionally, for parameter estimation we recommend the use of \emph{eSSR}. This algorithm 
+algorithm is part of the MEIGOR toolbox. Although this package is
+not available on BioConductor, it can be downloaded from 
+\url{http://www.ebi.ac.uk/saezrodriguez/cno/meigo/}. Once downloaded, install
+MEIGOR by typing:
 
-In order to install MEIGOR do:
 
 <<installMEIGOR, eval=FALSE>>=
 install.packages("~/MEIGOR_0.99.1_svn2120.tar.gz",type="source")
@@ -151,14 +138,14 @@ library(CNORode)
 \label{sec:quickstart}
 \section{Quick Start}
 
-In this section, we provide a quick example on how to use CNORode to 
+In this section, we provide a quick example on how to use \emph{CNORode} to 
 find the set of continuous parameters which minimize the squared difference
 between a model simulation and the experimental data.
 
 Since here we will not be modifying the model structure as opposed to \emph{CellNOptR} 
 we will use a model that already contains AND type gates. Such model can be for instance
 the result of calibrating a \textit{prior knowledge network}(PKN) with \emph{CellNOptR}.
-Please note a PKN can also be used as Boolean model which will contain only OR type gates.
+Please note that a PKN can also be used as Boolean model which will contain only OR type gates.
 
 Detailed information about the model used here (ToyModelMMB\_FeedbackAnd) and additional models can be found at: 
 
@@ -195,9 +182,9 @@ In order to simulate the model and perform parameter estimation we first need to
 a list with the ODE parameters associated with each dynamic state as described in \cite{wittman}.
 Each dynamic state will have a \(\tau\) parameter, as many \(n\) and \(k\) parameters as inputs. 
 Although the default is to use the normalized Hill function it also possible to use the 
-standard Hill or even not to use any transfer function. To illustrate shape of the equations
-associated to each dynamic state and the meaning of each parameter will show the differential
-of \textit{Mek}. 
+standard Hill or even not to use any transfer function at all. To illustrate the shape of the equations
+associated to each dynamic state and the meaning of each parameter, let us show the differential
+of \textit{Mek}: 
  
 
 \[ \dot{Mek}=\Bigg[  \Bigg( 1 - \frac{Akt^{n_1}/({k_1}^{n_1} + Akt^{n_1})}{1/({k_1}^{n_1} + 1)}\Bigg) 
@@ -215,7 +202,7 @@ To create a list of ODE parameters we will typically use the \emph{createLBodeCo
 
 This function creates a general structure where the ODE parameters are ordered according 
 to the model. Some tweaks have been added in order to ease tasks we have found 
-to be common, nevertheless you can edit several attributes manually. If you print the the 
+to be common, nevertheless you can edit several attributes manually. If you print the 
 \emph{ode\_parameters}  list you will see the following attributes.
 
 \clearpage
@@ -225,7 +212,7 @@ to be common, nevertheless you can edit several attributes manually. If you prin
 \clearpage 
 
 Typically before running an optimization run you will want to choose which type of parameters
-you want to optimize. The field index\_opt\_pars defines which parameters are meant to be optimized.
+you want to optimize. The field \emph{index\_opt\_pars} defines which parameters are meant to be optimized.
 In the \emph{createLBodeContPars}, if you choose \(opt\_tau \) as \(TRUE\)  all \( \tau \) parameters will be 
 added to the index\_opt\_pars array, the same idea is valid for \( n \) and \( k \) parameters.
 
@@ -234,9 +221,9 @@ e.g. \( \tau \) ( \emph{LB\_tau} and \emph{UB\_tau}), as well as a default initi
 
 Once we have the ODE parameters structure we are ready to run a simulation or optimization process.
 To run a simulation we can use the \emph{getLBodeModel} or \emph{getLBodeDataSim}, depending on
-if we want to simulate only the signals present in the CNOlist object or the all species in the model. Additionally
+if we want to simulate only the signals present in the CNOlist object or all the species in the model. Additionally
 \emph{plotLBodeDataSim} or \emph{plotLBodeModelSim} will also return the values of a model simulation while
-plotting the same values. In figure \ref{fig:plotModelSimFig} we use plotLBodeModelSim to plot all the experiments
+plotting the same values. In figure \ref{fig:plotModelSimFig}, we use plotLBodeModelSim to plot all the experiments
 sampled in 5 different instants (\emph{timeSignals}).
 
 \begin{figure}[ht]
@@ -252,9 +239,11 @@ modelSim=plotLBodeModelSim(cnolist, model, ode_parameters,
 
 \clearpage
 
-As previously mentioned we included a direct interface for two optimization algorithms that allow parameter estimation
-Both of these algorithms have specific parameters that can be tunned each specific problem (please check CNORode manual for detailed information). 
-For instance, in order to run the the genetic algorithm for 10 iterations and a population of size we can use the following code:
+As previously mentioned, we provide two optimization algorithms that allow parameter estimation
+Both of these algorithms have specific parameters that can be tunned on each specific problem (please check CNORode manual for detailed information). 
+For instance, in order to run the genetic algorithm for 10 iterations and a
+population of size of 10, we can use the following code:
+
 
 <<eval=TRUE, results=hide>>=
 initial_pars=createLBodeContPars(model, LB_n = 1, LB_k = 0.1,
@@ -273,8 +262,8 @@ opt_pars=parEstimationLBode(cnolist,model,ode_parameters=initial_pars,
 simulatedData=plotLBodeFitness(cnolist, model,ode_parameters=opt_pars)
 @
 
-In figure \ref{plotInitFit} we can see a worse solution before optimization the genetic algorithm. This solution
-is later improved \ref{plotFinalFit} as seen in the example code. 
+In figure \ref{fig:plotInitFit} we can see a worse solution before optimization the genetic algorithm. This solution
+is later improved \ref{fig:plotFinalFit} as seen in the example code. 
 
 \begin{center}
 \begin{figure}[ht]
