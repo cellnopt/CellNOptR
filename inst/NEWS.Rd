@@ -1,3 +1,21 @@
+
+version 1.3.32: (2012-09-10)
+
+    o BUG FIX:
+
+        - plotModel can handle CNOlist=NULL as it used to be the case
+    
+    o CHANGES
+
+       - simulatorT1 and TN have additional check for AND gates with any NA inputs.
+
+version 1.3.31: (2012-09-06)
+
+    o BUG FIXES
+
+        - typo in checkSignals in warning message.
+        - fixing bug (typo) in cutAndPlotResultsT1
+
 version 1.3.30: (2012-08-30)
 
     o BUG FIXES
