@@ -29,10 +29,12 @@ plotLBodeFitness <-function
 	if(is.null(indices))indices=indexFinder(cnolist,model);
 	if(is.null(adjMatrix))adjMatrix=incidence2Adjacency(model);
 	if(is.null(ode_parameters))ode_parameters=createLBodeContPars(model);
-
+	timeSignals=NULL;
+	
 	sim_data=getLBodeDataSim(cnolist,model,
-			ode_parameters,indices,time,verbose,transfer_function,
-			reltol,atol,maxStepSize,maxNumSteps,maxErrTestsFails);
+			ode_parameters,indices,timeSignals,time,verbose,
+			transfer_function,reltol,atol,maxStepSize,maxNumSteps,
+			maxErrTestsFails);
 
 	times=cnolist$timeSignals;
 	sim_data=lapply(sim_data,function(x)x[plot_index_experiments,plot_index_signals]);
