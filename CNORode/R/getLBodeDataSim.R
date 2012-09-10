@@ -16,7 +16,7 @@
 getLBodeDataSim<-function
 (
 		cnolist,				    model,					ode_parameters=NULL,
-		indices=NULL,			    timeSignals,			time=1,					
+		indices=NULL,			    timeSignals=NULL,		time=1,					
 		verbose=0,					transfer_function=3,	reltol=1e-4,			
 		atol=1e-3,					maxStepSize=Inf,		maxNumSteps=100000,		
 		maxErrTestsFails=50
