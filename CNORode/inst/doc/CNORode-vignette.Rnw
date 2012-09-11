@@ -240,10 +240,9 @@ modelSim=plotLBodeModelSim(cnolist, model, ode_parameters,
 \clearpage
 
 As previously mentioned, we provide two optimization algorithms that allow parameter estimation
-Both of these algorithms have specific parameters that can be tunned on each specific problem (please check CNORode manual for detailed information). 
-For instance, in order to run the genetic algorithm for 10 iterations and a
-population of size of 10, we can use the following code:
-
+Both of these algorithms have specific parameters that can be tunned on each specific problem 
+(please check CNORode manual for detailed information). For instance, in order to run the 
+genetic algorithm for 10 iterations and a population of size of 10, we can use the following code:
 
 <<eval=TRUE, results=hide>>=
 initial_pars=createLBodeContPars(model, LB_n = 1, LB_k = 0.1,
@@ -262,21 +261,19 @@ opt_pars=parEstimationLBode(cnolist,model,ode_parameters=initial_pars,
 simulatedData=plotLBodeFitness(cnolist, model,ode_parameters=opt_pars)
 @
 
-In figure \ref{fig:plotInitFit} we can see a worse solution before optimization the genetic algorithm. This solution
-is later improved \ref{fig:plotFinalFit} as seen in the example code. 
-
 \begin{center}
 \begin{figure}[ht]
 
 <<label=plotInit,include=TRUE,fig=TRUE>>=
 	simulatedData=plotLBodeFitness(cnolist, model,initial_pars)
 @
-\caption{The initial solution before optimization.}
+\caption{The initial solution before optimization. Each row corresponds to an experiment with a particular combination of stimuli and inhibitors.
+The columns correspond to the measured values (triangles) and the simulated values (dashed blue lines) from a given signal. The background color 
+gives an indication of squared difference where red means high error and white low error.}
 \label{fig:plotInitFit}
 
 \end{figure}
 \end{center}
-
 
 
 \begin{figure}[ht]
@@ -285,7 +282,9 @@ is later improved \ref{fig:plotFinalFit} as seen in the example code.
 	simulatedData=plotLBodeFitness(cnolist, model,ode_parameters=opt_pars)
 @
 \end{center}
-\caption{A solution obtained by optimization with a genetic algorithm.}
+\caption{A solution obtained by optimization with a genetic algorithm.Each row corresponds to an experiment with a particular combination of stimuli and inhibitors.
+The columns correspond to the measured values (triangles) and the simulated values (dashed blue lines) from a given signal. The background color 
+gives an indication of squared difference where red means high error and white low error.}
 \label{fig:plotFinalFit}
 \end{figure}
 
