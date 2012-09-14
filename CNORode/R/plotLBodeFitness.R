@@ -20,7 +20,7 @@ plotLBodeFitness <-function
 		verbose=0, 				    transfer_function=3,		reltol=1e-4,
 		atol=1e-3,				    maxStepSize=Inf,		 	maxNumSteps=100000,
 		maxErrTestsFails=50,		plot_index_signals=NULL,	plot_index_experiments=NULL,
-		plot_index_cues=NULL, colormap="heat"
+		plot_index_cues=NULL, 		colormap="heat"
 )
 {
 	if(is.null(plot_index_experiments))plot_index_experiments=1:dim(cnolist$valueCues)[1];
@@ -41,10 +41,7 @@ plotLBodeFitness <-function
 	expResults=lapply(cnolist$valueSignals,function(x)x[plot_index_experiments,plot_index_signals]);
 	
 	sim_data=lapply(sim_data,function(x)as.matrix(x));
-	expResults=lapply(cnolist$valueSignals,function(x)as.matrix(x));
-	
-	sim_data=lapply(sim_data,function(x)as.matrix(x));
-	expResults=lapply(cnolist$valueSignals,function(x)as.matrix(x));
+	expResults=lapply(expResults,function(x)as.matrix(x));
 
 	namesSignals=cnolist$namesSignals[plot_index_signals];
 	namesCues=c(cnolist$namesStimuli,cnolist$namesInhibitors);
@@ -64,8 +61,6 @@ plotLBodeFitness <-function
              CNOlist=cnolist, formalism="ode", pdf=FALSE,
              pdfFileName="", tPt=NULL)
     }
-
-
 
   return(sim_data);
 }
