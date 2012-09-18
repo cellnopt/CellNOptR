@@ -1,4 +1,7 @@
 import("CellNOptR", "abind")
 
-export("simulatorTimeScaleT2",  "simulatorTimeScale",  "plotOptimResultsTimeScale",  "getFitTimeScale",  "gaBinaryTimeScaleT2",  "gaBinaryTimeScale",  "cutModel",  "cutAndPlotResultsTimeScaleT2",  "cutAndPlotResultsTimeScale"
+useDynLib(CNORdt)
+
+export(
+  "simulatorDT",  "getFitDT",  "gaBinaryDT",  "cutAndPlotResultsDT"
 )
