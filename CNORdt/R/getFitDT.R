@@ -13,7 +13,7 @@
 
 getFitDT <- function(simResults, CNOlist, model, indexList, sizeFac = 1e-04, NAFac = 1, nInTot, boolUpdates,  
     lowerB, upperB) {
-    
+    	    
     if ((class(CNOlist) == "CNOlist") == FALSE) {
         CNOlist = CellNOptR::CNOlist(CNOlist)
     }
@@ -99,18 +99,3 @@ getFitDT <- function(simResults, CNOlist, model, indexList, sizeFac = 1e-04, NAF
     
 }
 
-convert2array <- function(x, nRow, nCol, nBool) {
-    v1 = c(x)
-    count = 1
-    out1 = array(NA, dim = c(nRow, nCol, nBool))
-    for (d in 1:nBool) {
-        for (a in 1:nRow) {
-            for (b in 1:nCol) {
-                out1[a, b, d] = v1[count]
-                count = count + 1
-            }
-        }
-    }
-    
-    return(out1)
-}

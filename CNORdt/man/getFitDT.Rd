@@ -1,5 +1,5 @@
-\name{getFitTimeScale}
-\alias{getFitTimeScale}
+\name{getFitDT}
+\alias{getFitDT}
 \title{
 The optimization function that finds the scaling factor for the boolean simulation
 }
@@ -7,8 +7,7 @@ The optimization function that finds the scaling factor for the boolean simulati
 This function is called from gaBinaryDT. Using the model passed as input, it finds a scaling factor that minimizes the mean squared error between the data from the boolean simulation and the experimental data. A spline is fitted to the experimental data to allow this.
 }
 \usage{
-getFitDT(simResults, CNOlist, model, indexList, sizeFac=0.0001,
-NApenFac=1, nInTot, boolUpdates, lowerB=lowerB, upperB=upperB)
+getFitDT(simResults, CNOlist, model, indexList, sizeFac = 1e-04, NAFac = 1, nInTot, boolUpdates, lowerB, upperB)
 }
 \arguments{
 \item{simResults}{
@@ -26,7 +25,7 @@ A list of indexes of species stimulated/inhibited/signals, as produced by indexf
 \item{sizeFac}{
 The scaling factor for the size term in the objective function, default to 0.0001.
 }
-\item{NApenFac}{
+\item{NAFac}{
 The scaling factor for the NA term in the objective function, default to 1.
 }
 \item{nInTot}{
@@ -60,7 +59,7 @@ A. MacNamara
 gaBinaryDT, simulatorDT
 }
 \examples{
-# this function is usually contained within gaBinaryTimeScale
+# this function is usually contained within gaBinaryDT
 # but the output can be viewed as follows:
 
 library(CellNOptR)

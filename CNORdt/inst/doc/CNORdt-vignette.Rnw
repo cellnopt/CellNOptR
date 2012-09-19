@@ -66,46 +66,20 @@ data(modelPB, package="CNORdt")
 The full details of preprocessing the model can be found in the \emph{CellNOptR} package (the vignette gives a comprehensive explanation). The following steps are taken:
 
 <<getData, eval=TRUE>>=
-# processing the model (indexing, compression and expansion)
-# index the stimuli, readouts and inhibitors
-indexOrig <- indexFinder(CNOlist=CNOlistPB, model=modelPB, verbose=T)
-
-# find the indexes of the non-observables and the non-controllable species
-indexNONC <- findNONC(model=modelPB, indexes=indexOrig, verbose=T)
-
-# cut the data according to 'indexNONC'
-modelCut <- cutNONC(model=modelPB, NONCindexes=indexNONC)
-
-# find the indexes again as model may have changed
-indexNONCcut <- indexFinder(CNOlist=CNOlistPB, model=modelCut)
-
-# compress the model
-modelCutCompress <- compressModel(model=modelCut, indexes=indexNONCcut)
-
-# find the indexes again
-indexNONCcutComp <- indexFinder(CNOlist=CNOlistPB, model=modelCutCompress)
-
-# expand
-modelCutCompressExpand <- expandGates(model=modelCutCompress)
-
-# extract information for simulation
-fields4Sim <- prep4sim(model=modelCutCompressExpand)
-initBstring <- rep(1, length(modelCutCompressExpand$reacID))
+# pre-process model
+model = preprocessing(CNOlistPB, modelPB)
+initBstring <- rep(1, length(model$reacID))
 @
 
 \section{Optimization}
 
 This is where the difference between \emph{CNORdt} and its parent package \emph{CellNOptR} becomes visible. \emph{CellNOptR} fits the model to data at steady state~i.e. the simulation runs until all species are static. This gives a robust overview of the model behaviour but this formalism cannot model more complex dynamics such as oscillations. \emph{CNORdt} uses full time course data by scaling the boolean simulation. Hence the difference betweeen model and data can be calculated and optimized across all data points at not just a single one or two.
 
-An additional feature from \emph{CellNOptR} can also be implemented in \emph{CNORdt}: the model fitting can be carried out in 2 stages if the user has sufficient knowledge that the data represents early and late reactions (for example, an early phosphoprotein activation followed by later deactivation). This feature is controlled by supplying the division time (`divTime') - the experimental time point where the late reactions start to occur. If no such value is supplied, divTime is set to NULL and the model fitting is not divided into early and late. In the case of this model below, a division time is set at 10 (minutes) as there is a delayed deactivation of phosphoproteins in the data (see MacNamara et al.~\cite{macnamara2012} for more details).
-
-The other data that currently needs to be supplied in addition to the optimization parameters described are `boolUpdates' and the upper and lower bounds for the optimization of the scaling factor (`upperB' and `lowerB'). The variable `boolUpdates' controls the number of simulation steps (`ticks') and is either 1 or 2 values depending whether `divTime' has been set. This will be set to an intelligent default value in future releases (it can be considered a function of model size and experimental time) but it is currently a manual entry. The upper and lower bounds control the range of values for the optimization of the scaling factor.
+The other data that currently needs to be supplied in addition to the optimization parameters described are `boolUpdates' and the upper and lower bounds for the optimization of the scaling factor (`upperB' and `lowerB'). The variable `boolUpdates' controls the number of simulation steps (`ticks'). This will be set to an intelligent default value in future releases (it can be considered a function of model size and experimental time) but it is currently a manual entry. The upper and lower bounds control the range of values for the optimization of the scaling factor.
 
 <<getData, eval=FALSE>>=
-# the 'switch' time between the 2 time phases needs to be known
-opt1 <- gaBinaryTimeScale(CNOlist=CNOlistPB, model=modelCutCompressExpand,
-simList=fields4Sim, indexList=indexNONCcutComp, initBstring=initBstring,
-verbose=TRUE, boolUpdates=c(10,20), divTime=10, maxTime=100, lowerB=0.8, upperB=10)
+opt1 <- gaBinaryDT(CNOlist=CNOlistPB, model=model, initBstring=initBstring,
+verbose=TRUE, boolUpdates=10, maxTime=30, lowerB=0.8, upperB=10)
 @
 
 Here you can visualize the `early' fit of the data in figure~\ref{fig:halfPlot}:
@@ -201,7 +175,7 @@ J.~Saez-Rodriguez, L.~Alexopoulos, J.~Epperlein, R.~Samaga, D.~Lauffenburger, S.
 \bibitem{macnamara2012}
 A.~MacNamara, C.~Terfve, D.~Henriques, B.~Pe\~nalver Bernab\'e and J.~Saez-Rodriguez.
 \newblock State-time spectrum of signal transduction logic models.
-\newblock {\em Physical Biology}, submitted, 2012.
+\newblock {\em Physical Biology},  2012, 9(4), p.045003.
 
 \end{thebibliography}
 

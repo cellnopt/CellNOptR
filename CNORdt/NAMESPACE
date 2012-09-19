@@ -3,5 +3,7 @@ import("CellNOptR", "abind")
 useDynLib(CNORdt)
 
 export(
-  "simulatorDT",  "getFitDT",  "gaBinaryDT",  "cutAndPlotResultsDT"
+  "simulatorDT",  "getFitDT",  "gaBinaryDT",  "cutAndPlotResultsDT",
+  "computeScoreDT",
+  "convert2array"
 )

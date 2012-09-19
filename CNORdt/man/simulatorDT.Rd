@@ -7,7 +7,8 @@ Discrete time simulation of a boolean model
 Simulates multiple time points within C (for speed).
 }
 \usage{
-simulatorDT(CNOlist, model, simList, indexList, boolUpdates)
+simulatorDT(CNOlist, model, simList, indices, boolUpdates,
+prevSim=NULL)
 }
 \arguments{
 \item{CNOlist}{
@@ -19,7 +20,7 @@ A model that only contains the reactions to be evaluated.
 \item{simList}{
 A simList as created by prep4sim, that has also already been cut to contain only the reactions to be evaluated.
 }
-\item{indexList}{
+\item{indices}{
 An indexList as created by indexFinder.
 }
 \item{boolUpdates}{
@@ -28,9 +29,6 @@ The number of update rounds the simulator should run for.
 \item{prevSim}{
 The results from \code{simulatorT0} can be used here as initial conditions.
 }
-}
-\details{
-
 }
 \value{
 A 3-dimensional array that gives the value of all species under each condition at each update (conditions, species, update).
@@ -54,13 +52,14 @@ data(modelPB, package="CNORdt")
 
 indexOrig <- indexFinder(CNOlistPB, modelPB, verbose=TRUE)
 fields4Sim <- prep4sim(modelPB)
+boolUpdates=10
 
 simResults <- simulatorDT(
   CNOlist=CNOlistPB,
   model=modelPB,
   simList=fields4Sim,
   indices=indexOrig,
-  boolUpdates=10
+  boolUpdates=boolUpdates
 )
 simResults = convert2array(simResults, dim(CNOlistPB$valueSignals[[1]])[1],
 length(modelPB$namesSpecies), boolUpdates)

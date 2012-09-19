@@ -1,5 +1,5 @@
-\name{gaBinaryTimeScale}
-\alias{gaBinaryTimeScale}
+\name{gaBinaryDT}
+\alias{gaBinaryDT}
 \title{
 Genetic algorithm for optimizing models using multiple time-points
 }
@@ -7,10 +7,10 @@ Genetic algorithm for optimizing models using multiple time-points
 The genetic algorithm used to optimize a model by fitting to data consisting of multiple time points. The data can be fitted by applying a single scaling factor to the boolean simulation.
 }
 \usage{
-gaBinaryTimeScale(CNOlist, model, simList, indexList, sizeFac = 1e-04, NApenFac = 1,
-initBstring, popSize = 50, pMutation = 0.5, maxTime = 60, maxGens = 500, stallGenMax = 100,
-selPress = 1.2, elitism = 5, relTol = 0.1, verbose=TRUE, boolUpdates, lowerB=lowerB,
-upperB=upperB)
+gaBinaryDT(CNOlist, model, initBstring = NULL, sizeFac = 1e-04, NAFac = 1, popSize = 50,
+pMutation = 0.5, maxTime = 60, maxGens = 500, stallGenMax = 100, selPress = 1.2,
+elitism = 5, relTol = 0.1, verbose = TRUE, priorBitString = NULL, maxSizeHashTable = 5000,
+boolUpdates, lowerB = lowerB, upperB = upperB)
 }
 \arguments{
 \item{CNOlist}{
