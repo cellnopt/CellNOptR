@@ -23,3 +23,18 @@ cutAndPlotResultsDT(
 	lowerB=0.8,
 	upperB=10
 )
+
+writeScaffold(
+	modelComprExpanded=model,
+	optimResT1=opt1,
+	optimResT2=NA,
+	modelOriginal=modelPB,
+	CNOlist=CNOlistPB
+)
+
+writeNetwork(
+	modelOriginal=modelPB,
+	modelComprExpanded=model,
+	optimResT1=opt1,
+	CNOlist=CNOlistPB
+)

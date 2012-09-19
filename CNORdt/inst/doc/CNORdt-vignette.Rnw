@@ -82,56 +82,24 @@ opt1 <- gaBinaryDT(CNOlist=CNOlistPB, model=model, initBstring=initBstring,
 verbose=TRUE, boolUpdates=10, maxTime=30, lowerB=0.8, upperB=10)
 @
 
-Here you can visualize the `early' fit of the data in figure~\ref{fig:halfPlot}:
+Visualize the result (figure~\ref{fig:fullPlot}):
 
 <<getData, eval=FALSE>>=
-cutAndPlotResultsTimeScale(model=modelCutCompressExpand, bString=opt1$bString,
-simList=fields4Sim, CNOlist=CNOlistPB, indexList=indexNONCcutComp, boolUpdates=c(10,20),
-divTime=10, lowerB=0.8, upperB=10)
+cutAndPlotResultsDT(
+	model=model,
+	CNOlist=CNOlistPB,
+	bString=opt1$bString,
+	plotPDF=FALSE,
+	boolUpdates=10,
+	lowerB=0.8,
+	upperB=10
+)
 @
 
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[width=\textwidth]{CNORdt-vignette-halfPlot}
-\caption{The fit of the model over the early time phase ($t=0$ to $t=10$). The black triangles are the experimental measurements across the time course. The simulation is represented by a blue dashed line. The color code represents the normalized error between the simulation and the data. The colors range from white (perfect fit) to red (poor fit) spanning heat map coloration in between.
-}
-\label{fig:halfPlot}
-\end{center}
-\end{figure}
-
-Simulate the above model to get the starting point for second steady state:
-
-<<getData, eval=FALSE>>=
-dataStartPoint = cutModel(model=modelCutCompressExpand,
-simList=fields4Sim, bitString=opt1$bString)
-simT1 = simulatorTimeScale(CNOlist=CNOlistPB,
-model=dataStartPoint[[1]], simList=dataStartPoint[[2]],
-indexList=indexNONCcutComp, boolUpdates=10)
-@
-
-Optimize the `late' network, then stitch the results together:
-
-<<getData, eval=FALSE>>=
-opt2 <- gaBinaryTimeScaleT2(CNOlist=CNOlist,
-model=modelCutCompressExpand, simList=fields4Sim,
-indexList=indexNONCcutComp, bStringT1=opt1$bString,
-simResT1=simT1, verbose=TRUE, boolUpdates=c(10,20),
-divTime=10, lowerB=0.8, upperB=10)
-@
-
-Visualize total result (figure~\ref{fig:fullPlot}):
-
-<<getData, eval=FALSE>>=
-cutAndPlotResultsTimeScaleT2(model=modelCutCompressExpand,
-bStringT1=opt1$bString, bStringT2=opt2$bString, simList=fields4Sim,
-CNOlist=CNOlistPB, indexList=indexNONCcutComp, boolUpdates=c(10,20),
-divTime=10, lowerB=0.8, upperB=10)
-@
-
-\begin{figure}[ht]
-\begin{center}
-\includegraphics[width=\textwidth]{CNORdt-vignette-fullPlot}
-\caption{The fit of the model at multiple time points using fast ($t=0$ to $t=10$) and slow (from $t=10$ to $t=30$) time phases. The training in CNORdt took 300 seconds.
+\includegraphics[width=\textwidth]{CNORdt-vignette-plot}
+\caption{The fit of the model at multiple time points. The training took 60 seconds.
 }
 \label{fig:fullPlot}
 \end{center}
@@ -143,18 +111,17 @@ As mentioned above, the difference between \emph{CNORdt} and \emph{CellNOptR} is
 
 <<writeRes, eval=FALSE>>=
 writeScaffold(
-	ModelComprExpanded=modelCutCompressExpand,
+	modelComprExpanded=model,
 	optimResT1=opt1,
-	optimResT2=opt2,
-	ModelOriginal=Model,
+	optimResT2=NA,
+	modelOriginal=modelPB,
 	CNOlist=CNOlistPB
 )
 	
 writeNetwork(
 	ModelOriginal=Model,
-	ModelComprExpanded=modelCutCompressExpand,
+	ModelComprExpanded=model,
 	optimResT1=opt1,
-	optimResT2=opt2,
 	CNOlist=CNOlistPB
 )
 @
