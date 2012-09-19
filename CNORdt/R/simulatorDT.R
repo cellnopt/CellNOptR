@@ -16,13 +16,17 @@
 
 simulatorDT <- function(CNOlist, model, simList, indices, boolUpdates, prevSim=NULL) {
 	
+	if ((class(CNOlist) == "CNOlist") == FALSE) {
+    	CNOlist = CellNOptR::CNOlist(CNOlist)
+	}
+	
 	# CONSTANTS
 	# cnolist
 	nStimuli <- as.integer(length(indices$stimulated))
 	nInhibitors <- as.integer(length(indices$inhibited))
 	nSignals <- as.integer(length(indices$signals))
-	nCond <- as.integer(dim(CNOlist$valueSignals[[1]])[1])
-	nTimes <- as.integer(length(CNOlist$timeSignals))
+	nCond <- as.integer(dim(CNOlist@signals[[1]])[1])
+	nTimes <- as.integer(length(CNOlist@timepoints))
 
 	# model
 	nReacs <- as.integer(length(model$reacID))
@@ -42,13 +46,18 @@ simulatorDT <- function(CNOlist, model, simList, indices, boolUpdates, prevSim=N
 
 	# STRUCTURES
 	# cnolist
-	valueInhibitors <- as.integer(t(CNOlist$valueInhibitors))
-	valueStimuli <- as.integer(t(CNOlist$valueStimuli))
+	valueInhibitors <- as.integer(t(CNOlist@inhibitors))
+	valueStimuli <- as.integer(t(CNOlist@stimuli))
 	
 	# additional to DT
 	boolUpdates <- as.integer(boolUpdates)
-	# set any NA to 2 
-	prevSim[is.na(prevSim)] = 2
+	# set any NA to 2 (if present)
+	if(is.null(prevSim)) {
+		prevSim = matrix(2, nrow=dim(CNOlist@signals[[1]])[1],
+		ncol=length(model$reacID))
+	} else {
+		prevSim[is.na(prevSim)] = 2
+	}
 	prevSim <- as.integer(t(prevSim))
 
 	

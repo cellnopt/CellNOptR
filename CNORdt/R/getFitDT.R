@@ -11,43 +11,36 @@
 # 
 # $Id: $
 
-getFitDT <- function(simResults, CNOlist, model, indexList, sizeFac = 1e-04, NAFac = 1, nInTot, boolUpdates, divTime = NULL, 
+getFitDT <- function(simResults, CNOlist, model, indexList, sizeFac = 1e-04, NAFac = 1, nInTot, boolUpdates,  
     lowerB, upperB) {
     
-    # ignore for the moment and return to for TN if(is.null(divTime)) {divTime =
-    # CNOlist$timeSignals[length(CNOlist$timeSignals)]} if(timeSplit=='early') { timeExper =
-    # CNOlist$timeSignals[CNOlist$timeSignals <= divTime] timeIndex = which(CNOlist$timeSignals <= divTime) boolUpdates =
-    # boolUpdates[1] } else if(timeSplit=='late') { timeExper = CNOlist$timeSignals[CNOlist$timeSignals > divTime] timeIndex
-    # = which(CNOlist$timeSignals > divTime) boolUpdates = boolUpdates[2] } if ((class(CNOlist)=='CNOlist')==FALSE){ CNOlist
-    # = CellNOptR::CNOlist(CNOlist) } make sure timeExper[1] = 0 for fitting
-    timeExper = CNOlist$timeSignals - CNOlist$timeSignals[1]
-    
+    if ((class(CNOlist) == "CNOlist") == FALSE) {
+        CNOlist = CellNOptR::CNOlist(CNOlist)
+    }
+      
     # dimensions, time points
-    times = length(timeExper)
-    sigs = dim(CNOlist$valueSignals[[1]])
+    nTimes = length(CNOlist@timepoints)
+    sigs = dim(CNOlist@signals[[1]])
     
-    # simulator will need to add simulatorDT-TN here, ignore for now if(timeSplit=='early') { yBool =
-    # simulatorTimeScale(CNOlist, model, simList, indexList, boolUpdates) } else if(timeSplit=='late') { yBool =
-    # simulatorTimeScaleT2(simResultsT1[,,dim(simResultsT1)[3]], CNOlist, model, simList, indexList, boolUpdates) }
-    
+    # cut simResults to view signals only
     simResults <- simResults[, indexList$signals, ]
     
-    
+    # interpolate experimental data so it can be compared to boolean simulation  
     splineStore = list()
     splineAdd = 1
     
-    for (nExper in 1:dim(CNOlist$valueSignals[[1]])[1]) {
-        for (nSig in 1:dim(CNOlist$valueSignals[[1]])[2]) {
+    for (nExper in 1:dim(CNOlist@signals[[1]])[1]) {
+        for (nSig in 1:dim(CNOlist@signals[[1]])[2]) {
             yTest = c()
-            for (a in 1:times) {
-                yTest = c(yTest, CNOlist$valueSignals[[a]][nExper, nSig])
+            for (a in 1:nTimes) {
+                yTest = c(yTest, CNOlist@signals[[a]][nExper, nSig])
             }
             
             if (!is.na(yTest[1])) {
-                cS = splinefun(timeExper, yTest)
+                cS = splinefun(CNOlist@timepoints, yTest)
                 splineStore[splineAdd] = list(cS)
             } else {
-                cS = splinefun(timeExper, rep(0, times))
+                cS = splinefun(CNOlist@timepoints, rep(0, nTimes))
                 splineStore[splineAdd] = list(cS)
             }
             splineAdd = splineAdd + 1
@@ -78,7 +71,7 @@ getFitDT <- function(simResults, CNOlist, model, indexList, sizeFac = 1e-04, NAF
     
     seed = 0.99
     myEstimate = optim(seed, taufinder, method = "L-BFGS-B", lower = lowerB, upper = upperB)
-    yFinal = array(dim = dim(simResults))
+    yInter = array(dim = dim(simResults))
     xCoords = seq(0, by = myEstimate$par, length.out = boolUpdates)
     
     count = 1
@@ -86,26 +79,23 @@ getFitDT <- function(simResults, CNOlist, model, indexList, sizeFac = 1e-04, NAF
         for (nSig in 1:dim(simResults)[2]) {
             
             yOut = splineStore[[count]](xCoords)
-            yFinal[nExper, nSig, ] = yOut
+            yInter[nExper, nSig, ] = yOut
             count = count + 1
         }
     }
     
-    diff <- (simResults - yFinal)  # * my.weights
+    diff <- (simResults - yInter)
     r <- diff^2
-    deviationPen <- sum(r[!is.na(r)])/times
+    deviationPen <- sum(r[!is.na(r)])/nTimes
     NAPen <- NAFac * length(which(is.na(simResults)))
-    
-    # CHANGE HERE
-    nDataPts <- dim(CNOlist$valueSignals[[1]])[1] * dim(CNOlist$valueSignals[[1]])[2]
-    
+    nDataPts <- dim(CNOlist@signals[[1]])[1] * dim(CNOlist@signals[[1]])[2] * nTimes
     nInputs <- length(which(model$interMat == -1))
     
     # nInTot: number of inputs of expanded model nInputs: number of inputs of cut model
     sizePen <- (nDataPts * sizeFac * nInputs)/nInTot
     
     score <- deviationPen + NAPen + sizePen
-    return(list(score = score, estimate = myEstimate$par, xCoords = xCoords, yInter = yFinal, simResults = simResults))
+    return(list(score = score, estimate = myEstimate$par, xCoords = xCoords, yInter = yInter, simResults = simResults))
     
 }
 

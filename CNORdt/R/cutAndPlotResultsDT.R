@@ -15,7 +15,7 @@
 # $Id: $
 
 cutAndPlotResultsDT <- function(model, bString, simList=NULL, CNOlist, indexList=NULL,
- plotPDF=FALSE, tag=NULL, plotParams=list(maxrow=10),boolUpdates=30, lowerB=0.8, upperB=10)
+ plotPDF=FALSE, tag=NULL, plotParams=list(maxrow=10),boolUpdates=boolUpdates, lowerB=lowerB, upperB=upperB,sizeFac = 1e-04, NAFac = 1)
 {
 	
     if ((class(CNOlist)=="CNOlist")==FALSE){
@@ -39,13 +39,12 @@ cutAndPlotResultsDT <- function(model, bString, simList=NULL, CNOlist, indexList
     # t0
     Sim0 <- simulatorT0(CNOlist=CNOlist, model=modelCut, simList=simListCut, indexList=indexList)
 
-	# make simulatorDT compatible with class
-    Sim <- simulatorDT(CNOlist=CNOlistPB, model=modelCut, simList=simListCut, indices=indexList, boolUpdates=boolUpdates, prevSim = Sim0) 
+    Sim <- simulatorDT(CNOlist=CNOlist, model=modelCut, simList=simListCut, indices=indexList, boolUpdates=boolUpdates, prevSim = Sim0) 
     
     simResults = convert2array(Sim, dim(CNOlist@signals[[1]])[1], length(model$namesSpecies), boolUpdates)
 
-    optimResults <- getFitDT(simResults = simResults, CNOlist = CNOlistPB, model = modelCut, indexList = indexList, sizeFac = sizeFac, 
-        NAFac = NAFac, nInTot = length(which(model$interMat == -1)), boolUpdates, divTime = NULL, lowerB = lowerB, upperB = upperB)
+    optimResults <- getFitDT(simResults = simResults, CNOlist = CNOlist, model = modelCut, indexList = indexList, sizeFac = sizeFac, 
+        NAFac = NAFac, nInTot = length(which(model$interMat == -1)), boolUpdates,  lowerB = lowerB, upperB = upperB)
 	    simResults <- simResults[, indexList$signals, ]
 
     dim1 = dim(CNOlist@signals[[1]])[1]

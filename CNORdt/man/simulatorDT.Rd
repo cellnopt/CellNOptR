@@ -1,23 +1,23 @@
-\name{simulatorTimeScale}
-\alias{simulatorTimeScale}
+\name{simulatorDT}
+\alias{simulatorDT}
 \title{
 Discrete time simulation of a boolean model
 }
 \description{
-Simulates multiple time points
+Simulates multiple time points within C (for speed).
 }
 \usage{
-simulatorTimeScale(CNOlist, model, simList, indexList, boolUpdates)
+simulatorDT(CNOlist, model, simList, indexList, boolUpdates)
 }
 \arguments{
 \item{CNOlist}{
 A CNOlist.
 }
 \item{model}{
-A Model that only contains the reactions to be evaluated.
+A model that only contains the reactions to be evaluated.
 }
 \item{simList}{
-A SimList as created by prep4sim, that has also already been cut to contain only the reactions to be evaluated.
+A simList as created by prep4sim, that has also already been cut to contain only the reactions to be evaluated.
 }
 \item{indexList}{
 An indexList as created by indexFinder.
@@ -25,9 +25,12 @@ An indexList as created by indexFinder.
 \item{boolUpdates}{
 The number of update rounds the simulator should run for.
 }
+\item{prevSim}{
+The results from \code{simulatorT0} can be used here as initial conditions.
+}
 }
 \details{
-To simulate a particular model according to a user-defined bit string, use cutModel() and then simulate from the output.
+
 }
 \value{
 A 3-dimensional array that gives the value of all species under each condition at each update (conditions, species, update).
@@ -36,7 +39,7 @@ A 3-dimensional array that gives the value of all species under each condition a
 A. MacNamara
 }
 \seealso{
-gaBinaryTimeScale, getFitTimeScale
+gaBinaryDT, getFitDT
 }
 \examples{
 # this computes the output of the full model, 
@@ -52,11 +55,13 @@ data(modelPB, package="CNORdt")
 indexOrig <- indexFinder(CNOlistPB, modelPB, verbose=TRUE)
 fields4Sim <- prep4sim(modelPB)
 
-simRes <- simulatorTimeScale(
+simResults <- simulatorDT(
   CNOlist=CNOlistPB,
   model=modelPB,
   simList=fields4Sim,
-  indexList=indexOrig,
-  boolUpdates=30
+  indices=indexOrig,
+  boolUpdates=10
 )
+simResults = convert2array(simResults, dim(CNOlistPB$valueSignals[[1]])[1],
+length(modelPB$namesSpecies), boolUpdates)
 }

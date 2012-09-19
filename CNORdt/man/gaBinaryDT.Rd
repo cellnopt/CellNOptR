@@ -9,7 +9,8 @@ The genetic algorithm used to optimize a model by fitting to data consisting of 
 \usage{
 gaBinaryTimeScale(CNOlist, model, simList, indexList, sizeFac = 1e-04, NApenFac = 1,
 initBstring, popSize = 50, pMutation = 0.5, maxTime = 60, maxGens = 500, stallGenMax = 100,
-selPress = 1.2, elitism = 5, relTol = 0.1, verbose=TRUE, boolUpdates, lowerB=lowerB, upperB=upperB)
+selPress = 1.2, elitism = 5, relTol = 0.1, verbose=TRUE, boolUpdates, lowerB=lowerB,
+upperB=upperB)
 }
 \arguments{
 \item{CNOlist}{
@@ -92,8 +93,7 @@ This function returns a list with elements:
 \item{StringsTolScores}{The scores of the above-mentioned strings.}
 }
 \references{
-J. Saez-Rodriguez, L. G. Alexopoulos, J. Epperlein, R. Samaga, D. A. Lauffenburger, S. Klamt and P. K. Sorger. Discrete logic modeling as a means to link protein signaling networks with functional analysis of
-mammalian signal transduction, Molecular Systems Biology, 5:331, 2009.
+A. MacNamara, C. Terfve, D. Henriques, B. Penalver Bernabe and J. Saez-Rodriguez, 2012. State-time spectrum of signal transduction logic models. Physical biology, 9(4), p.045003.
 }
 \author{
 A. MacNamara
@@ -108,16 +108,10 @@ data(CNOlistPB, package="CNORdt")
 data(modelPB, package="CNORdt")
 
 # pre-process model
-model <- preprocessing(CNOlistPB, modelPB)
-fields4Sim <- prep4sim(model=model)
-initBstring <- rep(1, length(model$reacID))
-indices = indexFinder(CNOlistPB, model)
-# optimize
-opt1 <- gaBinaryTimeScale(CNOlist=CNOlistPB, model=model,
-simList=fields4Sim, indexList=indices, initBstring=initBstring,
-verbose=TRUE, boolUpdates=30, maxTime=100, lowerB=0.8, upperB=10)
+model = preprocessing(CNOlistPB, modelPB)
 
-# plot result
-cutAndPlotResultsTimeScale(model=model, bString=opt1$bString, simList=fields4Sim,
-CNOlist=CNOlistPB, indexList=indices, boolUpdates=30, lowerB=0.8, upperB=10)
+# optimise
+initBstring <- rep(1, length(model$reacID))
+opt1 <- gaBinaryDT(CNOlist=CNOlistPB, model=model, initBstring=initBstring,
+verbose=TRUE, boolUpdates=10, maxTime=30, lowerB=0.8, upperB=10)
 }

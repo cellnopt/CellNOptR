@@ -4,15 +4,15 @@
 The optimization function that finds the scaling factor for the boolean simulation
 }
 \description{
-This function is called from gaBinaryTimeScale. Using the model passed as input, it finds a scaling factor that minimizes the mean squared error between the data from the boolean simulation and the experimental data. A spline is fitted to the experimental data to allow this.
+This function is called from gaBinaryDT. Using the model passed as input, it finds a scaling factor that minimizes the mean squared error between the data from the boolean simulation and the experimental data. A spline is fitted to the experimental data to allow this.
 }
 \usage{
-getFitTimeScale(simList, CNOlist, model, indexList, sizeFac=0.0001,
-NApenFac=1, boolUpdates, timeSplit="early", divTime=NULL, simResultsT1, lowerB=lowerB, upperB=upperB)
+getFitDT(simResults, CNOlist, model, indexList, sizeFac=0.0001,
+NApenFac=1, nInTot, boolUpdates, lowerB=lowerB, upperB=upperB)
 }
 \arguments{
-\item{simList}{
-A list that contains additional fields for the simulator, as created by prep4sim applied to the model above.
+\item{simResults}{
+The simulation results as output from simulatorDT
 }
 \item{CNOlist}{
 A CNOlist on which the score is based (based on all valueSignals).
@@ -29,17 +29,11 @@ The scaling factor for the size term in the objective function, default to 0.000
 \item{NApenFac}{
 The scaling factor for the NA term in the objective function, default to 1.
 }
+\item{nInTot}{
+The number of inputs in the model prior to cutting, used to normalise the size penalty.
+}
 \item{boolUpdates}{
 The number of synchronous updates performed by the boolean simulator.
-}
-\item{timeSplit}{
-If using the 2 steady-state version, this is the user-provided time point that signifies the split of early and late edges in the network.
-}
-\item{divTime}{
-The experimental time point that divides the early and late steady states, if using the 2-steady state version.
-}
-\item{simResultsT1}{
-The results of optimization at the first steady state (i.e. the whole list as output by gaBinaryTimeScale).
 }
 \item{lowerB}{
 The lower bound for the optimized value of the scaling factor.
@@ -63,7 +57,7 @@ This function returns a list with elements:
 A. MacNamara
 }
 \seealso{
-gaBinaryTimeScale, simulatorTimeScale
+gaBinaryDT, simulatorDT
 }
 \examples{
 # this function is usually contained within gaBinaryTimeScale
@@ -78,13 +72,25 @@ data(modelPB, package="CNORdt")
 indexOrig <- indexFinder(CNOlist=CNOlistPB, model=modelPB, verbose=TRUE)
 fields4Sim <- prep4sim(model=modelPB)
 
-getFitRes <- getFitTimeScale(
+boolUpdates = 10
+simResults <- simulatorDT(
+  CNOlist=CNOlistPB,
+  model=modelPB,
   simList=fields4Sim,
+  indices=indexOrig,
+  boolUpdates=boolUpdates
+)
+simResults = convert2array(simResults, dim(CNOlistPB$valueSignals[[1]])[1],
+length(modelPB$namesSpecies), boolUpdates)
+
+optimRes <- getFitDT(
+  simResults=simResults,
   CNOlist=CNOlistPB,
   model=modelPB,
   indexList=indexOrig,
-  boolUpdates=30,
+  boolUpdates=boolUpdates,
   lowerB=0.8,
-  upperB=10
+  upperB=10,
+  nInTot=length(which(modelPB$interMat == -1))
 )
 }

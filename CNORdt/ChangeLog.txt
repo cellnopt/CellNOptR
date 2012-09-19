@@ -1,3 +1,9 @@
+version 0.99.4
+------------------
+* major restructuring for bioconductor submission
+* leaving out time-scales for the moment
+* they will be reintroduced for delay version
+
 version 0.99.3
 ------------------
 * refactoring of example/man due to modificaitons of the data filename.

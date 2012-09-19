@@ -24,14 +24,14 @@ dyn.load("src/simulatorDT.so")
 
 
 opt1 <- gaBinaryDT(CNOlist=CNOlistPB, model=model, initBstring=initBstring,
-verbose=TRUE, boolUpdates=30, divTime=10, maxTime=30, lowerB=0.8, upperB=10)
+verbose=TRUE, boolUpdates=10, maxTime=30, lowerB=0.8, upperB=10)
 
 source("R/cutAndPlotResultsDT.R")
 cutAndPlotResultsDT(
 	model=model,
 	CNOlist=CNOlistPB,
 	bString=opt1$bString,
-	plotPDF=FALSE)
+	plotPDF=FALSE,boolUpdates=10, lowerB=0.8, upperB=10)
 
 
 
