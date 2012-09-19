@@ -1,4 +1,4 @@
-import("CellNOptR", "abind")
+import("CellNOptR")
 
 useDynLib(CNORdt)
 
