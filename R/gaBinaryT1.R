@@ -36,6 +36,10 @@ gaBinaryT1<-function(
         initBstring<-rep(1,length(model$reacID))
     }
 
+    if ((class(CNOlist)=="CNOlist")==FALSE){
+        CNOlist = CellNOptR::CNOlist(CNOlist)
+    }
+
     # ---- section related to T1  ----
     bLength<-length(initBstring)
 

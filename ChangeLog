@@ -1,6 +1,12 @@
 
 1.3
 =======
+1.3.33
+---------
+
+* gaBinaryT1 convert the iput CNOlist to an instance of CNOlist right at the top
+  so that it is not done N times within the GA algorithm itself. Speeds up things
+  by 3 times.
 
 1.3.32
 ----------
