@@ -12,7 +12,7 @@ model = preprocessing(CNOlistPB, modelPB)
 initBstring <- rep(1, length(model$reacID))
 
 opt1 <- gaBinaryDT(CNOlist=CNOlistPB, model=model, initBstring=initBstring,
-verbose=TRUE, boolUpdates=20, maxTime=60, lowerB=0.8, upperB=10)
+verbose=TRUE, boolUpdates=10, maxTime=60, lowerB=0.8, upperB=10)
 
 cutAndPlotResultsDT(
 	model=model,

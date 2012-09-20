@@ -1,18 +1,28 @@
-version 0.99.4
+version 0.99.5
 ------------------
 * major restructuring for bioconductor submission
 * leaving out time-scales for the moment
 * they will be reintroduced for delay version
+* currently may be slow because of class compliance
+* still need to sort out spikes at T=0
 
 version 0.99.3
 ------------------
-* refactoring of example/man due to modificaitons of the data filename.
+* refactoring of example/man due to modifications of the data filename.
 
 version 0.99.2
 ---------------
-* Arguments' name now following convention from CellNOpt. All manual and code changed accordingly.
+* arguments' name now following convention from CellNOpt. All manual and code changed accordingly.
 
 TODO:
 * Check color gradient when plotting (comparably too much red?)
 * Add t=0 changes
 * Check spikes in time course caused by NAs
+
+Topics to expand:
+* Asynchronous updating with training?
+* Application of Gillespie algorithm, stochastic (MaBoSS?)
+* Delay version
+	* R simulator is ready, needs to be written in C
+	* Optimization with MEIGO
+

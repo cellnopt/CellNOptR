@@ -27,7 +27,7 @@ A model structure, as created by code{readSIF}, normally pre-processed
 but that is not a requirement of this function.
 }
 \item{bString}{
-A bitstring of the same size as the number of reactions in the model above.
+A bit string of the same size as the number of reactions in the model above.
 }
 \item{simList}{
 If provided, simList should be created by \code{prep4sim}, and has also already been cut to 

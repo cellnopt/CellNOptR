@@ -16,25 +16,13 @@
 
 \section{Background}
 
-This software is written in the R language, so in order to use it you will need to have R installed on your computer. For more information, please refer to \url{http://www.r-project.org/}.  For more information about how to install R packages, please refer to \url{http://cran.r-project.org/doc/manuals/R-admin.html#Installing-packages}.
+This software is written in the R language, so in order to use it you will need to have R installed on your computer. For more information, please refer to \url{http://www.r-project.org/}. For more information about how to install R packages, please refer to \url{http://cran.r-project.org/doc/manuals/R-admin.html#Installing-packages}.
 
-\emph{CNORdt} is an add-on to \emph{CellNOptR}~\cite{CellNOptR}, a software package that trains logic models to data~\cite{julio2009}. More details and the package itself can be found using the following command to install:
-
-<<installPackage, eval=FALSE>>=
-install.packages("path_to_CellNOptR/CellNOptR_1.0.0.tar.gz", repos=NULL)
-@
-
-\emph{CNORdt} can be installed by:
+\emph{CNORdt} is an add-on to \emph{CellNOptR}~\cite{CellNOptR}, a software package that trains logic models to data~\cite{julio2009}. More details can be found using the following command to install:
 
 <<installPackage, eval=FALSE>>=
-install.packages("path_to_CNORdt/CNORdt_1.0.0.tar.gz", repos=NULL)
-@
-
-Alternatively, if you have the source code, you can install the packages in a R session by typing:
-
-<<installRBGL, eval=FALSE>>=
-install.packages("CellNOptR_1.0.0.tar.gz", repos=NULL)
-install.packages("CNORdt_1.0.0.tar.gz", repos=NULL)
+source("http//bioconductor.org/biocLite.R")
+biocLite("CNORdt")
 @
 
 \section{CNORdt}
@@ -65,7 +53,7 @@ data(modelPB, package="CNORdt")
 
 The full details of preprocessing the model can be found in the \emph{CellNOptR} package (the vignette gives a comprehensive explanation). The following steps are taken:
 
-<<getData, eval=TRUE>>=
+<<preProcess, eval=TRUE>>=
 # pre-process model
 model = preprocessing(CNOlistPB, modelPB)
 initBstring <- rep(1, length(model$reacID))
@@ -77,14 +65,14 @@ This is where the difference between \emph{CNORdt} and its parent package \emph{
 
 The other data that currently needs to be supplied in addition to the optimization parameters described are `boolUpdates' and the upper and lower bounds for the optimization of the scaling factor (`upperB' and `lowerB'). The variable `boolUpdates' controls the number of simulation steps (`ticks'). This will be set to an intelligent default value in future releases (it can be considered a function of model size and experimental time) but it is currently a manual entry. The upper and lower bounds control the range of values for the optimization of the scaling factor.
 
-<<getData, eval=FALSE>>=
+<<optimise, eval=TRUE>>=
 opt1 <- gaBinaryDT(CNOlist=CNOlistPB, model=model, initBstring=initBstring,
-verbose=TRUE, boolUpdates=10, maxTime=30, lowerB=0.8, upperB=10)
+verbose=FALSE, boolUpdates=10, maxTime=30, lowerB=0.8, upperB=10)
 @
 
 Visualize the result (figure~\ref{fig:fullPlot}):
 
-<<getData, eval=FALSE>>=
+<<plotData, eval=TRUE>>=
 cutAndPlotResultsDT(
 	model=model,
 	CNOlist=CNOlistPB,
@@ -99,7 +87,7 @@ cutAndPlotResultsDT(
 \begin{figure}[ht]
 \begin{center}
 \includegraphics[width=\textwidth]{CNORdt-vignette-plot}
-\caption{The fit of the model at multiple time points. The training took 60 seconds.
+\caption{The fit of the model at multiple time points. The training took 30 seconds.
 }
 \label{fig:fullPlot}
 \end{center}
@@ -109,7 +97,7 @@ cutAndPlotResultsDT(
 
 As mentioned above, the difference between \emph{CNORdt} and \emph{CellNOptR} is in the simulation of the data. Hence, it is possible to use the range of post-optimization functions available in \emph{CellNOptR} to view, for example, the evolution of fit during optimization (\emph{plotFit}), or map the optimized network onto the input network or PKN (\emph{writeNetwork}). Please see the \emph{CellNOptR} package for more details about the following:
 
-<<writeRes, eval=FALSE>>=
+<<writeRes, eval=TRUE>>=
 writeScaffold(
 	modelComprExpanded=model,
 	optimResT1=opt1,
@@ -119,8 +107,8 @@ writeScaffold(
 )
 	
 writeNetwork(
-	ModelOriginal=Model,
-	ModelComprExpanded=model,
+	modelOriginal=modelPB,
+	modelComprExpanded=model,
 	optimResT1=opt1,
 	CNOlist=CNOlistPB
 )
@@ -142,7 +130,7 @@ J.~Saez-Rodriguez, L.~Alexopoulos, J.~Epperlein, R.~Samaga, D.~Lauffenburger, S.
 \bibitem{macnamara2012}
 A.~MacNamara, C.~Terfve, D.~Henriques, B.~Pe\~nalver Bernab\'e and J.~Saez-Rodriguez.
 \newblock State-time spectrum of signal transduction logic models.
-\newblock {\em Physical Biology},  2012, 9(4), p.045003.
+\newblock {\em Physical Biology}, 2012, 9(4), p.045003.
 
 \end{thebibliography}
 
