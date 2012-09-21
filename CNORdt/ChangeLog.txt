@@ -1,10 +1,12 @@
+version 0.99.6
+------------------
+* corrected issues with vignette
+
 version 0.99.5
 ------------------
 * major restructuring for bioconductor submission
 * leaving out time-scales for the moment
 * they will be reintroduced for delay version
-* currently may be slow because of class compliance
-* still need to sort out spikes at T=0
 
 version 0.99.3
 ------------------
@@ -16,8 +18,9 @@ version 0.99.2
 
 TODO:
 * Check color gradient when plotting (comparably too much red?)
-* Add t=0 changes
+* Add t=0 changes - DONE
 * Check spikes in time course caused by NAs
+* slow-down caused by class conversion
 
 Topics to expand:
 * Asynchronous updating with training?
