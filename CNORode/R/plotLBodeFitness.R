@@ -37,11 +37,16 @@ plotLBodeFitness <-function
 			maxErrTestsFails);
 
 	times=cnolist$timeSignals;
+	
 	sim_data=lapply(sim_data,function(x)x[plot_index_experiments,plot_index_signals]);
 	expResults=lapply(cnolist$valueSignals,function(x)x[plot_index_experiments,plot_index_signals]);
 	
 	sim_data=lapply(sim_data,function(x)as.matrix(x));
 	expResults=lapply(expResults,function(x)as.matrix(x));
+	
+	if(dim(cnolist$valueSignals[[1]])[1]!=dim(sim_data[[1]])[1]){
+		sim_data=lapply(sim_data,function(x) t(as.matrix(x)));
+	}
 
 	namesSignals=cnolist$namesSignals[plot_index_signals];
 	namesCues=c(cnolist$namesStimuli,cnolist$namesInhibitors);
