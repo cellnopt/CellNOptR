@@ -30,9 +30,14 @@ getLBodeDataSim<-function
 	sim_function=getLBodeSimFunction(cnolist,model,adjMat,
 			indices1=indices, odeParameters1=ode_parameters$parValues, time1=time,verbose1=verbose,
 			transfer_function1=transfer_function,reltol1=reltol,atol1=atol,maxStepSize1=maxStepSize,
-			maxNumSteps1=maxNumSteps,maxErrTestsFails=maxErrTestsFails);
+			maxNumSteps1=maxNumSteps,maxErrTestsFails1=maxErrTestsFails);
 	sim=sim_function(cnolist,model,ode_parameters$parValues);
 	sim=lapply(sim,function(x) x[,indices$signals]);
 	sim=lapply(sim,function(x) as.matrix(x));
+	
+	if(dim(cnolist$valueSignals[[1]])[1]!=dim(sim[[1]])[1]){
+		sim=lapply(sim,function(x) t(as.matrix(x)));
+	}
+	
 	return(sim);
 }
