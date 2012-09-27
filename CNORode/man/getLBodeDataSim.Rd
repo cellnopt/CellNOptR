@@ -93,7 +93,7 @@ library(CNORode)
 data("ToyCNOlist",package="CNORode");
 data("ToyModel",package="CNORode");
 data("ToyIndices",package="CNORode");
-dataSimulation=getLBodeDataSim(cnolist, model,indices=indices);
+dataSimulation=getLBodeDataSim(cnolistCNORodeExample, model,indices=indices);
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

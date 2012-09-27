@@ -106,7 +106,7 @@ plot_index_cues = NULL, colormap="heat")
 	data("ToyModel",package="CNORode");
 	data("ToyIndices",package="CNORode");
 	ode_parameters=createLBodeContPars(model,random=TRUE);
-	dataSimulation=plotLBodeFitness(cnolist, model,indices=indices);
+	dataSimulation=plotLBodeFitness(cnolistCNORodeExample, model,indices=indices);
 }
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the

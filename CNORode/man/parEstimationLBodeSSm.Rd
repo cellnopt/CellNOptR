@@ -159,13 +159,13 @@ data("ToyIndices",package="CNORode");
 ode_parameters=createLBodeContPars(model,random=TRUE);
 
 #Visualize intial simulation
-simulatedData=plotLBodeFitness(cnolist, model,ode_parameters,indices=indices)
+simulatedData=plotLBodeFitness(cnolistCNORodeExample, model,ode_parameters,indices=indices)
 
-ode_parameters=parEstimationLBodeSSm(cnolist,model,ode_parameters,
+ode_parameters=parEstimationLBodeSSm(cnolistCNORodeExample,model,ode_parameters,
 indices=indices,maxtime=20,ndiverse=50,dim_refset=6);
 
 #Visualize fitterd solution
-simulatedData=plotLBodeFitness(cnolist, model,indices=indices,ode_parameters=ode_parameters);
+simulatedData=plotLBodeFitness(cnolistCNORodeExample, model,indices=indices,ode_parameters=ode_parameters);
 }
 }
 

@@ -96,7 +96,7 @@
 	data("ToyIndices",package="CNORode");
 	
 	ode_parameters=createLBodeContPars(model,random=TRUE);
-	minlp_obj_function=getLBodeContObjFunction(cnolist, model,ode_parameters,indices);
+	minlp_obj_function=getLBodeContObjFunction(cnolistCNORodeExample, model,ode_parameters,indices);
 	
 	x=ode_parameters$parValues;
 	

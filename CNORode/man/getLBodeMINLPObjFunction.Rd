@@ -96,7 +96,7 @@ data("ToyModel",package="CNORode");
 data("ToyIndices",package="CNORode");
 
 ode_parameters=createLBodeContPars(model,random=TRUE);
-minlp_obj_function=getLBodeMINLPObjFunction(cnolist, model,ode_parameters,indices);
+minlp_obj_function=getLBodeMINLPObjFunction(cnolistCNORodeExample, model,ode_parameters,indices);
 
 n_int_vars=dim(model$interMat)[2];
 x_int=round(runif(n_int_vars))

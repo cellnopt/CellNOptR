@@ -97,7 +97,7 @@
 	data("ToyCNOlist",package="CNORode");
 	data("ToyModel",package="CNORode");
 	data("ToyIndices",package="CNORode");
-	modelSimulation=plotLBodeModelSim(cnolist, model,indices=indices);
+	modelSimulation=plotLBodeModelSim(cnolistCNORodeExample, model,indices=indices);
 }
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the

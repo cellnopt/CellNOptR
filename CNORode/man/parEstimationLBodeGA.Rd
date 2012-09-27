@@ -157,13 +157,13 @@ data("ToyIndices",package="CNORode");
 	
 ode_parameters=createLBodeContPars(model,random=TRUE);
 #Visualize intial simulation
-#simulatedData=plotLBodeFitness(cnolist, model,ode_parameters,indices=indices)
+#simulatedData=plotLBodeFitness(cnolistCNORodeExample, model,ode_parameters,indices=indices)
 
-ode_parameters=parEstimationLBodeGA(cnolist,model,ode_parameters=ode_parameters,
+ode_parameters=parEstimationLBodeGA(cnolistCNORodeExample,model,ode_parameters=ode_parameters,
 indices=indices,maxStepSize=1,atol=1e-3,reltol=1e-5,transfer_function=2,popSize=10,iter=40);
 
 #Visual solution after optimization
-simulatedData=plotLBodeFitness(cnolist, model,indices=indices,ode_parameters=ode_parameters);
+simulatedData=plotLBodeFitness(cnolistCNORodeExample, model,indices=indices,ode_parameters=ode_parameters);
 }
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the
