@@ -11,6 +11,9 @@
 #include <stdio.h>
 
 
+// keep this NA > 1 and integer
+#define NA 100
+
 SEXP simulatorT1 (
 
     SEXP nStimuli_in,
@@ -145,7 +148,7 @@ SEXP simulatorT1 (
     int init_values[nCond][nSpecies];
     for(i = 0; i < nCond; i++) {
         for(j = 0; j < nSpecies; j++) {
-            init_values[i][j] = 2;
+            init_values[i][j] = NA;
         }
     }
 
@@ -162,7 +165,7 @@ SEXP simulatorT1 (
             for(j = 0; j < nInhibitors; j++) {
                 valueInhibitors[i][j] = 1 - valueInhibitors[i][j];
                 if(valueInhibitors[i][j] == 1) {
-                    valueInhibitors[i][j] = 2;
+                    valueInhibitors[i][j] = NA;
                 }
             }
         }
@@ -207,14 +210,13 @@ SEXP simulatorT1 (
                 temp_store[i][j] = output_prev[track_cond][finalCube[track_reac][j]];
 
                 if(ignoreCube[track_reac][j]) {
-                    temp_store[i][j] = 2;
+                    temp_store[i][j] = NA;
                 }
                 if(ixNeg[track_reac][j]) {
                     // flip the values of the neg inputs
                     if(temp_store[i][j] == 0) {temp_store[i][j] = 1;}
                     else if(temp_store[i][j] == 1) {temp_store[i][j] = 0;}
                 }
-            //        Rprintf("%d\n", temp_store[i][j]);
 
             }
 
@@ -236,8 +238,8 @@ SEXP simulatorT1 (
             for(j = 1; j < nMaxInputs; j++) {
                 // if statement below is for AND gates with any NA (2) input
                 // in this case output should always be NA
-                if(temp_store[i][j] == 2 && ignoreCube[dial_reac][j] == 0) {
-                    current_min = 2;
+                if(temp_store[i][j] == NA && ignoreCube[dial_reac][j] == 0) {
+                    current_min = NA;
                     break;
                 }
                 else if(temp_store[i][j] < current_min) {current_min = temp_store[i][j];}
@@ -251,7 +253,7 @@ SEXP simulatorT1 (
         // compute the OR gates and reinitialize new_input
         for(i = 0; i < nCond; i++) {
             for(j = 0; j < nSpecies; j++) {
-                new_input[i][j] = 2;
+                new_input[i][j] = NA;
             }
         }
 
@@ -277,10 +279,10 @@ SEXP simulatorT1 (
                 // else if species is output for > 1
                 if(selCounter > 1) {
                     for(i=0; i < nCond; i++) {
-                        or_max = 2;
+                        or_max = NA;
                         curr_max = 0;
                         for(int p=0; p < selCounter; p++) {
-                            if(output_cube[i][selection[p]] >= curr_max && output_cube[i][selection[p]] < 2) {
+                            if(output_cube[i][selection[p]] >= curr_max && output_cube[i][selection[p]] < NA) {
                                 or_max = output_cube[i][selection[p]];
                                 curr_max = output_cube[i][selection[p]];
                             }
@@ -296,7 +298,7 @@ SEXP simulatorT1 (
         for(i = 0; i < nCond; i++) {
             for(j = 0; j < nStimuli; j++) {
                 curr_max = valueStimuli[i][j];
-                if(new_input[i][indexStimuli[j]] > curr_max && new_input[i][indexStimuli[j]] < 2) {
+                if(new_input[i][indexStimuli[j]] > curr_max && new_input[i][indexStimuli[j]] < NA) {
                     curr_max = new_input[i][indexStimuli[j]];
                 }
                 new_input[i][indexStimuli[j]] = curr_max;
@@ -315,8 +317,8 @@ SEXP simulatorT1 (
         // set 'NAs' (2s) to 0
         for(i = 0; i < nCond; i++) {
             for(j = 0; j < nSpecies; j++) {
-                if(new_input[i][j] == 2) {new_input[i][j] = 0;}
-                if(output_prev[i][j] == 2) {output_prev[i][j] = 0;}
+                if(new_input[i][j] == NA) {new_input[i][j] = 0;}
+                if(output_prev[i][j] == NA) {output_prev[i][j] = 0;}
             }
         }
 
@@ -342,7 +344,7 @@ SEXP simulatorT1 (
     for(i = 0; i < nCond; i++) {
         for(j = 0; j < nSpecies; j++) {
             if(new_input[i][j] != output_prev[i][j])
-                new_input[i][j] = 2;
+                new_input[i][j] = NA;
         }
     }
 
@@ -350,7 +352,7 @@ SEXP simulatorT1 (
     rans = REAL(simResults);
     for(i = 0; i < nCond; i++) {
         for(j = 0; j < nSpecies; j++) {
-            if(new_input[i][j] == 2) rans[i + nCond*j] = NA_REAL;
+            if(new_input[i][j] == NA) rans[i + nCond*j] = NA_REAL;
             else rans[i + nCond*j] = new_input[i][j];
         }
     }

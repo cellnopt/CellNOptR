@@ -17,6 +17,9 @@
 #include <stdio.h>
 
 
+// keep this NA > 1 and integer
+#define NA 100
+
 SEXP simulatorTN (
 
     SEXP nStimuli_in,
@@ -171,6 +174,7 @@ SEXP simulatorTN (
         }
     }
 
+ 
 
     //============================================================================
 
@@ -247,8 +251,7 @@ SEXP simulatorTN (
             track_reac++;
         }
     }
-
-
+   
     // 2. Need to compute OutputCube
     /* R code :
        outputCube <- apply(tempStore, 1, minNA)
@@ -416,7 +419,6 @@ SEXP simulatorTN (
         // copy to outputPrev
         memcpy(output_prev, new_input, sizeof(output_prev));
 
-
         // fill temp store
         // this is different to R version, through a single loop
         // with conditions
@@ -428,7 +430,7 @@ SEXP simulatorTN (
                 temp_store[i][j] = output_prev[track_cond][finalCube[track_reac][j]];
 
                 if(ignoreCube[track_reac][j]) {
-                    temp_store[i][j] = 2;
+                    temp_store[i][j] = NA;
                 }
                 if(ixNeg[track_reac][j]) {
                     // flip the values of the neg inputs
@@ -444,6 +446,8 @@ SEXP simulatorTN (
                 track_reac++;
             }
         }
+
+
         // compute the AND gates (find the min 0/1 of each row)
 
         int current_min;
@@ -454,6 +458,7 @@ SEXP simulatorTN (
             for(j = 1; j < nMaxInputs; j++) {
                 if(temp_store[i][j] < current_min) {current_min = temp_store[i][j];}
             }
+
             output_cube[dial_cond][dial_reac] = current_min;
             dial_cond++;
             if(dial_cond==nCond) {dial_cond = 0; dial_reac++;}
@@ -462,7 +467,7 @@ SEXP simulatorTN (
         // compute the OR gates and reinitialize new_input
         for(i = 0; i < nCond; i++) {
             for(j = 0; j < nSpecies; j++) {
-                new_input[i][j] = 2;
+                new_input[i][j] = NA;
             }
         }
 
@@ -488,10 +493,10 @@ SEXP simulatorTN (
                 // else if species is output for > 1
                 if(selCounter > 1) {
                     for(i=0; i < nCond; i++) {
-                        or_max = 2;
+                        or_max = NA;
                         curr_max = 0;
                         for(int p=0; p < selCounter; p++) {
-                            if(output_cube[i][selection[p]] >= curr_max && output_cube[i][selection[p]] < 2) {
+                            if(output_cube[i][selection[p]] >= curr_max && output_cube[i][selection[p]] < NA) {
                                 or_max = output_cube[i][selection[p]];
                                 curr_max = output_cube[i][selection[p]];
                             }
@@ -507,7 +512,7 @@ SEXP simulatorTN (
         for(i = 0; i < nCond; i++) {
             for(j = 0; j < nStimuli; j++) {
                 curr_max = valueStimuli[i][j];
-                if(new_input[i][indexStimuli[j]] > curr_max && new_input[i][indexStimuli[j]] < 2) {
+                if(new_input[i][indexStimuli[j]] > curr_max && new_input[i][indexStimuli[j]] < NA) {
                     curr_max = new_input[i][indexStimuli[j]];
                 }
                 new_input[i][indexStimuli[j]] = curr_max;
@@ -536,8 +541,8 @@ SEXP simulatorTN (
         // set 'NAs' (2s) to 0
         for(i = 0; i < nCond; i++) {
             for(j = 0; j < nSpecies; j++) {
-                if(new_input[i][j] == 2) {new_input[i][j] = 0;}
-                if(output_prev[i][j] == 2) {output_prev[i][j] = 0;}
+                if(new_input[i][j] == NA) {new_input[i][j] = 0;}
+                if(output_prev[i][j] == NA) {output_prev[i][j] = 0;}
             }
         }
 
@@ -561,17 +566,15 @@ SEXP simulatorTN (
     for(i = 0; i < nCond; i++) {
         for(j = 0; j < nSpecies; j++) {
             if(new_input[i][j] != output_prev[i][j])
-                new_input[i][j] = 2;
+                new_input[i][j] = NA;
         }
     }
-
-
 
     PROTECT(simResults = allocMatrix(REALSXP, nCond, nSpecies));
     rans = REAL(simResults);
     for(i = 0; i < nCond; i++) {
         for(j = 0; j < nSpecies; j++) {
-            if(new_input[i][j] == 2) rans[i + nCond*j] = NA_REAL;
+            if(new_input[i][j] == NA) rans[i + nCond*j] = NA_REAL;
             else rans[i + nCond*j] = new_input[i][j];
         }
     }
