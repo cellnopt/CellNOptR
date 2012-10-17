@@ -54,7 +54,7 @@ simulatorDT <- function(CNOlist, model, simList, indices, boolUpdates, prevSim=N
 	# set any NA to 2 (if present)
 	if(is.null(prevSim)) {
 		prevSim = matrix(2, nrow=dim(CNOlist@signals[[1]])[1],
-		ncol=length(model$reacID))
+		ncol=length(model$namesSpecies))
 	} else {
 		prevSim[is.na(prevSim)] = 2
 	}
