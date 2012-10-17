@@ -1,3 +1,8 @@
+version 1.1.1
+------------------
+* change init_values - set anything that is not stimulus/inhibitor to 'prevSim' status
+* this fixes issue with spike in time course caused by initial NAs
+
 version 0.99.6
 ------------------
 * corrected issues with vignette
@@ -19,7 +24,8 @@ version 0.99.2
 TODO:
 * Check color gradient when plotting (comparably too much red?)
 * Add t=0 changes - DONE
-* Check spikes in time course caused by NAs
+* Check spikes in time course caused by NAs - DONE
+* Spike has moved to nfkb in example
 * slow-down caused by class conversion
 
 Topics to expand:

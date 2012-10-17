@@ -188,7 +188,15 @@ SEXP simulatorDT (
 			init_values[i][indexInhibitors[j]] = valueInhibitors[i][j];
 		}
 	}
-		
+	
+	// set other initial values from prevSim
+	for(i = 0; i < nCond; i++) {
+		for(j = 0; j < nSpecies; j++) {
+			// anything that is not stimulus/inhibitor
+			if(init_values[i][j] == 2) init_values[i][j] = prevSim[i][j];
+		}
+	}
+	
 	// initialize main loop
 	int output_prev[nCond][nSpecies];
 	int new_input[nCond][nSpecies];
