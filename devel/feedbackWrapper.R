@@ -21,9 +21,9 @@ feedbackWrapper <- function(model) {
 			}
 		}
 		negReacs = unique(negReacs)
-		negEdges = rep(0,length(model$reacID))
-		negEdges[negReacs] = 1
-		return(negEdges)
+	#	negEdges = rep(0,length(model$reacID))
+	#	negEdges[negReacs] = 1
+		return(negReacs)
 	} else {
 		
 		print("No loops found!")

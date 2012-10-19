@@ -1,117 +1,94 @@
-# delay and state finder
-# 20/10/2011
+# This file is part of the CNO software
+# 
+# Copyright (c) 2011-2012 - EBI
+# 
+# File author(s): CNO developers (cno-dev@ebi.ac.uk)
+# 
+# Distributed under the GPLv2 License.  See accompanying file LICENSE.txt or copy at
+# http://www.gnu.org/licenses/gpl-2.0.html
+# 
+# CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
+# 
+# $Id: $
 
-getFitPause <- function(SimList, CNOlist, Model, indexList, sizeFac=0.0001, NAPenFac=1, boolUpdates, timeSplit="early", divTime=NULL, SimResultsT1) {
-
-	if(is.null(divTime)) {divTime = CNOlist$timeSignals[length(CNOlist$timeSignals)]}
-	if(timeSplit=="early") {
-		time.exper = CNOlist$timeSignals[CNOlist$timeSignals <= divTime]
-		time.index = which(CNOlist$timeSignals <= divTime)
-		boolUpdates = boolUpdates[1]
-	} else if(timeSplit=="late") {
-		time.exper = CNOlist$timeSignals[CNOlist$timeSignals > divTime]
-		time.index = which(CNOlist$timeSignals > divTime)
-		boolUpdates = boolUpdates[2]
-	}	
-	# make sure time.exper[1] = 0 for fitting
-	time.exper = time.exper - time.exper[1]
+getFitPause <- function(CNOlist, model, indexList, sizeFac = 1e-04, NAFac = 1, nInTot, boolUpdates,  
+    lowerB, upperB) {
+    	    
+    if ((class(CNOlist) == "CNOlist") == FALSE) {
+        CNOlist = CellNOptR::CNOlist(CNOlist)
+    }
+      
+    # dimensions, time points
+    nTimes = length(CNOlist@timepoints)
+    sigs = dim(CNOlist@signals[[1]])
+    
+    # interpolate experimental data so it can be compared to boolean simulation  
+    splineStore = list()
+    splineAdd = 1
+    
+    for (nExper in 1:dim(CNOlist@signals[[1]])[1]) {
+        for (nSig in 1:dim(CNOlist@signals[[1]])[2]) {
+            yTest = c()
+            for (a in 1:nTimes) {
+                yTest = c(yTest, CNOlist@signals[[a]][nExper, nSig])
+            }
+            
+            if (!is.na(yTest[1])) {
+                cS = splinefun(CNOlist@timepoints, yTest)
+                splineStore[splineAdd] = list(cS)
+            } else {
+                cS = splinefun(CNOlist@timepoints, rep(0, nTimes))
+                splineStore[splineAdd] = list(cS)
+            }
+            splineAdd = splineAdd + 1
+        }
+    }
 	
-	# dimensions, time.points
-	times = length(time.exper)
-	sigs = dim(CNOlist$valueSignals[[1]])
-
-	################################################################################
-	
-	# fit the curves to the experimental data for each cell
-	# uses splinefun
-
-	spline.store = list()
-	spline.add = 1
-	for (nExper in 1:dim(CNOlist$valueSignals[[1]])[1]) {
-		for (nSig in 1:dim(CNOlist$valueSignals[[1]])[2]) {
-			yTest = c()
-			for (a in time.index) {
-				yTest =c(yTest, CNOlist$valueSignals[[a]][nExper, nSig])
-			}
-
-			if(!is.na(yTest[1])) {
-				cs = splinefun(time.exper, yTest)
-				spline.store[spline.add] = list(cs)
-			} else {
-				cs = splinefun(time.exper,rep(0,times))
-				spline.store[spline.add] = list(cs)
-			}
-		spline.add = spline.add + 1
-		}
-	}
-	
-	################################################################################
-	
-	# here pick out the negative feedback that can be optimized
-	# as either strong/weak with/without delay
-
-	what.loops = feedbackFinder1(Model)
-	neg.reacs = c()
-	for(b in 1:length(what.loops)) {
-		loop1 = what.loops[[b]]
-		loop1 = loop1[loop1 > 0]
-		loop1 = c(loop1, loop1[1])
-		for(a in 1:length(loop1)-1) {
-			lhs = loop1[a]
-			rhs = loop1[a+1]
-			lhs.reac = which(Model$interMat[lhs,] == -1)
-			rhs.reac = which(Model$interMat[rhs,] == 1)
-			reac = intersect(lhs.reac, rhs.reac)
-			if(any(Model$notMat[,reac] == 1)) {
-				neg.reacs = c(neg.reacs, reac)	
-			}
-		}
-	}
-	neg.reacs = unique(neg.reacs)
-	negEdges = rep(0,length(Model$reacID))
-	negEdges[neg.reacs] = 1
-	strongWeak = rep(0,length(negEdges[negEdges == 1]))
 	
 	################################################################################
-
+	
+	# TODO: neg data should be index list from model$reacID
+	# of what strongWeak edges there are
+	strongWeak = rep(0,length(model$reacID))
+	negEdges = feedbackWrapper(model) # the index of edges that can be changed
 	# optimization
 
-	findDelayState <- function(optimString, splines) {
+	# what to optimize
+	delayFinder <- function(optimString) {
+		
+		whatScale = optimString[1] # continuous with upper/lower bounds
+		delayThresh = # integer section of optimString
+		strongWeak[negEdges] = # binary section of optimString
+		
+		simResults = simulatorTest(CNOlist, model, simList, indexList,
+		boolUpdates=boolUpdates, delayThresh=delayThresh, strongWeak=strongWeak)
+		simResults = convert2array(simResults, dim(CNOlist@signals[[1]])[1], length(model$namesSpecies), boolUpdates)
+		simResults = simResults[,indexList$signals,]
 
-		# what to optimize
-		delayStateFinder <- function(optimString) {
-		
-			what.scale = optimString[1]
-			delayThresh = optimString[2:(1+length(optimString))]
-		#	strongWeak = optimString[(2+length(Model$reacID)):length(optimString)]
-			yB = simulatorPause(CNOlist, Model, SimList, indexList, boolUpdates, delayThresh)
-			yB = yB[,indexList$signals,]
-		
-			ySilico = array(dim=dim(yB))
-			number.points = dim(yB)[3]
-			x.coords = seq(0,by=what.scale,length.out=number.points)
-   			count.1 = 1
+		ySilico = array(dim=dim(simResults))
+		numberPoints = dim(simResults)[3]
+		xCoords = seq(0, by=whatScale, length.out=numberPoints)
+   		count = 1
     
-    		for(nExper in 1:dim(yB)[1]) {
-    			for(nSig in 1:dim(yB)[2]) {
+    	for(nExper in 1:dim(simResults)[1]) {
+    		for(nSig in 1:dim(simResults)[2]) {
     				             
-            		yOut = splines[[count.1]](x.coords)
-            		ySilico[nExper,nSig,] = yOut;
-            		count.1 = count.1 + 1
-   				}
-  			}
+            	yOut = splines[[count]](xCoords)
+            	ySilico[nExper,nSig,] = yOut;
+            	count = count + 1
+   			}
+  		}
   	
-  			ErrorVector = as.vector(ySilico) - as.vector(yB)
-    		sse = sum(ErrorVector^2)
-    		return(sse)	
-		}
-
-		len.delay = length(Model$reacID)
-		len.strongWeak = length(optimString[(2+length(Model$reacID)):length(optimString)])
-		problem = list(f=delayStateFinder, x_L=c(0.1, rep(0,len.delay)), x_U=c(9.9, rep(boolUpdates,len.delay)), int_var=length(Model$reacID))
-		opts = list(maxtime=240, local_solver=0, dim_refset=6, ndiverse=50)
-		est.1 = essR(problem, opts)	
+  		errorVector = as.vector(ySilico) - as.vector(simResults)
+    	sse = sum(errorVector^2)
+    	return(sse)			
 	}
+
+	lenDelay = length(Model$reacID)
+	len.strongWeak = length(optimString[(2+length(Model$reacID)):length(optimString)])
+	problem = list(f=delayStateFinder, x_L=c(0.1, rep(0,len.delay)), x_U=c(9.9, rep(boolUpdates,len.delay)), int_var=length(Model$reacID))
+	opts = list(maxtime=240, local_solver=0, dim_refset=6, ndiverse=50)
+	est.1 = essR(problem, opts)	
 
 	################################################################################
 

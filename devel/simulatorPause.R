@@ -223,15 +223,15 @@ simulatorPause <- function(CNOlist, model, simList, indexList, boolUpdates, dela
 		yBool[,,countBool] = readout
 		
 		###
-		allCubes
-		yBool[,,1:countBool]
-		countBool
-		countBool = countBool+1
+	#	allCubes
+	#	yBool[,,1:countBool]
+	#	countBool
+	#	countBool = countBool+1
 		###
 	}
 
 	############################## MAIN LOOP ##############################
 
-	return(yBool)
+	return(list(yBool, allCubes))
 }
 
