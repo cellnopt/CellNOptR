@@ -25,7 +25,7 @@ TODO:
 * Check color gradient when plotting (comparably too much red?)
 * Add t=0 changes - DONE
 * Check spikes in time course caused by NAs - DONE
-* Spike has moved to nfkb in example
+* Spike has moved to nfkb in example - DONE
 * slow-down caused by class conversion
 
 Topics to expand:
