@@ -66,9 +66,10 @@ readMIDAS<-function(MIDASfile, verbose=TRUE){
     }
 
     # Determine which are the informative columns (i.e. columns with useful data info and values)
-    TRcol<-grep(pattern="TR",x=colnames(data),ignore.case=FALSE)
-    DAcol<-grep(pattern="DA",x=colnames(data),ignore.case=FALSE)
-    DVcol<-grep(pattern="DV",x=colnames(data),ignore.case=FALSE)
+    TRcol<-grep(pattern="TR:",x=colnames(data),ignore.case=FALSE)
+    DAcol<-grep(pattern="DA:",x=colnames(data),ignore.case=FALSE)
+    DVcol<-grep(pattern="DV:",x=colnames(data),ignore.case=FALSE)
+    #data<-data[,c(TRcol,DAcol,DVcol)]
 
     # Print information about the data set 
     if (verbose){
@@ -94,7 +95,7 @@ readMIDAS<-function(MIDASfile, verbose=TRUE){
             data<-data[,-DAcol]
 
             }else{
-                warning("You have more data values columns (DV columns) than data points columns (DV columns)")
+                warning("DA columns and DV columns do not match.")
                 }
         }
 
@@ -138,6 +139,7 @@ readMIDAS<-function(MIDASfile, verbose=TRUE){
         print("Please be aware that CNO only handles measurements on one cell line at this time.")
     }
 
+    # data has been changed so we need to extract columns indices again
     TRcol<-grep(pattern="TR:",x=colnames(data),ignore.case=FALSE)
     DAcol<-grep(pattern="DA:",x=colnames(data),ignore.case=FALSE)
     DVcol<-grep(pattern="DV:",x=colnames(data),ignore.case=FALSE)

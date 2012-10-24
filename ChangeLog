@@ -1,3 +1,17 @@
+1.5
+====
+
+1.5.1
+--------
+* readMIDAS. bug fixed for the case of species that contains the DA, TR or DV
+  string inside their name.
+
+
+1.4.0
+======
+
+Bioconductor release 
+
 
 1.3
 =======
