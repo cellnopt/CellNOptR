@@ -15,7 +15,8 @@
 # $Id$
 
 CNORbool<-function(CNOlist, model, paramsList=defaultParameters(),
-    compression=TRUE, expansion=TRUE, cutNONC=TRUE, verbose=FALSE)
+    compression=TRUE, expansion=TRUE, cutNONC=TRUE, verbose=FALSE,
+    timeIndices=NULL)
 {
 
 
@@ -39,6 +40,14 @@ CNORbool<-function(CNOlist, model, paramsList=defaultParameters(),
     bStrings = list()
     initBstring<-rep(1,length(model$reacID))
     print("Entering gaBinaryT1")
+
+
+    if (is.null(timeIndices)==TRUE){
+        T0index = 2
+    } else{
+        T0index = timeIndices[[1]]
+    }
+
     T1opt<-gaBinaryT1(CNOlist=cnolist,
         model=model,
         initBstring=initBstring,
@@ -52,7 +61,8 @@ CNORbool<-function(CNOlist, model, paramsList=defaultParameters(),
         selPress=paramsList$selPress,
         elitism=paramsList$elitism,
         relTol=paramsList$relTol,
-        verbose=paramsList$verbose)
+        verbose=paramsList$verbose, 
+        timeIndex=T0index)
     bStrings[[1]] = T1opt$bString
 
 
@@ -64,33 +74,66 @@ CNORbool<-function(CNOlist, model, paramsList=defaultParameters(),
     Times = 1
     T2opt<-NA # default value
 
-    for (i in 3:length(cnolist@signals)){
-        Times = Times + 1
-        print(paste("Entering gaBinaryTN (time=", Times, ")", sep=" "))
+    if (is.null(timeIndices)==TRUE){
+        for (i in 3:length(cnolist@signals)){
+            Times = Times + 1
+            print(paste("Entering gaBinaryTN (time=", Times, ")", sep=" "))
 
-        TNopt<-gaBinaryTN(
-            CNOlist=cnolist,
-            model=model,
-            bStrings=bStrings,
-            sizeFac=paramsList$sizeFac,
-            NAFac=paramsList$NAFac,
-            popSize=paramsList$popSize,
-            pMutation=paramsList$pMutation,
-            maxTime=paramsList$maxTime,
-            maxGens=paramsList$maxGens,
-            stallGenMax=paramsList$stallGenMax,
-            selPress=paramsList$selPress,
-            elitism=paramsList$elitism,
-            relTol=paramsList$relTol,
-            verbose=paramsList$verbose)
+            TNopt<-gaBinaryTN(
+                CNOlist=cnolist,
+                model=model,
+                bStrings=bStrings,
+                sizeFac=paramsList$sizeFac,
+                NAFac=paramsList$NAFac,
+                popSize=paramsList$popSize,
+                pMutation=paramsList$pMutation,
+                maxTime=paramsList$maxTime,
+                maxGens=paramsList$maxGens,
+                stallGenMax=paramsList$stallGenMax,
+                selPress=paramsList$selPress,
+                elitism=paramsList$elitism,
+                relTol=paramsList$relTol,
+                verbose=paramsList$verbose)
 
-        bStrings[[Times]] = TNopt$bString
-        print(TNopt$bString)
+            bStrings[[Times]] = TNopt$bString
+            print(TNopt$bString)
 
-        if (Times==2){
-            T2opt = TNopt
+            if (Times==2){
+                T2opt = TNopt
+            }
+        }
+    }else{
+        for (i in 2:length(timeIndices)){
+            Times = Times + 1
+            print(paste("Entering gaBinaryTN (time=", Times, ")", sep=" "))
+
+            TNopt<-gaBinaryTN(
+                CNOlist=cnolist,
+                model=model,
+                bStrings=bStrings,
+                sizeFac=paramsList$sizeFac,
+                NAFac=paramsList$NAFac,
+                popSize=paramsList$popSize,
+                pMutation=paramsList$pMutation,
+                maxTime=paramsList$maxTime,
+                maxGens=paramsList$maxGens,
+                stallGenMax=paramsList$stallGenMax,
+                selPress=paramsList$selPress,
+                elitism=paramsList$elitism,
+                relTol=paramsList$relTol,
+                verbose=paramsList$verbose, timeIndex=timeIndices[[i]])
+
+            bStrings[[Times]] = TNopt$bString
+            print(TNopt$bString)
+
+            if (Times==2){
+                T2opt = TNopt
+            }
+
         }
     }
+
+
 
     return(list(model=model, bStrings=bStrings))
 }
