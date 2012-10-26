@@ -32,8 +32,8 @@ gaBinaryT1<-function(
     maxSizeHashTable=5000, timeIndex=2){
 
     if (timeIndex<2){ stop("timeIndex must be >=2")}
-    if (timeIndex>length(CNOlist@timeSignals)){ 
-        stop(paste("timeIndex must be <= ", length(CNOlist@timeSignals), sep=" "))
+    if (timeIndex>length(CNOlist@timepoints)){ 
+        stop(paste("timeIndex must be <= ", length(CNOlist@timepoints), sep=" "))
     }
     # by default initial bit string is made of ones.
     if (is.null(initBstring)==TRUE){
