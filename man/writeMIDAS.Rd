@@ -38,5 +38,5 @@ T. Cokelaer
    data(CNOlistToy)
    writeMIDAS(CNOlistToy, 'test.csv')
    readMIDAS('test.csv')
-   writeMIDAS(CNOlistToy, 'test.csv', timeIndices=c(1,2))
+   writeMIDAS(CNOlistToy, 'test.csv', timeIndices=c(1,2), overwrite=TRUE)
 }
