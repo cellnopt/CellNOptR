@@ -1,7 +1,7 @@
 #
 #  This file is part of the CNO software
 #
-#  Copyright (c) 2011-2012 - EBI - Massachusetts Institute of Technology
+#  Copyright (c) 2011-2012 - EMBL - European Bioinformatics Institute - Massachusetts Institute of Technology
 #
 #  File author(s): CNO developers (cno-dev@ebi.ac.uk)
 #
