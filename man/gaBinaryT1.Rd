@@ -10,7 +10,7 @@ This function is the genetic algorithm to be used to optimise a model by fitting
 gaBinaryT1(CNOlist, model, initBstring=NULL, sizeFac = 1e-04, 
     NAFac = 1, popSize = 50, pMutation = 0.5, maxTime = 60, maxGens = 500,
     stallGenMax = 100, selPress = 1.2, elitism = 5, relTol = 0.1, verbose=TRUE,
-    priorBitString=NULL, maxSizeHashTable=5000)
+    priorBitString=NULL, maxSizeHashTable=5000, timeIndex=2)
 }
 \arguments{
   \item{CNOlist}{
@@ -73,6 +73,12 @@ score. This allows the GA to be very efficient is the case of small models. The
 size of the hash table is 5000 by default, which may be too large for large
 models. 
 }
+
+  \item{timeIndex}{the index of the time point to optimize. Must be greater or
+equal to 2 (1 corresponds to time=0). Must be less than the number of time
+points. Default is 2. 
+    }
+
 
 }
 \details{

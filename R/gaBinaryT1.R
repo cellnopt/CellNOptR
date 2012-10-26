@@ -29,8 +29,12 @@ gaBinaryT1<-function(
     relTol=0.1,
     verbose=TRUE,
     priorBitString=NULL,
-    maxSizeHashTable=5000){
+    maxSizeHashTable=5000, timeIndex=2){
 
+    if (timeIndex<2){ stop("timeIndex must be >=2")}
+    if (timeIndex>length(CNOlist@timeSignals)){ 
+        stop(paste("timeIndex must be <= ", length(CNOlist@timeSignals), sep=" "))
+    }
     # by default initial bit string is made of ones.
     if (is.null(initBstring)==TRUE){
         initBstring<-rep(1,length(model$reacID))
@@ -83,7 +87,7 @@ gaBinaryT1<-function(
         }
 
         Score = computeScoreT1(CNOlist, model, bitString, simList, indexList,
-			sizeFac, NAFac)
+			sizeFac, NAFac, timeIndex)
 
         return(Score)
     }

@@ -17,10 +17,18 @@
 #Function that computes the score of a specific bitstring
 # todo: this is similar to wha is done in gaBinaryT1. need to do the same for T2
 computeScoreT1<-function(CNOlist, model, bString, simList=NULL, indexList=NULL, 
-    sizeFac=0.0001, NAFac=1){
+    sizeFac=0.0001, NAFac=1, timeIndex=2){
     # simList and indexList are computed inside this function. 
     # However, for back-compatibility, we keep the arguments so that if
     # provided, we can still use them.
+
+    # uncomment if required for debugging.
+    # if (timeIndex<2){ stop("timeIndex must be >=2")}
+    # if (timeIndex>length(CNOlist@timeSignals)){ 
+    #      stop(paste("timeIndex must be <= ", length(CNOlist@timeSignals),sep=" "))
+    # }
+
+
     if (is.null(simList)==TRUE){
         simList = prep4sim(model)
     }
@@ -28,8 +36,6 @@ computeScoreT1<-function(CNOlist, model, bString, simList=NULL, indexList=NULL,
         indexList = indexFinder(CNOlist, model)
     }
 
-
-	timeIndex = 2 # i.e., "t1"
 
     modelCut = cutModel(model, bString)
 
@@ -64,7 +70,7 @@ computeScoreT1<-function(CNOlist, model, bString, simList=NULL, indexList=NULL,
   if ((class(CNOlist)=="CNOlist")==FALSE){
        CNOlist = CellNOptR::CNOlist(CNOlist)
   }
-  nDataP <- sum(!is.na(CNOlist@signals[[2]]))
+  nDataP <- sum(!is.na(CNOlist@signals[[timeIndex]]))
   Score <- Score/nDataP
 
 
