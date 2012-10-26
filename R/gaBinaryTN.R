@@ -29,12 +29,15 @@ gaBinaryTN <-function(
     relTol=0.1,
     verbose=TRUE,
     priorBitString=NULL,
-    maxSizeHashTable=5000){
+    maxSizeHashTable=5000, 
+    timeIndex=NULL){
 
     #Find the bits to optimise
     N = length(bStrings)
     bStringPrev = bStrings[[N]]
-    timeIndex = N + 2   # +1 for T0 and +1 for the current time (bStrings length is N-1 indeed)
+    if (is.null(timeIndex)==TRUE){
+        timeIndex = N + 2   # +1 for T0 and +1 for the current time (bStrings length is N-1 indeed)
+    }
 
     bits2optimise<-which(bStringPrev == 0)
     bLength<-length(bits2optimise)
