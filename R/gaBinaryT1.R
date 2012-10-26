@@ -31,10 +31,6 @@ gaBinaryT1<-function(
     priorBitString=NULL,
     maxSizeHashTable=5000, timeIndex=2){
 
-    if (timeIndex<2){ stop("timeIndex must be >=2")}
-    if (timeIndex>length(CNOlist@timepoints)){ 
-        stop(paste("timeIndex must be <= ", length(CNOlist@timepoints), sep=" "))
-    }
     # by default initial bit string is made of ones.
     if (is.null(initBstring)==TRUE){
         initBstring<-rep(1,length(model$reacID))
@@ -42,6 +38,12 @@ gaBinaryT1<-function(
 
     if ((class(CNOlist)=="CNOlist")==FALSE){
         CNOlist = CellNOptR::CNOlist(CNOlist)
+    }
+
+    # should be after CNOlist conversion
+    if (timeIndex<2){ stop("timeIndex must be >=2")}
+    if (timeIndex>length(CNOlist@timepoints)){ 
+        stop(paste("timeIndex must be <= ", length(CNOlist@timepoints), sep=" "))
     }
 
     # ---- section related to T1  ----

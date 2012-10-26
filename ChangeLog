@@ -1,6 +1,11 @@
 1.5
 ====
 
+1.5.2
+------------
+
+* computeScoreT1 and gaBinaryT1: an arbitrary time point can now be optimised.
+
 1.5.1
 --------
 * readMIDAS. bug fixed for the case of species that contains the DA, TR or DV
