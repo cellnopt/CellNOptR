@@ -29,7 +29,7 @@ gaBinaryT1<-function(
     relTol=0.1,
     verbose=TRUE,
     priorBitString=NULL,
-    maxSizeHashTable=5000, timeIndex=2){
+    maxSizeHashTable=1000, timeIndex=2){
 
     # by default initial bit string is made of ones.
     if (is.null(initBstring)==TRUE){
