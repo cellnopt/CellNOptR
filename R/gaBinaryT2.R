@@ -29,7 +29,7 @@ gaBinaryT2 <-function(
     relTol=0.1,
     verbose=TRUE,
     priorBitString=NULL,
-    maxSizeHashTable=5000){
+    maxSizeHashTable=1000){
 
     # ---- section related to T2  ----
     #Find the bits to optimise
