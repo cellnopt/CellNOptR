@@ -13,7 +13,8 @@ This function does not create any plots or reports.
 }
 \usage{
 CNORbool(CNOlist, model, paramsList=defaultParameters(),
-    compression=TRUE, expansion=TRUE, cutNONC=TRUE, verbose=FALSE)
+    compression=TRUE, expansion=TRUE, cutNONC=TRUE, verbose=FALSE,
+    timeIndices = NULL)
 }
 
 \arguments{
@@ -39,6 +40,10 @@ cut the NONC nodes off the model by (default TRUE)
 }
 \item{verbose}{
 FALSE}
+\item{timeIndices}{by default, optimise T1 and T2 assuming there are the 2 first
+time points. However, with this argument you can change that behaviour to
+arbitrary time points.}
+
 }
 \value{
 This function returns 2 components. The first one is the processed model used in
