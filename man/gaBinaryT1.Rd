@@ -10,7 +10,7 @@ This function is the genetic algorithm to be used to optimise a model by fitting
 gaBinaryT1(CNOlist, model, initBstring=NULL, sizeFac = 1e-04, 
     NAFac = 1, popSize = 50, pMutation = 0.5, maxTime = 60, maxGens = 500,
     stallGenMax = 100, selPress = 1.2, elitism = 5, relTol = 0.1, verbose=TRUE,
-    priorBitString=NULL, maxSizeHashTable=5000, timeIndex=2)
+    priorBitString=NULL, maxSizeHashTable=1000, timeIndex=2)
 }
 \arguments{
   \item{CNOlist}{
@@ -70,7 +70,7 @@ to 0 or 1 are used to replace the bits created by the GA itself (see example).
 }
   \item{maxSizeHashTable}{a hash table is use to store bitstring and related
 score. This allows the GA to be very efficient is the case of small models. The
-size of the hash table is 5000 by default, which may be too large for large
+size of the hash table is 1000 by default, which may be too large for large
 models. 
 }
 
