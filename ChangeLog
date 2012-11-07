@@ -1,6 +1,16 @@
 1.5
 ====
 
+
+1.5.3
+----------
+
+* add CNOdata
+* add overwrite argument in writeSIF
+* fixing manuals.
+* fixing bug in makeCNOlist for MIDAS file with only one experiment.
+
+
 1.5.2
 ------------
 

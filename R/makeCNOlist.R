@@ -290,11 +290,11 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
 
             }
     if(is.null(dim(valueInhibitors))){
-        valueInhibitors<-as.matrix(valueInhibitors,nrow=dim(newcues)[1])
+        valueInhibitors<-matrix(valueInhibitors,nrow=dim(newcues)[1])
         }
 
     if(is.null(dim(valueStimuli))){
-        valueStimuli<-as.matrix(valueStimuli,nrow=dim(newcues)[1])
+        valueStimuli<-matrix(valueStimuli,nrow=dim(newcues)[1])
         }
 
 
