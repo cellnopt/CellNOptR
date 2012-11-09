@@ -14,7 +14,7 @@
 ##############################################################################
 # $Id$
 
-cSimulator <- function(CNOlist, model, simList, indexList) {
+cSimulator <- function(CNOlist, model, simList, indexList, mode=1) {
 
     if ((class(CNOlist)=="CNOlist")==FALSE){
         CNOlist = CellNOptR::CNOlist(CNOlist)
@@ -38,19 +38,24 @@ cSimulator <- function(CNOlist, model, simList, indexList) {
 	nMaxInputs <- as.integer(dim(simList$finalCube)[2])
 	
 	# simList
-	finalCube = as.integer(as.vector(t(simList$finalCube))-1)
-	ixNeg = as.integer(as.vector(t(simList$ixNeg)))
-	ignoreCube = as.integer(as.vector(t(simList$ignoreCube)))
+	# used to be 
+    # >>> finalCube = as.integer(as.vector(t(simList$finalCube))-1)
+    # but as.vector(t is slow and can be replaced by just as.integer albeit
+    # appropriate C modifications
+	finalCube = as.integer(simList$finalCube-1)
+	ixNeg = as.integer(simList$ixNeg)
+	ignoreCube = as.integer(simList$ignoreCube)
 	maxIx = as.integer(simList$maxIx-1)
 	
 	# index
 	indexSignals <- as.integer(as.vector(indexList$signals)-1)
 	indexStimuli <- as.integer(as.vector(indexList$stimulated)-1)
 	indexInhibitors <- as.integer(as.vector(indexList$inhibited)-1)
+    nSignals <- length(indexSignals)
 
 	# cnolist
-	valueInhibitors <- as.integer(t(CNOlist@inhibitors))
-	valueStimuli <- as.integer(t(CNOlist@stimuli))
+	valueInhibitors <- as.integer(CNOlist@inhibitors)
+	valueStimuli <- as.integer(CNOlist@stimuli)
 
 	res = .Call("simulatorT1",
 		# variables	
@@ -59,6 +64,7 @@ cSimulator <- function(CNOlist, model, simList, indexList) {
 		nCond,
 		nReacs,
 		nSpecies,
+        nSignals,
 		nMaxInputs,
 		# simList
 		finalCube,
@@ -71,7 +77,8 @@ cSimulator <- function(CNOlist, model, simList, indexList) {
 		indexInhibitors,
 		# cnolist
 		valueInhibitors,
-		valueStimuli
+		valueStimuli,
+        as.integer(mode)
 	)
 	
 	return(res)

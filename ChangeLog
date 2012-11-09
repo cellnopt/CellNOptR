@@ -1,6 +1,13 @@
 1.5
 ====
 
+1.5.4
+-------
+
+* speed up code by factor 2 in the T1 boolean case by sending matrices instead
+  of vectors in the call to the C function.
+* plotmodel can switch on/off the empty edges.
+
 
 1.5.3
 ----------

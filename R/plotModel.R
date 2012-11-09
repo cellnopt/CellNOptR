@@ -48,7 +48,9 @@ plotModel <- function(model, CNOlist=NULL, bString=NULL, indexIntegr=NULL,
   if (is.null(graphvizParams$nodeLabels)==TRUE) {
     graphvizParams$nodeLabels=NULL
   }
-
+  if (is.null(graphvizParams$viewEmptyEdges)==TRUE) {
+    graphvizParams$viewEmptyEdges = TRUE
+  }
 
 
     # Some required library to build the graph and plot the results using
@@ -204,7 +206,7 @@ plotModel <- function(model, CNOlist=NULL, bString=NULL, indexIntegr=NULL,
         msg = signals[signals %in% vertices == FALSE]
         print("Those signals were not found in the vertices: ")
         print(msg)
-        stop("Check that the data and network are in agreement.")
+        #stop("Check that the data and network are in agreement.")
     }
 
 
@@ -227,10 +229,11 @@ plotModel <- function(model, CNOlist=NULL, bString=NULL, indexIntegr=NULL,
 
     # --------------------------------------- Build the node and edges attributes list
     nodeAttrs = createNodeAttrs(g, vertices, stimuli, signals, inhibitors, NCNO,
-compressed, graphvizParams)
+        compressed, graphvizParams)
 
     res = createEdgeAttrs(v1, v2, edges, BStimes, Integr,
-        user_edgecolor=graphvizParams$edgecolor)
+        user_edgecolor=graphvizParams$edgecolor,
+        view_empty_edge=graphvizParams$viewEmptyEdges)
     # an alias
     edgeAttrs = res$edgeAttrs
 
@@ -300,6 +303,7 @@ compressed, graphvizParams)
     # triangle shape does not exist in Rgraphviz. Switch them back to circle
     shapes= nodeAttrs$shape
     shapes[shapes=="triangle"] = "circle"
+
 
     nodeRenderInfo(g) <- list(
         fill=nodeAttrs$fillcolor,
@@ -474,6 +478,7 @@ subGraph(stimuli, g)? Does the stimuli from your MIDAS are present in the model
 createNodeAttrs <- function(g, vertices, stimuli, signals, inhibitors, NCNO,
 compressed, graphvizParams){
 
+
     nodeLabels = graphvizParams$nodeLabels
     nodeWidth = graphvizParams$nodeWidth
     nodeHeight = graphvizParams$nodeHeight
@@ -577,14 +582,15 @@ compressed, graphvizParams){
     }
     nodeAttrs <- list(fillcolor=fillcolor, color=color, label=label, width=width, height=height,
         style=style, lty=lty, fixedsize=fixedsize, shape=shape)
-
     return(nodeAttrs)
 }
 
 
 # Create the node attributes and save in a list to be used either by the
 # plot function of the edgeRenderInfo function.
-createEdgeAttrs <- function(v1, v2, edges, BStimes ,Integr, user_edgecolor){
+createEdgeAttrs <- function(v1, v2, edges, BStimes ,Integr, user_edgecolor,
+    view_empty_edge=TRUE){
+
     edgewidth_c = 3 # default edge width
 
     # The edge attributes
@@ -626,11 +632,22 @@ createEdgeAttrs <- function(v1, v2, edges, BStimes ,Integr, user_edgecolor){
             # first, let us build the color
             if (edgecolor[edgename] == 'red'){
                 # if red, go from red to light pink color according to v value
-                color = rgb(1,1-(max(20,v)/100),1-(max(20,v)/100))
+                if (view_empty_edge==TRUE){
+                    print("showing red link even if empty")
+                    color = rgb(1,1-(max(20,v)/100),1-(max(20,v)/100))
+                }
+                else{
+                    color = rgb(1,1-v/100,1-v/100)
+                }
             }
             else if (edgecolor[edgename] == 'black'){
                 # if black, go from grey dark to grey light color according to v value
-                color = paste("grey", as.character(100.-max(20,v)), sep="")
+                if (view_empty_edge==TRUE){
+                    color = paste("grey", as.character(100.-max(20,v)), sep="")
+                }
+                else{
+                    color = paste("grey", as.character(100.-v), sep="")
+                }
             }
             else{
                 # otherwise, just keep the color identical and only add label
