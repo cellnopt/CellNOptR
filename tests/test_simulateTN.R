@@ -20,8 +20,8 @@
 
 library(CellNOptR)
 pknmodel = readSIF(system.file("ToyModelT3/ToyModelT3.sif", package="CellNOptR"))
-data = readMIDAS(system.file("ToyModelT3/ToyDataT3.csv",  package="CellNOptR"))
-cnolist = makeCNOlist(data, subfield=FALSE)
+cnolist = CNOlist(system.file("ToyModelT3/ToyDataT3.csv",  package="CellNOptR"))
+
 
 model = preprocessing(cnolist, pknmodel)
 
@@ -40,8 +40,8 @@ SimT3<-simulateTN(CNOlist=cnolist, model=model, bStrings=list(bestBS, bestBS2, b
 score1 = computeScoreT1(cnolist, model, bString=bestBS)
 score2 = computeScoreTN(cnolist, model, bStrings=list(bestBS,bestBS2))
 score3 = computeScoreTN(cnolist, model, bStrings=list(bestBS,bestBS2, bestBS3))
-
-if (score1>0.01 || score2>0.01 || score3>0.01){
+print(score3)
+if (score1>0.0001 || score2>0.0001 || score3>0.0001){
    stop("errore")
 }
 cutAndPlot(cnolist, model,bStrings=list(bestBS),plotPDF=TRUE, tag="test1")
