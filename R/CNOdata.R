@@ -19,7 +19,8 @@ CNOdata <- function(filename, verbose=FALSE, url=NULL){
     valid_filenames = c(
         "PKN-ToyMMB.sif", "PKN-ToyPB.sif", "PKN-ToyMSB2009.sif",
         "PKN-ExtLiverPCB.sif", "MD-ToyMMB.csv", "MD-ToyPB.csv", 
-        "MD-ToyMSB2009.csv", "MD-ExtLiverPCB.csv")
+        "MD-ToyMSB2009.csv", "MD-ExtLiverPCB.csv", "PKN-ToyPCB.sif",
+         "MD-ToyPCB.csv")
 
 
     if ((filename %in% valid_filenames)==FALSE){
@@ -39,6 +40,9 @@ CNOdata <- function(filename, verbose=FALSE, url=NULL){
 
     #filename = paste(URL, directory, filename, sep="/")
     filename = paste(url,  filename, sep="/")
+    if (verbose==TRUE){
+        print(filename)
+    }
     library(RCurl)
     data = getURL(filename)
     fh = tempfile("cellnopt_", fileext=".dat")
