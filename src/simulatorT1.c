@@ -21,6 +21,7 @@ SEXP simulatorT1 (
     SEXP nCond_in,
     SEXP nReacs_in,
     SEXP nSpecies_in,
+    SEXP nSignals_in,
     SEXP nMaxInputs_in,
 
     SEXP finalCube_in,
@@ -33,7 +34,8 @@ SEXP simulatorT1 (
     SEXP indexInhibitors_in,
 
     SEXP valueInhibitors_in,
-    SEXP valueStimuli_in
+    SEXP valueStimuli_in,
+    SEXP mode_in
 ) {
 
     SEXP simResults;
@@ -52,8 +54,9 @@ SEXP simulatorT1 (
     int nCond = INTEGER(nCond_in)[0];
     int nReacs = INTEGER(nReacs_in)[0];
     int nSpecies = INTEGER(nSpecies_in)[0];
+    int nSignals = INTEGER(nSignals_in)[0];
     int nMaxInputs = INTEGER(nMaxInputs_in)[0];
-
+    int mode = INTEGER(mode_in)[0];
     counter = 0;
     int *maxIx;
     maxIx = (int*) malloc(nReacs * sizeof(int));
@@ -75,13 +78,20 @@ SEXP simulatorT1 (
         indexInhibitors[i] = INTEGER(indexInhibitors_in)[counter++];
     }
 
+    counter = 0;
+    int *indexSignals;
+    indexSignals = (int*) malloc(nSignals * sizeof(int));
+    for (i = 0; i < nSignals; i++) {
+        indexSignals[i] = INTEGER(indexSignals_in)[counter++] ; 
+    }
+
     counter=0;
     int **finalCube;
     finalCube = (int**) malloc(nReacs * sizeof(int*));
     for (i = 0; i < nReacs; i++) {
         finalCube[i] = (int*) malloc(nMaxInputs * sizeof(int));
         for (j = 0; j < nMaxInputs; j++) {
-            finalCube[i][j] = INTEGER(finalCube_in)[counter++];
+            finalCube[i][j] = INTEGER(finalCube_in)[j*nReacs +i];
         }
     }
 
@@ -91,7 +101,7 @@ SEXP simulatorT1 (
     for (i = 0; i < nReacs; i++) {
         ixNeg[i] = (int*) malloc(nMaxInputs * sizeof(int));
         for (j = 0; j < nMaxInputs; j++) {
-            ixNeg[i][j] = INTEGER(ixNeg_in)[counter++];
+            ixNeg[i][j] = INTEGER(ixNeg_in)[j*nReacs+i];
         }
     }
 
@@ -101,30 +111,51 @@ SEXP simulatorT1 (
     for (i = 0; i < nReacs; i++) {
         ignoreCube[i] = (int*) malloc(nMaxInputs * sizeof(int));
         for (j = 0; j < nMaxInputs; j++) {
-            ignoreCube[i][j] = INTEGER(ignoreCube_in)[counter++];
+            ignoreCube[i][j] = INTEGER(ignoreCube_in)[j*nReacs+i];
         }
     }
 
     counter=0;
     int **valueInhibitors;
-    valueInhibitors = (int**) malloc(nCond * sizeof(int*));
-    for (i = 0; i < nCond; i++) {
-        valueInhibitors[i] = (int*) malloc(nInhibitors * sizeof(int));
-        for (j = 0; j < nInhibitors; j++) {
-            valueInhibitors[i][j] = INTEGER(valueInhibitors_in)[counter++];
+    if (mode==0){
+        valueInhibitors = (int**) malloc(nCond * sizeof(int*));
+        for (i = 0; i < nCond; i++) {
+            valueInhibitors[i] = (int*) malloc(nInhibitors * sizeof(int));
+            for (j = 0; j < nInhibitors; j++) {
+                valueInhibitors[i][j] = 1;
+            }
+        }
+    }
+    else{
+        valueInhibitors = (int**) malloc(nCond * sizeof(int*));
+        for (i = 0; i < nCond; i++) {
+            valueInhibitors[i] = (int*) malloc(nInhibitors * sizeof(int));
+            for (j = 0; j < nInhibitors; j++) {
+                valueInhibitors[i][j] = INTEGER(valueInhibitors_in)[nCond*j+i];
+            }
         }
     }
 
     counter=0;
     int **valueStimuli;
-    valueStimuli = (int**) malloc(nCond * sizeof(int*));
-    for (i = 0; i < nCond; i++) {
-        valueStimuli[i] = (int*) malloc(nStimuli * sizeof(int));
-        for (j = 0; j < nStimuli; j++) {
-            valueStimuli[i][j] = INTEGER(valueStimuli_in)[counter++];
+    if (mode==0){
+        valueStimuli = (int**) malloc(nCond * sizeof(int*));
+        for (i = 0; i < nCond; i++) {
+            valueStimuli[i] = (int*) malloc(nStimuli * sizeof(int));
+            for (j = 0; j < nStimuli; j++) {
+                valueStimuli[i][j] = 0;
+            }
         }
     }
-
+    else{
+        valueStimuli = (int**) malloc(nCond * sizeof(int*));
+        for (i = 0; i < nCond; i++) {
+            valueStimuli[i] = (int*) malloc(nStimuli * sizeof(int));
+            for (j = 0; j < nStimuli; j++) {
+                valueStimuli[i][j] = INTEGER(valueStimuli_in)[nCond*j+i];
+            }
+        }
+    }
 
     //============================================================================
 
