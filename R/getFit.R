@@ -17,7 +17,6 @@ getFit<-function(
     simResults,
     CNOlist,
     model,
-    indexList,
     timePoint=c("t1","t2"),
     sizeFac=0.0001,
     NAFac=1,
@@ -30,7 +29,7 @@ getFit<-function(
      }
 
 
-    simResults<-simResults[,indexList$signals]
+    #simResults<-simResults[,indexList$signals]
 
 
     # for back compatibility, timePoint ca be "t1" or "t2" but developers should
@@ -51,7 +50,8 @@ getFit<-function(
     # if t0 is provided and we are interested in t1
     # then  score is based on t1 but also t0
     if (tPt == 2 && is.na(simResultsT0)==FALSE){
-        Diff0<-simResultsT0[,indexList$signals]-CNOlist@signals[[1]]
+        #Diff0<-simResultsT0[,indexList$signals]-CNOlist@signals[[1]]
+        Diff0<-simResultsT0-CNOlist@signals[[1]]
         Diff<-simResults-CNOlist@signals[[tPt]]
         r0<-Diff0^2
         r<-Diff^2

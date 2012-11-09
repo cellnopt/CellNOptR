@@ -36,42 +36,78 @@ computeScoreT1<-function(CNOlist, model, bString, simList=NULL, indexList=NULL,
         indexList = indexFinder(CNOlist, model)
     }
 
+	# TC oct 2012. cutModel is a function. It performs the cut to select interMat, 
+    # reacID, nameSpecies, and notMat. Here, we need only need the 3  and possibly only 2, so let us 
+    # just copy and paste the code. This will save 10% of computational time
+    # modelCut = cutModel(model, bString)
+    bs = as.logical(bString)
+    modelCut <- list()
+    modelCut$interMat <- model$interMat[, bs]
+    modelCut$reacID <- model$reacID[bs]
 
-    modelCut = cutModel(model, bString)
-
+    # could do the same with cutSimList but it does not worth it
     simListCut <- cutSimList(simList, bString)
 
     # Compute the simulated results
-    simResults<-simulatorT1(
-        CNOlist=CNOlist,
-        model=modelCut,
-        simList=simListCut,
-        indexList=indexList)
-    # We may want to use the T0 information.
-    simResultsT0<-simulatorT0(
-        CNOlist=CNOlist,
-        model=modelCut,
-        simList=simListCut,
-        indexList=indexList)
+    nStimuli = length(indexList$inhibited)
+    nInhibitors <- length(indexList$inhibited)
+    nCond <- dim(CNOlist@stimuli)[1]
+    nReacs <- length(modelCut$reacID)
+    nSpecies <- length(model$namesSpecies)
+    nMaxInputs <- dim(simListCut$finalCube)[2]
+    nStimuli <- dim(CNOlist@stimuli)[2]
+
+    # simList matrices. C code must handle the matrix indices carefully.
+    # This is faster than transforming into a vector as in the previous code.
+    finalCube = as.integer(simListCut$finalCube-1)
+    ixNeg = as.integer(simListCut$ixNeg)
+    ignoreCube = as.integer(simListCut$ignoreCube)
+    maxIx = as.integer(simListCut$maxIx-1)
+
+    # index. convertion from R to C indices convention.
+    indexSignals <- as.integer(indexList$signals-1)
+    indexStimuli <- as.integer(indexList$stimulated-1)
+    indexInhibitors <- as.integer(indexList$inhibited-1)
+    nSignals <- length(indexSignals)
+
+    # cnolist
+    valueInhibitors <- as.integer(CNOlist@inhibitors)
+    valueStimuli <- as.integer((CNOlist@stimuli))
+
+
+	simResults = .Call("simulatorT1", nStimuli, nInhibitors,
+        nCond, nReacs, nSpecies, nSignals, nMaxInputs,
+        finalCube, ixNeg, ignoreCube, maxIx,
+        indexSignals, 
+        indexStimuli, 
+        indexInhibitors, valueInhibitors,
+        valueStimuli, as.integer(1))
+    
+
+    simResultsT0 = .Call("simulatorT1", nStimuli, nInhibitors,
+        nCond, nReacs, nSpecies, nSignals, nMaxInputs,
+        finalCube, ixNeg, ignoreCube, maxIx,
+        indexSignals, indexStimuli, indexInhibitors, 
+        valueInhibitors, valueStimuli, as.integer(0))
+
+    
 
     #Compute the score
-    Score <- getFit(
-        simResults=simResults,
-        CNOlist=CNOlist,
-        model=modelCut,
-        indexList=indexList,
-        timePoint=timeIndex,
-        sizeFac=sizeFac,
-        NAFac=NAFac,
-        nInTot=length(which(model$interMat == -1)),
-        simResultsT0=simResultsT0)
-
-
-  if ((class(CNOlist)=="CNOlist")==FALSE){
-       CNOlist = CellNOptR::CNOlist(CNOlist)
-  }
-  nDataP <- sum(!is.na(CNOlist@signals[[timeIndex]]))
-  Score <- Score/nDataP
+    Score = .Call("getFit", 
+        nCond,
+        nSignals, 
+        nReacs,
+        nSpecies,
+        sum(bs),
+        as.real(simResultsT0), 
+        as.real(simResults), 
+        as.real(CNOlist@signals[[1]]), #T0 data
+        as.real(CNOlist@signals[[timeIndex]]), #T1 data
+        as.integer(model$interMat),
+        as.integer(modelCut$interMat),
+		as.real(sizeFac),
+		as.real(NAFac)
+		)
 
 
   return(Score)

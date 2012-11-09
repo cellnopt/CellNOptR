@@ -69,7 +69,7 @@ SEXP getFit (
         if (INTEGER(interMatCut_in)[counter++] == -1){
             nInputs +=1;
         }
-}
+    }
 
 	counter=0;
 	float **cnolist0;
