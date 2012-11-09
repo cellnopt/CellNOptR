@@ -44,17 +44,19 @@ cutAndPlotResultsT2 <-function(model, bStringT1, bStringT2, CNOlist, simList=NUL
     simListCut <- cutSimList(simList, bStringT1)
 
     # t0
-    Sim0 <- simulatorT0(CNOlist=CNOlist,model=modelCut,simList=simListCut,indexList=indexList)
-    simResT0 <- as.matrix(Sim0[,indexList$signals])
+    simResT0 <-
+        simulatorT1(CNOlist=CNOlist,model=modelCut,simList=simListCut,indexList=indexList,
+        mode=0)
+    #simResT0 <- as.matrix(Sim0[,indexList$signals])
 
     # t1
     # same as simulateTN followed by selection of indexList$signals
     # SimT1 = simulatorT1(CNOlist=CNOlist, model=modelCut, simList=simListCut, indexList=indexList)
-    SimT1 = simulateTN(CNOlist, model, bStrings=list(bStringT1))
-    simResT1 <- as.matrix(SimT1[,indexList$signals])
+    simResT1 = simulateTN(CNOlist, model, bStrings=list(bStringT1))
+    #simResT1 <- as.matrix(SimT1[,indexList$signals])
 
-    SimT2 = simulateTN(CNOlist, model, bStrings=list(bStringT1, bStringT2))
-    simResT2 <- as.matrix(SimT2[,indexList$signals])
+    simResT2 = simulateTN(CNOlist, model, bStrings=list(bStringT1, bStringT2))
+    #simResT2 <- as.matrix(SimT2[,indexList$signals])
 
     # put it all together
     simResults <- list(

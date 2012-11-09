@@ -29,7 +29,7 @@ gaBinaryTN <-function(
     relTol=0.1,
     verbose=TRUE,
     priorBitString=NULL,
-    maxSizeHashTable=5000, 
+    maxSizeHashTable=1000, 
     timeIndex=NULL){
 
     #Find the bits to optimise

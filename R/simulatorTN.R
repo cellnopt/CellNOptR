@@ -53,6 +53,7 @@ simulatorTN <-function(simResultsPrev, CNOlist, model, simList, indexList, timeI
     indexSignals <- as.integer(as.vector(indexList$signals)-1)
     indexStimuli <- as.integer(as.vector(indexList$stimulated)-1)
     indexInhibitors <- as.integer(as.vector(indexList$inhibited)-1)
+    nSignals <- length(indexSignals)
 
     # cnolist
     valueInhibitors <- as.integer(t(CNOlist@inhibitors))
@@ -70,6 +71,7 @@ simulatorTN <-function(simResultsPrev, CNOlist, model, simList, indexList, timeI
         nCond,
         nReacs,
         nSpecies,
+        nSignals,
         nMaxInputs,
         nTimes,
 
