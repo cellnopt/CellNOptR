@@ -66,7 +66,7 @@ computeScoreT1(CNOlist, model, bString, simList=NULL, indexList=NULL,
     data(CNOlistToy,package="CellNOptR")
     data(ToyModel,package="CellNOptR")
     model <- preprocessing(CNOlistToy,ToyModel)
-    score = computeScoreT1(CNOlistToy, model, bString=rep(1,16))
+    score = computeScoreT1(CNOlist(CNOlistToy), model, bString=rep(1,16))
 }
 
 

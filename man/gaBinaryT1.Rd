@@ -116,7 +116,7 @@ ToyT1opt<-gaBinaryT1(
 	CNOlist=CNOlistToy,
 	model=model,
 	initBstring=initBstring,
-	maxGens=10, popSize=10, verbose=FALSE)
+	maxGens=100, popSize=10, verbose=FALSE)
 
 # During the optimisation, some bits can be overwritten by your prior knowledge 
 # First, you need to create a priorBitString made of NA where known bit values
