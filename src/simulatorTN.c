@@ -27,6 +27,7 @@ SEXP simulatorTN (
     SEXP nCond_in,
     SEXP nReacs_in,
     SEXP nSpecies_in,
+    SEXP nSignals_in,
     SEXP nMaxInputs_in,
     SEXP nTimes_in,
 
@@ -69,6 +70,7 @@ SEXP simulatorTN (
     int nCond = INTEGER(nCond_in)[0];
     int nReacs = INTEGER(nReacs_in)[0];
     int nSpecies = INTEGER(nSpecies_in)[0];
+    int nSignals = INTEGER(nSignals_in)[0];
     int nMaxInputs = INTEGER(nMaxInputs_in)[0];
     int nTimes = INTEGER(nTimes_in)[0];
 
@@ -102,6 +104,12 @@ SEXP simulatorTN (
         indexInhibitors[i] = INTEGER(indexInhibitors_in)[counter++];
     }
 
+    counter = 0;
+    int *indexSignals;
+    indexSignals = (int*) malloc(nSignals * sizeof(int));
+    for (i = 0; i < nSignals; i++) {
+        indexSignals[i] = INTEGER(indexSignals_in)[counter++] ; 
+    }
 
     counter=0;
     int **interMat;
@@ -570,7 +578,7 @@ SEXP simulatorTN (
         }
     }
 
-    PROTECT(simResults = allocMatrix(REALSXP, nCond, nSpecies));
+/*     PROTECT(simResults = allocMatrix(REALSXP, nCond, nSpecies));
     rans = REAL(simResults);
     for(i = 0; i < nCond; i++) {
         for(j = 0; j < nSpecies; j++) {
@@ -578,11 +586,24 @@ SEXP simulatorTN (
             else rans[i + nCond*j] = new_input[i][j];
         }
     }
+*/
+
+     PROTECT(simResults = allocMatrix(REALSXP, nCond, nSignals));
+    rans = REAL(simResults);
+    for(i = 0; i < nCond; i++) {
+        for(j = 0; j < nSignals; j++) {
+            if(new_input[i][indexSignals[j]] == NA) rans[i + nCond*j] = NA_REAL;
+            else rans[i + nCond*j] = new_input[i][indexSignals[j]];
+        }
+    }
+
 
 
     free(maxIx);
     free(indexStimuli);
     free(indexInhibitors);
+    free(indexSignals);
+
     free(times);
 
     for (i = 0; i < nSpecies; i++) {

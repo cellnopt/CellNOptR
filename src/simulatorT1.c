@@ -403,6 +403,7 @@ SEXP simulatorT1 (
     free(maxIx);
     free(indexStimuli);
     free(indexInhibitors);
+    free(indexSignals);
 
     for (i = 0; i < nReacs; i++) {
         free(finalCube[i]);
