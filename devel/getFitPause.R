@@ -9,7 +9,7 @@
 # 
 # CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
 # 
-# $Id: $
+# $Id$
 
 getFitPause <- function(CNOlist, model, indexList, sizeFac = 1e-04, NAFac = 1, nInTot, boolUpdates,  
     lowerB, upperB) {
@@ -57,8 +57,9 @@ getFitPause <- function(CNOlist, model, indexList, sizeFac = 1e-04, NAFac = 1, n
 	delayFinder <- function(optimString) {
 		
 		whatScale = optimString[1] # continuous with upper/lower bounds
-		delayThresh = # integer section of optimString
-		strongWeak[negEdges] = # binary section of optimString
+		delayThresh = optimString[2:(length(model$reacID)+1)] # integer section of optimString
+		strongWeak = c(0,0,0,0,1,0,0,0,0,0,0)
+	#	strongWeak = optimString[(length(model$reacID)+2):length(optimString)] # binary section of optimString
 		
 		simResults = simulatorTest(CNOlist, model, simList, indexList,
 		boolUpdates=boolUpdates, delayThresh=delayThresh, strongWeak=strongWeak)
@@ -66,16 +67,15 @@ getFitPause <- function(CNOlist, model, indexList, sizeFac = 1e-04, NAFac = 1, n
 		simResults = simResults[,indexList$signals,]
 
 		ySilico = array(dim=dim(simResults))
-		numberPoints = dim(simResults)[3]
-		xCoords = seq(0, by=whatScale, length.out=numberPoints)
+		xCoords = seq(0, by=whatScale, length.out=dim(simResults)[3])
    		count = 1
     
     	for(nExper in 1:dim(simResults)[1]) {
     		for(nSig in 1:dim(simResults)[2]) {
     				             
-            	yOut = splines[[count]](xCoords)
+            	yOut = splineStore[[count]](xCoords)
             	ySilico[nExper,nSig,] = yOut;
-            	count = count + 1
+            	count = count+1
    			}
   		}
   	
@@ -84,44 +84,54 @@ getFitPause <- function(CNOlist, model, indexList, sizeFac = 1e-04, NAFac = 1, n
     	return(sse)			
 	}
 
-	lenDelay = length(Model$reacID)
-	len.strongWeak = length(optimString[(2+length(Model$reacID)):length(optimString)])
-	problem = list(f=delayStateFinder, x_L=c(0.1, rep(0,len.delay)), x_U=c(9.9, rep(boolUpdates,len.delay)), int_var=length(Model$reacID))
-	opts = list(maxtime=240, local_solver=0, dim_refset=6, ndiverse=50)
-	est.1 = essR(problem, opts)	
+	problem = list(
+		f=delayFinder,
+		x_L=c(0.9, rep(0,length(model$reacID))),
+		x_U=c(9.9, rep(10,length(model$reacID))),
+		int_var=length(model$reacID)
+	#	bin_var=length(model$reacID)
+	)
+	opts = list(maxtime=15, local_solver=0, dim_refset=6, ndiverse=50)
+	optimString = c(1, rep(1,length(model$reacID)))
+	est = essR(problem, opts)	
 
 	################################################################################
 
-	optimString = c(1, rep(1,length(Model$reacID)))
-	my.estimate = findDelayState(optimString=optimString, splines=spline.store)
-	bestTimeStep = my.estimate$xbest[1]
-	bestDelays = my.estimate$xbest[2:length(my.estimate$xbest)]
+	bestScale = est$xbest[1]
+	bestDelay = est$xbest[2:length(est$xbest)]
 
-	yBool = simulatorPause(CNOlist, Model, SimList, indexList, boolUpdates, bestDelays)
-	yBool = yBool[,indexList$signals,]
-	yFinal = array(dim = dim(yBool))
+	simBest = simulatorTest(CNOlist, model, simList, indexList,
+	boolUpdates=boolUpdates, delayThresh=bestDelay, strongWeak=strongWeak)
+	simBest = convert2array(simBest, dim(CNOlist@signals[[1]])[1], length(model$namesSpecies), boolUpdates)
+	simBest = simBest[,indexList$signals,]
+	
+#	plotCNOlist(plotData(CNOlistPB, simBest))
+
+
+	yInter = array(dim = dim(simBest))
 	xCoords = seq(0, by=bestTimeStep, length.out=boolUpdates)
-	count.2 = 1
 
-	for(nExper in 1:dim(yBool)[1]) {
-		for(nSig in 1:dim(yBool)[2]) { 
+	count = 1
+	for(nExper in 1:dim(yInter)[1]) {
+		for(nSig in 1:dim(yInter)[2]) { 
                 
-			yOut = spline.store[[count.2]](xCoords)
+			yOut = spline.store[[count]](xCoords)
      		yFinal[nExper,nSig,] = yOut;
-      		count.2 = count.2 + 1
+      		count = count+1
    		}
 	}
 
-	Diff <- (yBool - yFinal)
-	r <- Diff^2
-	deviationPen <- sum(r[!is.na(r)])
-	NAPen <- NAPenFac * length(which(is.na(yBool)))
-	dims = dim(yFinal)
-	nDataPts <- dims[1] * dims[2] * dims[3]
-	nReac <- length(Model$reacID)
-	nInputs <- length(which(Model$interMat == -1))
-	sizePen <- (nDataPts * sizeFac * nInputs) / nReac
-	score <- deviationPen + NAPen + sizePen
-	return(list(score=score, estimate=bestTimeStep, bestDelays=bestDelays, xCoords=xCoords, yInter=yFinal, yBool= yBool))
+    diff <- (simBest - yInter)
+    r <- diff^2
+    deviationPen <- sum(r[!is.na(r)])/nTimes
+    NAPen <- NAFac * length(which(is.na(simResults)))
+    nDataPts <- dim(CNOlist@signals[[1]])[1] * dim(CNOlist@signals[[1]])[2] * nTimes
+    nInputs <- length(which(model$interMat == -1))
+    
+    # nInTot: number of inputs of expanded model nInputs: number of inputs of cut model
+    sizePen <- (nDataPts * sizeFac * nInputs)/nInTot
+    
+    score <- deviationPen + NAPen + sizePen
+	return(list(score=score, estimate=bestScale, bestDelay=bestDelay, xCoords=xCoords, yInter=yInter, simResults=simBestl))
 
 }
