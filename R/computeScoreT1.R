@@ -45,8 +45,9 @@ computeScoreT1<-function(CNOlist, model, bString, simList=NULL, indexList=NULL,
     modelCut$interMat <- model$interMat[, bs]
     modelCut$reacID <- model$reacID[bs]
 
-    # could do the same with cutSimList but it does not worth it
+
     simListCut <- cutSimList(simList, bString)
+
 
     # Compute the simulated results
     nStimuli = length(indexList$inhibited)
@@ -70,19 +71,16 @@ computeScoreT1<-function(CNOlist, model, bString, simList=NULL, indexList=NULL,
     indexInhibitors <- as.integer(indexList$inhibited-1)
     nSignals <- length(indexSignals)
 
+
     # cnolist
     valueInhibitors <- as.integer(CNOlist@inhibitors)
     valueStimuli <- as.integer((CNOlist@stimuli))
 
-
 	simResults = .Call("simulatorT1", nStimuli, nInhibitors,
-        nCond, nReacs, nSpecies, nSignals, nMaxInputs,
+		nCond, nReacs, nSpecies, nSignals, nMaxInputs,
         finalCube, ixNeg, ignoreCube, maxIx,
-        indexSignals, 
-        indexStimuli, 
-        indexInhibitors, valueInhibitors,
+        indexSignals, indexStimuli, indexInhibitors, valueInhibitors,
         valueStimuli, as.integer(1))
-    
 
     simResultsT0 = .Call("simulatorT1", nStimuli, nInhibitors,
         nCond, nReacs, nSpecies, nSignals, nMaxInputs,
@@ -90,7 +88,6 @@ computeScoreT1<-function(CNOlist, model, bString, simList=NULL, indexList=NULL,
         indexSignals, indexStimuli, indexInhibitors, 
         valueInhibitors, valueStimuli, as.integer(0))
 
-    
 
     #Compute the score
     Score = .Call("getFit", 
@@ -107,8 +104,7 @@ computeScoreT1<-function(CNOlist, model, bString, simList=NULL, indexList=NULL,
         as.integer(modelCut$interMat),
 		as.real(sizeFac),
 		as.real(NAFac)
-		)
-
+		)[[1]]
 
   return(Score)
 }
