@@ -16,7 +16,7 @@
 * add overwrite argument in writeSIF
 * fixing manuals.
 * fixing bug in makeCNOlist for MIDAS file with only one experiment.
-
+* normaliseCNOlist can now handle relative data input
 
 1.5.2
 ------------
