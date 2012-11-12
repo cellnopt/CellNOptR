@@ -46,7 +46,11 @@ cutAndPlotResultsDT <- function(model, bString, simList=NULL, CNOlist, indexList
     optimResults <- getFitDT(simResults = simResults, CNOlist = CNOlist, model = modelCut, indexList = indexList, sizeFac = sizeFac, 
         NAFac = NAFac, nInTot = length(which(model$interMat == -1)), boolUpdates,  lowerB = lowerB, upperB = upperB)
 	    simResults <- simResults[, indexList$signals, ]
-
+  if(dim(CNOlist@signals[[1]])[1] == 1) {
+    	simResults = array(simResults,
+    	c(dim(CNOlist@signals[[1]])[1], length(indexList$signals), boolUpdates)
+    	)
+    }
     dim1 = dim(CNOlist@signals[[1]])[1]
     dim2 = dim(CNOlist@signals[[1]])[2]
 

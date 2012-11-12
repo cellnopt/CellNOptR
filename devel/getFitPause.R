@@ -51,15 +51,15 @@ getFitPause <- function(CNOlist, model, indexList, sizeFac = 1e-04, NAFac = 1, n
 	# of what strongWeak edges there are
 	strongWeak = rep(0,length(model$reacID))
 	negEdges = feedbackWrapper(model) # the index of edges that can be changed
-	# optimization
 
+	# optimization
 	# what to optimize
-	delayFinder <- function(optimString) {
+	delayFinder <- function(optimStringF) {
 		
-		whatScale = optimString[1] # continuous with upper/lower bounds
-		delayThresh = optimString[2:(length(model$reacID)+1)] # integer section of optimString
-		strongWeak = c(0,0,0,0,1,0,0,0,0,0,0)
-	#	strongWeak = optimString[(length(model$reacID)+2):length(optimString)] # binary section of optimString
+		whatScale = optimStringF[1] # continuous with upper/lower bounds
+		delayThresh = optimStringF[2:(length(model$reacID)+1)] # integer section of optimString
+	#	strongWeak = c(0,0,0,0,1,0,0,0,0,0,0)
+		strongWeak[negEdges] = optimStringF[(length(model$reacID)+2):length(optimString)] # binary section of optimString
 		
 		simResults = simulatorTest(CNOlist, model, simList, indexList,
 		boolUpdates=boolUpdates, delayThresh=delayThresh, strongWeak=strongWeak)
@@ -84,39 +84,41 @@ getFitPause <- function(CNOlist, model, indexList, sizeFac = 1e-04, NAFac = 1, n
     	return(sse)			
 	}
 
+	optimString = c(1, rep(1,length(model$reacID)), rep(0,length(negEdges)))
 	problem = list(
 		f=delayFinder,
-		x_L=c(0.9, rep(0,length(model$reacID))),
-		x_U=c(9.9, rep(10,length(model$reacID))),
-		int_var=length(model$reacID)
+		x_O = optimString,
+		x_L=c(0.9, rep(0,length(model$reacID)), rep(0,length(negEdges))),
+		x_U=c(9.9, rep(10,length(model$reacID)), rep(1,length(negEdges))),
+		int_var=length(model$reacID) + length(negEdges)
 	#	bin_var=length(model$reacID)
 	)
-	opts = list(maxtime=15, local_solver=0, dim_refset=6, ndiverse=50)
-	optimString = c(1, rep(1,length(model$reacID)))
+
+	opts = list(maxtime=60, local_solver=0, dim_refset=6, ndiverse=50)
 	est = essR(problem, opts)	
 
 	################################################################################
 
 	bestScale = est$xbest[1]
 	bestDelay = est$xbest[2:length(est$xbest)]
+	bestSW = est$xbest[(length(model$reacID)+2):length(optimString)]
+	strongWeak[negEdges] = bestSW
 
 	simBest = simulatorTest(CNOlist, model, simList, indexList,
 	boolUpdates=boolUpdates, delayThresh=bestDelay, strongWeak=strongWeak)
 	simBest = convert2array(simBest, dim(CNOlist@signals[[1]])[1], length(model$namesSpecies), boolUpdates)
 	simBest = simBest[,indexList$signals,]
-	
 #	plotCNOlist(plotData(CNOlistPB, simBest))
-
-
+	
 	yInter = array(dim = dim(simBest))
-	xCoords = seq(0, by=bestTimeStep, length.out=boolUpdates)
+	xCoords = seq(0, by=bestScale, length.out=boolUpdates)
 
 	count = 1
 	for(nExper in 1:dim(yInter)[1]) {
 		for(nSig in 1:dim(yInter)[2]) { 
                 
-			yOut = spline.store[[count]](xCoords)
-     		yFinal[nExper,nSig,] = yOut;
+			yOut = splineStore[[count]](xCoords)
+     		yInter[nExper,nSig,] = yOut;
       		count = count+1
    		}
 	}
@@ -124,7 +126,7 @@ getFitPause <- function(CNOlist, model, indexList, sizeFac = 1e-04, NAFac = 1, n
     diff <- (simBest - yInter)
     r <- diff^2
     deviationPen <- sum(r[!is.na(r)])/nTimes
-    NAPen <- NAFac * length(which(is.na(simResults)))
+    NAPen <- NAFac * length(which(is.na(simBest)))
     nDataPts <- dim(CNOlist@signals[[1]])[1] * dim(CNOlist@signals[[1]])[2] * nTimes
     nInputs <- length(which(model$interMat == -1))
     
@@ -132,6 +134,6 @@ getFitPause <- function(CNOlist, model, indexList, sizeFac = 1e-04, NAFac = 1, n
     sizePen <- (nDataPts * sizeFac * nInputs)/nInTot
     
     score <- deviationPen + NAPen + sizePen
-	return(list(score=score, estimate=bestScale, bestDelay=bestDelay, xCoords=xCoords, yInter=yInter, simResults=simBestl))
+	return(list(score=score, estimate=bestScale, bestDelay=bestDelay, xCoords=xCoords, yInter=yInter, simResults=simBest))
 
 }

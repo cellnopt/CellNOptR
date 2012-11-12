@@ -24,6 +24,11 @@ getFitDT <- function(simResults, CNOlist, model, indexList, sizeFac = 1e-04, NAF
     
     # cut simResults to view signals only
     simResults <- simResults[, indexList$signals, ]
+    if(dim(CNOlist@signals[[1]])[1] == 1) {
+    	simResults = array(simResults,
+    	c(dim(CNOlist@signals[[1]])[1], length(indexList$signals), boolUpdates)
+    	)
+    }
     
     # interpolate experimental data so it can be compared to boolean simulation  
     splineStore = list()
