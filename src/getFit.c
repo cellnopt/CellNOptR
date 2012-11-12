@@ -120,22 +120,30 @@ SEXP getFit (
     float deviationPen=0.;
 	counter=0;
     float r;
+
+    // as of 12 Nov 2012 this code is equivalent to (1) calling R version of
+    // getFit followed by 
+    // >>> nDataP <- sum(!is.na(CNOlist@signals[[timeIndex]]))
+    // >>>  Score <- Score/nDataP
     for (i = 0; i < nCond; i++) {
 	    for (j = 0; j < nSignals; j++) {
             if (!ISNAN(cnolist0[i][j])){
 	            r =  simResT0[i][j] - cnolist0[i][j];
                 deviationPen += r*r;
+                // TC, nov.2012 why are we not counting nDataP for time zero as well ? 
             }
 
             if (!ISNAN(cnolist1[i][j])){
-	            r = (simResT1[i][j] - cnolist1[i][j]);
+                nDataP+=1;  // why is it that nDataP searches for NA in cnolist only and not in r?
+            }
+            r = (simResT1[i][j] - cnolist1[i][j]);
+            if (!ISNAN(r)){
                 deviationPen += r*r;
-                nDataP+=1;
+
             }
         }
     }
     deviationPen/=2.;
-
     sizePen = (float)(nDataPts*sizeFac*nInputs)/nInTot;
     score = deviationPen + NAPen + sizePen;
     score /= (float)nDataP;
@@ -146,18 +154,18 @@ SEXP getFit (
  	PROTECT(simResults = allocMatrix(REALSXP, 1, 1));
 	rans = REAL(simResults);
 	rans[0] = score;
-	
-	
+
+
 	for (i = 0; i < nCond; i++) {
 		free(cnolist0[i]);
 	}
 	free(cnolist0);
-	
+
 	for (i = 0; i < nCond; i++) {
 		free(cnolist1[i]);
 	}
 	free(cnolist1);
-	
+
 	for (i = 0; i < nCond; i++) {
 		free(simResT0[i]);
 	}
