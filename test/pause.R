@@ -24,8 +24,10 @@ negEdges = feedbackWrapper(modelDelay)
 
 # simulate with delays
 source("../CNORdt/R/simulatorPause.R")
-sim1 = simulatorPause(CNOlistDelay, modelDelay, simDelay, indexDelay,
-boolUpdates=30, delayThresh, strongWeak=negEdges)
+source("../../")
+sim1 = simulatorTest(CNOlist, model, simList, indexList,
+boolUpdates=30, delayThresh=delayThresh, strongWeak=negEdges)
+sim1 = convert2array(sim1, 2,10,30)
 sim1 = sim1[,indexDelay$signals,]
 plotCNOlist(plotData(CNOlistDelay, sim1))
 
