@@ -32,7 +32,7 @@ cutAndPlotResultsDT <- function(model, bString, simList=NULL, CNOlist, indexList
         plotParams$maxrow = 10
     }
 
-    # keep simList and indxList for back compatibility ?
+    # keep simList and indexList for back compatibility ?
     modelCut <- cutModel(model, bString)
     simListCut <- cutSimList(simList, bString)
 
