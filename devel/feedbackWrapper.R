@@ -1,6 +1,6 @@
 feedbackWrapper <- function(model) {
 
-	whatLoops = feedbackFinder1(model)
+	whatLoops = feedbackFinder(model)
 	negReacs = c()
 	
 	if(length(whatLoops) != 0) {

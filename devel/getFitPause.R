@@ -117,6 +117,6 @@ getFitPause <- function(CNOlist, model, simList, indexList, sizeFac = 1e-04, NAF
     sizePen <- (nDataPts * sizeFac * nInputs)/nInTot
     
     score <- deviationPen + NAPen + sizePen
-	return(list(score=score, estimate=bestDelay, xCoords=xCoords, yInter=ySilico, simResults=simBest))
+	return(list(score=score, estimate=est$xbest, xCoords=xCoords, yInter=ySilico, simResults=simBest))
 
 }

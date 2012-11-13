@@ -14,7 +14,7 @@
 ##############################################################################
 # $Id$
 
-feedbackFinder1 <- function(model) {
+feedbackFinder <- function(model) {
 
 v = 1:length(model$namesSpecies)
 gamma = vector("list",length(v))
