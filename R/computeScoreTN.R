@@ -94,6 +94,7 @@ computeScoreTN<-function(CNOlist, model, simList=NULL, indexList=NULL,
         simResults=simResults,
         CNOlist=CNOlist,
         model=modelCut,
+        indexList=NULL, # because we are using the C simulator thast cope with indexList directly
         timePoint=timeIndex,
         sizeFac=sizeFac,
         NAFac=NAFac,

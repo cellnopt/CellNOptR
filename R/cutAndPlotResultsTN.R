@@ -18,42 +18,38 @@ cutAndPlotResultsTN <-function(CNOlist, model,bStrings, plotPDF=FALSE,
     tag=NULL, plotParams=list(maxrow=10))
 {
 
- if ((class(CNOlist)=="CNOlist")==FALSE){
+    if ((class(CNOlist)=="CNOlist")==FALSE){
         CNOlist = CellNOptR::CNOlist(CNOlist)
-    } 
+    }
 
-
-
-
-  tPt=CNOlist@timepoints[1:length(bStrings)+1]
-  simList = prep4sim(model)
-  indexList = indexFinder(CNOlist, model)
+    tPt=CNOlist@timepoints[1:length(bStrings)+1]
+    simList = prep4sim(model)
+    indexList = indexFinder(CNOlist, model)
 
     if ("maxrow" %in% names(plotParams) == FALSE){
         plotParams$maxrow = 10
-    }   
-
+    }
 
 
     modelCut <- cutModel(model, bStrings[[1]])
     simListCut <- cutSimList(simList, bStrings[[1]])
 
     # t0
-    simRes0 <-
-        simulatorT1(CNOlist=CNOlist,model=modelCut,simList=simListCut,indexList=indexList,
-        mode=0)
-    #simResT0 <- as.matrix(Sim0[,indexList$signals])
+    simResT0 <- cSimulator(CNOlist=CNOlist,model=modelCut,simList=simListCut,
+        indexList=indexList, mode=0)
 
     # simulate
     simResults<-list()
     simResults[[1]]<-simResT0
 
+
     for(i in 1:length(bStrings)){
       simRes = simulateTN(CNOlist, model, bStrings[1:i])
+      # no need to cut. already done in the C simulator
       #cutRes<-simRes[,indexList$signals]
-      simResults[[i+1]]<-simRes
+      cutRes <- simRes
+      simResults[[i+1]]<-cutRes
     }
-
 
     plotOptimResultsPan(
       simResults=simResults,

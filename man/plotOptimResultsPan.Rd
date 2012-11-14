@@ -72,11 +72,10 @@ indicesToy <- indexFinder(CNOlistToy, ToyModel, verbose=TRUE)
 ToyFields4Sim <- prep4sim(ToyModel)
 
 # simulate model
-Sim <- simulatorT1(CNOlist=CNOlistToy, model=ToyModel, simList=ToyFields4Sim, indexList=indicesToy)
+simRes <- simulatorT1(CNOlist=CNOlistToy, model=ToyModel, simList=ToyFields4Sim, indexList=indicesToy)
 
 # format data and results
 
-simRes <- Sim[,indicesToy$signals]
 simResults <- list(t0=matrix(data=0, nrow=dim(simRes)[1], ncol=dim(simRes)[2]), t1=simRes)
 
 # plot
