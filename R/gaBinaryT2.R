@@ -227,6 +227,7 @@ gaBinaryT2 <-function(
 
     return(list(
         bString=bestbit,
+        bScore=bestobj,
         results=res,
         stringsTol=PopTol,
         stringsTolScores=PopTolScores))

@@ -87,6 +87,7 @@ The whole procedure is described in details in Saez-Rodriguez et al. (2009). The
 \value{
 This function returns a list with elements:
 \item{bString}{the best bitstring}
+\item{bScore}{the best score}
 \item{results}{ a matrix with columns "Generation","Best_score","Best_bitString","Stall_Generation","Avg_Score_Gen","Best_score_Gen","Best_bit_Gen","Iter_time"}
 \item{stringsTol}{the bitstrings whose scores are within the tolerance}
 \item{stringsTolScores}{the scores of the above-mentioned strings}
