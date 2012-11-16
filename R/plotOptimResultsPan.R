@@ -90,8 +90,10 @@ cmap_scale=1, cex=1.6)) {
     #yMax <- max(unlist(lapply(CNOlist$valueSignals, function(x) max(x,na.rm=TRUE))))
     yMax=1
     # minimum across all data points
-    #yMin <- min(unlist(lapply(CNOlist$valueSignals, function(x) min(x,na.rm=TRUE))))
-    yMin=0
+    yMin <- min(unlist(lapply(CNOlist@signals, function(x) min(x,na.rm=TRUE))))
+    if (yMin<0){
+        yMin=-1
+    }
     # time labels
     xVal <- CNOlist@timepoints[valueSignalsI]
     if(formalism=="dt") {
@@ -220,7 +222,6 @@ cmap_scale=1, cex=1.6)) {
 
 
             bgcolor = heatCols[diff]
-
             plot(x=xVal,y=yVal,ylim=c(yMin,yMax),xlab=NA,ylab=NA,xaxt="n",yaxt="n",)
             rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4], col=bgcolor)
             points(x=xVal,y=yVal,ylim=c(yMin, yMax),xlab=NA,ylab=NA,xaxt="n",yaxt="n",pch=2)
