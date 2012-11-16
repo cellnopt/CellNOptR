@@ -263,7 +263,7 @@ shift <- function(d, k) rbind( tail(d,k), head(d,-k), deparse.level = 0 )
 
 
 
-fillHashTable <-function(scoresHash, scores, Pop, maxSizeHashTable=5000)
+fillHashTable <-function(scoresHash, scores, Pop, maxSizeHashTable=1000)
 {
     # if not a data.frame, just return NULL
     if (is.null(scoresHash)==TRUE){ return(NULL)}
