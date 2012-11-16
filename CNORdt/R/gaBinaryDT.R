@@ -11,7 +11,11 @@
 # $Id$
 
 gaBinaryDT <- function(CNOlist, model, initBstring = NULL, sizeFac = 1e-04, NAFac = 1, popSize = 50, pMutation = 0.5, maxTime = 60, maxGens = 500, stallGenMax = 100, 
-    selPress = 1.2, elitism = 5, relTol = 0.1, verbose = TRUE, priorBitString = NULL, maxSizeHashTable = 5000, method=c("dt", "delay"), boolUpdates, lowerB = lowerB, upperB = upperB) {
+    selPress = 1.2, elitism = 5, relTol = 0.1, verbose = TRUE, priorBitString = NULL, maxSizeHashTable = 1000, method=c("dt", "delay"), boolUpdates, lowerB = lowerB, upperB = upperB) {
+
+print(popSize)
+print(maxGens)
+print(boolUpdates)
     
     # by default initial bit string is made of ones
     
@@ -189,7 +193,7 @@ gaBinaryDT <- function(CNOlist, model, initBstring = NULL, sizeFac = 1e-04, NAFa
     res <- res[3:dim(res)[1], ]
     rownames(res) <- NULL
     
-    return(list(bString = bestbit, results = res, stringsTol = PopTol, stringsTolScores = PopTolScores))
+    return(list(bString = bestbit, bScore=bestobj, results = res, stringsTol = PopTol, stringsTolScores = PopTolScores))
 }
 
 
@@ -209,7 +213,7 @@ shift <- function(d, k) rbind(tail(d, k), head(d, -k), deparse.level = 0)
 
 
 
-fillHashTable <- function(scoresHash, scores, Pop, maxSizeHashTable = 5000) {
+fillHashTable <- function(scoresHash, scores, Pop, maxSizeHashTable = 1000) {
     # if not a data.frame, just return NULL
     if (is.null(scoresHash) == TRUE) {
         return(NULL)

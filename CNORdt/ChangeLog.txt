@@ -1,5 +1,6 @@
 version 1.1.1
 ------------------
+* gaDiscreteDT returns an additional field called bScore for the final best Score. The hash table is limited to 1000
 * change init_values - set anything that is not stimulus/inhibitor to 'prevSim' status
 * this fixes issue with spike in time course caused by initial NAs
 
