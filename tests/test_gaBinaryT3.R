@@ -28,28 +28,19 @@ model = preprocessing(cnolist, pknmodel, verbose=FALSE)
 truebs = c(1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0,0)
 truebs2 <- c(0,0,0,0,0,0,1)
 truebs3 <- c(0,0,1,0,0,0)
-truebs3_bis <- c(0,0,0,1,0,0)
-truebs3_ter <- c(0,0,0,0,1,0)
 
 
 # run T1 first, 
 T1opt<-gaBinaryT1(CNOlist=cnolist,model=model,verbose=FALSE)
-print(T1opt$bString)
-
-
-if (all(T1opt$bString == truebs)==FALSE){
-stop("something wrong going on")
-}
-
 
 # run T2
 T2opt<-gaBinaryTN(CNOlist=cnolist,model=model,bStrings=list(T1opt$bString),verbose=FALSE)
-print(T2opt$bString)
-if (all(T2opt$bString == truebs2)==FALSE){
-    stop("something wrong going on T2")
-}
 
 # run T3
 T3opt<-gaBinaryTN(CNOlist=cnolist,model=model,bStrings=list(truebs, truebs2),verbose=FALSE)
+
+
+print(T1opt$bString)
+print(T2opt$bString)
 print(T3opt$bString)
 

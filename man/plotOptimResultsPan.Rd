@@ -73,11 +73,11 @@ ToyFields4Sim <- prep4sim(ToyModel)
 
 # simulate model
 simRes <- simulatorT1(CNOlist=CNOlistToy, model=ToyModel, simList=ToyFields4Sim, indexList=indicesToy)
+#simRes = simRes[, indicesToy$signals]
 
 # format data and results
 
 simResults <- list(t0=matrix(data=0, nrow=dim(simRes)[1], ncol=dim(simRes)[2]), t1=simRes)
-
 # plot
 plotOptimResultsPan(simResults,
   CNOlist=CNOlistToy,

@@ -17,7 +17,6 @@ export(
     "cSimulator",
     "cutAndPlot",
     "cutAndPlotResultsT1",
-    "cutAndPlotResultsT2",
     "cutAndPlotResultsTN",
     "cutNONC",
     "cutSimList",
