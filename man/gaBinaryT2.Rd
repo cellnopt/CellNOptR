@@ -121,3 +121,4 @@ ToyT2<-gaBinaryT2(
 	popSize = 10,
 	verbose=FALSE)
 }
+\keyword{internal}

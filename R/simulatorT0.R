@@ -41,7 +41,6 @@ simulatorT0<-function(CNOlist,model,simList,indexList){
 
     # Finally run the simulator with the particular set of experiments at t0
     newInput = simulatorT1(CNOlistT0, model, simList, indexList)
-
     return(newInput)
     }
 

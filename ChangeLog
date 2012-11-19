@@ -4,8 +4,10 @@
 1.5.4
 -------
 
+* remove cutAndPlotResultsT2 function (use TN version instead)
 * speed up code by factor 2 in the T1 boolean case by sending matrices instead
-  of vectors in the call to the C function.
+  of vectors in the call to the C function. Got some trouble here. Further
+  cleaning will be done later on.
 * plotmodel can switch on/off the empty edges.
 
 

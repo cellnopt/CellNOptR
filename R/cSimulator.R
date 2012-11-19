@@ -80,6 +80,6 @@ cSimulator <- function(CNOlist, model, simList, indexList, mode=1) {
 		valueStimuli,
         as.integer(mode)
 	)
-    res = res[,indexList$signals]
+    #res = res[,indexList$signals]
 	return(res)
 }
