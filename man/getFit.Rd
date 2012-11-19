@@ -74,7 +74,7 @@ simResults<-simulatorT1(
 	model=ToyModel,
 	simList=ToyFields4Sim,
 	indexList=indicesToy)
-#simResults = simResults[, indicesToy$signals]
+simResults = simResults[, indicesToy$signals]
 Score<-getFit(
 	simResults=simResults,
 	CNOlist=CNOlistToy,

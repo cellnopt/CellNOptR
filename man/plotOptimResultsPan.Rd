@@ -73,7 +73,7 @@ ToyFields4Sim <- prep4sim(ToyModel)
 
 # simulate model
 simRes <- simulatorT1(CNOlist=CNOlistToy, model=ToyModel, simList=ToyFields4Sim, indexList=indicesToy)
-#simRes = simRes[, indicesToy$signals]
+simRes = simRes[, indicesToy$signals]
 
 # format data and results
 
