@@ -87,7 +87,11 @@ computeScoreTN<-function(CNOlist, model, simList=NULL, indexList=NULL,
             timeIndex=timeIndex)
     }
 
+    # already done in the C simulator.
+    #simResults = simResults[, indexList$signals]
 
+
+    ## todo: use the C simulator ? 
 
     #Compute the score
     Score <- getFit(
@@ -104,10 +108,8 @@ computeScoreTN<-function(CNOlist, model, simList=NULL, indexList=NULL,
     if ((class(CNOlist)=="CNOlist")==FALSE){
           CNOlist = CellNOptR::CNOlist(CNOlist)
     }
-
   nDataP <- sum(!is.na(CNOlist@signals[[2]]))
   Score <- Score/nDataP
-
 
   return(Score)
 }

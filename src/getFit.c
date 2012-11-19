@@ -26,7 +26,9 @@ SEXP getFit (
     SEXP interMatCut_in,
 
     SEXP sizeFac_in,
-    SEXP NAFac_in
+    SEXP NAFac_in,
+
+    SEXP time0_in
 ) {
 	
 	SEXP simResults;
@@ -49,6 +51,8 @@ SEXP getFit (
 	float NAFac = REAL(NAFac_in)[0];
     float sizeFac = REAL(sizeFac_in)[0];
 
+    int time0 = INTEGER(time0_in)[0];
+
     int nInTot = 0;
     int nInputs = 0;
 
@@ -57,7 +61,6 @@ SEXP getFit (
     int nDataP = 0; // count NAs in cnolist
     float sizePen; 
     float score;
-
     counter = 0;
     for (i=0; i<nReacs*nSpecies; i++){
         if (INTEGER(interMat_in)[counter++] == -1){
@@ -127,10 +130,12 @@ SEXP getFit (
     // >>>  Score <- Score/nDataP
     for (i = 0; i < nCond; i++) {
 	    for (j = 0; j < nSignals; j++) {
-            if (!ISNAN(cnolist0[i][j])){
-	            r =  simResT0[i][j] - cnolist0[i][j];
-                deviationPen += r*r;
-                // TC, nov.2012 why are we not counting nDataP for time zero as well ? 
+            if (time0 == 1){
+                if (!ISNAN(cnolist0[i][j])){
+	                r =  simResT0[i][j] - cnolist0[i][j];
+                    deviationPen += r*r;
+                    // TC, nov.2012 why are we not counting nDataP for time zero as well ? 
+                }
             }
 
             if (!ISNAN(cnolist1[i][j])){
@@ -143,7 +148,11 @@ SEXP getFit (
             }
         }
     }
-    deviationPen/=2.;
+
+    if (time0==1){ // if 2 time points (time=0 and timeN then, we must divide by 2
+        deviationPen/=2.;
+    }
+
     sizePen = (float)(nDataPts*sizeFac*nInputs)/nInTot;
     score = deviationPen + NAPen + sizePen;
     score /= (float)nDataP;
