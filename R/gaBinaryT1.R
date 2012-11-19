@@ -103,6 +103,24 @@ gaBinaryT1<-function(
     # if you do want the hastable, uncomment the following line.
     #scoresHash = NULL
 
+
+    # if bitstring has only 1 bit to optimize, enter this simple loop:
+    # we should have an exhaustive optimisation as well for simple cases.
+    if (bLength==1){
+        # build a population made of 2 vectors: c(0) and c(1)
+        Pop = matrix(c(0,1), nrow=2)
+        scores<-apply(Pop,1,getObj, scoresHash=NULL)  
+        rankP<-order(scores,decreasing=TRUE)
+        # extract the best solution.
+        iBest = rankP[2]
+        return(list(
+            bString=Pop[iBest,],
+            bScore=scores[iBest],
+            results=res,
+            stringsTol=PopTol,
+            stringsTolScores=PopTolScores))
+    }
+
     while(!stop){
 
         #compute the scores
