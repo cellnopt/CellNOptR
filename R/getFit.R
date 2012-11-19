@@ -32,8 +32,10 @@ getFit<-function(
 
     if (is.null(indexList)==FALSE){
         simResults<-simResults[,indexList$signals]
+        if (is.na(simResultsT0)==FALSE){
+            simResultsT0<-simResultsT0[,indexList$signals]
+        }
     }
-
 
     # for back compatibility, timePoint ca be "t1" or "t2" but developers should
     # use an integer.
@@ -53,15 +55,10 @@ getFit<-function(
     # if t0 is provided and we are interested in t1
     # then  score is based on t1 but also t0
     if (tPt == 2 && is.na(simResultsT0)==FALSE){
-        if (is.null(indexList)==FALSE){
-            Diff0<-simResultsT0[,indexList$signals]-CNOlist@signals[[1]]
-        }else{
-            Diff0<-simResultsT0-CNOlist@signals[[1]]
-        }
-        Diff0<-simResultsT0-CNOlist@signals[[1]]
-        Diff<-simResults-CNOlist@signals[[tPt]]
-        r0<-Diff0^2
-        r<-Diff^2
+        Diff0 <- simResultsT0 - CNOlist@signals[[1]]
+        Diff <- simResults - CNOlist@signals[[tPt]]
+        r0 <- Diff0^2
+        r <- Diff^2
         r <- rbind(r0, r) # we can concatenate because it's matricial computation.
         deviationPen<-sum(r[!is.na(r)])/2
     }# otherwise, no need to take to into account
@@ -81,9 +78,7 @@ getFit<-function(
     # nInTot: number of inputs of expanded model
     # nInputs: number of inputs of cut model
     sizePen<-(nDataPts*sizeFac*nInputs)/nInTot
-
     score<-deviationPen+NAPen+sizePen
-
     return(score)
 
     }
