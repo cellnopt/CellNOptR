@@ -89,7 +89,13 @@ computeScoreT1<-function(CNOlist, model, bString, simList=NULL, indexList=NULL,
         valueInhibitors, valueStimuli, as.integer(0))
 
 
+    # this step is commented in the C code. Does not seem to work properly. Try
+    # test_simulateTN.R for instance.
+    simResultsT0 = simResultsT0[, indexList$signals]
+    simResults = simResults[, indexList$signals]
+
     #Compute the score
+    mode = 1 # 1 for TRUE: takes into account T0
     Score = .Call("getFit", 
         nCond,
         nSignals, 
@@ -103,7 +109,7 @@ computeScoreT1<-function(CNOlist, model, bString, simList=NULL, indexList=NULL,
         as.integer(model$interMat),
         as.integer(modelCut$interMat),
 		as.real(sizeFac),
-		as.real(NAFac)
+		as.real(NAFac), as.integer(mode)
 		)[[1]]
 
   return(Score)
