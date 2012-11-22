@@ -22,6 +22,8 @@ CNORbool<-function(CNOlist, model, paramsList=defaultParameters(),
 
     if ((class(CNOlist)=="CNOlist")==FALSE){
         cnolist = CellNOptR::CNOlist(CNOlist)
+    }else{
+        cnolist = CNOlist
     }
     if (is.character(model)==TRUE){
         model = readSIF(model)
