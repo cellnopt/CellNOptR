@@ -236,10 +236,10 @@ gaBinaryT1<-function(
     }
     #end of the while loop
 
-    PopTol<-PopTol[-1,]
+    PopTol<-as.matrix(PopTol[-1,])
     PopTolScores<-PopTolScores[-1]
     TolBs<-which(PopTolScores < scores[length(scores)]+tolScore)
-    PopTol<-PopTol[TolBs,]
+    PopTol<-as.matrix(PopTol[TolBs,])
     PopTolScores<-PopTolScores[TolBs]
     PopTolT<-cbind(PopTol,PopTolScores)
     PopTolT<-unique(PopTolT,MARGIN=1)

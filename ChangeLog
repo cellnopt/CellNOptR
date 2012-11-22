@@ -1,6 +1,13 @@
 1.5
 ====
 
+
+1.5.5
+------
+
+	o gaBinaryT1 and T2: fixed issue when only one model within the tolerance	
+	  was returned (bug report 167)
+
 1.5.4
 -------
 
