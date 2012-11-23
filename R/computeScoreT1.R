@@ -94,6 +94,8 @@ computeScoreT1<-function(CNOlist, model, bString, simList=NULL, indexList=NULL,
     simResultsT0 = simResultsT0[, indexList$signals]
     simResults = simResults[, indexList$signals]
 
+    nInTot = length(which(model$interMat == -1))
+
     #Compute the score
     mode = 1 # 1 for TRUE: takes into account T0
     Score = .Call("getFit", 
@@ -102,11 +104,11 @@ computeScoreT1<-function(CNOlist, model, bString, simList=NULL, indexList=NULL,
         nReacs,
         nSpecies,
         sum(bs),
+        nInTot,
         as.real(simResultsT0), 
         as.real(simResults), 
         as.real(CNOlist@signals[[1]]), #T0 data
         as.real(CNOlist@signals[[timeIndex]]), #T1 data
-        as.integer(model$interMat),
         as.integer(modelCut$interMat),
 		as.real(sizeFac),
 		as.real(NAFac), as.integer(mode)

@@ -15,6 +15,7 @@ SEXP getFit (
 	SEXP nReacs_in,
 	SEXP nSpecies_in,
 	SEXP nReacsCut_in,
+	SEXP nInTot_in,
 	
 	SEXP simResT0_in,
 	SEXP simResT1_in,
@@ -22,7 +23,6 @@ SEXP getFit (
     SEXP cnolist0_in,
     SEXP cnolist1_in,
 
-    SEXP interMat_in,
     SEXP interMatCut_in,
 
     SEXP sizeFac_in,
@@ -47,13 +47,13 @@ SEXP getFit (
 	int nReacs = INTEGER(nReacs_in)[0];
 	int nReacsCut = INTEGER(nReacsCut_in)[0];
 	int nSpecies = INTEGER(nSpecies_in)[0];
+	int nInTot = INTEGER(nInTot_in)[0];
 
 	float NAFac = REAL(NAFac_in)[0];
     float sizeFac = REAL(sizeFac_in)[0];
 
     int time0 = INTEGER(time0_in)[0];
 
-    int nInTot = 0;
     int nInputs = 0;
 
     int NAPen = 0.;
@@ -61,12 +61,12 @@ SEXP getFit (
     int nDataP = 0; // count NAs in cnolist
     float sizePen; 
     float score;
-    counter = 0;
+    /*counter = 0;
     for (i=0; i<nReacs*nSpecies; i++){
         if (INTEGER(interMat_in)[counter++] == -1){
             nInTot +=1;
         }
-    }
+    }*/
     counter = 0;
     for (i=0; i<nReacsCut*nSpecies; i++){
         if (INTEGER(interMatCut_in)[counter++] == -1){
@@ -153,7 +153,10 @@ SEXP getFit (
         deviationPen/=2.;
     }
 
+
+    //Rprintf("%f %d %d %d\n", sizeFac, nDataPts, nInputs, nInTot);
     sizePen = (float)(nDataPts*sizeFac*nInputs)/nInTot;
+    //Rprintf("%f\n", sizePen);
     score = deviationPen + NAPen + sizePen;
     score /= (float)nDataP;
 
