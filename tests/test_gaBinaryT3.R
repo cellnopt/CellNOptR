@@ -20,27 +20,44 @@
 library(CellNOptR)
 
 pknmodel = readSIF(system.file("ToyModelT3/ToyModelT3.sif", package="CellNOptR"))
-data = readMIDAS(system.file("ToyModelT3/ToyDataT3.csv", package="CellNOptR"))
-cnolist = makeCNOlist(data, subfield=FALSE)
+cnolist = CNOlist(system.file("ToyModelT3/ToyDataT3.csv", package="CellNOptR"))
 model = preprocessing(cnolist, pknmodel, verbose=FALSE)
 
 # expected values
-truebs = c(1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0,0)
-truebs2 <- c(0,0,0,0,0,0,1)
-truebs3 <- c(0,0,1,0,0,0)
+bestBS = c(1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0,0)
+bestBS2 <- c(0,0,0,0,0,0,1)
+bestBS3 <- c(0,0,1,0,0,0)
+
+# just to check that the simulateTN function works 
+SimT1<-simulateTN(CNOlist=cnolist, model=model, bString=list(bestBS))
+SimT2<-simulateTN(CNOlist=cnolist, model=model, bStrings=list(bestBS,bestBS2))
+SimT3<-simulateTN(CNOlist=cnolist, model=model, bStrings=list(bestBS, bestBS2, bestBS3))
 
 
+# again, just to check that gaBinary works
 # run T1 first, 
 T1opt<-gaBinaryT1(CNOlist=cnolist,model=model,verbose=FALSE)
-
 # run T2
 T2opt<-gaBinaryTN(CNOlist=cnolist,model=model,bStrings=list(T1opt$bString),verbose=FALSE)
-
 # run T3
-T3opt<-gaBinaryTN(CNOlist=cnolist,model=model,bStrings=list(truebs, truebs2),verbose=FALSE)
+T3opt<-gaBinaryTN(CNOlist=cnolist,model=model,bStrings=list(bestBS, bestBS2),verbose=FALSE)
+
+# no using the hardcoded parameters, we can check the output of te scores that
+# must be tiny.
+score1 = computeScoreT1(cnolist, model, bString=bestBS)
+score2 = computeScoreTN(cnolist, model, bStrings=list(bestBS,bestBS2))
+score3 = computeScoreTN(cnolist, model, bStrings=list(bestBS,bestBS2, bestBS3))
 
 
-print(T1opt$bString)
-print(T2opt$bString)
-print(T3opt$bString)
+print(score1)
+print(score2)
+print(score3)
+if (score1>0.01 || score2>0.01 || score3>0.01){
+   stop("errore")
+}
+cutAndPlot(cnolist, model,bStrings=list(bestBS),plotPDF=TRUE, tag="test1")
+cutAndPlot(cnolist, model,bStrings=list(bestBS,bestBS2),plotPDF=TRUE, tag="test2")
+cutAndPlot(cnolist, model, bStrings=list(bestBS,bestBS2,bestBS3),plotPDF=TRUE, tag="test3")
+
+
 
