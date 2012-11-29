@@ -1,0 +1,189 @@
+%\VignetteIndexEntry{Main vignette:Playing with networks using CNORfeeder}
+%\VignetteKeywords{Training of boolean logic models of signalling networks using prior knowledge networks and perturbation data }
+%\VignettePackage{CNORfeeder}
+
+\documentclass{article}
+\usepackage{Sweave, fullpage}
+\usepackage{url, color}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks, linkcolor=blue
+}
+% 10 
+% 11 \usepackage{authblk}
+% 12 \usepackage[T1]{fontenc}
+% 13 \usepackage[utf8]{inputenc}
+% 14 
+
+
+
+
+
+\title{Training of boolean logic models of signalling networks using prior
+knowledge networks and perturbation data with \emph{CNORfeeder} \\\small{(version 1.3.30
+and above)}}
+
+
+
+
+\author{Camille Terfve, Thomas Cokelaer, Aidan MacNamara, Julio Saez-Rodriguez}
+
+\begin{document}
+\maketitle
+
+
+
+
+\tableofcontents
+
+\section{Installation}
+
+This software is written in the R language, so in order to use it you will need
+to have R installed on your computer.  For more information and download of R,
+please refer to \url{http://www.r-project.org/}.   For more information about
+how to install R packages, please refer to
+\url{http://cran.r-project.org/doc/manuals/R-admin.html#Installing-packages}.
+This package relies on several Bioconductor package (RBGL, graph, methods) and
+optional package Rgraphivz. As an example, you can install RGBL package by typing:
+<<installRBGL, eval=FALSE>>=
+source("http://bioconductor.org/biocLite.R")
+biocLite("RBGL")
+@
+
+Before starting this tutorial you also need to install the package
+\emph{CNORfeeder}. You can either install \emph{CNORfeeder} from Bioconductor by typing:
+<<installPackage, eval=FALSE>>=
+source("http://bioconductor.org/biocLite.R")
+biocLite("CNORfeeder")
+@
+
+or from a tar ball as follows:
+<<installPackage2, eval=FALSE>>=
+install.packages("path_to_CNORfeeder/CNORfeeder_1.0.0.tar.gz",
+    repos=NULL, type="source")
+@
+or, using the R GUI by clicking on "Packages \& Data" then "Package installer", then choosing "local source" from the dropdown menu, clicking "install", choosing \emph{CNORfeeder\_1.0.0.tar.gz} and finally clicking "open".
+
+A series of books about R can be found on the R project website
+(\url{http://www.r-project.org/}), and many tutorials are available on the
+internet. If you are a complete beginner, all you need to know is that by typing
+"?nameOfFunction" you get the help page about the function that you are
+interested in.
+
+
+
+\section{Introduction}
+
+The package \emph{CNORfeeder} integrates prior knowledge about protein signalling
+networks and perturbation data to infer functional characteristics of a
+signalling network. This package is based on methods described
+in\cite{julio2009}, and implemented in the Matlab toolbox \emph{CellNOpt}
+(available at
+\url{http://www.ebi.ac.uk/saezrodriguez/software.html#CellNetOptimizer}). More
+information about the methods and application of the Matlab pipeline can be
+found in reference \cite{CNObc}. This is a reduced version of
+\emph{CellNetOptimiser} that performs optimisation of boolean networks. However,
+continuous (ordinary differential equation-based) and constrained fuzzy logic
+versions are also in development.  This package also includes some data
+importing and normalising capabilities that are performed using the
+\emph{DataRail} toolbox \cite{datarail} in the MatLab pipeline (available at
+\url{http://www.ebi.ac.uk/saezrodriguez/software.html#DataRail}).
+
+A typical analysis using \emph{CNORfeeder} will be described here in detail on a toy example and on a realistic example.  The whole analysis can also be performed in one step using a wrapper function, and this is what is described in section 6.
+
+You can either copy and paste the lines of code in this document (not including the \(>\)) or type them yourself.
+
+For easiness of use we also provide (in the doc folder of this package) a text
+file CNORfeeder-examples.R which contains some  R commands being used in this
+tutorial.  
+
+%We recommend that you use that script as a template for your
+%analyses.  In the doc folder of this package you will also find a file called
+%CNORfeeder0\_1flowchart.pdf which graphically describes the pipeline of this
+%package and places all of the functions of this package relative to each other.
+%Squared nodes in this flowchart are steps that should not be omitted in a normal
+%analysis, whereas elliptic nodes are optional in most analyses.
+
+The first step of an analysis with \emph{CNORfeeder} is to load the library, and
+create a directory where you can perform your analysis, then set it as your
+working directory.
+
+<<Ropts, echo=FALSE, results=hide>>=
+options(width=70)
+@
+
+<<loadLib, eval=TRUE>>=
+library(CNORfeeder)
+@
+
+<<newDir, eval=FALSE>>=
+dir.create("CNOR_analysis")
+setwd("CNOR_analysis")
+@
+
+\section{Quick Start}
+
+Assuming that you have a prior knowledge network stored in SIF format and a
+MIDAS file, the optimisation of your problem can be done in a couple of steps:
+
+<<quickstart, eval=FALSE>>=
+# ---------------------- load the library and get a SIF and MIDAS file
+library(CNORfeeder)
+#
+# ---------------------- examples are provided in CNORfeeder
+data("ToyModel", package="CellNOptR")
+data("CNOlistToy", package="CellNOptR")
+pknmodel = ToyModel
+cnolist = CNOlist(CNOlistToy)
+#
+# ---------------------- but you can read your own files:
+pknmodel = readSIF("ToyModel.sif")
+cnolist = CNOlist("ToyDataMMB.csv")
+#
+# ---------------------- pre process the network
+model = preprocessing(cnolist, pknmodel)
+#
+# ---------------------- perform the analysis
+res = gaBinaryT1(cnolist, model, verbose=FALSE)
+#
+# ---------------------- plot the results
+@
+
+
+
+\clearpage
+
+\begin{thebibliography}{1}
+
+\bibitem{alexopoulos_networks_2010}
+Alexopoulos, L.G., Saez-Rodriguez, J., Cosgrove, B.D., Lauffenburger, D.A.,
+  Sorger, P.K.: Networks inferred from biochemical data reveal profound
+  differences in toll-like receptor and inflammatory signaling between normal
+  and transformed hepatocytes.
+\newblock Molecular \& Cellular Proteomics: {MCP} \textbf{9}(9), 1849--1865
+  (2010).
+
+  \bibitem{CNObc}
+M.K.~Morris, I.~Melas, J.~Saez-Rodriguez.
+\newblock Construction of cell type-specific logic models of signalling networks using CellNetOptimizer.
+\newblock {\em Methods in Molecular Biology: Computational Toxicology}, Ed. B. Reisfeld and A. Mayeno, Humana Press.
+
+\bibitem{datarail}
+J.~Saez-Rodriguez, A.~Goldsipe, J.~Muhlich, L.G.~Alexopoulos, B.~Millard, D.A.~Lauffenburger and P.K.~Sorger.
+\newblock Flexible informatics for linking experimental data to mathematical models via \emph{DataRail}.
+\newblock {\em Bioinformatics}, 24:6, 2008.
+
+\bibitem{julio2009}
+J.~Saez-Rodriguez, L.~Alexopoulos, J.~Epperlein, R.~Samaga, D.~Lauffenburger, S.~Klamt and P.K.~Sorger.
+\newblock Discrete logic modelling as a means to link protein signalling networks with functional analysis of mammalian signal transduction.
+\newblock {\em Molecular Systems Biology}, 5:331, 2009.
+
+\bibitem{Cytoscape}
+P.~Shannon, A.~Markiel, O.~Ozier, N.S..~Baliga, J.T.~Wang, D.~Ramage,  N.~Amin, B.~Schiwkowski and T.~Ideker.
+\newblock Cytoscape: a software for integrated models of biomolecular interaction networks.
+\newblock {\em Genome Research}, 13(11):2498-504, 2003.
+
+
+\end{thebibliography}
+
+\end{document}
