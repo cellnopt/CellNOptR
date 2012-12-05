@@ -33,7 +33,7 @@ normaliseCNOlist <- function(
         stop("'norm2TorCtrl' argument is deprecated. Please use 'mode=' instead")
     }
 
-#Check that the parameters have the right format
+    #Check that the parameters have the right format
     if(class(EC50Data) != "numeric" | length(EC50Data) != 1)
         warning("The parameter 'EC50Data' should be a single numeric value")
     if(class(EC50Noise) != "numeric" | length(EC50Noise) != 1)
@@ -50,13 +50,13 @@ normaliseCNOlist <- function(
         stop("The parameter 'mode' should be either 'time' or 'ctrl' or 'raw'")
 
 
-# Check which values are out of the dynamic range of the machine: create a list
-# of matrices, one matrix for each time point (i.e. each element of the field
-# CNOlist$valueSignals) filled with FALSE if the measurement is in the dynamic
-# range, and true if it isn't (i.e. it should be replaced by NA at the end) i.e.
-# if Detection=0 and saturation=Inf, then all the matrices in NaNsList should be
-# filled with 0s this function also tags as NAs all the field that don't have a
-# value (should be imported as NA)
+    # Check which values are out of the dynamic range of the machine: create a list
+    # of matrices, one matrix for each time point (i.e. each element of the field
+    # CNOlist$valueSignals) filled with FALSE if the measurement is in the dynamic
+    # range, and true if it isn't (i.e. it should be replaced by NA at the end) i.e.
+    # if Detection=0 and saturation=Inf, then all the matrices in NaNsList should be
+    # filled with 0s this function also tags as NAs all the field that don't have a
+    # value (should be imported as NA)
 
     NaNsList <- CNOlist@signals
 
@@ -70,30 +70,28 @@ normaliseCNOlist <- function(
         }
 
     NaNsList <- lapply(NaNsList, DynamicRange )
-# Calculate relative change
+    # Calculate relative change
 
-# the following list will contain true for the fold changes that are negatives
-# and significant,and false for the other ones.
+    # the following list will contain true for the fold changes that are negatives
+    # and significant,and false for the other ones.
     negList <- CNOlist@signals
     negList <- lapply(negList,
                     function(x) x <- matrix(data=FALSE,
                     nrow=dim(x)[1],ncol=dim(x)[2]) 
                 )
 
-# the following list will contain true for the fold changes that are positive
-# and significant, and false for the other ones.
+    # the following list will contain true for the fold changes that are positive
+    # and significant, and false for the other ones.
     posList <- CNOlist@signals
     posList <- lapply(posList,
                     function(x) x <- matrix(data=FALSE,
                     nrow=dim(x)[1],ncol=dim(x)[2]) 
                 )
 
-# the following matrix will contain the actual fold change values
+    # the following matrix will contain the actual fold change values
     FoldChangeList <- CNOlist@signals
 
-# if mode="time" then the relative change is simply matrix t1 - matrix
-# t0 (ie each measurement is compared to the exact same condition at time 0).
-
+    # if mode="raw" data may be negative
     if(mode == "raw"){
         for(i in 2:length(FoldChangeList)){
             negList[[i]][which((CNOlist@signals[[i]] - CNOlist@signals[[1]]) < (-1*changeTh))] <- TRUE
@@ -101,6 +99,8 @@ normaliseCNOlist <- function(
         }
     }
 
+    # if mode="time" then the relative change is simply matrix t1 - matrix
+    # t0 (ie each measurement is compared to the exact same condition at time 0).
 
     if(mode == "time"){
         for(i in 2:length(FoldChangeList)){
@@ -121,20 +121,20 @@ normaliseCNOlist <- function(
     # else
     if(mode == "ctrl"){
 
-# if mode="ctrl" then the relative change is computed relative to the
-# ctrl at the same time the ctrl is the case without stimuli, but with the same
-# inhibitors.   In our case this still means that at t0 we are going to have
-# zero everywhere since only two measurements were made: with and without the
-# inhibitor(s) and these measurements have been copied across corresponding
-# position this last bit makes sense because we assume that the inhibitors are
-# already present at time 0 when we add the stimuli to find the right row to
-# normalise, we look for a row in the valueStimuli that has only 0's but where
-# the corresponding row in the inhibitor matrix has the same status as the row
-# that we are trying to normalise.
+    # if mode="ctrl" then the relative change is computed relative to the
+    # ctrl at the same time the ctrl is the case without stimuli, but with the same
+    # inhibitors.   In our case this still means that at t0 we are going to have
+    # zero everywhere since only two measurements were made: with and without the
+    # inhibitor(s) and these measurements have been copied across corresponding
+    # position this last bit makes sense because we assume that the inhibitors are
+    # already present at time 0 when we add the stimuli to find the right row to
+    # normalise, we look for a row in the valueStimuli that has only 0's but where
+    # the corresponding row in the inhibitor matrix has the same status as the row
+    # that we are trying to normalise.
 
         for(i in 2:length(FoldChangeList)){
             for(n in 1:dim(FoldChangeList[[i]])[1]){
-#First I treat the rows that are not ctrls
+                #First I treat the rows that are not ctrls
                 if(sum(CNOlist@stimuli[n,]) != min(apply(CNOlist@stimuli,MARGIN=1,sum))){
                     ctrlRow <- intersect(
                         which(
@@ -149,7 +149,7 @@ normaliseCNOlist <- function(
 
                     }else{
 
-#Then I set to 0 all the rows that are ctrls
+                        #Then I set to 0 all the rows that are ctrls
                         FoldChangeList[[i]][n,] <- rep(0,dim(FoldChangeList[[i]])[2])
                     }
 
@@ -162,10 +162,10 @@ normaliseCNOlist <- function(
                 nrow=dim(FoldChangeList[[1]])[1])
 
         }
-# Now I compute the penalty for being noisy, which is calculated for each
-# measurement as the measurement divided by the max measurement across all
-# conditions and time for that particular signal (excluding values out of the
-# dynamic range).
+    # Now I compute the penalty for being noisy, which is calculated for each
+    # measurement as the measurement divided by the max measurement across all
+    # conditions and time for that particular signal (excluding values out of the
+    # dynamic range).
 
     #1.This small function computes the max across all measurements for each signal,
     #excluding the values out of the dynamic range
@@ -180,7 +180,12 @@ normaliseCNOlist <- function(
             }
 
         signals <- signals[[length(signals)]]
-        signalMax <- apply(signals,MARGIN=2,max)
+        if (mode=="raw"){ # in raw mode, negative values are possible, need to take abs
+            signalABS <- apply(signals,MARGIN=2,abs)
+            signalMax <- apply(signalABS,MARGIN=2,max)
+        }else{
+            signalMax <- apply(signals,MARGIN=2,max)
+        }
         return(signalMax)
         }
 
@@ -195,29 +200,34 @@ normaliseCNOlist <- function(
             return(t(x))
         })
 
-    # 3.Now I can make this list of values go through the saturation function
-    SatPenalty <- PenaltyList
+    #3.Now I can make this list of values go through the saturation function
+    if (mode=="raw"){
+        # in raw mode, negative values are possible. Just take the absolute values
+        SatPenalty <- lapply(PenaltyList,abs)
+    }else{
+        SatPenalty <- PenaltyList
+     }
     SatPenalty <- lapply(SatPenalty,function(x) {x/(EC50Noise+x)} )
 
-# Now I make the data go through the Hill function
+    # Now I make the data go through the Hill function
     HillData <- FoldChangeList
     HillData <- lapply(
         HillData,
         function(x) {x^HillCoef/((EC50Data^HillCoef)+(x^HillCoef))} )
 
-# Now I can multiply HillData and SatPenalty, matrix by matrix and element by
-# element.
+    # Now I can multiply HillData and SatPenalty, matrix by matrix and element by
+    # element.
     NormData <- HillData
     for(i in 1:length(NormData)){
         NormData[[i]] <- HillData[[i]]*SatPenalty[[i]]
         NormData[[i]][which(negList[[i]] == 1)] <- NormData[[i]][which(negList[[i]] == 1)]*-1
-        if(mode != "raw"){
+        if(mode != "raw"){ # in raw mode, neg+pos can leaad to zero. time 0 is also zero.
             NormData[[i]][which((negList[[i]] + posList[[i]]) == 0)] <- 0
         }
     }
 
-# Now let us set to NaN all the values that have been tagged in the beginning as
-# out of the dynamic range.
+    # Now let us set to NaN all the values that have been tagged in the beginning as
+    # out of the dynamic range.
     for(i in 1:length(NormData)){
         NormData[[i]][which(NaNsList[[i]] == 1)] <- NaN
     }

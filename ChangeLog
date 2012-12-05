@@ -1,7 +1,11 @@
 1.5
 ====
 
+1.5.7
+------
 
+    o fixing bug normaliseCNOlist introduced in 1.5.3 related to the new
+      mode="raw" option that interfered with time and control modes.
 1.5.6
 ------
 
