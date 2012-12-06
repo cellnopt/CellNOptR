@@ -132,7 +132,7 @@ SEXP getFit (
 	    for (j = 0; j < nSignals; j++) {
             if (time0 == 1){
 	            r =  simResT0[i][j] - cnolist0[i][j];
-                if (!ISNA(r) && isNAN(r)){
+                if (!ISNA(r) && ISNAN(r)){
                     deviationPen += r*r;
                     // TC, nov.2012 why are we not counting nDataP for time zero as well ? 
                 }
