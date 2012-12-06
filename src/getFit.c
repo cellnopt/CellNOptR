@@ -131,8 +131,8 @@ SEXP getFit (
     for (i = 0; i < nCond; i++) {
 	    for (j = 0; j < nSignals; j++) {
             if (time0 == 1){
-                if (!ISNAN(cnolist0[i][j])){
-	                r =  simResT0[i][j] - cnolist0[i][j];
+	            r =  simResT0[i][j] - cnolist0[i][j];
+                if (!ISNA(r) && isNAN(r)){
                     deviationPen += r*r;
                     // TC, nov.2012 why are we not counting nDataP for time zero as well ? 
                 }
@@ -142,10 +142,10 @@ SEXP getFit (
                 nDataP+=1;  // why is it that nDataP searches for NA in cnolist only and not in r?
             }
             r = (simResT1[i][j] - cnolist1[i][j]);
-            if (!ISNAN(r)){
+            if (!ISNA(r)  && !ISNAN(r)){
                 deviationPen += r*r;
-
             }
+
         }
     }
 
@@ -154,9 +154,7 @@ SEXP getFit (
     }
 
 
-    //Rprintf("%f %d %d %d\n", sizeFac, nDataPts, nInputs, nInTot);
     sizePen = (float)(nDataPts*sizeFac*nInputs)/nInTot;
-    //Rprintf("%f\n", sizePen);
     score = deviationPen + NAPen + sizePen;
     score /= (float)nDataP;
 

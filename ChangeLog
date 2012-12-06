@@ -1,6 +1,11 @@
 1.5
 ====
 
+1.5.8
+-------
+    o fixed bug in gtFit (C version) to handl NA and NaN properly. Bug report
+	183
+
 1.5.7
 ------
 
