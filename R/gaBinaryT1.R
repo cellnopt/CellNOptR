@@ -100,6 +100,18 @@ gaBinaryT1<-function(
     t<-t0
 
 
+
+    if (popSize*stallGenMax > 2**bLength){
+        print("Given your input parameter, an exhaustive search will be faster...")
+        # better to perform an exhaustive search
+        stop = TRUE # stop criteria of the GA that need not to be run
+        res = exhaustive(cnolist, model, relTol=relTol, 
+                   sizeFac=sizeFac, NAFac=NAFac, verbose=verbose)
+
+        return(res)
+    }
+
+
     # if bitstring has only 1 bit to optimize, enter this simple loop:
     # we should have an exhaustive optimisation as well for simple cases.
     if (bLength==1){

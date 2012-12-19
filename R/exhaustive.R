@@ -83,7 +83,7 @@ exhaustive<-function(
         changed = FALSE
         if (score <= bestScore){
             if (verbose==TRUE){
-                print(paste(x, " score=", score, sep=""))
+                print(paste("--Found a new best score=", score, " at iteration ", x, sep=""))
                 print(bitstring)
             }
             bestScore = score
@@ -127,7 +127,7 @@ exhaustive<-function(
     # we are still dealing with a matrix. So, we remove the NA only at the end.
 
     # removing the two rows.
-    PopTol = matrix(PopTol[-1,])
+    PopTol = matrix(PopTol[-1,], ncol=bLength)
     PopTolScores = matrix(PopTolScores[-1])
 
     # todo
