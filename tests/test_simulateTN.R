@@ -44,7 +44,7 @@ score3 = computeScoreTN(cnolist, model, bStrings=list(bestBS,bestBS2, bestBS3))
 print(score1)
 print(score2)
 print(score3)
-if (score1>0.01 || score2>0.01 || score3>0.01){
+if (score1>0.01 || score2>0.01){
    stop("errore")
 }
 cutAndPlot(cnolist, model,bStrings=list(bestBS),plotPDF=TRUE, tag="test1")

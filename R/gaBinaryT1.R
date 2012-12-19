@@ -105,7 +105,7 @@ gaBinaryT1<-function(
         print("Given your input parameter, an exhaustive search will be faster...")
         # better to perform an exhaustive search
         stop = TRUE # stop criteria of the GA that need not to be run
-        res = exhaustive(cnolist, model, relTol=relTol, 
+        res = exhaustive(CNOlist, model, relTol=relTol, 
                    sizeFac=sizeFac, NAFac=NAFac, verbose=verbose)
 
         return(res)
