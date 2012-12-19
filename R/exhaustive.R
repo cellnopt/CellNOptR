@@ -61,20 +61,22 @@ exhaustive<-function(
 
     # if the user request a Nmax value, let us use it
     if (is.null(Nmax)==FALSE){
+        if (Nmax<=0){stop("Nmax must be positive stricly")}
         N = min(Nmax, N)
     } else{
         Nmax=N
     }
-    #for (x in seq(1:dim(m)[1])){print(m[x,])}
-    PopTol<-rep(NA,bLength)
-     PopTolScores<-NA
 
+    # NA are removed later on
+    PopTol<-rep(NA,bLength)
+    PopTolScores<-NA 
 
     all_scores = c()
     t1 = Sys.time()
     for (x in seq(1:Nmax)){
+
         bitstring = as.double(bitstrings[x,])
-        if (sum(bitstring)==0){next}
+        #if (sum(bitstring)==0){next}
         score = computeScoreT1(CNOlist, model, bitstring, simList, indexList,
 			sizeFac, NAFac, timeIndex)
         all_scores[x] = score
@@ -98,7 +100,7 @@ exhaustive<-function(
         # Check if the current score/bitstring is within tolerance of the best
         # score
         if( score <=(1+relTol)*bestScore){
-            
+
             PopTol<-rbind(PopTol, bitstring)
             PopTolScores<-c(PopTolScores, score)
         }
@@ -123,8 +125,10 @@ exhaustive<-function(
     # remove first NA element. The NA element has the good property that if
     # there is only one score found within the tol, there are 2 elements hence
     # we are still dealing with a matrix. So, we remove the NA only at the end.
-    PopTol = PopTol[-1,]
-    PopTolScores = PopTolScores[-1]
+
+    # removing the two rows.
+    PopTol = matrix(PopTol[-1,])
+    PopTolScores = matrix(PopTolScores[-1])
 
     # todo
     res = NULL
