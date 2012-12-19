@@ -29,7 +29,6 @@ gaBinaryTN <-function(
     relTol=0.1,
     verbose=TRUE,
     priorBitString=NULL,
-    maxSizeHashTable=1000, 
     timeIndex=NULL){
 
     #Find the bits to optimise
@@ -71,27 +70,24 @@ gaBinaryTN <-function(
     PopTol<-rep(NA,bLength)
     PopTolScores<-NA
 
+    library(hash)
+    scores2Hash = hash()
+
     #Function that produces the score for a specific bitstring
-    getObj<-function(x, scoresHash=NULL){
+    getObj<-function(x){
 
-        bitString<-x
+        key = toString(.int2dec(x))
+        if (has.key(key, scores2Hash)==TRUE){
+            return(scores2Hash[[key]])
+        } else {
+            bStrings[[N+1]] = x
 
-        # the hash table is used to speed up code. gain is guaranteed to be at least equal to elitism/popsize
-        if (is.null(scoresHash)==FALSE){
-            thisScore <- scoresHash[rownames(scoresHash) == paste(unlist(x), collapse=","),1]
-             if (length(thisScore) != 0){
-                 return(thisScore)
-            } # otherwise let us keep going
+            Score = computeScoreTN(CNOlist, model, simList, indexList, simResPrev, bStringPrev=NULL,  bStringNext=NULL,
+                bStrings=bStrings, timeIndex=timeIndex, sizeFac=sizeFac, NAFac=NAFac)
+            if (length(scores2Hash)<1000){
+                scores2Hash[[key]] =  Score
+            }
         }
-
-        # must use bstrings concatenate with the proposal not just the previous
-        # and next. Works for T2 but not for TN.
-        #Score = computeScoreTN(CNOlist, model, simList, indexList, 
-	    #	simResPrev, bStringPrev, bitString, timeIndex=timeIndex, sizeFac=sizeFac, NAFac=NAFac)
-        bStrings[[N+1]] = bitString
-
-        Score = computeScoreTN(CNOlist, model, simList, indexList, simResPrev, bStringPrev=NULL,  bStringNext=NULL,
-            bStrings=bStrings, timeIndex=timeIndex, sizeFac=sizeFac, NAFac=NAFac)
 
         return(Score)
     }
@@ -99,12 +95,6 @@ gaBinaryTN <-function(
     #Loop
     t0<-Sys.time()
     t<-t0
-
-    # used by the scores hashTable.
-    scoresHash <- data.frame()
-    # if you do want the hastable, uncomment the following line.
-    #scoresHash = NULL
-
 
 
     # if bitstring has only 1 bit to optimize, enter this simple loop:
@@ -124,15 +114,14 @@ gaBinaryTN <-function(
             stringsTolScores=PopTolScores))
     }
 
-
-
     while(!stop){
 
         #compute the scores
-        scores<-apply(Pop,1,getObj, scoresHash=scoresHash)
+        #l1 = length(scores2Hash)
+        scores <- apply(Pop, 1, getObj)
+        #l2 = length(scores2Hash)
+        #if (verbose == TRUE){print(paste("new scores:", l2-l1))}
 
-        # fill the hash table to speed up code
-        scoresHash<-fillHashTable(scoresHash, scores, Pop, maxSizeHashTable)
 
         #Fitness assignment: ranking, linear
         rankP<-order(scores,decreasing=TRUE)
@@ -241,10 +230,10 @@ gaBinaryTN <-function(
     }
     #end of the while loop
 
-    PopTol<-PopTol[-1,]
+    PopTol<-as.matrix(PopTol[-1,])
     PopTolScores<-PopTolScores[-1]
     TolBs<-which(PopTolScores < scores[length(scores)]+tolScore)
-    PopTol<-PopTol[TolBs,]
+    PopTol<-as.matrix(PopTol[TolBs,])
     PopTolScores<-PopTolScores[TolBs]
     PopTolT<-cbind(PopTol,PopTolScores)
     PopTolT<-unique(PopTolT,MARGIN=1)
@@ -269,7 +258,6 @@ gaBinaryTN <-function(
     }
 
 
-
 addPriorKnowledge <- function(pop, priorBitString){
     if (is.null(priorBitString) == TRUE){
         return(pop)
@@ -282,3 +270,7 @@ addPriorKnowledge <- function(pop, priorBitString){
    return(pop)
 }
 
+
+.int2dec <- function(x){
+    return(sum(x*2^(rev(seq(x))-1)))
+}

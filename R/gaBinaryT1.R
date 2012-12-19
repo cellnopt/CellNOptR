@@ -29,7 +29,7 @@ gaBinaryT1<-function(
     relTol=0.1,
     verbose=TRUE,
     priorBitString=NULL,
-    maxSizeHashTable=1000, timeIndex=2){
+    timeIndex=2){
 
     # by default initial bit string is made of ones.
     if (is.null(initBstring)==TRUE){
@@ -75,21 +75,22 @@ gaBinaryT1<-function(
     PopTol<-rep(NA,bLength)
     PopTolScores<-NA
 
+    library(hash)
+    scores2Hash = hash()
+
     #Function that produces the score for a specific bitstring
-    getObj<-function(x, scoresHash=NULL){
+    getObj<-function(x){
 
-        bitString<-x
-
-        # the hash table is used to speed up code. gain is guaranteed to be at least equal to elitism/popsize
-        if (is.null(scoresHash)==FALSE){
-            thisScore <- scoresHash[rownames(scoresHash) == paste(unlist(x), collapse=","),1]
-             if (length(thisScore) != 0){
-                 return(thisScore)
-            } # otherwise let us keep going
+        key = toString(.int2dec(x))
+        if (has.key(key, scores2Hash)==TRUE){
+            return(scores2Hash[[key]])
+        } else {
+            Score = computeScoreT1(CNOlist, model, x, simList, indexList,
+                sizeFac, NAFac, timeIndex)
+            if (length(scores2Hash)<1000){
+                scores2Hash[[key]] =  Score
+            }
         }
-
-        Score = computeScoreT1(CNOlist, model, bitString, simList, indexList,
-			sizeFac, NAFac, timeIndex)
 
         return(Score)
     }
@@ -97,11 +98,6 @@ gaBinaryT1<-function(
     #Loop
     t0<-Sys.time()
     t<-t0
-
-    # used by the scores hashTable.
-    scoresHash <- data.frame()
-    # if you do want the hastable, uncomment the following line.
-    #scoresHash = NULL
 
 
     # if bitstring has only 1 bit to optimize, enter this simple loop:
@@ -124,10 +120,11 @@ gaBinaryT1<-function(
     while(!stop){
 
         #compute the scores
-        scores<-apply(Pop,1,getObj, scoresHash=scoresHash)
+        #l1 = length(scores2Hash)
+        scores <- apply(Pop, 1, getObj)
+        #l2 = length(scores2Hash)
+        #if (verbose == TRUE){print(paste("new scores:", l2-l1))}
 
-        # fill the hash table to speed up code
-        scoresHash<-fillHashTable(scoresHash, scores, Pop, maxSizeHashTable)
 
         #Fitness assignment: ranking, linear
         rankP<-order(scores,decreasing=TRUE)
@@ -276,48 +273,7 @@ addPriorKnowledge <- function(pop, priorBitString){
    return(pop)
 }
 
-# simple function to shift a data.frame
-shift <- function(d, k) rbind( tail(d,k), head(d,-k), deparse.level = 0 )
 
-
-
-fillHashTable <-function(scoresHash, scores, Pop, maxSizeHashTable=1000)
-{
-    # if not a data.frame, just return NULL
-    if (is.null(scoresHash)==TRUE){ return(NULL)}
-
-    popSize = dim(Pop)[1]
-    for (i in 1:dim(Pop)[1]){
-        thisScore <- scoresHash[rownames(scoresHash) == paste(unlist(Pop[i,]), collapse=","), 1]
-        # if not already stored, store the score and corresponding bitstring
-        if (length(thisScore) == 0){
-            # compute a new score
-            thisScore <- scores[i]
-            # rename the row (latest one) of the newly added score
-            if (dim(scoresHash)[1]<maxSizeHashTable){
-                scoresHash <- rbind(scoresHash, c(thisScore, 1))
-                j = dim(scoresHash)[1]
-                row.names(scoresHash)[j] = paste(unlist(Pop[i,]), collapse=",")
-            }
-            else{
-                # shift by -1 so that first element put in the queue (that
-                # we get rid of) is last
-                #indices = c(1:maxSizeHashTable-popSize*2)
-                #scoresHash[indices, ] = scoresHash[order(scoresHash[indices,2], decreasing=TRUE), ]
-                scoresHash = shift(scoresHash, -1)
-
-
-                #scoresHash = shift(scoresHash, -1)
-                # overwrite last element with the latest score and bitstring
-                scoresHash[maxSizeHashTable,] = c(thisScore, 1)
-                row.names(scoresHash)[maxSizeHashTable] =
-                    paste(unlist(Pop[i,]), collapse=",")
-            }
-         }
-         else {
-             count = scoresHash[rownames(scoresHash) == paste(unlist(Pop[i,]), collapse=","), 2]
-             scoresHash[rownames(scoresHash) == paste(unlist(Pop[i,]), collapse=","), 2] = count+1
-         }
-    }
-    return(scoresHash)
+.int2dec <- function(x){
+    return(sum(x*2^(rev(seq(x))-1)))
 }

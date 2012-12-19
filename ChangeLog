@@ -1,10 +1,17 @@
 1.5
 ====
 
+
+1.5.9
+-------
+
+    o gaBinary family function now uses the hash package instead of home-made
+      hash table(Task 185).
+
 1.5.8
 -------
-    o fixed bug in gtFit (C version) to handl NA and NaN properly. Bug report
-	183
+    o fixed bug in gtFit (C version) to handl NA and NaN properly. Bug report 138
+	
 
 1.5.7
 ------
