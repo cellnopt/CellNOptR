@@ -68,7 +68,7 @@ ToyT1<-gaBinaryT1(
 ToyT2<-gaBinaryTN(
 	CNOlist=CNOlistToy2,
 	model=model,
-	bString=list(ToyT1$bString),
+	bStrings=list(ToyT1$bString),
 	maxGens=20, 
 	popSize = 10,
 	verbose=FALSE)

@@ -19,7 +19,7 @@ a CNOlist
 parameter for the scaling of the data between 0 and 1, default=0.5
 }
   \item{HillCoef}{
-Hill coefficient for the scaling of the data, defat to 2
+Hill coefficient for the scaling of the data, default to 2
 }
   \item{EC50Noise}{
 parameter for the computation of a penalty for data comparatively smaller than
@@ -35,7 +35,7 @@ saturation level of the instrument, everything over this will be treated as NA, 
 threshold for relative change considered significant, default to 0
 }
   \item{norm2TorCtrl}{
-deprecated. Use mode argument instead.
+deprecated since 1.5.0. Use the mode argument instead.
 }
   \item{mode}{
 "time" or "ctrl" or "raw": choice of a normalisation method: "time" compute the relative change

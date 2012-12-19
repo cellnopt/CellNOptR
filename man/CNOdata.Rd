@@ -7,6 +7,8 @@ Get data from a CellNOpt data repository
 This function fetch a file from the URL provided (default is
 http://www.ebi.ac.uk~/cokelaer/cellnopt/data/_downloads)
 and save it into a temporary file.
+
+You will need Rcurl package to use this function.
 }
 \usage{
 CNOdata(filename, verbose=FALSE, url=NULL)
