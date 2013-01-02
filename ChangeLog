@@ -1,6 +1,14 @@
 1.5
 ====
 
+1.5.10
+-----------
+
+    o add cutCNOlist function that can remove signals and cues not found in a
+	  model
+	o make the CNOlist print method more verbose: print the cues and signals as
+	  in makeCNOlist
+
 
 1.5.9
 -------
@@ -10,8 +18,8 @@
 
 1.5.8
 -------
-    o fixed bug in gtFit (C version) to handl NA and NaN properly. Bug report 138
-	
+
+o fixed bug in gtFit (C version) to handl NA and NaN properly. Bug report 138
 
 1.5.7
 ------

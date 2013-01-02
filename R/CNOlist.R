@@ -90,6 +90,10 @@ setMethod(show, "CNOlist", function(object) {
     cat("stimuli:", colnames(stimuli(object)), "\n")
     cat("timepoints:", names(signals(object)), "\n")
     cat("signals:", colnames(signals(object)[[1]]), "\n")
+    cat("\n---- data (cues):\n\n")
+    print(cues(object))
+    cat("\n---- data (signals):\n\n")
+    print(signals(object))
 })
 
 #setMethod("plot", signature(x="CNOlist", y="missing"), function(x, y, ...){
