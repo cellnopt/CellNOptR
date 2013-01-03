@@ -38,11 +38,11 @@ threshold for relative change considered significant, default to 0
 deprecated since 1.5.0. Use the mode argument instead.
 }
   \item{mode}{
-"time" or "ctrl" or "raw": choice of a normalisation method: "time" compute the relative change
-compared to the control at the same time. "ctrl" compute the relative change
-compared to the same condition and measurement at time 0. "raw" does not take
-into account time zero data; data are relative to time 0 so can be positive or negative
-values.
+"time" or "ctrl" or "raw" (experimental): choice of a normalisation method:
+"ctrl" computes the relative change compared to the control at the same time.
+"time" computes the relative change compared to the same condition and
+measurement at time 0. "raw" does not take into account time zero data; data are
+relative to time 0 so can be positive or negative values.
 }
 }
 \details{
