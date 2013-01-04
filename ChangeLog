@@ -1,6 +1,14 @@
 1.5
 ====
 
+1.5.11
+---------
+
+    o changes in plotOptimResultsPan: NA value are now rendered as grey boxes
+	  instead of red boxes. The black line connecting measurements is printed.
+	  The ylim for the y axis can be set manually to overwrite the default
+	  behaviour.
+
 1.5.10
 -----------
 
