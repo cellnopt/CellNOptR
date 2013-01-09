@@ -37,6 +37,7 @@ export(
     "model2sif",
     "normaliseCNOlist",
     "plotCNOlist",
+    "plotCNOlist2",
     "plotCNOlistLarge",
     "plotCNOlistLargePDF",
     "plotCNOlistPDF",
@@ -47,6 +48,7 @@ export(
     "prep4sim",
     "prep4Sim",
     "preprocessing",
+    "randomizeCNOlist",
     "readMIDAS",
     "readSIF",
     "readSif",
@@ -68,4 +70,4 @@ export(
 # CNOlist class
 exportClasses(CNOlist)
 
-exportMethods("plot")
+exportMethods("plot", "randomize", "length")

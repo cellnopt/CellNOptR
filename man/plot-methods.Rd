@@ -2,6 +2,7 @@
 \docType{methods}
 \alias{plot.CNOlist}
 \alias{plot,CNOlist,ANY-method}
+\alias{plot,CNOlist,ANY,ANY-method}
 
 
 
@@ -11,20 +12,25 @@
 }
 
 \section{Usage}{
-    \code{signature(x="CNOlist")}: Please see the help page for the \code{plot.CNOlist} method in the \code{CellNOptR} package
+    \code{signature(x="CNOlist")}: If only one argument (a CNOlist) is provided,
+        this method calls \code{\link{plotCNOlist}}.
+
+    \code{signature(x="CNOlist", y="CNOlist")}: If 2 arguments (2 CNOlist
+        objects) are provided, this method calls \code{\link{plotCNOlist2}}.
 }
 \section{arguments}{
     \describe{
 	\item{x}{The \code{CNOlist} object to plot}
+	\item{y}{an optional \code{CNOlist} object to plot}
     }
 }
 
 
 \author{
-T.Cokelaer
+T. Cokelaer
 }
 \seealso{
-\code{\link{readMIDAS}}, \code{\link{makeCNOlist}}
+\code{\link{CNOlist}}
 }
 \examples{
 showClass("CNOlist")

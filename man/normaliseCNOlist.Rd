@@ -9,7 +9,7 @@ This function takes in a CNOlist and does the normalisation of the data between
 }
 \usage{
 normaliseCNOlist(CNOlist, EC50Data=0.5, HillCoef=2, EC50Noise=0.1, detection=0,
-    saturation=Inf, changeTh=0, norm2TorCtrl=NULL, mode="time")
+    saturation=Inf, changeTh=0, norm2TorCtrl=NULL, mode="time", verbose=FALSE)
 }
 \arguments{
   \item{CNOlist}{
@@ -43,6 +43,9 @@ deprecated since 1.5.0. Use the mode argument instead.
 "time" computes the relative change compared to the same condition and
 measurement at time 0. "raw" does not take into account time zero data; data are
 relative to time 0 so can be positive or negative values.
+}
+  \item{verbose}{
+prints some information if True (default is False)
 }
 }
 \details{

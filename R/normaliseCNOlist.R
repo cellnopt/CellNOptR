@@ -22,7 +22,7 @@ normaliseCNOlist <- function(
     saturation=Inf,
     changeTh=0,
     norm2TorCtrl=NULL,
-    mode="time"){
+    mode="time", verbose=FALSE){
 
 
     if ((class(CNOlist)=="CNOlist")==FALSE){
@@ -50,6 +50,9 @@ normaliseCNOlist <- function(
         stop("The parameter 'mode' should be either 'time' or 'ctrl' or 'raw'")
 
 
+    if (verbose==TRUE){
+        cat("Normalisation mode is: ", mode, "\n", sep="")
+    }
     # Check which values are out of the dynamic range of the machine: create a list
     # of matrices, one matrix for each time point (i.e. each element of the field
     # CNOlist$valueSignals) filled with FALSE if the measurement is in the dynamic
@@ -61,8 +64,18 @@ normaliseCNOlist <- function(
     NaNsList <- CNOlist@signals
 
     DynamicRange <- function(x){
+        if (verbose==TRUE){
+            data_sat = x[which(x > saturation )]
+            cat("found ", length(data_sat), " data points above saturation (", saturation, ").\n", sep="")
+        }
         x[which(x > saturation )] <- Inf
+
+        if (verbose==TRUE){
+            data = x[which(x < detection)]
+            cat("found ", length(data), " data points below detection (",detection, ").\n", sep="")
+        }
         x[which(x < detection )] <- Inf
+
         x[which(is.na(x))] <- Inf
         x[is.finite(x)] <- FALSE
         x[is.infinite(x)] <- TRUE
@@ -131,7 +144,6 @@ normaliseCNOlist <- function(
     # normalise, we look for a row in the valueStimuli that has only 0's but where
     # the corresponding row in the inhibitor matrix has the same status as the row
     # that we are trying to normalise.
-
         for(i in 2:length(FoldChangeList)){
             for(n in 1:dim(FoldChangeList[[i]])[1]){
                 #First I treat the rows that are not ctrls

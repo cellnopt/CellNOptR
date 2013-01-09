@@ -100,12 +100,30 @@ setMethod(show, "CNOlist", function(object) {
 #    plotCNOlist(x)
 #})
 
-setMethod("plot", "CNOlist", function(x, y, ...){
-
+setMethod("plot", "CNOlist", function(x, y, ... ){
     plotCNOlist(x)
-
+})
+setMethod("plot", signature(x="CNOlist", y="CNOlist"), function(x, y, ... ){
+    plotCNOlist2(x,y)
 })
 
+setMethod("length", "CNOlist", function(x) length(x@timepoints))
+
+#if (isGeneric("randomize")==FALSE){
+    setGeneric(
+        name="randomize",
+        def=function(object,sd=0.1, minValue=0,maxValue=1,mode="gaussian"){standardGeneric("randomize")}
+    )
+#}
+#lockBinding("randomize", .GlobalEnv)
+
+
+setMethod("randomize", "CNOlist", 
+    definition=function(object, sd=0.1, minValue=0, maxValue=1,mode="uniform"){
+        res = randomizeCNOlist(object, sd=sd, mode=mode)
+        return(res)
+    }
+)
 
 
 # used by the constructor not for export.
@@ -144,4 +162,5 @@ internal_CNOlist_from_makeCNOlist <- function(cnolist)
     return( list(cues=myCues, inhibitors=myInhibitors, stimuli=myStimuli,
         signals=mySignals, timepoints=myTimePoints))
 }
+
 

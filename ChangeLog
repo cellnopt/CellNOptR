@@ -1,5 +1,15 @@
 1.5
 ====
+1.5.12
+-----------
+
+    o add a randomizeCNOlist function to add gaussian noise into a CNOlist, or
+      replace data by uniform distribution
+	o add a new plotCNOlist function called plotCNOlist2 that uses ggplot2 and
+      can plot 2 cnolist at the same time for comparison.
+	o CNOlist class has 3 new methods: length, randomize and plot accepts either
+      one or 2 cnolist arguments.
+    o add verbose option in normaliseCNOlist
 
 1.5.11
 ---------
