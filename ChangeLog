@@ -10,6 +10,7 @@
 	o CNOlist class has 3 new methods: length, randomize and plot accepts either
       one or 2 cnolist arguments.
     o add verbose option in normaliseCNOlist
+    o readSIF can now read relation "A 1 B C D E" as excepted in SIF format.
 
 1.5.11
 ---------
