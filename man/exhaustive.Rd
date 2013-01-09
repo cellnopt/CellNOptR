@@ -1,10 +1,12 @@
 \name{exhaustive}
 \alias{exhaustive}
-\title{
-Genetic algorithm used to optimise a model
-}
+\title{Exhaustive search over the optimisation of a PKN model on MIDAS data.}
+
 \description{
-This function is the genetic algorithm to be used to optimise a model by fitting to data containing one time point.
+This function performs an exhaustive search of the parameter space tring all the
+solutions. It is used internally by the genetic algorithm when a small model has
+to be optimised and the number of solutions to try is smaller than the number of
+iterations that the Genetic Algorithm will perform.
 }
 \usage{
 exhaustive(CNOlist, model, shuffle=FALSE, Nmax=NULL, verbose=TRUE, sizeFac =
@@ -58,7 +60,7 @@ This function returns a list with elements:
 \item{stringsTol}{the bitstrings whose scores are within the tolerance}
 \item{stringsTolScores}{the scores of the above-mentioned strings}
 
-results, is not yet populated but maybe in the future.
+Note that the field results, is not yet populated but maybe in the future.
 }
 \author{
 T. Cokelaer
