@@ -35,6 +35,7 @@ export(
     "mapBack", 
     "makeCNOlist",
     "model2sif",
+    "model2igraph",
     "normaliseCNOlist",
     "plotCNOlist",
     "plotCNOlist2",

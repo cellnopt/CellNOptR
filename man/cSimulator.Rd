@@ -56,3 +56,5 @@ A. MacNamara based on former simulatorT1 version from C.Terfve.
 \seealso{
 \link{simulatorT1}.
 }
+
+\keyword{internal}
