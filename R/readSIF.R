@@ -20,8 +20,8 @@ readSIF<-function(sifFile){
     status = tryCatch({
             sif<-read.table(sifFile)
             sif<-as.matrix(sif)
-            return(TRUE)},
-        error = function(e) {     return(FALSE) })
+            status = TRUE},
+        error = function(e) { status = FALSE })
 
     # if the sif file has more than 3 columns e.g.:
     # A 1 B C
