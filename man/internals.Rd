@@ -1,4 +1,4 @@
-\name{inernals}
+\name{internals}
 \alias{internals}
 \title{
 List of CellNOptR internal functions.
@@ -12,10 +12,11 @@ by tying preceding the name of the function with question tag.
 
 
  \details{
-  \tabular{ll}{
-  function: \tab manual \cr
-  cSimulator: \tab yes\cr
-  buildBitString: \tab yes\cr
+  \tabular{|l|l|l|l|}{
+  function:         \tab deprecated since           \tab manual \cr
+  cSimulator:       \tab internal usage             \tab yes    \cr
+  buildBitString:   \tab internal usage             \tab yes    \cr
+  simulateT1:       \tab 1.3.28 (use simulateTN)   \tab yes\cr
   }
 }
 

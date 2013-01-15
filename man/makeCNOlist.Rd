@@ -5,7 +5,8 @@ Make a CNOlist structure
 }
 \description{
 This function takes as input the output of readMIDAS and extracts the elements
-that are needed in a CNO project.
+that are needed in a CNO project. Instead, please use the \code{CNOlist} class to read a MIDAS
+file that will be converted to a CNOlist.
 }
 \usage{
 makeCNOlist(dataset, subfield, verbose=TRUE)

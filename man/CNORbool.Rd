@@ -9,7 +9,7 @@ It optimises each time point found in the data and returns the processed model
 as well as a list of optimised bitstring corresponding to each time points that
 has been optimised.
 
-This function does not create any plots or reports.
+This function does not create any plots or reports unlike \code{\link{CNORwrap}}.
 }
 \usage{
 CNORbool(CNOlist, model, paramsList=defaultParameters(),
