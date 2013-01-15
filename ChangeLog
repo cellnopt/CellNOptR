@@ -1,9 +1,12 @@
 1.5
 ====
 
+
 1.5.13
 ---------
     o add model2igraph function.
+    o add shuffle option in randomizeCNOlist
+	o add variancs in makeCNOlist and adapt CNOlist accordingly.
 
 
 1.5.12

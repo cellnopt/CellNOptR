@@ -28,6 +28,7 @@ Objects can be created by calls of the form \code{new("CNOlist", ...)}.
     \item{\code{inhibitors}:}{Object of class \code{"matrix"}  }
     \item{\code{stimuli}:}{Object of class \code{"matrix"} }
     \item{\code{signals}:}{Object of class \code{"list"}  }
+    \item{\code{variances}:}{Object of class \code{"list"}  }
     \item{\code{timepoints}:}{Object of class \code{"vector"} timepoints contained in the signals matrix. }
   }
 }
@@ -64,6 +65,7 @@ cnolist  = CNOlist(files[[1]])
 cnolist@cues
 cnolist@inhibitors
 cnolist@signals
+cnolist@variances
 cnolist@timepoints
 cnolist@stimuli
 # In version 1.3.30 and above, use the plot method instead of former plotCNOlist function.

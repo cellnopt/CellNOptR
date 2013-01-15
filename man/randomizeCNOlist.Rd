@@ -25,11 +25,11 @@ minValue(default 0). If so, the value is set to minValue.
   \item{maxValue}{When adding Gaussian noise, the result may be above the
 maxValue(default 1). If so, the value is set to maxValue.
 }
-  \item{mode}{The mode can be either 'gaussian' or uniform'. In gaussian mode, a
+  \item{mode}{The mode can be either 'gaussian', 'shuffle' or uniform'. In gaussian mode, a
 gaussian noise is added to the data. The mean parameter is the
 data and the standard deviation is defined by the sd parameter. In uniform mode,
 the data is simply replaced by values taken from a uniform distribution between
-0 and 1.
+0 and 1. In 'shuffle' mode all rows and columns are shuffled.
 }
 
 }

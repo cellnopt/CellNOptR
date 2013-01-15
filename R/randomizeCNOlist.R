@@ -21,26 +21,33 @@
 # the data is not used anymore.
 randomizeCNOlist <- function(cnolist, sd=0.1, minValue=0, maxValue=1, mode="gaussian"){
 
-     if (mode %in% list("gaussian", "uniform")==FALSE){
-         stop("mode can be only 'gaussian'")
-     }
+    if (mode %in% list("gaussian", "uniform", "shuffle")==FALSE){
+        stop("mode can be only 'gaussian', 'uniform', or 'shuffle'")
+    }
 
-     cnames = colnames(cnolist@signals$`0`)
-     dimensions = dim(cnolist@signals$`0`)
-     times = cnolist@timepoints
+    cnames = colnames(cnolist@signals$`0`)
+    dimensions = dim(cnolist@signals$`0`)
+    times = cnolist@timepoints
 
 
-     for (time in 2:length(times)){
-         if (mode=="gaussian"){
-             cnolist@signals[[time]] = rnorm(cnolist@signals[[time]], sd=sd)
-         }
-         if (mode=="uniform"){
-             cnolist@signals[[time]] = runif(cnolist@signals[[time]])
-         }
-         cnolist@signals[[time]][cnolist@signals[[time]]<0] <- 0
-         cnolist@signals[[time]][cnolist@signals[[time]]>1] <- 1
-         dim(cnolist@signals[[time]])<-dimensions
-         colnames(cnolist@signals[[time]])<-cnames
+    for (time in 2:length(times)){
+        if (mode=="gaussian"){
+            cnolist@signals[[time]] = rnorm(cnolist@signals[[time]], sd=sd)
+        }
+        if (mode=="uniform"){
+            cnolist@signals[[time]] = runif(cnolist@signals[[time]])
+        }
+        if (mode=="shuffle"){
+            cnolist@signals[[time]] = sample(signals(c)[[time]])
+
+        }
+        # make sure that values are still in the expected range
+        cnolist@signals[[time]][cnolist@signals[[time]]<minValue] <- minValue
+        cnolist@signals[[time]][cnolist@signals[[time]]>maxValue] <- maxValue
+
+        # set back the column names that are lost
+        dim(cnolist@signals[[time]])<-dimensions
+        colnames(cnolist@signals[[time]])<-cnames
     }
 
      return(cnolist)

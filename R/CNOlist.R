@@ -29,6 +29,7 @@ setClass("CNOlist",
         inhibitors="matrix",
         stimuli="matrix",
         signals="list",
+        variances="list",
         timepoints="vector"),
     ## validity method
     validity=function(object) {
@@ -66,9 +67,8 @@ CNOlist <-function(data, subfield=FALSE, verbose=FALSE){
         }
     }
 
-
     new("CNOlist", cues=res$cues, inhibitors=res$inhibitors,
-        stimuli=res$stimuli, signals=res$signals, timepoints=res$timepoints)
+        stimuli=res$stimuli, signals=res$signals, variances=res$variances, timepoints=res$timepoints)
 }
 
 
@@ -78,6 +78,7 @@ cues <- function(cnoList, ...) cnoList@cues
 inhibitors <- function(cnoList, ...) cnoList@inhibitors
 stimuli <- function(cnoList, ...) cnoList@stimuli
 signals <- function(cnoList, ...) cnoList@signals
+variances <- function(cnoList, ...) cnoList@variances
 timepoints <- function(cnoList, ...) cnoList@timepoints
 #plot <- function(cnoList, ...) plotCNOlist(cnoList)
 
@@ -90,10 +91,9 @@ setMethod(show, "CNOlist", function(object) {
     cat("stimuli:", colnames(stimuli(object)), "\n")
     cat("timepoints:", names(signals(object)), "\n")
     cat("signals:", colnames(signals(object)[[1]]), "\n")
-    cat("\n---- data (cues):\n\n")
-    print(cues(object))
-    cat("\n---- data (signals):\n\n")
-    print(signals(object))
+    cat("variances:", colnames(signals(object)[[1]]), "\n")
+    cat("--\nTo see the values of any data contained in this instance, just use the
+method (e.g., cues(cnolist), signals(cnolist), variances(cnolist), ...\n\n")
 })
 
 #setMethod("plot", signature(x="CNOlist", y="missing"), function(x, y, ...){
@@ -153,14 +153,17 @@ internal_CNOlist_from_makeCNOlist <- function(cnolist)
 
     mySignals <- cnolist$valueSignals
     names(mySignals) <- cnolist$timeSignals
-    mySignals <-
-        lapply(mySignals, "colnames<-", cnolist$namesSignals)
+    mySignals <- lapply(mySignals, "colnames<-", cnolist$namesSignals)
+
+    myVars <- cnolist$valueVariances
+    names(myVars) <- cnolist$timeSignals
+    myVars <- lapply(myVars, "colnames<-", cnolist$namesSignals)
 
     myTimePoints <- cnolist$timeSignals
 
     #CNOlist(myCues, myInhibitors, myStimuli, mySignals)
     return( list(cues=myCues, inhibitors=myInhibitors, stimuli=myStimuli,
-        signals=mySignals, timepoints=myTimePoints))
+        signals=mySignals, variances=myVars, timepoints=myTimePoints))
 }
 
 
