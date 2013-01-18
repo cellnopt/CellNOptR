@@ -155,9 +155,16 @@ internal_CNOlist_from_makeCNOlist <- function(cnolist)
     names(mySignals) <- cnolist$timeSignals
     mySignals <- lapply(mySignals, "colnames<-", cnolist$namesSignals)
 
-    myVars <- cnolist$valueVariances
-    names(myVars) <- cnolist$timeSignals
-    myVars <- lapply(myVars, "colnames<-", cnolist$namesSignals)
+    if ("valueVariances" %in% names(cnolist)){
+        myVars <- cnolist$valueVariances
+        names(myVars) <- cnolist$timeSignals
+        myVars <- lapply(myVars, "colnames<-", cnolist$namesSignals)
+    } else{
+        myVars = mySignals
+        for (time in 1:length(mySignals)){
+            myVars[[time]] = myVars[[time]] * NA
+        }
+    }
 
     myTimePoints <- cnolist$timeSignals
 
