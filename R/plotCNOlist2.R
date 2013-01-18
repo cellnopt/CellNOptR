@@ -26,6 +26,8 @@ plotCNOlist2<-function(cnolist, simulated_cnolist=NULL, ymin=0, ymax=1){
         d = .cnolist2ggdata(cnolist)
     }
 
+    times=NULL # just to prevent warnings
+    type=NULL # just to prevent warnings
     # in ggplot, you can remove colour=type to get only black lines
     # remove shape=type to get black-circle symbol
     sp <- ggplot(d, aes(x=times, y=values, group=type, shape=type, colour=type)) +

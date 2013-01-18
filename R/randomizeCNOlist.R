@@ -38,7 +38,7 @@ randomizeCNOlist <- function(cnolist, sd=0.1, minValue=0, maxValue=1, mode="gaus
             cnolist@signals[[time]] = runif(cnolist@signals[[time]])
         }
         if (mode=="shuffle"){
-            cnolist@signals[[time]] = sample(signals(c)[[time]])
+            cnolist@signals[[time]] = sample(getSignals(c)[[time]])
 
         }
         # make sure that values are still in the expected range

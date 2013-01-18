@@ -2,6 +2,14 @@
 ====
 
 
+1.5.14
+--------
+
+    o fixing manual
+    o add compatCNOlist to convert CNOlist class to makeCNOlist for back
+      compatibiltiy. This is a CNOlist class method
+	o add getter in CNOlist
+
 1.5.13
 ---------
     o add model2igraph function.
