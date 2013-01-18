@@ -50,6 +50,7 @@ CNORbool<-function(CNOlist, model, paramsList=defaultParameters(),
         T0index = timeIndices[[1]]
     }
 
+    allRes = c()
     T1opt<-gaBinaryT1(CNOlist=cnolist,
         model=model,
         initBstring=initBstring,
@@ -66,10 +67,11 @@ CNORbool<-function(CNOlist, model, paramsList=defaultParameters(),
         verbose=paramsList$verbose, 
         timeIndex=T0index)
     bStrings[[1]] = T1opt$bString
+    allRes = c(allRes, T1opt)
 
 
     if (length(cnolist@signals)==2){
-        return(list(model=model, bStrings=bStrings))
+        return(list(model=model, bStrings=bStrings, results=allRes))
     }
 
     #.Optimise tN where N>1
@@ -97,6 +99,7 @@ CNORbool<-function(CNOlist, model, paramsList=defaultParameters(),
                 relTol=paramsList$relTol,
                 verbose=paramsList$verbose)
 
+            allRes = c(allRes, TNopt)
             bStrings[[Times]] = TNopt$bString
             print(TNopt$bString)
 
@@ -125,6 +128,7 @@ CNORbool<-function(CNOlist, model, paramsList=defaultParameters(),
                 relTol=paramsList$relTol,
                 verbose=paramsList$verbose, timeIndex=timeIndices[[i]])
 
+            allRes = c(allRes, TNopt)
             bStrings[[Times]] = TNopt$bString
             print(TNopt$bString)
 
@@ -135,7 +139,5 @@ CNORbool<-function(CNOlist, model, paramsList=defaultParameters(),
         }
     }
 
-
-
-    return(list(model=model, bStrings=bStrings))
+    return(list(model=model, bStrings=bStrings, results=allRes))
 }

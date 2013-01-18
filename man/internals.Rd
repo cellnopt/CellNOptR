@@ -12,11 +12,12 @@ by tying preceding the name of the function with question tag.
 
 
  \details{
-  \tabular{|l|l|l|l|}{
-  function:         \tab deprecated since           \tab manual \cr
+  \tabular{lll}{
+  Function:         \tab deprecated since           \tab manual \cr
+  ------------         \tab ---------------------          \tab ---------- \cr
   cSimulator:       \tab internal usage             \tab yes    \cr
   buildBitString:   \tab internal usage             \tab yes    \cr
-  simulateT1:       \tab 1.3.28 (use simulateTN)   \tab yes\cr
+  simulateT1:       \tab 1.3.28 (use simulateTN)   \tab yes     \cr
   }
 }
 

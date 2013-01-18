@@ -17,13 +17,14 @@ The name of a SIF file (Cytoscape format). See details for the accepted format.
 }
 \details{
 The input argument is the name of a SIF file that contains a prior knowledge
-network. The SIF format (See
-\link{http://wiki.cytoscape.org/Cytoscape_User_Manual/Network_Formats/}) can be of the
-form:
+network. The SIF format (See http://wiki.cytoscape.org/Cytoscape_User_Manual/Network_Formats/) 
+can be of the form:
 
-\code{
-\cr nodeA typeA node2
-\cr node2 typeB node3 node4}
+\code{ nodeA typeA node2}
+
+or
+
+\code{ node2 typeB node3 node4}
 
 with space or tabulations in between types and nodes. Spaces and tabulations
 have different meaning in the original cytoscape format. However, we do not
