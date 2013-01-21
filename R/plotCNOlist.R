@@ -46,14 +46,14 @@ plotCNOlist<-function(CNOlist){
             y=(yMin+((yMax-yMin)/2)),cex=2)
         }
 
-        plot(
-            x=xVal,
-            y=rep(-5,length(xVal)),
-            ylim=c(yMin, yMax),xlab=NA,ylab=NA,xaxt="n",yaxt="n")
-        text(
-            labels="Cues",
-            x=((xVal[length(xVal)]-xVal[1])/2),
-            y=(yMin+((yMax-yMin)/2)),cex=2)
+    plot(
+        x=xVal,
+        y=rep(-5,length(xVal)),
+        ylim=c(yMin, yMax),xlab=NA,ylab=NA,xaxt="n",yaxt="n")
+    text(
+        labels="Cues",
+        x=((xVal[length(xVal)]-xVal[1])/2),
+        y=(yMin+((yMax-yMin)/2)),cex=2)
 
     par(fg="black",mar=c(0.5,0.5,0,0))
 
