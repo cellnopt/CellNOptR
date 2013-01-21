@@ -170,10 +170,11 @@ setGeneric(
     def=function(object){standardGeneric("compatCNOlist")})
 setMethod("compatCNOlist", "CNOlist",
     definition=function(object){
-        return(internal_comnpatCNOlist(object))})
+        return(internal_compatCNOlist(object))})
 
 
 internal_compatCNOlist<-function(cnolist){
+
 
     if (class(cnolist)=="CNOlist"){
 
@@ -182,8 +183,8 @@ internal_compatCNOlist<-function(cnolist){
              namesCues=colnames(cnolist@cues),
              namesStimuli=colnames(cnolist@stimuli),
              namesInhibitors=colnames(cnolist@inhibitors),
-             namesSignals=colnames(cnolist@signals),
-             timeSignals=names(getSignals(cnolist)),
+             namesSignals=colnames(cnolist@signals[[1]]),
+             timeSignals=getTimepoints(cnolist),
              valueCues=cnolist@cues,
              valueInhibitors=cnolist@inhibitors,
              valueStimuli=cnolist@stimuli,
@@ -229,7 +230,6 @@ internal_CNOlist_from_makeCNOlist <- function(cnolist)
 
     if ("valueVariances" %in% names(cnolist)){
         myVars <- cnolist$valueVariances
-        names(myVars) <- cnolist$timeSignals
         myVars <- lapply(myVars, "colnames<-", cnolist$namesSignals)
     } else{
         myVars = mySignals
