@@ -1,6 +1,6 @@
 %\VignetteIndexEntry{Main vignette:Playing with networks using CNORode}
-%\VignetteKeywords{Training Signalling Pathway Maps to 
-%	Biochemical Data with Logic-Based Ordinary Differential Equations
+%\VignetteKeywords{Training Signalling Pathway Maps to
+%    Biochemical Data with Logic-Based Ordinary Differential Equations
 %}
 
 %\VignettePackage{CNORode}
@@ -49,8 +49,8 @@
 
 \DefineVerbatimEnvironment{shell}{Verbatim}{formatcom=\color{blue}}
 
-\title{Training Signalling Pathway Maps to 
-	Biochemical Data with Logic-Based Ordinary Differential Equations
+\title{Training Signalling Pathway Maps to
+    Biochemical Data with Logic-Based Ordinary Differential Equations
 }
 \author[1,2]{David Henriques}
 \author[1]{Thomas Cokelaer \thanks{cokelaer@ebi.ac.uk}}
@@ -70,7 +70,7 @@ options(width=70, useFancyQuotes="UTF-8", prompt=" ", continue="  ")
 
 \section{Introduction}
 
-Mathematical models are used to understand protein signalling networks so as to 
+Mathematical models are used to understand protein signalling networks so as to
 provide an integrative view of pharmacological and toxicological processes at
 molecular level. \emph{CellNOptR}~\cite{CellNOptR} is an existing
 package (see
@@ -79,26 +79,26 @@ provides functionalities to combine
 prior knowledge network (about protein signalling networks) and perturbation
 data to infer functional characteristics (of the signalling network).
 While \emph{CellNOptR} has demonstrated its ability to infer new functional
-characteristics, it is based on a boolean formalism where protein species are 
+characteristics, it is based on a boolean formalism where protein species are
 characterised as being fully active or inactive. In contrast, logic-based ordinary
 differential equations allow a quantitive description of a given Boolean model.
 
 The method used here was first published by Wittmann et al. \cite{wittman} by
 the name of \emph{odefy}.
-For a detailed description of the methodology the user is adressed to \cite{wittman} and for 
+For a detailed description of the methodology the user is adressed to \cite{wittman} and for
 a published application example to \cite{wittmanJS}.
 
 This package implements the Odefy method and focus mainly extending the \emph{CellNOptR}
-capabilities in order to simulate and calibrate logic-based ordinary differential 
-equation model. We provide direct and easy to use interface to optimization methods 
+capabilities in order to simulate and calibrate logic-based ordinary differential
+equation model. We provide direct and easy to use interface to optimization methods
 available in R such as \emph{eSSR} \cite{eSSR1} (enhanced Scatter Search Metaheuristic for R) and an R genetic
 algorithm implementation by the name of \emph{genalg} in order to perform parameter estimation.
 Additionally we were specially careful in tackling the main computanional bottlenecks
 by implementing CNORode simulation engine in the C language using the
 \emph{CVODES} library \cite{cvodes}.
 
-This brief tutorial shows how to use \emph{CNORode} using as a starting point a Boolean model 
-and a dataset consisting in a time-series of several proteins. 
+This brief tutorial shows how to use \emph{CNORode} using as a starting point a Boolean model
+and a dataset consisting in a time-series of several proteins.
 
 \section{Installation}
 
@@ -116,9 +116,9 @@ It may take a few minutes to install all dependencies if you start from scratch
 Linux system, some of these packages necessitate the R-devel package to be
 installed (e.g., under Fedora type \emph{sudo yum install R-devel}).
 
-Additionally, for parameter estimation we recommend the use of \emph{eSSR}. This algorithm 
+Additionally, for parameter estimation we recommend the use of \emph{eSSR}. This algorithm
 algorithm is part of the MEIGOR toolbox. Although this package is
-not available on BioConductor, it can be downloaded from 
+not available on BioConductor, it can be downloaded from
 \url{http://www.ebi.ac.uk/saezrodriguez/cno/downloads.html}. Once downloaded, install
 MEIGOR by typing:
 
@@ -138,18 +138,18 @@ library(CNORode)
 \label{sec:quickstart}
 \section{Quick Start}
 
-In this section, we provide a quick example on how to use \emph{CNORode} to 
+In this section, we provide a quick example on how to use \emph{CNORode} to
 find the set of continuous parameters which minimize the squared difference
 between a model simulation and the experimental data.
 
-Since here we will not be modifying the model structure as opposed to \emph{CellNOptR} 
+Since here we will not be modifying the model structure as opposed to \emph{CellNOptR}
 we will use a model that already contains AND type gates. Such model can be for instance
 the result of calibrating a \textit{prior knowledge network}(PKN) with \emph{CellNOptR}.
 Please note that a PKN can also be used as Boolean model which will contain only OR type gates.
 
-Detailed information about the model used here (ToyModelMMB\_FeedbackAnd) and additional models can be found at: 
+Detailed information about the model used here (ToyModelMMB\_FeedbackAnd) and additional models can be found at:
 
-\url{http://www.ebi.ac.uk/~cokelaer/cno/doc/sampleModels/}
+\url{http://www.ebi.ac.uk/~cokelaer/cellnopt/data/}
 
 \begin{center}
 \begin{figure}[ht]
@@ -166,54 +166,53 @@ should type the following commands:
 
 % show data and model loading
 <<quickstart, eval=TRUE, results=hide>>=
-	library(CNORode)
-	model=readSIF(system.file("/doc/ToyModelMMB_FeedbackAnd.sif",
-		package="CNORode"));
-	cno_data=readMIDAS(system.file("/doc/ToyModelMMB_FeedbackAnd.csv",
-		package="CNORode"));
-	cnolist=makeCNOlist(cno_data,subfield=FALSE);
+    library(CNORode)
+    model=readSIF(system.file("/doc/ToyModelMMB_FeedbackAnd.sif",
+        package="CNORode"));
+    cnolist = CNOlist(system.file("/doc/ToyModelMMB_FeedbackAnd.csv",
+        package="CNORode"))
 @
 
-The structure from the CNOlist and the Model object is exactly the same as used in the 
-\emph{CellNOptR} and therefore for a detailed explanation about these structure we direct 
+The structure from the CNOlist and the Model object is exactly the same as used in the
+\emph{CellNOptR} and therefore for a detailed explanation about these structure we direct
 the reader to the \emph{CellNOptR} manual.
 
-In order to simulate the model and perform parameter estimation we first need to create 
+In order to simulate the model and perform parameter estimation we first need to create
 a list with the ODE parameters associated with each dynamic state as described in \cite{wittman}.
-Each dynamic state will have a \(\tau\) parameter, as many \(n\) and \(k\) parameters as inputs. 
-Although the default is to use the normalized Hill function it also possible to use the 
+Each dynamic state will have a \(\tau\) parameter, as many \(n\) and \(k\) parameters as inputs.
+Although the default is to use the normalized Hill function it also possible to use the
 standard Hill or even not to use any transfer function at all. To illustrate the shape of the equations
 associated to each dynamic state and the meaning of each parameter, let us show the differential
-of \textit{Mek}: 
- 
+of \textit{Mek}:
 
-\[ \dot{Mek}=\Bigg[  \Bigg( 1 - \frac{Akt^{n_1}/({k_1}^{n_1} + Akt^{n_1})}{1/({k_1}^{n_1} + 1)}\Bigg) 
-	\cdot \Bigg(\frac{Raf^{n_2}/({k_2}^{n_2} + Raf^{n_2})}{1/({k_2}^{n_2} + 1)}\Bigg) - Mek \Bigg] \cdotp \tau_{Mek} 
+
+\[ \dot{Mek}=\Bigg[  \Bigg( 1 - \frac{Akt^{n_1}/({k_1}^{n_1} + Akt^{n_1})}{1/({k_1}^{n_1} + 1)}\Bigg)
+    \cdot \Bigg(\frac{Raf^{n_2}/({k_2}^{n_2} + Raf^{n_2})}{1/({k_2}^{n_2} + 1)}\Bigg) - Mek \Bigg] \cdotp \tau_{Mek}
 \]
 
 To create a list of ODE parameters we will typically use the \emph{createLBodeContPars} function:
 
 <<>>=
-	ode_parameters=createLBodeContPars(model, LB_n = 1, LB_k = 0.1,
-		LB_tau = 0.01, UB_n = 5, UB_k = 0.9, UB_tau = 10, default_n = 3, 
-		default_k = 0.5, default_tau = 1, opt_n = TRUE, opt_k = TRUE,
-		opt_tau = TRUE, random = FALSE)
+    ode_parameters=createLBodeContPars(model, LB_n = 1, LB_k = 0.1,
+        LB_tau = 0.01, UB_n = 5, UB_k = 0.9, UB_tau = 10, default_n = 3,
+        default_k = 0.5, default_tau = 1, opt_n = TRUE, opt_k = TRUE,
+        opt_tau = TRUE, random = FALSE)
 @
 
-This function creates a general structure where the ODE parameters are ordered according 
-to the model. Some tweaks have been added in order to ease tasks we have found 
-to be common, nevertheless you can edit several attributes manually. If you print the 
+This function creates a general structure where the ODE parameters are ordered according
+to the model. Some tweaks have been added in order to ease tasks we have found
+to be common, nevertheless you can edit several attributes manually. If you print the
 \emph{ode\_parameters}  list you will see the following attributes.
 
 \clearpage
 <<>>=
-	print(ode_parameters)
+    print(ode_parameters)
 @
-\clearpage 
+\clearpage
 
 Typically before running an optimization run you will want to choose which type of parameters
 you want to optimize. The field \emph{index\_opt\_pars} defines which parameters are meant to be optimized.
-In the \emph{createLBodeContPars}, if you choose \(opt\_tau \) as \(TRUE\)  all \( \tau \) parameters will be 
+In the \emph{createLBodeContPars}, if you choose \(opt\_tau \) as \(TRUE\)  all \( \tau \) parameters will be
 added to the index\_opt\_pars array, the same idea is valid for \( n \) and \( k \) parameters.
 
 It is also possible to choose default values for lower and upper bounds for the parameters of a given type,
@@ -230,7 +229,7 @@ sampled in 5 different instants (\emph{timeSignals}).
 \begin{center}
 <<label=plotModelSim,include=TRUE,fig=TRUE>>=
 modelSim=plotLBodeModelSim(cnolist, model, ode_parameters,
- 	timeSignals=seq(0,2,0.5));
+     timeSignals=seq(0,2,0.5));
 @
 \caption{A model simulation plotted with \emph{plotLBodeModelSim} ..
 \label{fig:plotModelSimFig}}
@@ -240,23 +239,23 @@ modelSim=plotLBodeModelSim(cnolist, model, ode_parameters,
 \clearpage
 
 As previously mentioned, we provide two optimization algorithms that allow parameter estimation
-Both of these algorithms have specific parameters that can be tunned on each specific problem 
-(please check CNORode manual for detailed information). For instance, in order to run the 
+Both of these algorithms have specific parameters that can be tunned on each specific problem
+(please check CNORode manual for detailed information). For instance, in order to run the
 genetic algorithm for 10 iterations and a population of size of 10, we can use the following code:
 
 <<eval=TRUE, results=hide>>=
 initial_pars=createLBodeContPars(model, LB_n = 1, LB_k = 0.1,
-	LB_tau = 0.01, UB_n = 5, UB_k = 0.9, UB_tau = 10, random = TRUE)
+    LB_tau = 0.01, UB_n = 5, UB_k = 0.9, UB_tau = 10, random = TRUE)
 #Visualize initial solution
 simulatedData=plotLBodeFitness(cnolist, model,initial_pars)
 paramsGA = defaultParametersGA()
 paramsGA$maxStepSize = 1
 paramsGA$popSize = 50
-paramsGA$iter = 100
+paramsGA$iters = 300
 paramsGA$transfer_function = 2
-	
+
 opt_pars=parEstimationLBode(cnolist,model,ode_parameters=initial_pars,
-	paramsGA=paramsGA)
+    paramsGA=paramsGA)
 #Visualize fitted solution
 simulatedData=plotLBodeFitness(cnolist, model,ode_parameters=opt_pars)
 @
@@ -265,10 +264,10 @@ simulatedData=plotLBodeFitness(cnolist, model,ode_parameters=opt_pars)
 \begin{figure}[ht]
 
 <<label=plotInit,include=TRUE,fig=TRUE>>=
-	simulatedData=plotLBodeFitness(cnolist, model,initial_pars)
+    simulatedData=plotLBodeFitness(cnolist, model,initial_pars)
 @
 \caption{The initial solution before optimization. Each row corresponds to an experiment with a particular combination of stimuli and inhibitors.
-The columns correspond to the measured values (triangles) and the simulated values (dashed blue lines) from a given signal. The background color 
+The columns correspond to the measured values (triangles) and the simulated values (dashed blue lines) from a given signal. The background color
 gives an indication of squared difference where red means high error and white low error.}
 \label{fig:plotInitFit}
 
@@ -279,11 +278,11 @@ gives an indication of squared difference where red means high error and white l
 \begin{figure}[ht]
 \begin{center}
 <<label=plotFinalFit_fit,include=TRUE,fig=TRUE>>=
-	simulatedData=plotLBodeFitness(cnolist, model,ode_parameters=opt_pars)
+    simulatedData=plotLBodeFitness(cnolist, model,ode_parameters=opt_pars)
 @
 \end{center}
 \caption{A solution obtained by optimization with a genetic algorithm.Each row corresponds to an experiment with a particular combination of stimuli and inhibitors.
-The columns correspond to the measured values (triangles) and the simulated values (dashed blue lines) from a given signal. The background color 
+The columns correspond to the measured values (triangles) and the simulated values (dashed blue lines) from a given signal. The background color
 gives an indication of squared difference where red means high error and white low error.}
 \label{fig:plotFinalFit}
 \end{figure}
@@ -298,12 +297,12 @@ In the following example we show how to generate and use an the objective functi
 <<eval=FALSE>>=
 library(MEIGOR)
 f_hepato<-getLBodeContObjFunction(cnolist, model, initial_pars, indices=NULL,
- time = 1, verbose = 0, transfer_function = 2, reltol = 1e-05, atol = 1e-03, 
+ time = 1, verbose = 0, transfer_function = 2, reltol = 1e-05, atol = 1e-03,
 maxStepSize = Inf, maxNumSteps = 1e4, maxErrTestsFails = 50, nan_fac = 1)
 n_pars=length(initial_pars$LB);
 
 problem<-list(f=f_hepato, x_L=initial_pars$LB[initial_pars$index_opt_pars],
-	x_U=initial_pars$UB[initial_pars$index_opt_pars]);
+    x_U=initial_pars$UB[initial_pars$index_opt_pars]);
 
 #Source a function containing the options used in the CeSSR publication
  source(system.file("benchmarks","get_paper_settings.R",package="MEIGOR"))
@@ -328,7 +327,7 @@ P.K~Sorger.: Networks inferred from biochemical data reveal profound
   and transformed hepatocytes.
 \newblock Molecular \& Cellular Proteomics: {MCP} \textbf{9}(9), 1849--1865
   (2010).
-  
+
 \bibitem{MMB}
 M.K.~Morris, I.~Melas, J.~Saez-Rodriguez.
 \newblock Construction of cell type-specific logic models of signalling networks using CellNetOptimizer.
@@ -348,32 +347,32 @@ J.~Saez-Rodriguez, L.~Alexopoulos, J.~Epperlein, R.~Samaga, D.~Lauffenburger, S.
 
 \bibitem{wittmanJS}
 Dominik Wittmann, Jan Krumsiek, Julio S. Rodriguez, Douglas
-Lauffenburger, Steffen Klamt, and Fabian Theis. 
+Lauffenburger, Steffen Klamt, and Fabian Theis.
 \newblock Transforming boolean models to continuous models: methodology and application to t-cell
 receptor signaling.
 \newblock BMC Systems Biology, 3(1):98+, September 2009.
 
 \bibitem{eSSR1}
-Egea, J.A., Maria, R., Banga, J.R. (2010) 
-\newblock An evolutionary method for complex-process optimization. 
+Egea, J.A., Maria, R., Banga, J.R. (2010)
+\newblock An evolutionary method for complex-process optimization.
 \newblock Computers \& Operations Research 37(2):315\-324.
- 
-\bibitem{eSSR2} 
-Egea, J.A., Balsa-Canto, E., Garcia, M.S.G., Banga, J.R. (2009) 
+
+\bibitem{eSSR2}
+Egea, J.A., Balsa-Canto, E., Garcia, M.S.G., Banga, J.R. (2009)
 \newblock Dynamic optimization of nonlinear processes with an enhanced scatter search
-method. 
-\newblock Industrial \& Engineering Chemistry Research 49(9): 4388\-4401. 
+method.
+\newblock Industrial \& Engineering Chemistry Research 49(9): 4388\-4401.
 
 \bibitem{wittman}
 Jan Krumsiek, Sebastian Polsterl, Dominik Wittmann, and Fabian Theis.
-\newblock Odefy - from discrete to continuous models. 
+\newblock Odefy - from discrete to continuous models.
 \newblock BMC Bioinformatics, 11(1):233+, 2010.
 
 \bibitem{cvodes}
 R. Serban and A. C. Hindmarsh
 \newblock"CVODES: the Sensitivity\-Enabled ODE Solver in SUNDIALS,"
 \newblock Proceedings of IDETC/CIE 2005, Sept. 2005, Long Beach, CA. Also available as LLNL
-technical report UCRL\-JP\-200039.     
+technical report UCRL\-JP\-200039.
 
 \end{thebibliography}
 
