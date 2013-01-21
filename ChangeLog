@@ -1,6 +1,10 @@
 1.5
 ====
 
+1.5.15
+-----------
+
+    o fixing bug in CNOlist (makeCNOlist)
 
 1.5.14
 --------
