@@ -1,8 +1,29 @@
+#
+#  This file is part of the CNO software
+#
+#  Copyright (c) 2011-2013 - EMBL-EBI
+#
+#  File author(s): CNO developers (cno-dev@ebi.ac.uk)
+#
+#  Distributed under the GPLv3 License.
+#  See accompanying file LICENSE.txt or copy at
+#      http://www.gnu.org/licenses/gpl-3.0.html
+#
+#  CNO website: http://www.cellnopt.org
+#
+##############################################################################
+# $Id: $
+
+
+
+
 parEstimationLBodeGA<-function (cnolist, model, ode_parameters = NULL, indices = NULL, 
     mutationChance=NA, popSize=200,iters=100,elitism=NA, time = 1,monitor=TRUE,
 	verbose = 0, transfer_function = 3, reltol = 1e-04, atol = 0.001,
 	maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails = 50, nan_fac = 1) 
 {
+
+    if (class(cnolist)=="CNOlist"){cnolist = compatCNOlist(cnolist)}
     adjMat = incidence2Adjacency(model)
     if (is.null(ode_parameters)) {
         ode_parameters = createLBodeContPars(model, random = TRUE)

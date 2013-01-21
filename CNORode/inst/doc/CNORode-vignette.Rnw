@@ -72,7 +72,7 @@ options(width=70, useFancyQuotes="UTF-8", prompt=" ", continue="  ")
 
 Mathematical models are used to understand protein signalling networks so as to
 provide an integrative view of pharmacological and toxicological processes at
-molecular level. \emph{CellNOptR}~\cite{CellNOptR} is an existing
+molecular level. \emph{CellNOptR}~\cite{CellNOptR, CellNOptR_paper} is an existing
 package (see
 \url{http://bioconductor.org/packages/release/bioc/html/CellNOptR.html}) that
 provides functionalities to combine
@@ -319,6 +319,13 @@ C.~Terfve.
 \newblock CellNOptR: R version of CellNOpt, boolean features only.
 \newblock {R package version 1.2.0, (2012)
 http://www.bioconductor.org/packages/release/bioc/html/CellNOptR.html}
+
+\bibitem{CellNOptR_paper}
+{C. Terfve, T. Cokelaer, A. MacNamara, D. Henriques, E. Goncalves, MK.
+    Morris, M. van Iersel, DA Lauffenburger, J. Saez-Rodriguez.
+    CellNOptR: a flexible toolkit to train protein signaling networks to data
+using multiple logic formalisms. BMC Systems Biology, 2012, 6:133}
+
 
 \bibitem{alexopoulos_networks_2010}
 L.G.~Alexopoulos, J.~Saez-Rodriguez, B.D.~Cosgrove, D.A.~Lauffenburger,

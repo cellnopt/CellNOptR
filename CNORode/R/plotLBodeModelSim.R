@@ -24,11 +24,12 @@ plotLBodeModelSim <-function
 )
 {
 
+    if (class(cnolist)=="CNOlist"){cnolist = compatCNOlist(cnolist)}
 	if(is.null(indices))indices=indexFinder(cnolist,model);
 	if(is.null(adjMatrix))adjMatrix=incidence2Adjacency(model);
 	if(is.null(ode_parameters))ode_parameters=createLBodeContPars(model);
 	if(!is.null(timeSignals))cnolist$timeSignals=timeSignals;
-	
+
   	states_index=which(as.logical(getStates(adjMatrix)));
 
 	sim_data=getLBodeModelSim(cnolist,model,
@@ -36,9 +37,9 @@ plotLBodeModelSim <-function
 			reltol,atol,maxStepSize,maxNumSteps,maxErrTestsFails);
 
 	sim_data=lapply(sim_data,function(x) x[,states_index]);
-
 	times=cnolist$timeSignals;
 	cnolist$valueSignals=sim_data;
+    cnolist$valueVariances = sim_data # variance should be set to NA but does not matter here 
 	cnolist$namesSignals=model$namesSpecies[states_index];
 	cnolist$namesCues=c(cnolist$namesStimuli,cnolist$namesInhibitors);
 
@@ -47,15 +48,16 @@ plotLBodeModelSim <-function
 	cnolist$valueCues[which(cnolist$valueCues>0)]=1;
 	names(cnolist$valueCues)=cnolist$namesCues;
 
+
 	if(large)
 	{
-		plotCNOlistLarge(cnolist,nsplit);
+		plotCNOlistLarge(CNOlist(cnolist),nsplit);
 	}
 	else
 	{
-		plotCNOlist(cnolist);
+		plotCNOlist(CNOlist(cnolist));
 	}
-	
+
 
   return(sim_data);
 }

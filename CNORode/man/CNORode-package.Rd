@@ -16,9 +16,9 @@
 	\tabular{ll}{
 		Package: \tab CNORode\cr
 		Type: \tab Package\cr
-		Version: \tab 1.1.0\cr
-		Date: \tab 2012-10-05\cr
-		License: \tab GPL-2\cr
+		Version: \tab 1.1.1\cr
+		Date: \tab 2012-01-20\cr
+		License: \tab GPL-3\cr
 		LazyLoad: \tab yes\cr
 	}
 }
@@ -49,6 +49,11 @@
 	R. Serban and A. C. Hindmarsh, "CVODES: the Sensitivity-Enabled ODE Solver in SUNDIALS,"
 	Proceedings of IDETC/CIE 2005, Sept. 2005, Long Beach, CA. Also available as LLNL
 	technical report UCRL-JP-200039.     
+
+    C. Terfve, T. Cokelaer, A. MacNamara, D. Henriques, E. Goncalves, MK.
+    Morris, M. van Iersel, DA Lauffenburger, J. Saez-Rodriguez.
+    CellNOptR: a flexible toolkit to train protein signaling networks to data using
+    multiple logic formalisms. BMC Systems Biology, 2012, 6:133:
 }
 \keyword{CNORode}
 

@@ -23,6 +23,8 @@ parEstimationLBodeSSm <-function
 		maxNumSteps=100000,		maxErrTestsFails=50,	nan_fac=1
 )
 {
+
+   if (class(cnolist)=="CNOlist"){cnolist = compatCNOlist(cnolist)}
    tryCatch({library(MEIGOR)}, error=function(e){print("MEIGOR (essR) package not found.
 	SSm not available. Install the package and load it or try the Genetic Algorithm
 	optimiser instead.");return(ode_parameters);});

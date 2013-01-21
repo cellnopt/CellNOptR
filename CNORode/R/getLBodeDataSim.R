@@ -22,6 +22,8 @@ getLBodeDataSim<-function
 		maxErrTestsFails=50
 )
 {
+
+    if (class(cnolist)=="CNOlist"){cnolist = compatCNOlist(cnolist)}
 	adjMat=incidence2Adjacency(model);
 	if(is.null(indices))indices <- indexFinder(cnolist,model,verbose=FALSE);
 	if(is.null(ode_parameters))ode_parameters=createLBodeContPars(model);
