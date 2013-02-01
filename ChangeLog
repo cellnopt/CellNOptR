@@ -1,5 +1,10 @@
 1.5
 ====
+1.5.16
+-------------
+
+    o hack plotModel to fix a bug in Rgraphviz, which is known but wil be fix
+      later on. layout is closer to SGBN standard.
 
 1.5.15
 -----------
