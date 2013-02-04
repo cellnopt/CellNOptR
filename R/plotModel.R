@@ -317,7 +317,7 @@ plotModel <- function(model, CNOlist=NULL, bString=NULL, indexIntegr=NULL,
     }
 
     # Set the node Rendering in Rgraphviz
-    nodeRenderAttrs  <- setNodeRenderInfo(nodeAttrs, extra=list(lwd=2, lty=nodelty, 
+    nodeRenderAttrs  <- setNodeRenderInfo(nodeAttrs, list(lwd=2, lty=nodelty, 
        cex=0.4, fontsize=fontsize, fixedsize=FALSE))
     nodeRenderInfo(g) <- nodeRenderAttrs
 
@@ -331,7 +331,7 @@ plotModel <- function(model, CNOlist=NULL, bString=NULL, indexIntegr=NULL,
     graphRenderInfo(g) <-  list(recipEdges=recipEdges)
 
     edgeRenderAttrs  <- setEdgeRenderInfo(edgeAttrs,
-        extra=list(arrowhead=arrowhead2, head=v2, tail=v1, 
+        list(arrowhead=arrowhead2, head=v2, tail=v1, 
         lwd=3, lty="solid"))
     edgeRenderInfo(g) <- edgeRenderAttrs
 

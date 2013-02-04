@@ -11,9 +11,9 @@ pre-processing steps (compression, NONC nodes, expansion gates).
 It can also be used to plot optimised model given the optimisation bitstring.}
 
 \usage{
-plotModel(model, CNOlist=NULL, bString=NULL, indexIntegr=NULL, signals=NULL, stimuli=NULL,
-inhibitors=NULL, NCNO=NULL, compressed=NULL, output="STDOUT",filename=NULL, 
-graphvizParams=list(), remove_dot=TRUE)
+plotModel(model, CNOlist=NULL, bString=NULL, indexIntegr=NULL, signals=NULL, 
+stimuli=NULL, inhibitors=NULL, NCNO=NULL, compressed=NULL, output="STDOUT",
+filename=NULL, graphvizParams=list(), remove_dot=TRUE)
 }
 
 \arguments{
@@ -118,7 +118,7 @@ T. Cokelaer
     data(CNOlistToy,package="CellNOptR")
     data(ToyModel,package="CellNOptR")
     res<-plotModel(ToyModel, CNOlist=CNOlistToy, compressed=c("TRAF6", "p38"), 
-        graphvizParams(mode="classic", fontsize=30))
-    }
+        graphvizParams=list(mode="classic", fontsize=30))
+    
 }
 
