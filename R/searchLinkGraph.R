@@ -13,7 +13,7 @@
 #
 ##############################################################################
 # $Id$
-SearchLinkGraph <-
+searchLinkGraph <-
 function(node1,node2,graph,noNodes=vector()){
   # looks in the graph if there is a connection between node1 and node2
   # giving as output 1 if they are connected and 0 otherwise

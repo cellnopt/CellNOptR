@@ -13,32 +13,32 @@
 #
 ##############################################################################
 # $Id$
-MapBTables2Model <-
-function(BTable,Model,optimRes=NA,allInter=TRUE){
+mapBTables2model <-
+function(BTable,model,optimRes=NA,allInter=TRUE){
   # BTable are the Bolean Tables inferred from data using the function makeBTables
   # Model is the model optimised using CNO and than compressed
   
-  if (!is.null(Model)){
-    g<-sif2graph(model2sif(Model=Model, optimRes=optimRes))
+  if (!is.null(model)){
+    g<-sif2graph(model2sif(model=model, optimRes=optimRes))
     #the vectr indexIntegr will contain the indexes of the added links
-    indexIntegr<-length(Model$reacID)
+    indexIntegr<-length(model$reacID)
   }else{
     g<-new("graphNEL", edgemode="directed")
     indexIntegr<-0
-    Model<-list()
-    Model$reacID<-vector()
-    Model$namesSpecies<-unique(c(CNOlist$namesCues, CNOlist$namesSignals))
-    Model$interMat<-matrix(data=0,nrow=length(Model$namesSpecies), ncol=0)
-    rownames(Model$interMat)<-Model$namesSpecies
-	  Model$notMat<-matrix(data=0,nrow=length(Model$namesSpecies), ncol=0)
-	  rownames(Model$notMat)<-Model$namesSpecies
+    model<-list()
+    model$reacID<-vector()
+    model$namesSpecies<-unique(c(CNOlist$namesCues, CNOlist$namesSignals))
+    model$interMat<-matrix(data=0,nrow=length(model$namesSpecies), ncol=0)
+    rownames(model$interMat)<-model$namesSpecies
+	  model$notMat<-matrix(data=0,nrow=length(model$namesSpecies), ncol=0)
+	  rownames(model$notMat)<-model$namesSpecies
   }
   
   namesStimuli<-colnames(BTable$tables[[1]])
   namesInhibitors<-rownames(BTable$tables[[1]])
   namesSignals<-BTable$namesSignals
   #Others are the white nodes in the network, those that are not stimulated, nor inhibited, nor measures
-  namesOthers<-setdiff(setdiff(setdiff(Model$namesSpecies, namesSignals), namesInhibitors), namesStimuli)
+  namesOthers<-setdiff(setdiff(setdiff(model$namesSpecies, namesSignals), namesInhibitors), namesStimuli)
   
     
   ck=0
@@ -74,10 +74,10 @@ function(BTable,Model,optimRes=NA,allInter=TRUE){
           cue <- colnames(BTable$tables[[i]])[j]
           signal <- rownames(BTable$tables[[i]])[ix[k]]
           
-          ck <- SearchLinkGraph(node1 = cue,node2 = signal, graph=g, noNodes=noNodes)
-          #ck <- SearchLink(node1 = cue,node2 = signal, noNodes=noNodes, Model = Model)
+          ck <- searchLinkGraph(node1 = cue,node2 = signal, graph=g, noNodes=noNodes)
+          #ck <- SearchLink(node1 = cue,node2 = signal, noNodes=noNodes, model = model)
           if (ck == 0){
-            # if there is no connection between the cue and the signal in the Model
+            # if there is no connection between the cue and the signal in the model
             # all possible connections are added between nodes downstream the cue
             # (but upstream the following cue) and those upstream the signal
             # (but downstream the previous signal)
@@ -105,8 +105,8 @@ function(BTable,Model,optimRes=NA,allInter=TRUE){
                 # the sign is the sign of the effect of prodict of the stimulis and the inhibitor to the protein
                 Sign<-SignStim*SignInhib
                 
-                Model <- AddLink(CueDown[ix_tmp1], SigUp[jx_tmp1], Model, Sign=Sign)
-                #g<-sif2graph(model2sif(Model=Model))
+                model <- addLink(CueDown[ix_tmp1], SigUp[jx_tmp1], model, Sign=Sign)
+                #g<-sif2graph(model2sif(model=model))
               }
             }
           }
@@ -115,10 +115,10 @@ function(BTable,Model,optimRes=NA,allInter=TRUE){
           # connection between the inhibitor and the signal
           cue <- rownames(BTable$tables[[i]])[ix[k]]
           signal <- BTable$namesSignals[i]
-          #ck <- SearchLink(node1 = cue,node2 = signal, noNodes=noNodes, Model = Model)
-          ck <- SearchLinkGraph(node1 = cue,node2 = signal, graph=g, noNodes=noNodes)
+          #ck <- searchLink(node1 = cue,node2 = signal, noNodes=noNodes, model = model)
+          ck <- searchLinkGraph(node1 = cue,node2 = signal, graph=g, noNodes=noNodes)
           if (ck == 0){
-            # if there is no connection between the cue and the signal in the Model
+            # if there is no connection between the cue and the signal in the model
             # all possible connections are added between nodes downstream the cue
             # (but upstream the following cue) and those upstream the signal
             # (but downstream the previous signal)
@@ -145,8 +145,8 @@ function(BTable,Model,optimRes=NA,allInter=TRUE){
                 # the sign is the sign of the effect of the inhibitor to the protein
                 Sign<-SignInhib
                 
-                Model <- AddLink(CueDown[ix_tmp1], SigUp[jx_tmp1], Model, Sign=Sign)
-                #g<-sif2graph(model2sif(Model=Model))
+                model <- addLink(CueDown[ix_tmp1], SigUp[jx_tmp1], model, Sign=Sign)
+                #g<-sif2graph(model2sif(model=model))
               }
             }      
           }
@@ -167,9 +167,9 @@ function(BTable,Model,optimRes=NA,allInter=TRUE){
             # (but only the inhibitor) and the inhibitor - with negative sign for the stimulus
             if (length(ixStiDiff)>0){
               for (k2 in 1:length(ixStiDiff)){
-                ck <- SearchLinkGraph(node1 = cue,node2 = signal, graph=g, noNodes=noNodes)
+                ck <- searchLinkGraph(node1 = cue,node2 = signal, graph=g, noNodes=noNodes)
 				print(paste("!",namesStimuli[ixStiDiff[k2]], "+", namesInhibitors[ix[k]] ,"->", namesSignals[i],sep=""))
-                Model<-AddLinkAND(namesStimuli[ixStiDiff[k2]], namesInhibitors[ix[k]], namesSignals[i], Model)
+                model<-addLinkAND(namesStimuli[ixStiDiff[k2]], namesInhibitors[ix[k]], namesSignals[i], model)
               }
             }
           }
@@ -185,10 +185,10 @@ function(BTable,Model,optimRes=NA,allInter=TRUE){
         SignStim<-1
         if (BTable$NotMatStim[[i]][1,j]==1) {SignStim<-(-1)}
         
-        #ck <- SearchLink(node1 = cue,node2 = signal, noNodes=noNodes, Model = Model)
-        ck <- SearchLinkGraph(node1 = cue,node2 = signal, graph=g, noNodes=noNodes)
+        #ck <- SearchLink(node1 = cue,node2 = signal, noNodes=noNodes, model = model)
+        ck <- searchLinkGraph(node1 = cue,node2 = signal, graph=g, noNodes=noNodes)
         if (ck == 0){
-          # if there is no connection between the cue and the signal in the Model
+          # if there is no connection between the cue and the signal in the model
           # all possible connections are added between nodes downstream the cue
           # (but upstream the following cue) and those upstream the signal
           # (but downstream the previous signal)
@@ -212,8 +212,8 @@ function(BTable,Model,optimRes=NA,allInter=TRUE){
             for (jx_tmp1 in 1:length(SigUp)){
               print(paste(CueDown[ix_tmp1], "->", SigUp[jx_tmp1],sep=""))
               
-              Model <- AddLink(CueDown[ix_tmp1], SigUp[jx_tmp1], Model, Sign=SignStim)
-              #g<-sif2graph(model2sif(Model=Model))
+              model <- addLink(CueDown[ix_tmp1], SigUp[jx_tmp1], model, Sign=SignStim)
+              #g<-sif2graph(model2sif(model=model))
             }
           }
         }
@@ -222,6 +222,6 @@ function(BTable,Model,optimRes=NA,allInter=TRUE){
     print(paste(""))
     }
   }
-  Model$indexIntegr<-seq(from=indexIntegr+1, to=length(Model$reacID))
-  return(Model)
+  model$indexIntegr<-seq(from=indexIntegr+1, to=length(model$reacID))
+  return(model)
 }

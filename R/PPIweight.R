@@ -23,7 +23,7 @@ PPIweight <-
     scoresVec<-rep(1,length(modelIntegr$indexIntegr))
     
     # transform the PKN CNOmodel in a graph
-    PKNgraph<-sif2graph(model2sif(Model=PKNmodel, optimRes=NA))
+    PKNgraph<-sif2graph(model2sif(model=PKNmodel, optimRes=NA))
     # I want to add the weight only to the integrated links (can be easily changed to all links)
     links2weight<-modelIntegr$reacID[modelIntegr$indexIntegr]
     

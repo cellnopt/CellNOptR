@@ -12,17 +12,17 @@
 #  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
 #
 ##############################################################################
-# $Id: MapDDN2Model.R 853 2012-03-28 15:09:06Z eduati $
-MapDDN2Model <-
-function(DDN,Model,CNOlist,allInter=TRUE){
-	g<-sif2graph(model2sif(Model=Model))
-	indexIntegr<-length(Model$reacID)
+# $Id: mapDDN2model.R 853 2012-03-28 15:09:06Z eduati $
+mapDDN2model <-
+function(DDN,model,CNOlist,allInter=TRUE){
+	g<-sif2graph(model2sif(model=model))
+	indexIntegr<-length(model$reacID)
 	
 	namesStimuli<-CNOlist$namesStimuli
 	namesInhibitors<-CNOlist$namesInhibitors
 	namesSignals<-CNOlist$namesSignals
 #Others are the white nodes in the network, those that are not stimulated, nor inhibited, nor measures
-	namesOthers<-setdiff(setdiff(setdiff(Model$namesSpecies, namesSignals), namesInhibitors), namesStimuli)
+	namesOthers<-setdiff(setdiff(setdiff(model$namesSpecies, namesSignals), namesInhibitors), namesStimuli)
 	
 	for (i in 1:dim(DDN)[1]){
 		noNodes <- namesOthers
@@ -34,7 +34,7 @@ function(DDN,Model,CNOlist,allInter=TRUE){
 		print(paste("Added links:"))
 		
 		
-		ck <- SearchLinkGraph(node1 = node1,node2 = node2, graph=g, noNodes=noNodes)
+		ck <- searchLinkGraph(node1 = node1,node2 = node2, graph=g, noNodes=noNodes)
 		if (ck==0){
 			if (allInter==TRUE){
 # 1. create a vector containing all nodes downstream the cue
@@ -58,11 +58,11 @@ function(DDN,Model,CNOlist,allInter=TRUE){
 # the sign is the sign of the effect of prodict of the stimulis and the inhibitor to the protein
 					Sign<-DDN[i,2]
 					
-					Model <- AddLink(CueDown[ix_tmp1], SigUp[jx_tmp1], Model, Sign=Sign)
+					model <- addLink(CueDown[ix_tmp1], SigUp[jx_tmp1], model, Sign=Sign)
 				}
 			}
 		}
 	}
-	Model$indexIntegr<-seq(from=indexIntegr+1, to=length(Model$reacID))
-	return(Model)
+	model$indexIntegr<-seq(from=indexIntegr+1, to=length(model$reacID))
+	return(model)
 }

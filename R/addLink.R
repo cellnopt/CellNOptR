@@ -13,33 +13,33 @@
 #
 ##############################################################################
 # $Id$
-AddLink <-
-function(CueDown, SigUp, Model, Sign){
+addLink <-
+function(CueDown, SigUp, model, Sign){
   
   # Update the vector of the name of reactions
 
   reaction<-paste(CueDown,"=",SigUp,sep="")
   if (Sign==(-1)){reaction<-paste("!",reaction,sep="")}
     
-  if (!any(Model$reacID==reaction)){
-    Model$reacID[length(Model$reacID)+1] <- reaction
+  if (!any(model$reacID==reaction)){
+    model$reacID[length(model$reacID)+1] <- reaction
     
-	  tmp<-matrix(data=0,nrow=dim(Model$interMat)[1], ncol=1)
-    sou<-match(CueDown,Model$namesSpecies)
+	  tmp<-matrix(data=0,nrow=dim(model$interMat)[1], ncol=1)
+    sou<-match(CueDown,model$namesSpecies)
 	  if (Sign==(-1)){tmp[sou,1]<-1}
-	  Model$notMat <- cbind(Model$notMat,tmp)
+	  model$notMat <- cbind(model$notMat,tmp)
     
-	  tmp<-matrix(data=0,nrow=dim(Model$interMat)[1], ncol=1)
-	  sou<-match(CueDown,Model$namesSpecies)
-    tar<-match(SigUp,Model$namesSpecies)
+	  tmp<-matrix(data=0,nrow=dim(model$interMat)[1], ncol=1)
+	  sou<-match(CueDown,model$namesSpecies)
+    tar<-match(SigUp,model$namesSpecies)
     tmp[sou,1]<-(-1)
 	  tmp[tar,1]<-1
-    Model$interMat <- cbind(Model$interMat,tmp)
+    model$interMat <- cbind(model$interMat,tmp)
   }
       
-  colnames(Model$interMat) <- Model$reacID
-  colnames(Model$notMat) <- Model$reacID
+  colnames(model$interMat) <- model$reacID
+  colnames(model$notMat) <- model$reacID
       
-  return(Model)
+  return(model)
   
 }

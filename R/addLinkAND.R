@@ -13,34 +13,34 @@
 #
 ##############################################################################
 # $Id$
-AddLinkAND <-
-function(Stimulus, Inhibitor, Signal, Model){
+addLinkAND <-
+function(Stimulus, Inhibitor, Signal, model){
   
   # add a negative and gate to the model between the Sitimulus(-) and the Inhibitor(+)
 
   reaction<-paste("!",Stimulus,sep="")
   reaction<-paste(reaction,"+",Inhibitor,sep="")
   reaction<-paste(reaction,"=",Signal,sep="")
-  if (!any(Model$reacID==reaction)){
-    Model$reacID[length(Model$reacID)+1] <- reaction
-    tmp<-matrix(data=0,nrow=dim(Model$interMat)[1], ncol=1)
+  if (!any(model$reacID==reaction)){
+    model$reacID[length(model$reacID)+1] <- reaction
+    tmp<-matrix(data=0,nrow=dim(model$interMat)[1], ncol=1)
     
 	tmpNeg<-tmp
-	souNeg<-match(Stimulus,Model$namesSpecies)
+	souNeg<-match(Stimulus,model$namesSpecies)
 	tmpNeg[souNeg,1]<-1
-	Model$notMat <- cbind(Model$notMat,tmpNeg)
-	sou1<-match(Stimulus,Model$namesSpecies)
-	sou2<-match(Inhibitor,Model$namesSpecies)
-	tar<-match(Signal,Model$namesSpecies)
+	model$notMat <- cbind(model$notMat,tmpNeg)
+	sou1<-match(Stimulus,model$namesSpecies)
+	sou2<-match(Inhibitor,model$namesSpecies)
+	tar<-match(Signal,model$namesSpecies)
 	tmp[sou1,1]<-(-1)
 	tmp[sou2,1]<-(-1)
 	tmp[tar,1]<-1
-	Model$interMat <- cbind(Model$interMat,tmp)
+	model$interMat <- cbind(model$interMat,tmp)
 	}
       
-  colnames(Model$interMat) <- Model$reacID
-  colnames(Model$notMat) <- Model$reacID
+  colnames(model$interMat) <- model$reacID
+  colnames(model$notMat) <- model$reacID
       
-  return(Model)
+  return(model)
   
 }
