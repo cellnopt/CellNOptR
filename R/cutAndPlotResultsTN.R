@@ -40,7 +40,7 @@ cutAndPlotResultsTN <-function(CNOlist, model,bStrings, plotPDF=FALSE,
 
     # t0
     simResT0 <- simulatorT0(CNOlist=CNOlist,model=modelCut,simList=simListCut,indexList=indexList)
-    simResT0 <- as.matrix(simResT0[,indexList$signals])
+    simResT0 <- simResT0[,indexList$signals, drop=FALSE]
 
     # simulate
     simResults<-list()
