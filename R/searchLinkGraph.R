@@ -12,7 +12,7 @@
 #  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
 #
 ##############################################################################
-# $Id$
+# $Id: searchLinkGraph.R -1   $
 searchLinkGraph <-
 function(node1,node2,graph,noNodes=vector()){
   # looks in the graph if there is a connection between node1 and node2
@@ -26,14 +26,14 @@ function(node1,node2,graph,noNodes=vector()){
 	  gg<-graph
   }
   
-  nod<-nodes(gg)
-  edg<-edges(gg)
+  nod<-graph::nodes(gg)
+  edg<-graph::edges(gg)
   
   if (any(which(nod==node1))){
     queue<-edg[[which(nod==node1)]]
 	gg<-removeNode(node1,gg)
-	nod<-nodes(gg)
-	edg<-edges(gg)
+	nod<-graph::nodes(gg)
+	edg<-graph::edges(gg)
   }else{
     queue<-vector()
   }
@@ -48,8 +48,8 @@ function(node1,node2,graph,noNodes=vector()){
     }
 	if (any(which(nod==queue[1]))){
 	  gg<-removeNode(queue[1],gg)
-	  nod<-nodes(gg)
-	  edg<-edges(gg)
+	  nod<-graph::nodes(gg)
+	  edg<-graph::edges(gg)
 	}
 	queue<-queue[-1]
   }

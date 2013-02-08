@@ -12,7 +12,7 @@
 #  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
 #
 ##############################################################################
-# $Id$
+# $Id: mapBTables2model.R -1   $
 mapBTables2model <-
 function(BTable,model,optimRes=NA,allInter=TRUE){
   # BTable are the Bolean Tables inferred from data using the function makeBTables

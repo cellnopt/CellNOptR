@@ -12,7 +12,7 @@
 #  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
 #
 ##############################################################################
-# $Id$
+# $Id: addLinkAND.R -1   $
 addLinkAND <-
 function(Stimulus, Inhibitor, Signal, model){
   

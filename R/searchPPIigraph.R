@@ -13,27 +13,29 @@
 #
 ##############################################################################
 # $Id$
-searchPPIigraph <- function(node1, node2, UniprotID, igraph, noPKNnodes=TRUE, color="blue"){
-
+searchPPIigraph <- function(node1, node2, UniprotID, PPINigraph, noPKNnodes=TRUE){
+	
+  #node1 is the ending node and is always a 1 value vector
+  node1ID<-UniprotID[[which(names(UniprotID)==node1)]]
+  #node2 is the starting node and can have more than 1 element (AND gates)
+  node2IDs<-vector()
+  for (i in 1:length(node2)){
+    node2IDs<-c(node2IDs, UniprotID[[which(names(UniprotID)==node2[i])]])
+  }
+	
   if (noPKNnodes==TRUE){
-    #node1 is the ending node and is always a 1 value vector
-    node1ID<-UniprotID[[which(names(UniprotID)==node1)]]
-    #node2 is the starting node and can have more than 1 element (AND gates)
-    node2IDs<-vector()
-    for (i in 1:length(node2)){
-      node2IDs<-c(node2IDs, UniprotID[[which(names(UniprotID)==node2[i])]])
-    }
-  
     #we are looking for paths that do not pass through other nodes of the PKN
     #thus we fist list the nodes of the PKN with all possible Uniprot identifiers..
     PKNnodes<-rapply(UniprotID,c)
     #..exept for the nodes we are interested in..
     noNodes<-setdiff(PKNnodes, c(node1ID,node2IDs))
     #..and we subtract them from the PIN graph (grate a new graph only with the other nodes)
-    okNodes<-setdiff(V(igraph)$name,noNodes)
-    gg<-subgraph(igraph,okNodes)
+    okNodes<-setdiff(V(PPINigraph)$name,noNodes)
+	# this gives the index of the nodes
+	ixOkNodes<-match(okNodes,V(PPINigraph)$name)
+    gg<-induced.subgraph(PPINigraph,ixOkNodes)
   }else{
-    gg<-igraph
+    gg<-PPINigraph
   }
   
   ckmin<-rep(Inf,length(node2))
@@ -49,17 +51,6 @@ searchPPIigraph <- function(node1, node2, UniprotID, igraph, noPKNnodes=TRUE, co
           ix<-get.shortest.paths(graph=gg,from=node1ID[i],to=node2ID[j1])[[1]]
           ck<-length(ix)
           ck[ck==0]<-Inf
-          if (ck<ckmin[j]){
-            pathOK<-V(gg)[ix]
-            tmp<-pathOK$name
-			V(igraph)[tmp]$color<-color
-			E(igraph,path=V(igraph)[tmp])$color<-color
-            #paths contains also starting and anding nodes
-#tmp<-tmp[-1]
-#            tmp<-tmp[-length(tmp)]
-            path[[j]]<-tmp
-            
-          }
           ckmin[j]<-min(ckmin[j],ck)
         }
       }
@@ -69,6 +60,5 @@ searchPPIigraph <- function(node1, node2, UniprotID, igraph, noPKNnodes=TRUE, co
   ckmin<-ckmin-2
   #for and nodes the maximum distance from all the nodes is taken
   ckmin<-max(ckmin)
-  res<-list(ckmin=ckmin, path=path, igraph=igraph)
-  return(res)
+  return(ckmin)
 }

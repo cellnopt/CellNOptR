@@ -16,7 +16,6 @@
 MIinference <-
 function(CNOlist, method="ARACNE", PKNgraph=NULL, filename="ARACNE"){
   
-  library(minet)
 
   
   valueStimuli<-CNOlist$valueStimuli

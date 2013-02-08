@@ -1,17 +1,11 @@
 import("CellNOptR", "igraph", "minet", "catnet")
 
-export("AddLinkAND",
-    "AddLink",
-    "Binference",
-    "downCueGraph",
+export("Binference",
     "gaBinaryT1int",
     "getFitint",
     "linksRanking",
     "makeBTables",
-    "MapBTables2Model",
-    "MapDDN2Model",
+    "mapBTables2model",
+    "mapDDN2model",
     "MIinference",
-    "PPIweight",
-    "SearchLinkGraph",
-    "searchPPIigraph",
-    "upSignalGraph")
+    "PPIweight")

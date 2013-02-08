@@ -12,7 +12,7 @@
 #  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
 #
 ##############################################################################
-# $Id$
+# $Id: addLink.R -1   $
 addLink <-
 function(CueDown, SigUp, model, Sign){
   

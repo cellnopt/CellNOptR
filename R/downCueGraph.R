@@ -18,8 +18,8 @@ function(cue,graph,stopNodes){
   
   gg<-graph
   
-  nod<-nodes(gg)
-  edg<-edges(gg)
+  nod<-graph::nodes(gg)
+  edg<-graph::edges(gg)
   
   CueDown<-cue
   
