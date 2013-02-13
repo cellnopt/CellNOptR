@@ -1,8 +1,7 @@
 import("CellNOptR", "igraph", "minet", "catnet")
 
 export("Binference",
-    "gaBinaryT1int",
-    "getFitint",
+    "gaBinaryT1W",
     "linksRanking",
     "makeBTables",
     "mapBTables2model",

@@ -1,5 +1,5 @@
-\name{gaBinaryT1int}
-\alias{gaBinaryT1int}
+\name{gaBinaryT1W}
+\alias{gaBinaryT1W}
 \title{
 Genetic algorithm used to optimise a model
 }
@@ -7,7 +7,7 @@ Genetic algorithm used to optimise a model
 This function is the genetic algorithm to be used to optimise a model by fitting to data containing one time point. It is the function \link{gaBinaryT1} of CellNOptR modified in orter to differently  weights for the integrated links
 }
 \usage{
-gaBinaryT1int(CNOlist, Model, SimList, indexList, sizeFac = 1e-04,
+gaBinaryT1W(CNOlist, model, SimList, indexList, sizeFac = 1e-04,
               integrFac=10, NAFac = 1, initBstring, PopSize = 50,
               Pmutation = 0.5, MaxTime = 60, maxGens = 500,
               StallGenMax = 100, SelPress = 1.2, elitism = 5,
@@ -109,7 +109,7 @@ modelIntegr <- resPPIweight$modelIntegr}
 
 DreamFields4Sim <- prep4Sim(modelIntegr)
 initBstring <- rep(1,length(modelIntegr$reacID))
-DreamT1opt <- gaBinaryT1int(
+DreamT1opt <- gaBinaryT1W(
 	CNOlist=CNOlistDREAM,
 	Model=modelIntegr,
 	SimList=DreamFields4Sim,
