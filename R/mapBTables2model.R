@@ -27,7 +27,7 @@ function(BTable,model,optimRes=NA,allInter=TRUE){
     indexIntegr<-0
     model<-list()
     model$reacID<-vector()
-    model$namesSpecies<-unique(c(CNOlist$namesCues, CNOlist$namesSignals))
+    model$namesSpecies<-unique(c(colnames(BTable$tables[[1]]), rownames(BTable$tables[[1]]), BTable$namesSignals))
     model$interMat<-matrix(data=0,nrow=length(model$namesSpecies), ncol=0)
     rownames(model$interMat)<-model$namesSpecies
 	  model$notMat<-matrix(data=0,nrow=length(model$namesSpecies), ncol=0)

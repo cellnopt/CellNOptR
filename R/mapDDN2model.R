@@ -15,12 +15,17 @@
 # $Id: mapDDN2model.R 853 2012-03-28 15:09:06Z eduati $
 mapDDN2model <-
 function(DDN,model,CNOlist,allInter=TRUE){
+	
+	if ((class(CNOlist)=="CNOlist")==FALSE){
+		CNOlist = CellNOptR::CNOlist(CNOlist)
+	}
+	
 	g<-sif2graph(model2sif(model=model))
 	indexIntegr<-length(model$reacID)
 	
-	namesStimuli<-CNOlist$namesStimuli
-	namesInhibitors<-CNOlist$namesInhibitors
-	namesSignals<-CNOlist$namesSignals
+	namesStimuli<-colnames(CNOlist@stimuli)
+	namesInhibitors<-colnames(CNOlist@inhibitors)
+	namesSignals<-colnames(CNOlist@signals[[2]])
 #Others are the white nodes in the network, those that are not stimulated, nor inhibited, nor measures
 	namesOthers<-setdiff(setdiff(setdiff(model$namesSpecies, namesSignals), namesInhibitors), namesStimuli)
 	

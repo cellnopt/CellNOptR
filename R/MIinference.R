@@ -16,22 +16,22 @@
 MIinference <-
 function(CNOlist, method="ARACNE", PKNgraph=NULL, filename="ARACNE"){
   
-
+	
+  if ((class(CNOlist)=="CNOlist")==FALSE){
+	  CNOlist = CellNOptR::CNOlist(CNOlist)
+  }
+	
+  valueStimuli <- CNOlist@stimuli
   
-  valueStimuli<-CNOlist$valueStimuli
-  colnames(valueStimuli)<-CNOlist$namesStimuli
-  namesInhibitors<-setdiff(CNOlist$namesInhibitors, CNOlist$namesSignals)
-  valueInhibitors<-CNOlist$valueInhibitors
-  colnames(valueInhibitors)<-CNOlist$namesInhibitors
-  valueInhibitors<-as.matrix(valueInhibitors[,namesInhibitors])
-  colnames(valueInhibitors)<-namesInhibitors
-
+  namesInhibitors <- setdiff(colnames(CNOlist@inhibitors), colnames(CNOlist@signals[[1]]))
+  valueInhibitors <- CNOlist@inhibitors[,namesInhibitors]
+  
   valueInhibitors<-1-valueInhibitors
   #valueInhibitors[valueInhibitors==1]<-NA
   
-  valueSignals<-CNOlist$valueSignals[[2]]
+  valueSignals<-CNOlist@signals[[2]]
   valueSignals[is.na(valueSignals)]<-0
-  colnames(valueSignals)<-CNOlist$namesSignals
+  
   dataset<-cbind(valueStimuli, valueInhibitors, valueSignals)
 
   mim<-build.mim(dataset=dataset)
@@ -46,7 +46,7 @@ function(CNOlist, method="ARACNE", PKNgraph=NULL, filename="ARACNE"){
   sif<-graph2sif(graph, writeSif=FALSE)
   
   # delete all links going to stimuli
-  sif<-sif[-which(sif[,3]%in%CNOlist$namesStimuli),]
+  sif<-sif[-which(sif[,3]%in%colnames(CNOlist@stimuli)),]
   
   # if a PKN is given as input, the directionality of the links is selected according to the PKN
   

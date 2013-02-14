@@ -16,22 +16,20 @@
 Binference <-
 function(CNOlist, mode="AIC", tempCheckOrders=10, maxIter=100, filename="BAYESIAN"){
   
-  library(catnet)
+  if ((class(CNOlist)=="CNOlist")==FALSE){
+	CNOlist = CellNOptR::CNOlist(CNOlist)
+  }
   
   ##STIMULI
   #data matrix
-  valueStimuli<-CNOlist$valueStimuli+1
-  colnames(valueStimuli)<-CNOlist$namesStimuli
-
+  valueStimuli<-CNOlist@stimuli
+	
   #parturbations matrix
   fixedStimuli<-valueStimuli
 
   ##INHIBITORS
-  namesInhibitors<-setdiff(CNOlist$namesInhibitors, CNOlist$namesSignals)
-  valueInhibitors<-CNOlist$valueInhibitors
-  colnames(valueInhibitors)<-CNOlist$namesInhibitors
-  valueInhibitors<-as.matrix(valueInhibitors[,namesInhibitors])
-  colnames(valueInhibitors)<-namesInhibitors
+  namesInhibitors <- setdiff(colnames(CNOlist@inhibitors), colnames(CNOlist@signals[[1]]))
+  valueInhibitors <- CNOlist@inhibitors[,namesInhibitors]
   # = 0 not inhibited (unknown value) - remains = 0 in the perturbations matrix (will be = NA in the data matrix)
   # = 1 inhibited - remains = 1 (off) in both the perturbations matrix and in the data matrix
 
@@ -44,7 +42,7 @@ function(CNOlist, mode="AIC", tempCheckOrders=10, maxIter=100, filename="BAYESIA
   #valueInhibitors[valueInhibitors==0]=NA
 
   ##SIGNALS
-  valueSignals<-CNOlist$valueSignals[[2]]
+  valueSignals<-CNOlist@signals[[2]]
 
   #parturbations matrix
   fixedSignals<-matrix(data=0,nrow=dim(valueSignals)[1],ncol=dim(valueSignals)[2])
@@ -54,7 +52,6 @@ function(CNOlist, mode="AIC", tempCheckOrders=10, maxIter=100, filename="BAYESIA
   valueSignals[is.na(valueSignals)]<-0
   valueSignals[valueSignals>0.5]<-2
   valueSignals[valueSignals<0.5]<-1
-  colnames(valueSignals)<-CNOlist$namesSignals
 
   ## ALL
   #data matrix
@@ -68,7 +65,7 @@ function(CNOlist, mode="AIC", tempCheckOrders=10, maxIter=100, filename="BAYESIA
   perturbations<-t(perturbations)
 
   parentSizes<-rep(3,dim(psamples)[1])
-  parentSizes[1:length(CNOlist$namesStimuli)]<-0
+  parentSizes[1:length(colnames(CNOlist@stimuli))]<-0
 
   nets <- cnSearchSA(data=psamples, perturbations=perturbations, maxParentSet=3,
                        parentSizes=parentSizes, maxComplexity=0,

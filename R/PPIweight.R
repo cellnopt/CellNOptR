@@ -17,9 +17,9 @@ PPIweight <-
   function(modelIntegr,PKNmodel,CNOlist,integrFac=10,UniprotID=NULL,PPI=FALSE){
     
 	  
-	#if ((class(CNOlist)=="CNOlist")==FALSE){
-	#	CNOlist = CellNOptR::CNOlist(CNOlist)
-	#}
+	if ((class(CNOlist)=="CNOlist")==FALSE){
+		CNOlist = CellNOptR::CNOlist(CNOlist)
+	}
 	  
 	# create a field with liks weight/reliability and allows different (higher) weigth for integrated links according to integrFac
 	modelIntegr$linksWeights <- rep(1,length(modelIntegr$reacID))
@@ -39,13 +39,9 @@ PPIweight <-
 		# I want to add the weight only to the integrated links (can be easily changed to all links)
 		links2weight<-modelIntegr$reacID[modelIntegr$indexIntegr]
 		
-		#namesCues<-colnames(CNOlist@cues)
-		#namesStimuli<-colnames(CNOlist@stimuli)
-		#namesSignals<-colnames(CNOlist@signals[[1]])
-		
-		namesCues<-CNOlist$namesCues
-		namesStimuli<-CNOlist$namesStimuli
-		namesSignals<-CNOlist$namesSignals
+		namesCues<-colnames(CNOlist@cues)
+		namesStimuli<-colnames(CNOlist@stimuli)
+		namesSignals<-colnames(CNOlist@signals[[1]])
 		
 		# for each link
 		for (i in 1:length(links2weight)){
