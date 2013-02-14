@@ -92,6 +92,6 @@ internal_simulateT1<-function(CNOlist, model, bStringT1, simList=NULL, indexList
     # compute the results
     simRes <- simulatorT1(CNOlist=CNOlist, model=modelCut, simList=newSimList, 
         indexList=indexList)
-    simRes <- simRes[,indexList$signals, drop=FALSE]
+
     return(simRes)
 }
