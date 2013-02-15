@@ -1,5 +1,11 @@
 1.5
 ====
+
+1.5.17
+-----------
+
+    o fix bug report201: cutAndPlotResult where messed up at time T2 and later
+
 1.5.16
 -------------
 
