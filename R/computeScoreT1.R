@@ -91,8 +91,8 @@ computeScoreT1<-function(CNOlist, model, bString, simList=NULL, indexList=NULL,
 
     # this step is commented in the C code. Does not seem to work properly. Try
     # test_simulateTN.R for instance.
-    simResultsT0 = simResultsT0[, indexList$signals]
-    simResults = simResults[, indexList$signals]
+    #simResultsT0 = simResultsT0[, indexList$signals]
+    #simResults = simResults[, indexList$signals]
 
     nInTot = length(which(model$interMat == -1))
 

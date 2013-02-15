@@ -39,12 +39,13 @@ cutAndPlotResultsTN <-function(CNOlist, model,bStrings, plotPDF=FALSE,
     simListCut <- cutSimList(simList, bStrings[[1]])
 
     # t0
-    simResT0 <- simulatorT0(CNOlist=CNOlist,model=modelCut,simList=simListCut,indexList=indexList)
-    simResT0 <- as.matrix(simResT0[,indexList$signals])
+    simResT0 <- cSimulator(CNOlist=CNOlist,model=modelCut,simList=simListCut,
+        indexList=indexList, mode=0)
 
     # simulate
     simResults<-list()
     simResults[[1]]<-simResT0
+
 
     for(i in 1:length(bStrings)){
       cutRes = simulateTN(CNOlist, model, bStrings[1:i])
