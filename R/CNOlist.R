@@ -99,7 +99,12 @@ setMethod("getInhibitors", "CNOlist", function(object){return(object@inhibitors)
 setMethod("getStimuli", "CNOlist", function(object){return(object@stimuli)})
 setMethod("getSignals", "CNOlist", function(object){return(object@signals)})
 setMethod("getVariances", "CNOlist", function(object){return(object@variances)})
-setMethod("getTimepoints", "CNOlist", function(object){return(object@timepoints)})
+setMethod("getTimepoints", "CNOlist", function(object){
+    # timepoints may have been modify on the fly so let us recomput it
+    object@timepoints = names(object@signals)
+    return(object@timepoints)
+
+})
 
 
 # timepoints will be updated if signals is changed so we should not provide any
@@ -145,7 +150,7 @@ setMethod("plot", signature(x="CNOlist", y="CNOlist"), function(x, y, ... ){
     plotCNOlist2(x,y)
 })
 
-setMethod("length", "CNOlist", function(x) length(x@timepoints))
+setMethod("length", "CNOlist", function(x) length(x@signals))
 
 if (isGeneric("randomize")==FALSE){
     setGeneric(
