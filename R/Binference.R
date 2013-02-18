@@ -16,6 +16,8 @@
 Binference <-
 function(CNOlist, mode="AIC", tempCheckOrders=10, maxIter=100, filename="BAYESIAN"){
   
+  library(catnet)	
+	
   if ((class(CNOlist)=="CNOlist")==FALSE){
 	CNOlist = CellNOptR::CNOlist(CNOlist)
   }

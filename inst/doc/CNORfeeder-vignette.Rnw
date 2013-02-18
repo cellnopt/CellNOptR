@@ -19,16 +19,16 @@
 
 
 
-\title{Training of boolean logic models of signalling networks using prior
-knowledge networks and perturbation data with \emph{CNORfeeder} \\\small{(version 1.3.30
+\title{Integrating literature-constrained and data-driven inference of signalling networks with \emph{CNORfeeder} \\\small{(version 1.0.0
 and above)}}
 
 
 
 
-\author{Camille Terfve, Thomas Cokelaer, Aidan MacNamara, Julio Saez-Rodriguez}
+\author{}
 
 \begin{document}
+\SweaveOpts{concordance=TRUE}
 \maketitle
 
 
@@ -43,11 +43,18 @@ to have R installed on your computer.  For more information and download of R,
 please refer to \url{http://www.r-project.org/}.   For more information about
 how to install R packages, please refer to
 \url{http://cran.r-project.org/doc/manuals/R-admin.html#Installing-packages}.
-This package relies on several Bioconductor package (RBGL, graph, methods) and
-optional package Rgraphivz. As an example, you can install RGBL package by typing:
-<<installRBGL, eval=FALSE>>=
+This package relies on several Bioconductor packages (CellNOptR, RBGL, graph, minet) and CRAN packages (igraph catnet). The following code installs the \emph{CNORfeeder} dependencies that are on Bioconductor website, open an R session and type:
+<<installBio, eval=FALSE>>=
 source("http://bioconductor.org/biocLite.R")
 biocLite("RBGL")
+biocLite("graph")
+biocLite("minet")
+biocLite("CellNOptR")
+@
+The following code installs the \emph{CNORfeeder} dependencies that are available on CRAN website. Open a R session and type:
+<<installCRAN, eval=FALSE>>=
+install.packages("igraph")
+install.packages("catnet")
 @
 
 Before starting this tutorial you also need to install the package

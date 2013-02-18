@@ -1,4 +1,5 @@
-import("CellNOptR", "igraph", "minet", "catnet")
+import("CellNOptR", "igraph")
+
 
 export("Binference",
     "gaBinaryT1W",
@@ -7,4 +8,4 @@ export("Binference",
     "mapBTables2model",
     "mapDDN2model",
     "MIinference",
-    "PPIweight")
+    "weighting")

@@ -36,12 +36,11 @@ P. E. Meyer, F. Lafitte and G. Bontempi (2008). MINET: An open source R/Biocondu
 }
 
 \seealso{
-\link{MapDDN2Model}, \link{sif2graph}, \link{model2sif}
+\link{mapDDN2model}, \link{sif2graph}, \link{model2sif}
 }
 
 \examples{
 
-library(CellNOptR)
 data(CNOlistDREAM,package="CellNOptR")
 data(DreamModel,package="CellNOptR")
 PKNgraph<-sif2graph(model2sif(DreamModel))

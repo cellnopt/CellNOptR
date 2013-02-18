@@ -40,12 +40,11 @@ F. Eduati, A. Corradin, B. Di Camillo, G. Toffolo. A Boolean approach to linear 
 }
 
 \seealso{
-\link{makeCNOlist}, \link{MapBTables2Model}
+\link{makeCNOlist}, \link{mapBTables2model}
 }
 
 \examples{
 
-library(CellNOptR)
 data(CNOlistDREAM,package="CellNOptR")
 BTable <- makeBTables(CNOlist=CNOlistDREAM, k=2, measErr=c(0.1, 0))
     

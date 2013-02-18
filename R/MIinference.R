@@ -16,6 +16,7 @@
 MIinference <-
 function(CNOlist, method="ARACNE", PKNgraph=NULL, filename="ARACNE"){
   
+  library(minet)
 	
   if ((class(CNOlist)=="CNOlist")==FALSE){
 	  CNOlist = CellNOptR::CNOlist(CNOlist)

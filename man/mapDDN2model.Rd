@@ -1,5 +1,5 @@
-\name{MapDDN2Model}
-\alias{MapDDN2Model}
+\name{mapDDN2model}
+\alias{mapDDN2model}
 
 \title{
   Integrate data-drive network with the model
@@ -10,13 +10,13 @@ This function integrates the data-driven network (in sif format)  with the netwo
 }
 
 \usage{
-MapDDN2Model(DDN,Model,CNOlist,allInter=TRUE)
+mapDDN2model(DDN,model,CNOlist,allInter=TRUE)
 }
 
 
 \arguments{
   \item{DDN}{a sif file encoding a data-driven network, as created by \link{Binference} or \link{MIinference}}
-  \item{Model}{a Model list, as created by \link{readSif}}
+  \item{model}{a model list, as created by \link{readSif}}
   \item{CNOlist}{a CNOlist, as created by \link{makeCNOlist}}
   \item{allInter}{one new link in the network can correspond to more links in the model, set it to TRUE if you want to add all possible links, FALSE to add only one link, default is TRUE}
 }
@@ -43,16 +43,14 @@ a new Model with the integrated links and an additional field:
 
 \examples{
 
-library(CellNOptR)
 data(CNOlistDREAM,package="CellNOptR")
 data(DreamModel,package="CellNOptR")
-res<-preprocessing(Data=CNOlistDREAM, Model=DreamModel)
-Model<-res$model
+model<-preprocessing(Data=CNOlistDREAM, model=DreamModel)
     
 DDN<-Binference(CNOlistDREAM, tempCheckOrders=10, maxIter=100,
                 filename="BAYESIAN")
 
-modelIntegr<-MapDDN2Model(DDN=DDN,Model=Model,CNOlist=CNOlistDREAM)
+modelIntegr<-mapDDN2model(DDN=DDN,model=model,CNOlist=CNOlistDREAM)
  
 }
 

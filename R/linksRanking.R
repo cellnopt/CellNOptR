@@ -14,7 +14,7 @@
 ##############################################################################
 # $Id$
 linksRanking <-
-function(CNOlist, measErr){
+function(CNOlist, measErr=c(0.1, 0)){
   
   if ((class(CNOlist)=="CNOlist")==FALSE){
   	CNOlist = CellNOptR::CNOlist(CNOlist)

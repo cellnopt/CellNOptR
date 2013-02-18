@@ -1,5 +1,5 @@
-\name{MapBTables2Model}
-\alias{MapBTables2Model}
+\name{mapBTables2model}
+\alias{mapBTables2model}
 
 \title{
   Integrate Boolean tables with the model
@@ -10,13 +10,13 @@
 }
 
 \usage{
-MapBTables2Model(BTable,Model,optimRes=NA,allInter=TRUE)
+mapBTables2model(BTable,model,optimRes=NA,allInter=TRUE)
 }
 
 
 \arguments{
   \item{BTable}{a BTable list, as created by \link{makeBTables}}
-  \item{Model}{a Model list, as created by \link{readSif}}
+  \item{model}{a model list, as created by \link{readSif}}
   \item{optimRes}{a bit string with the reaction of the model to be considered, default considers all reactions}
   \item{allInter}{one new link in the network can correspond to more links in the model, set it to TRUE if you want to add all possible links, FALSE to add only one link, default is TRUE}
 }
@@ -26,7 +26,7 @@ The function receive as input the Boolean Tables, infers the data-driven network
 }
 
 \value{
-a new Model with the integrated links and an additional field:
+a new model with the integrated links and an additional field:
 \item{indexIntegr}{a vector with the indexes of the integrated links}
 }
 
@@ -45,13 +45,11 @@ F. Eduati, A. Corradin, B. Di Camillo, G. Toffolo. A Boolean approach to linear 
 
 \examples{
 
-library(CellNOptR)
 data(CNOlistDREAM,package="CellNOptR")
 data(DreamModel,package="CellNOptR")
-res<-preprocessing(Data=CNOlistDREAM, Model=DreamModel)
-Model<-res$model
+model<-preprocessing(data=CNOlistDREAM, model=DreamModel)
 BTable <- makeBTables(CNOlist=CNOlistDREAM, k=2, measErr=c(0.1, 0))
-modelIntegr <- MapBTables2Model(BTable=BTable,Model=Model,allInter=TRUE)
+modelIntegr <- mapBTables2model(BTable=BTable,model=model,allInter=TRUE)
 # modelIntegr$reacID[modelIntegr$indexIntegr] to see the integrated links
 }
 

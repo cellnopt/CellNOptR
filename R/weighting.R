@@ -12,8 +12,8 @@
 #  CNO website: http://www.ebi.ac.uk/saezrodriguez/software.html
 #
 ##############################################################################
-# $Id: PPIweight.R 853 2012-03-28 15:09:06Z eduati $
-PPIweight <-
+# $Id: weighting.R 853 2012-03-28 15:09:06Z eduati $
+weighting <-
   function(modelIntegr,PKNmodel,CNOlist,integrFac=10,UniprotID=NULL,PPI=FALSE){
     
 	  
