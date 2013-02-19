@@ -30,6 +30,7 @@ gaBinaryT1W<-function(
     verbose=TRUE,
     priorBitString=NULL,
     maxSizeHashTable=5000){
+		
 
     # by default initial bit string is made of ones.
     if (is.null(initBstring)==TRUE){
@@ -68,6 +69,7 @@ gaBinaryT1W<-function(
         "Avg_Score_Gen","Best_score_Gen","Best_bit_Gen","Iter_time")
     PopTol<-rep(NA,bLength)
     PopTolScores<-NA
+		
 
     #Function that produces the score for a specific bitstring
     getObj<-function(x, scoresHash=NULL){
@@ -96,21 +98,25 @@ gaBinaryT1W<-function(
     scoresHash <- data.frame()
     # if you do want the hastable, uncomment the following line.
     #scoresHash = NULL
+		
+
 
     while(!stop){
 
         #compute the scores
         scores<-apply(Pop,1,getObj, scoresHash=scoresHash)
 
+
         # fill the hash table to speed up code
         scoresHash<-fillHashTable(scoresHash, scores, Pop, maxSizeHashTable)
-
+				
         #Fitness assignment: ranking, linear
         rankP<-order(scores,decreasing=TRUE)
         Pop<-Pop[rankP,]
         scores<-scores[rankP]
         fitness<-2-selPress+(2*(selPress-1)*(c(1:popSize)-1)/(popSize-1))
-
+		
+	
         #selection:stochastic uniform sampling
         wheel1<-cumsum(fitness/sum(fitness))
         breaks<-runif(1)*1/popSize
@@ -132,6 +138,8 @@ gaBinaryT1W<-function(
         #This holds the probability, for each bit, to be inherited from parent 1 (if TRUE) or 2 (if FALSE)
         InhBit<-matrix(runif((PSize3*bLength)),nrow=PSize3,ncol=bLength)
         InhBit<-InhBit < 0.5
+		
+		
 
         #Try one point crossover
         #xover<-ceiling(runif(PSize3)*(bLength-1))
@@ -157,6 +165,7 @@ gaBinaryT1W<-function(
         g<-g+1
         thisGenBest<-scores[length(scores)]
         thisGenBestBit<-Pop[length(scores),]
+		
 
         if(is.na(thisGenBest)){
             thisGenBest<-min(scores, na.rm=TRUE)
@@ -187,7 +196,7 @@ gaBinaryT1W<-function(
         if(verbose) print(resThisGen)
 
         res<-rbind(res,resThisGen)
-
+		
         #Check stopping criteria
         Criteria<-c((stallGen > stallGenMax),
             (as.numeric((t[length(t)]-t[1]), units="secs") > maxTime),
@@ -209,6 +218,8 @@ gaBinaryT1W<-function(
                 Pop<-Pop3
                 }
         Pop <- addPriorKnowledge(Pop, priorBitString)
+		
+		
     }
     #end of the while loop
 

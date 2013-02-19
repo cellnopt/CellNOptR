@@ -21,7 +21,9 @@ computeScoreT1W<-function(CNOlist, model, bString, simList=NULL, indexList=NULL,
     # simList and indexList are computed inside this function. 
     # However, for back-compatibility, we keep the arguments so that if
     # provided, we can still use them.
-    if (is.null(simList)==TRUE){
+    
+		
+	if (is.null(simList)==TRUE){
         simList = prep4sim(model)
     }
     if (is.null(indexList)==TRUE){
@@ -30,10 +32,14 @@ computeScoreT1W<-function(CNOlist, model, bString, simList=NULL, indexList=NULL,
 
 
 	timeIndex = 2 # i.e., "t1"
+		
 
     modelCut = cutModelW(model, bString)
 
+
     simListCut <- cutSimList(simList, bString)
+		
+
 
     # Compute the simulated results
     simResults<-simulatorT1(
@@ -48,6 +54,7 @@ computeScoreT1W<-function(CNOlist, model, bString, simList=NULL, indexList=NULL,
         simList=simListCut,
         indexList=indexList)
 
+
     #Compute the score
     Score <- getFitW(
         simResults=simResults,
@@ -59,6 +66,7 @@ computeScoreT1W<-function(CNOlist, model, bString, simList=NULL, indexList=NULL,
         NAFac=NAFac,
         nInTot=length(which(model$interMat == -1)),
         simResultsT0=simResultsT0)
+		
 
 
   if ((class(CNOlist)=="CNOlist")==FALSE){

@@ -29,9 +29,11 @@ getFitW<-function(
          CNOlist = CellNOptR::CNOlist(CNOlist)
      }
 
-
-    simResults<-simResults[,indexList$signals]
-
+	
+	# needed only for consistency between version 1.4 and following ones (following ones already cut the simList)
+	if (dim(simResults)[2]!=length(indexList$signals)){
+		simResults<-simResults[,indexList$signals]
+	}
 
     # for back compatibility, timePoint ca be "t1" or "t2" but developers should
     # use an integer.
@@ -51,8 +53,13 @@ getFitW<-function(
     # if t0 is provided and we are interested in t1
     # then  score is based on t1 but also t0
     if (tPt == 2 && is.na(simResultsT0)==FALSE){
-        Diff0<-simResultsT0[,indexList$signals]-CNOlist@signals[[1]]
-        Diff<-simResults-CNOlist@signals[[tPt]]
+		# needed only for consistency between version 1.4 and following ones (following ones already cut the simList)
+		if (dim(simResultsT0)[2]!=length(indexList$signals)){
+			simResultsT0<-simResultsT0[,indexList$signals]
+		}
+		Diff0<-simResultsT0-CNOlist@signals[[1]]
+        
+		Diff<-simResults-CNOlist@signals[[tPt]]
         r0<-Diff0^2
         r<-Diff^2
         r <- rbind(r0, r) # we can concatenate because it's matricial computation.
