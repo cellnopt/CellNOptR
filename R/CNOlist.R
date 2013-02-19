@@ -136,7 +136,7 @@ setMethod(show, "CNOlist", function(object) {
     cat("signals:", colnames(signals(object)[[1]]), "\n")
     cat("variances:", colnames(signals(object)[[1]]), "\n")
     cat("--\nTo see the values of any data contained in this instance, just use the
-method (e.g., getCues(cnolist), getSignals(cnolist), getVariances(cnolist), ...\n\n")
+appropriate getter method (e.g., getCues(cnolist), getSignals(cnolist), ...\n\n")
 })
 
 #setMethod("plot", signature(x="CNOlist", y="missing"), function(x, y, ...){
