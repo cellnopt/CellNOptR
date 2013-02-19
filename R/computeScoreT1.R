@@ -50,11 +50,11 @@ computeScoreT1<-function(CNOlist, model, bString, simList=NULL, indexList=NULL,
 
 
     # Compute the simulated results
-    nStimuli = length(indexList$inhibited)
+    nStimuli = length(indexList$stimuli)
     nInhibitors <- length(indexList$inhibited)
     nCond <- dim(CNOlist@stimuli)[1]
     nReacs <- length(modelCut$reacID)
-    nSpecies <- length(model$namesSpecies)
+    nSpecies <- length(model$namesSpecies) # this is correct. No need to get modelCut$namesSpecies 
     nMaxInputs <- dim(simListCut$finalCube)[2]
     nStimuli <- dim(CNOlist@stimuli)[2]
 
@@ -93,7 +93,6 @@ computeScoreT1<-function(CNOlist, model, bString, simList=NULL, indexList=NULL,
     # test_simulateTN.R for instance.
     #simResultsT0 = simResultsT0[, indexList$signals]
     #simResults = simResults[, indexList$signals]
-
     nInTot = length(which(model$interMat == -1))
 
     #Compute the score
