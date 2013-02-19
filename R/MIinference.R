@@ -56,7 +56,7 @@ function(CNOlist, method="ARACNE", PKNgraph=NULL, filename="ARACNE"){
     for (i in 1:dim(sif)[1]){
       node1<-sif[i,1]
       node2<-sif[i,3]
-      ck<-SearchLinkGraph(node1,node2,PKNgraph)
+      ck<-searchLinkGraph(node1,node2,PKNgraph)
       if (ck==1){
         oppLink<-intersect(which(sif[,1]==node2), which(sif[,3]==node1))
         if (length(oppLink)>0){

@@ -2,9 +2,9 @@
 \docType{data}
 \alias{UniprotIDdream}
 \title{Uniprot identifiers for proteins in DreamModel}
-\description{This data object contains the Uniprot identifiers corresponding to DreamModel of CellNOptR package, in order to identify the corresponding nodes in the protein-protein interaction network (PPINigraph).}
+\description{This data object contains the Uniprot identifiers corresponding to DreamModel of CellNOptR package, in order to associat them with the corresponding nodes in the protein-protein interaction network (PPINigraph).}
 \usage{UniprotIDdream}
-\format{UniprotIDdream is a list where each element is a protien of the DreamModel and is associated with the respective Unprot identifiers.}
+\format{UniprotIDdream is a list where each element is a protien of the DreamModel and is associated with the respective Uniprot identifiers.}
 \source{This data object is manually derived from the Uniprot database.}
 \references{
 \enumerate{
