@@ -7,7 +7,7 @@ Genetic algorithm used to optimise a model differently weighting links
 This function is the genetic algorithm to be used to optimise a model by fitting to data containing one time point. It is the function \link{gaBinaryT1} of CellNOptR modified in orter to differently  weights for the integrated links
 }
 \usage{
-gaBinaryT1(CNOlist, model, initBstring=NULL, sizeFac = 1e-04, 
+gaBinaryT1W(CNOlist, model, initBstring=NULL, sizeFac = 1e-04, 
     NAFac = 1, popSize = 50, pMutation = 0.5, maxTime = 60, maxGens = 500,
     stallGenMax = 100, selPress = 1.2, elitism = 5, relTol = 0.1, verbose=TRUE,
     priorBitString=NULL, maxSizeHashTable=5000)

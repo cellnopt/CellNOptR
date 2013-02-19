@@ -10,7 +10,7 @@
 }
 
 \usage{
-makeBTables(CNOlist, measErr=c(0.1, 0))
+linksRanking(CNOlist, measErr=c(0.1, 0))
 }
 
 
