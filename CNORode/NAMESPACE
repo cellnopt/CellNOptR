@@ -16,5 +16,5 @@ export("createLBodeContPars",
     "parEstimationLBode",
     "parEstimationLBodeSSm",
     "plotLBodeFitness",
-    "plotLBodeModelSim",
+    "plotLBodeModelSim"
     )
