@@ -1,6 +1,11 @@
 1.5
 ====
 
+1.5.18
+----------
+
+    o convert timepoints from string to numeric to make CNORode function working
+      again.
 1.5.17
 -----------
 
@@ -23,7 +28,7 @@
     o fixing manual
     o add compatCNOlist to convert CNOlist class to makeCNOlist for back
       compatibiltiy. This is a CNOlist class method
-	o add getter in CNOlist
+    o add getter in CNOlist
 
 1.5.13
 ---------

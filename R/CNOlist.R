@@ -243,7 +243,7 @@ internal_CNOlist_from_makeCNOlist <- function(cnolist)
         }
     }
 
-    myTimePoints <- cnolist$timeSignals
+    myTimePoints <- as.numeric(cnolist$timeSignals)
 
     #CNOlist(myCues, myInhibitors, myStimuli, mySignals)
     return( list(cues=myCues, inhibitors=myInhibitors, stimuli=myStimuli,
