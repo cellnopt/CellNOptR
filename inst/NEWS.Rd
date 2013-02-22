@@ -1,7 +1,7 @@
 \title{NEWS}
 \name{CNORfeeder NEWS}
 
-\section{CHANGES IN VERSION 0.1.2: (2012-09-20)}{
+\section{CHANGES IN VERSION 0.99.1: (2012-22-02)}{
   \itemize{
     \item{First version of CNORfeeder with the following features}
       \itemize{
