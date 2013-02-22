@@ -38,30 +38,25 @@ data(CNOlistDREAM,package="CellNOptR")
 data(DreamModel,package="CellNOptR")
 # see CellNOptR documentation to import other data/PKNs)
 
-# A. INFERENCE (see Fig 1A) - CNORfeeder
+# A. INFERENCE - CNORfeeder
 # FEED inference: codified in Boolean Tables
 BTable <- makeBTables(CNOlist=CNOlistDREAM, k=2, measErr=c(0.1, 0))
 
-# B. COMPRESSION (see Fig 1B) - CellNOptR
+# B. COMPRESSION - CellNOptR
 # preprocessing step
 model<-preprocessing(data=CNOlistDREAM, model=DreamModel)
 
-# C. INTEGRATION (see Fig 1C) - CNORfeeder
+# C. INTEGRATION - CNORfeeder
 # integration with the compressed model
 modelIntegr <- mapBTables2model(BTable=BTable,model=model,allInter=TRUE)
 # see example in ?MapDDN2Model to use other reverse-engineering methods
 
-# D. WEGHTING (see Fig 1D) - CNORfeeder
+# D. WEGHTING - CNORfeeder
 # integrated links are weighted more according to the integratin factor integrFac
-modelIntegrWeight <- weighting(modelIntegr=modelIntegr, PKNmodel=DreamModel, CNOlist=CNOlistDREAM, integrFac=10, PPI=FALSE)
-# proritization of links based on the PIN
-# the followig step may take a while:
-# if not run, all integrated links will have the same weight in the training step
-# load the UniprotID of proteins in the PKN
-data(UniprotIDdream,package="CNORfeeder")
-modelIntegrWeight2 <- weighting(modelIntegr=modelIntegr, PKNmodel=DreamModel, CNOlist=CNOlistDREAM, integrFac=10, UniprotID=UniprotIDdream, PPI=TRUE)
+modelIntegrWeight <- weighting(modelIntegr=modelIntegr, PKNmodel=DreamModel,
+                              CNOlist=CNOlistDREAM, integrFac=10, PPI=FALSE)
 
-# E. TRAINING (see Fig 1E) - CellNOptR
+# E. TRAINING - CellNOptR
 initBstring<-rep(1,length(modelIntegr$reacID))
 # training to data using genetic algorithm (run longer to obtain better results)
 DreamT1opt<-gaBinaryT1W(
@@ -71,7 +66,4 @@ CNOlist=CNOlistDREAM,
 	maxGens=2,
 	popSize=5,
 	verbose=FALSE)
-
-# plot the integrated model
-plotModel(model=modelIntegr, CNOlist=CNOlistDREAM, bString=DreamT1opt$bString, indexIntegr=modelIntegrWeight$indexIntegr)
 }

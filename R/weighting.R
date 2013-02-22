@@ -28,6 +28,7 @@ weighting <-
 	# if PPI is set to FALSE we only add the field linksWeights (with additional penalty for integrated links) and stop here
 	# if PPI is set to TRUE we do the weighting based on information from protein-protein interaction network
 	if (PPI==TRUE){
+		library(igraph)
 		data(PPINigraph,package="CNORfeeder")
 		
 		count<-0

@@ -21,7 +21,7 @@ makeBTables(CNOlist, k=2, measErr=c(0.1, 0), timePoint=NA)
   \item{timePoint}{the time point to be considered for the inference of the Boolean tables, if not specified all time points are consideres}
 }
 \details{
-This function computes the fist step of FEED to reverse engineer the network strictly from data, i.e. the inference of Boolean tables, as described in (Eduati et al., PLoS ONE, 2010). For each protein, a Boolean table is inferred having one columns for each stimulus and one row for each inhibitor. If a stimulus produces a significant effect on the activity level of the protein this is codified with a 1 in the corresponding column, if also the inhibitor affect the protein there is a 2 in the corresponding cell. The sign of the regulation is coded in separate tables.
+This function computes the fist step of FEED to reverse engineer the network strictly from data, i.e. the inference of Boolean tables, as described in (Eduati et al., PLoS ONE, 2010). For each protein, a Boolean table is inferred having one columns for each stimulus and one row for each inhibitor. If a stimulus produces a significant effect on the activity level of the protein this is codified with a 1 in the corresponding column, if also the inhibitor affects the protein there is a 2 in the corresponding cell. The sign of the regulation is coded in separate tables.
 }
 
 \value{

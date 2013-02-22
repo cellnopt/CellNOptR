@@ -29,7 +29,6 @@ Integrated links are less reliable than links from the PKN, thus should be penal
 }
 
 \value{
-This function returns a list with elements:
 \item{modelIntegr}{the input modelIntegr with an additional field: a vector with the weights of the integrated links}
 }
 

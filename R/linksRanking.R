@@ -14,7 +14,7 @@
 ##############################################################################
 # $Id$
 linksRanking <-
-function(CNOlist, measErr=c(0.1, 0)){
+function(CNOlist, measErr=c(0.1, 0), savefile=FALSE){
   
   if ((class(CNOlist)=="CNOlist")==FALSE){
   	CNOlist = CellNOptR::CNOlist(CNOlist)
@@ -103,8 +103,9 @@ function(CNOlist, measErr=c(0.1, 0)){
   Lrank <- Lrank[order(as.numeric(Lrank[,2]), decreasing = TRUE),]
   Lrank <- Lrank[1:(min(which(Lrank[,2]<=0))-1),]
   
-  write.table(Lrank, file="LinkRanking.txt", sep="\t",row.names=FALSE,col.names=c('link','k min'),quote=FALSE)
-
+  if(savefile==TRUE){
+	write.table(Lrank, file="LinkRanking.txt", sep="\t",row.names=FALSE,col.names=c('link','k min'),quote=FALSE)
+  }
   return(Lrank)
   
 }

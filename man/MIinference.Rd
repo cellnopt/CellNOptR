@@ -22,14 +22,14 @@ MIinference(CNOlist, method="ARACNE", PKNgraph=NULL,
   \item{filename}{name of the sif file saved, default ARACNE}
 }
 \details{
-This function transforms the data in a format compatible with minet package, infers the network using \link{aracne} or \link{clr} as implemented in the minet package and returns the network in the sif format. It is important to notice that mutual information approaches do not allow for determining the directionality of the links thus both directions are considered. The function allows to give as input a network in graph format (graph package, see \link{sif2graph} to convert from sif to graph format) to be used as comparison to assess the directionality of some links, e.g. PKN.
+This function transforms the data in a format compatible with minet package, infers the network using aracne or clr as implemented in the minet package and returns the network in the sif format. It is important to notice that mutual information approaches do not allow for determining the directionality of the links thus both directions are considered. The function allows to give as input a network in graph format (graph package, see \link{sif2graph} to convert from sif to graph format) to be used as comparison to assess the directionality of some links, e.g. PKN.
 }
 
 \value{
 \item{sif}{the inferred data-driven network in sif format}
 }
 \references{
-P. E. Meyer, F. Lafitte and G. Bontempi (2008). MINET: An open source R/Bioconductor Package for Mutual Information based Network Inference. Bioinformatics, Vol 9, 2008
+P. E. Meyer, F. Lafitte and G. Bontempi (2008). MINET: An open source R/Bioconductor Package for Mutual Information based Network Inference. BMC Bioinformatics, 9(1), 2008
 }
 \author{
     F.Eduati

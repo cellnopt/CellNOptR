@@ -45,7 +45,7 @@ a new Model with the integrated links and an additional field:
 
 data(CNOlistDREAM,package="CellNOptR")
 data(DreamModel,package="CellNOptR")
-model<-preprocessing(Data=CNOlistDREAM, model=DreamModel)
+model<-preprocessing(data=CNOlistDREAM, model=DreamModel)
     
 DDN<-Binference(CNOlistDREAM, tempCheckOrders=10, maxIter=100,
                 filename="BAYESIAN")

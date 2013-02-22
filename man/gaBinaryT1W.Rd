@@ -81,7 +81,8 @@ The whole procedure is described in details in Saez-Rodriguez et al. (2009). The
 \value{
 This function returns a list with elements:
 \item{bString}{the best bitstring}
-\item{results}{ a matrix with columns "Generation","Best_score","Best_bitString","Stall_Generation","Avg_Score_Gen","Best_score_Gen","Best_bit_Gen","Iter_time"}
+\item{results}{ a matrix with columns "Generation","Best_score","Best_bitString",
+  "Stall_Generation","Avg_Score_Gen","Best_score_Gen","Best_bit_Gen","Iter_time"}
 \item{stringsTol}{the bitstrings whose scores are within the tolerance}
 \item{stringsTolScores}{the scores of the above-mentioned strings}
 }
@@ -103,7 +104,8 @@ model<-preprocessing(data=CNOlistDREAM, model=DreamModel)
 BTable <- makeBTables(CNOlist=CNOlistDREAM, k=2, measErr=c(0.1, 0))
 modelIntegr <- mapBTables2model(BTable=BTable,model=model,allInter=TRUE)
 
-modelIntegrWeight <- weighting(modelIntegr=modelIntegr, PKNmodel=DreamModel, CNOlist=CNOlistDREAM, integrFac=10, PPI=FALSE)
+modelIntegrWeight <- weighting(modelIntegr=modelIntegr, PKNmodel=DreamModel,
+                        CNOlist=CNOlistDREAM, integrFac=10, PPI=FALSE)
 
 initBstring<-rep(1,length(modelIntegr$reacID))
 # training to data using genetic algorithm (run longer to obtain better results)

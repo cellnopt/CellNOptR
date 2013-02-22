@@ -14,7 +14,7 @@
 ##############################################################################
 # $Id: mapBTables2model.R -1   $
 mapBTables2model <-
-function(BTable,model,optimRes=NA,allInter=TRUE){
+function(BTable,model=NULL,optimRes=NA,allInter=TRUE){
   # BTable are the Bolean Tables inferred from data using the function makeBTables
   # Model is the model optimised using CNO and than compressed
   
