@@ -6,6 +6,7 @@
 
     o convert timepoints from string to numeric to make CNORode function working
       again.
+
 1.5.17
 -----------
 
@@ -75,7 +76,7 @@
 1.5.8
 -------
 
-o fixed bug in gtFit (C version) to handl NA and NaN properly. Bug report 138
+	o fixed bug in gtFit (C version) to handl NA and NaN properly. Bug report 138
 
 1.5.7
 ------
