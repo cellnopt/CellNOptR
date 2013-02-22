@@ -29,6 +29,7 @@ weighting <-
 	# if PPI is set to TRUE we do the weighting based on information from protein-protein interaction network
 	if (PPI==TRUE){
 		library(igraph)
+		PPINigraph = NULL
 		data(PPINigraph,package="CNORfeeder")
 		
 		count<-0
