@@ -22,7 +22,8 @@ normaliseCNOlist <- function(
     saturation=Inf,
     changeTh=0,
     norm2TorCtrl=NULL,
-    mode="time", verbose=FALSE){
+    mode="time", options=list(rescale_negative=T),
+    verbose=FALSE){
 
 
     if ((class(CNOlist)=="CNOlist")==FALSE){
@@ -48,7 +49,7 @@ normaliseCNOlist <- function(
         stop("The parameter 'Saturation' should be a single numeric value")
     if(mode %in% c("time","ctrl", "raw") == FALSE)
         stop("The parameter 'mode' should be either 'time' or 'ctrl' or 'raw'")
-
+    
 
     if (verbose==TRUE){
         cat("Normalisation mode is: ", mode, "\n", sep="")
@@ -243,6 +244,20 @@ normaliseCNOlist <- function(
     for(i in 1:length(NormData)){
         NormData[[i]][which(NaNsList[[i]] == 1)] <- NaN
     }
+
+    # rescale the columns that have negative values. T0 is untouched.
+    if (options$rescale_negative == T){
+        for (x in colnames(NormData[[1]])){
+            for (i in 2:length(NormData)){
+                m = min(NormData[[i]][,x], na.rm=T)
+                M = max(NormData[[i]][,x], na.rm=T)
+                if (m<0 && m!=M ){
+                    NormData[[i]][,x] = (NormData[[i]][,x]-m)/ (M-m)
+                }
+            }
+        }
+    }
+
 
     CNOlist@signals <- NormData
     return(CNOlist)
