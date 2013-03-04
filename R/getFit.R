@@ -22,20 +22,20 @@ getFit<-function(
     sizeFac=0.0001,
     NAFac=1,
     nInTot,
-    simResultsT0=NA
+    simResultsT0=NULL
     ){
 
     if ((class(CNOlist)=="CNOlist")==FALSE){
          CNOlist = CellNOptR::CNOlist(CNOlist)
      }
 
-
     if (is.null(indexList)==FALSE){
         simResults<-simResults[,indexList$signals]
-        if (is.na(simResultsT0)==FALSE){
+        if (is.null(simResultsT0)==FALSE){
             simResultsT0<-simResultsT0[,indexList$signals]
         }
     }
+
 
     # for back compatibility, timePoint ca be "t1" or "t2" but developers should
     # use an integer.
@@ -54,7 +54,7 @@ getFit<-function(
 
     # if t0 is provided and we are interested in t1
     # then  score is based on t1 but also t0
-    if (tPt == 2 && is.na(simResultsT0)==FALSE){
+    if (tPt == 2 && is.null(simResultsT0)==FALSE){
         Diff0 <- simResultsT0 - CNOlist@signals[[1]]
         Diff <- simResults - CNOlist@signals[[tPt]]
         r0 <- Diff0^2
