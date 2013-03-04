@@ -44,19 +44,20 @@ computeScoreT1<-function(CNOlist, model, bString, simList=NULL, indexList=NULL,
     modelCut <- list()
     modelCut$interMat <- model$interMat[, bs]
     modelCut$reacID <- model$reacID[bs]
+    modelCut$namesSpecies <- model$namesSpecies
 
 
     simListCut <- cutSimList(simList, bString)
 
 
     # Compute the simulated results
-    nStimuli = length(indexList$stimuli)
+    nStimuli = length(indexList$stimulated)
     nInhibitors <- length(indexList$inhibited)
     nCond <- dim(CNOlist@stimuli)[1]
     nReacs <- length(modelCut$reacID)
     nSpecies <- length(model$namesSpecies) # this is correct. No need to get modelCut$namesSpecies 
     nMaxInputs <- dim(simListCut$finalCube)[2]
-    nStimuli <- dim(CNOlist@stimuli)[2]
+
 
     # simList matrices. C code must handle the matrix indices carefully.
     # This is faster than transforming into a vector as in the previous code.
@@ -74,7 +75,7 @@ computeScoreT1<-function(CNOlist, model, bString, simList=NULL, indexList=NULL,
 
     # cnolist
     valueInhibitors <- as.integer(CNOlist@inhibitors)
-    valueStimuli <- as.integer((CNOlist@stimuli))
+    valueStimuli <- as.integer(CNOlist@stimuli)
 
 	simResults = .Call("simulatorT1", nStimuli, nInhibitors,
 		nCond, nReacs, nSpecies, nSignals, nMaxInputs,
@@ -87,31 +88,35 @@ computeScoreT1<-function(CNOlist, model, bString, simList=NULL, indexList=NULL,
         finalCube, ixNeg, ignoreCube, maxIx,
         indexSignals, indexStimuli, indexInhibitors, 
         valueInhibitors, valueStimuli, as.integer(0))
-
-
-    # this step is commented in the C code. Does not seem to work properly. Try
-    # test_simulateTN.R for instance.
+ 
+    # Unlike in computeScoreTN, the C code does not cut the simResults so you need to do it
+    # since it is done in getFit, no need to do it. 
+    # If we cut the simRsults in the C code, we must comment these lines AND set indexlist=NULL in the 
+    # get Fit call here below. However, the C code is called elwhere in simulateTN where the expected input to
+    # the C code simulateTN expect the full simResults matrix !!!
     #simResultsT0 = simResultsT0[, indexList$signals]
     #simResults = simResults[, indexList$signals]
     nInTot = length(which(model$interMat == -1))
 
     #Compute the score
-    mode = 1 # 1 for TRUE: takes into account T0
-    Score = .Call("getFit", 
-        nCond,
-        nSignals, 
-        nReacs,
-        nSpecies,
-        sum(bs),
-        nInTot,
-        as.real(simResultsT0), 
-        as.real(simResults), 
-        as.real(CNOlist@signals[[1]]), #T0 data
-        as.real(CNOlist@signals[[timeIndex]]), #T1 data
-        as.integer(modelCut$interMat),
-		as.real(sizeFac),
-		as.real(NAFac), as.integer(mode)
-		)[[1]]
+    Score <- getFit(
+        simResults=simResults,
+        CNOlist=CNOlist,
+        model=modelCut,
+        indexList=indexList,
+        timePoint=timeIndex,
+        sizeFac=sizeFac,
+        NAFac=NAFac,
+        nInTot=length(which(model$interMat == -1)),
+        simResultsT0=simResultsT0)
+
+
+  if ((class(CNOlist)=="CNOlist")==FALSE){
+       CNOlist = CellNOptR::CNOlist(CNOlist)
+  }
+  nDataP <- sum(!is.na(CNOlist@signals[[timeIndex]]))
+  Score <- Score/nDataP
+
 
   return(Score)
 }
