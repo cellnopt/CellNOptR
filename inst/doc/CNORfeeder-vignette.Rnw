@@ -206,13 +206,8 @@ The integrated network can be optimized using \emph{CellNOptR}; the function \em
 <<train, eval=TRUE>>=
 initBstring<-rep(1,length(modelIntegrWeight$reacID))
 # training to data using genetic algorithm (run longer to obtain better results)
-DreamT1opt<-gaBinaryT1W(
-CNOlist=CNOlistDREAM,
-  model=modelIntegrWeight,
-	initBstring=initBstring,
-	maxGens=2,
-	popSize=5,
-	verbose=FALSE)
+DreamT1opt<-gaBinaryT1W(CNOlist=CNOlistDREAM, model=modelIntegrWeight,
+                        initBstring=initBstring, maxGens=2, popSize=5, verbose=FALSE)
 @
 
 The optimal model and the simulated and real data (shown in Figure~\ref{fig:training}) can be visualized using the following commands of \emph{CellNOptR}:
@@ -228,9 +223,9 @@ cutAndPlotResultsT1(model=modelIntegrWeight, CNOlist=CNOlistDREAM,
 \begin{figure*}[!htbp]
 \begin{center}
 \begin{tabular}{cc}
-    {\includegraphics[width=7cm]{optModel}} 
+    {\includegraphics[width=7.5cm]{optModel}} 
     &
-    {\includegraphics[width=8cm]{SimResultsT1_1}} \\
+    {\includegraphics[width=8.5cm]{SimResultsT1_1}} \\
 \end{tabular}
 \caption[]{\emph{Left panel}: optimal model. \emph{Right panel}: fit to experimental data.}
 \label{fig:training}
