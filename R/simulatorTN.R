@@ -56,10 +56,11 @@ simulatorTN <-function(simResultsPrev, CNOlist, model, simList, indexList, timeI
     nSignals <- length(indexSignals)
 
     # cnolist
-    valueInhibitors <- as.integer(t(CNOlist@inhibitors))
-    valueStimuli <- as.integer(t(CNOlist@stimuli))
+    valueInhibitors <- as.integer(CNOlist@inhibitors)
+    valueStimuli <- as.integer(CNOlist@stimuli)
 
     # simResults
+
     valueSimResults = as.integer(t(simResultsPrev))
 
 

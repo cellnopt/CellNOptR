@@ -379,17 +379,19 @@ SEXP simulatorT1 (
         }
     }
 
-/*     PROTECT(simResults = allocMatrix(REALSXP, nCond, nSpecies));
-    rans = REAL(simResults);
+
+
+     PROTECT(simResults = allocMatrix(REALSXP, nCond, nSpecies));
+  rans = REAL(simResults);
     for(i = 0; i < nCond; i++) {
         for(j = 0; j < nSpecies; j++) {
             if(new_input[i][j] == NA) rans[i + nCond*j] = NA_REAL;
             else rans[i + nCond*j] = new_input[i][j];
         }
     }
-*/
 
-     PROTECT(simResults = allocMatrix(REALSXP, nCond, nSignals));
+/* this code works but raise issue when calling simulatorT1 */
+/*     PROTECT(simResults = allocMatrix(REALSXP, nCond, nSignals));
     rans = REAL(simResults);
     for(i = 0; i < nCond; i++) {
         for(j = 0; j < nSignals; j++) {
@@ -397,7 +399,7 @@ SEXP simulatorT1 (
             else rans[i + nCond*j] = new_input[i][indexSignals[j]];
         }
     }
-
+*/
 
 
     free(maxIx);

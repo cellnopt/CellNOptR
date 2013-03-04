@@ -168,7 +168,7 @@ SEXP simulatorTN (
     for (i = 0; i < nCond; i++) {
         valueInhibitors[i] = (int*) malloc(nInhibitors * sizeof(int));
         for (j = 0; j < nInhibitors; j++) {
-            valueInhibitors[i][j] = INTEGER(valueInhibitors_in)[counter++];
+            valueInhibitors[i][j] = INTEGER(valueInhibitors_in)[nCond*j+i];
         }
     }
 
@@ -178,7 +178,7 @@ SEXP simulatorTN (
     for (i = 0; i < nCond; i++) {
         valueStimuli[i] = (int*) malloc(nStimuli * sizeof(int));
         for (j = 0; j < nStimuli; j++) {
-            valueStimuli[i][j] = INTEGER(valueStimuli_in)[counter++];
+            valueStimuli[i][j] = INTEGER(valueStimuli_in)[nCond*j+i];
         }
     }
 
