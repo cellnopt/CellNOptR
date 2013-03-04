@@ -15,6 +15,7 @@
 # $Id$
 searchPPIigraph <- function(node1, node2, UniprotID, PPINigraph, noPKNnodes=TRUE){
 	
+	
   #node1 is the ending node and is always a 1 value vector
   node1ID<-UniprotID[[which(names(UniprotID)==node1)]]
   #node2 is the starting node and can have more than 1 element (AND gates)

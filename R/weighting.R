@@ -14,7 +14,7 @@
 ##############################################################################
 # $Id: weighting.R 853 2012-03-28 15:09:06Z eduati $
 weighting <-
-  function(modelIntegr,PKNmodel,CNOlist,integrFac=10,UniprotID=NULL,PPI=FALSE){
+  function(modelIntegr,PKNmodel,CNOlist,integrFac=10,UniprotID=NULL,PPI=NULL){
     
 	  
 	if ((class(CNOlist)=="CNOlist")==FALSE){
@@ -27,11 +27,15 @@ weighting <-
 	
 	# if PPI is set to FALSE we only add the field linksWeights (with additional penalty for integrated links) and stop here
 	# if PPI is set to TRUE we do the weighting based on information from protein-protein interaction network
-	if (PPI==TRUE){
+	if (!is.null(PPI)){
+			
 		library(igraph)
-		PPINigraph = NULL
-		data(PPINigraph,package="CNORfeeder")
 		
+		if(is.igraph(PPINigraph)==FALSE){
+			stop("The provider PPI is not an igraph")
+        }
+		
+				
 		count<-0
 		#vector with the scores only for integrated links (score =1 means that links will have the same weight as the other links, final score will be 1+scorePPI)
 		scoresVec<-rep(1,length(modelIntegr$indexIntegr))
@@ -93,6 +97,8 @@ weighting <-
 			
 			for (j1 in 1:length(node1)){
 				for (j2 in 1:length(node2)){
+				
+					
 					ckmin<-searchPPIigraph(node1=node1[[j1]], node2=node2[[j2]], UniprotID=UniprotID, PPINigraph=PPINigraph, noPKNnodes=TRUE)
 
 					#(ckmin+1) is the number of edges

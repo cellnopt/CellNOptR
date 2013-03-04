@@ -20,7 +20,7 @@ weighting(modelIntegr,PKNmodel,CNOlist,integrFac,UniprotID,PPI)
   \item{CNOlist}{a CNOlisi, as created by \link{makeCNOlist}}
   \item{integrFac}{a number indicating the penalty for integrated links}
   \item{UniprotID}{a list with the Uniprot identifiers of proteins in the PKN}
-  \item{PPI}{links can be differently prioritize using information from PIN, set it to TRUE if you want to use this information (might take some minutes), FALSE if not. Default is FALSE.}
+  \item{PPI}{an igraph of the PIN to be used, if no network is provided (=NULL) this information is not used. Default is NULL.}
  
 }
 
@@ -54,14 +54,15 @@ BTable <- makeBTables(CNOlist=CNOlistDREAM, k=2, measErr=c(0.1, 0))
 modelIntegr <- mapBTables2model(BTable=BTable,model=model,allInter=TRUE)
 
 modelIntegrWeight <- weighting(modelIntegr=modelIntegr, PKNmodel=DreamModel,
-					 CNOlist=CNOlistDREAM, integrFac=10, PPI=FALSE)
+					 CNOlist=CNOlistDREAM, integrFac=10)
 
 # weighting using PPI might take some minutes
 \dontrun{
 data(UniprotIDdream,package="CNORfeeder")
+data(PPINigraph,package="CNORfeeder")
 modelIntegrWeight2 <- weighting(modelIntegr=modelIntegr, PKNmodel=DreamModel,
 					  CNOlist=CNOlistDREAM, integrFac=10, UniprotID=UniprotIDdream,
-					  PPI=TRUE)
+					  PPI=PPINigraph)
 }
 
 

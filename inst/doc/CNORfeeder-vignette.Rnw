@@ -184,7 +184,7 @@ Links inferred based only on data are, in principle, less reliable than those de
 
 <<weight, eval=TRUE>>=
 modelIntegrWeight <- weighting(modelIntegr=modelIntegr, PKNmodel=DreamModel,
-                               CNOlist=CNOlistDREAM, integrFac=10, PPI=FALSE)
+                               CNOlist=CNOlistDREAM, integrFac=10)
 @
 
 This function return the same model with an additional field that is the weight assigned to each link, thus preparing it for the optimization (see next section).
@@ -192,10 +192,11 @@ This function return the same model with an additional field that is the weight 
 Information derived from protein-protein networks (PIN) can also be used to differently prioritize integrated links, with the basic idea that a shorter path in the PIN corresponds to a more reliable link in the PKN. If \emph{PPI} attribute is set to TRUE, the function \emph{weighting} uses a PIN provided with the package to weight links (note that Uniprot IDs must be provided, see \emph{UniprotIDdream} as an example of the list structure to be used).
 
 <<weightPPI, eval=FALSE>>=
+data(PPINigraph,package="CNORfeeder")
 data(UniprotIDdream,package="CNORfeeder")
 modelIntegrWeight <- weighting(modelIntegr=modelIntegr, PKNmodel=DreamModel,
                                CNOlist=CNOlistDREAM, integrFac=10,
-                               UniprotID=UniprotIDdream, PPI=TRUE)
+                               UniprotID=UniprotIDdream, PPI=PPINigraph)
 @
 
 \subsection{E. Training - CellNOptR}

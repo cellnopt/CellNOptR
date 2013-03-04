@@ -6,7 +6,7 @@ Date: 2013-22-02
 Author: F.Eduati
 Maintainer: F.Eduati <eduati@ebi.ac.uk>
 Depends: R (>= 2.15.0), CellNOptR (>= 1.4.0), graph
-Suggests: minet, catnet, igraph
+Suggests: minet, catnet, igraph, Rgraphviz
 biocViews: CellBasedAssays, CellBiology, Proteomics, Bioinformatics, TimeCourse
 Description: This package integrates literature-constrained and data-driven methods to infer signalling networks from perturbation experiments. It permits to extends a given network with links derived from the data via various inference methods, and uses information on physical interactions of proteins to guide and validate the integration of links.
 License: GPL-3
