@@ -48,9 +48,9 @@ cSimulator <- function(CNOlist, model, simList, indexList, mode=1) {
 	maxIx = as.integer(simList$maxIx-1)
 	
 	# index
-	indexSignals <- as.integer(as.vector(indexList$signals)-1)
-	indexStimuli <- as.integer(as.vector(indexList$stimulated)-1)
-	indexInhibitors <- as.integer(as.vector(indexList$inhibited)-1)
+	indexSignals <- as.integer(indexList$signals-1)
+	indexStimuli <- as.integer(indexList$stimulated-1)
+	indexInhibitors <- as.integer(indexList$inhibited-1)
     nSignals <- length(indexSignals)
 
 	# cnolist
@@ -80,6 +80,7 @@ cSimulator <- function(CNOlist, model, simList, indexList, mode=1) {
 		valueStimuli,
         as.integer(mode)
 	)
-    #res = res[,indexList$signals]
+# should not be cut because it is used in simulateTN as an input 
+#    res = res[,indexList$signals]
 	return(res)
 }
