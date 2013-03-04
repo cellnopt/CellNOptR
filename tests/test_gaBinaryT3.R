@@ -42,6 +42,9 @@ T2opt<-gaBinaryTN(CNOlist=cnolist,model=model,bStrings=list(T1opt$bString),verbo
 # run T3
 T3opt<-gaBinaryTN(CNOlist=cnolist,model=model,bStrings=list(bestBS, bestBS2),verbose=FALSE)
 
+print( T1opt$bScore)
+print( T2opt$bScore)
+print( T3opt$bScore)
 # no using the hardcoded parameters, we can check the output of te scores that
 # must be tiny.
 score1 = computeScoreT1(cnolist, model, bString=bestBS)
@@ -64,3 +67,4 @@ cutAndPlot(cnolist, model, bStrings=list(bestBS,bestBS2,bestBS3),plotPDF=TRUE, t
 
 
 
+warnings()

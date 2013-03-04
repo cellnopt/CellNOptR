@@ -85,7 +85,6 @@ CNOlist <-function(data, subfield=FALSE, verbose=FALSE){
         stimuli=res$stimuli, signals=res$signals, variances=res$variances, timepoints=res$timepoints)
 }
 
-
 setGeneric("getCues", function(object){standardGeneric("getCues")})
 setGeneric("getInhibitors", function(object){standardGeneric("getInhibitors")})
 setGeneric("getStimuli", function(object){standardGeneric("getStimuli")})

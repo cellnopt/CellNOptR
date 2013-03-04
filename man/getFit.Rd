@@ -8,7 +8,7 @@ This function computes the value of the objective function for a model and an as
 }
 \usage{
 getFit(simResults, CNOlist, model, indexList=NULL, timePoint=c("t1", "t2"),
-sizeFac=1e-04, NAFac=1, nInTot, simResultsT0=NA)
+sizeFac=1e-04, NAFac=1, nInTot, simResultsT0=NULL)
 }
 \arguments{
   \item{simResults}{
@@ -74,7 +74,7 @@ simResults<-simulatorT1(
 	model=ToyModel,
 	simList=ToyFields4Sim,
 	indexList=indicesToy)
-#simResults = simResults[, indicesToy$signals]
+simResults = simResults[, indicesToy$signals]
 Score<-getFit(
 	simResults=simResults,
 	CNOlist=CNOlistToy,
