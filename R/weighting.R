@@ -31,10 +31,11 @@ weighting <-
 			
 		library(igraph)
 		
-		if(is.igraph(PPINigraph)==FALSE){
+		PPINigraph <- PPI
+		if(is.igraph(PPI)==FALSE){
 			stop("The provider PPI is not an igraph")
         }
-		
+		PPINigraph <- PPI
 				
 		count<-0
 		#vector with the scores only for integrated links (score =1 means that links will have the same weight as the other links, final score will be 1+scorePPI)

@@ -54,7 +54,7 @@ modelIntegr <- mapBTables2model(BTable=BTable,model=model,allInter=TRUE)
 # D. WEGHTING - CNORfeeder
 # integrated links are weighted more according to the integratin factor integrFac
 modelIntegrWeight <- weighting(modelIntegr=modelIntegr, PKNmodel=DreamModel,
-                              CNOlist=CNOlistDREAM, integrFac=10, PPI=FALSE)
+                              CNOlist=CNOlistDREAM, integrFac=10)
 
 # E. TRAINING - CellNOptR
 initBstring<-rep(1,length(modelIntegr$reacID))

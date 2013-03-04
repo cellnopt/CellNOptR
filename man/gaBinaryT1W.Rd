@@ -104,7 +104,7 @@ BTable <- makeBTables(CNOlist=CNOlistDREAM, k=2, measErr=c(0.1, 0))
 modelIntegr <- mapBTables2model(BTable=BTable,model=model,allInter=TRUE)
 
 modelIntegrWeight <- weighting(modelIntegr=modelIntegr, PKNmodel=DreamModel,
-                        CNOlist=CNOlistDREAM, integrFac=10, PPI=FALSE)
+                        CNOlist=CNOlistDREAM, integrFac=10)
 
 initBstring<-rep(1,length(modelIntegr$reacID))
 # training to data using genetic algorithm (run longer to obtain better results)
