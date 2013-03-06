@@ -50,6 +50,7 @@ cutAndPlotResultsTN <-function(CNOlist, model,bStrings, plotPDF=FALSE,
 
     for(i in 1:length(bStrings)){
       cutRes = simulateTN(CNOlist, model, bStrings[1:i])
+      cutRes<-cutRes[,indexList$signals]
       simResults[[i+1]]<-cutRes
     }
 

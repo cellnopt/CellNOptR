@@ -578,7 +578,7 @@ SEXP simulatorTN (
         }
     }
 
-/*     PROTECT(simResults = allocMatrix(REALSXP, nCond, nSpecies));
+     PROTECT(simResults = allocMatrix(REALSXP, nCond, nSpecies));
     rans = REAL(simResults);
     for(i = 0; i < nCond; i++) {
         for(j = 0; j < nSpecies; j++) {
@@ -586,8 +586,8 @@ SEXP simulatorTN (
             else rans[i + nCond*j] = new_input[i][j];
         }
     }
-*/
 
+/*
      PROTECT(simResults = allocMatrix(REALSXP, nCond, nSignals));
     rans = REAL(simResults);
     for(i = 0; i < nCond; i++) {
@@ -597,7 +597,7 @@ SEXP simulatorTN (
         }
     }
 
-
+*/
 
     free(maxIx);
     free(indexStimuli);

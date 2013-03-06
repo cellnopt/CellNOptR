@@ -88,7 +88,7 @@ computeScoreTN<-function(CNOlist, model, simList=NULL, indexList=NULL,
     }
 
     # already done in the C simulator.
-    #simResults = simResults[, indexList$signals]
+    simResults = simResults[, indexList$signals]
 
 
     ## todo: use the C simulator ? 
@@ -98,7 +98,7 @@ computeScoreTN<-function(CNOlist, model, simList=NULL, indexList=NULL,
         simResults=simResults,
         CNOlist=CNOlist,
         model=modelCut,
-        indexList=NULL, # because we are using the C simulator thast cope with indexList directly
+        #indexList=NULL, # because we are using the C simulator thast cope with indexList directly
         timePoint=timeIndex,
         sizeFac=sizeFac,
         NAFac=NAFac,

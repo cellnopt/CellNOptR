@@ -1,6 +1,16 @@
 1.5
 ====
 
+1.5.19/1.5.20
+-------------------
+
+    o for developers: since the introduction of the cutting inside the C
+      simulator the code is unstable at T2. The optimisation seems ok but
+      cutAndPlot looks wrong. We decided to completely remove the cutting in
+      simulatorT1 and TN and to do the cut inside the simulatorT1/TN R code again. 
+      This is a bit slower but at least the code is then as in 1.4.0
+
+
 1.5.18
 ----------
 
