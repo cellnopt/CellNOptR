@@ -17,7 +17,7 @@
 #include <stdio.h>
 
 
-// keep this NA > 1 and integer
+/* keep this NA > 1 and integer */
 #define NA 100
 
 SEXP simulatorTN (
@@ -56,6 +56,7 @@ SEXP simulatorTN (
     int counter = 0;
     int i = 0;
     int j = 0;
+    int k = 0;
     int s = 0;
     int curr_max = 0;
     int or_max = 0;
@@ -64,7 +65,7 @@ SEXP simulatorTN (
     double *rans;
 
 
-    // variables
+    /* variables */
     int nStimuli = INTEGER(nStimuli_in)[0];
     int nInhibitors = INTEGER(nInhibitors_in)[0];
     int nCond = INTEGER(nCond_in)[0];
@@ -76,43 +77,81 @@ SEXP simulatorTN (
 
     int timeIndex = INTEGER(timeIndex_in)[0];
 
-    counter = 0;
+    /* variables to read the inputs*/
     int *times;
+    int *maxIx;
+    int *indexStimuli;
+    int *indexInhibitors;
+    int *indexSignals;
+    int **interMat;
+    int **prevSimResults;
+    int **finalCube;
+    int **ixNeg;
+    int **ignoreCube;
+    int **valueInhibitors;
+    int **valueStimuli;
+
+    int *end_ix;
+    int count_species=0;
+
+    /* see stop conditions */
+    float test_val = 1e-3;
+
+    /* First iteration before main loop. Different from T1 ! */
+    int **output_prev;
+    int **new_input;
+    int **first_iter;
+    int **output_cube;
+    int **temp_store;
+
+    int track_cond = 0; /* track condition */
+    int track_reac = 0; /* track reaction */
+
+    int current_min;
+    int dial_reac = 0;
+    int dial_cond = 0;
+
+    int nreacsTN = 0;
+    int *reacsTN;
+
+    int outNode, r;
+    int a,b,p;
+    int term_check_1 = 1;
+    float term_check_2 = 1;
+    int count = 1;
+    int diff;
+
+    counter = 0;
     times = (int*) malloc(nTimes * sizeof(int));
     for (i = 0; i < nTimes; i++) {
         times[i] = INTEGER(times_in)[counter++];
     }
 
     counter = 0;
-    int *maxIx;
     maxIx = (int*) malloc(nReacs * sizeof(int));
     for (i = 0; i < nReacs; i++) {
         maxIx[i] = INTEGER(maxIx_in)[counter++];
     }
 
     counter = 0;
-    int *indexStimuli;
     indexStimuli = (int*) malloc(nStimuli * sizeof(int));
     for (i = 0; i < nStimuli; i++) {
         indexStimuli[i] = INTEGER(indexStimuli_in)[counter++];
     }
 
     counter = 0;
-    int *indexInhibitors;
     indexInhibitors = (int*) malloc(nInhibitors * sizeof(int));
     for (i = 0; i < nInhibitors; i++) {
         indexInhibitors[i] = INTEGER(indexInhibitors_in)[counter++];
     }
 
     counter = 0;
-    int *indexSignals;
     indexSignals = (int*) malloc(nSignals * sizeof(int));
     for (i = 0; i < nSignals; i++) {
         indexSignals[i] = INTEGER(indexSignals_in)[counter++] ; 
     }
 
     counter=0;
-    int **interMat;
     interMat = (int**) malloc(nSpecies * sizeof(int*));
     for (i = 0; i < nSpecies; i++) {
         interMat[i] = (int*) malloc(nReacs * sizeof(int));
@@ -121,9 +160,8 @@ SEXP simulatorTN (
         }
     }
 
-    // previous SimResults data
+    /* previous SimResults data */
     counter=0;
-    int **prevSimResults;
     prevSimResults = (int**) malloc(nCond * sizeof(int*));
     for (i = 0; i < nCond; i++) {
         prevSimResults[i] = (int*) malloc(nSpecies * sizeof(int));
@@ -133,7 +171,6 @@ SEXP simulatorTN (
     }
 
     counter=0;
-    int **finalCube;
     finalCube = (int**) malloc(nReacs * sizeof(int*));
     for (i = 0; i < nReacs; i++) {
         finalCube[i] = (int*) malloc(nMaxInputs * sizeof(int));
@@ -143,7 +180,6 @@ SEXP simulatorTN (
     }
 
     counter=0;
-    int **ixNeg;
     ixNeg = (int**) malloc(nReacs * sizeof(int*));
     for (i = 0; i < nReacs; i++) {
         ixNeg[i] = (int*) malloc(nMaxInputs * sizeof(int));
@@ -153,7 +189,6 @@ SEXP simulatorTN (
     }
 
     counter=0;
-    int **ignoreCube;
     ignoreCube = (int**) malloc(nReacs * sizeof(int*));
     for (i = 0; i < nReacs; i++) {
         ignoreCube[i] = (int*) malloc(nMaxInputs * sizeof(int));
@@ -163,7 +198,6 @@ SEXP simulatorTN (
     }
 
     counter=0;
-    int **valueInhibitors;
     valueInhibitors = (int**) malloc(nCond * sizeof(int*));
     for (i = 0; i < nCond; i++) {
         valueInhibitors[i] = (int*) malloc(nInhibitors * sizeof(int));
@@ -173,7 +207,6 @@ SEXP simulatorTN (
     }
 
     counter=0;
-    int **valueStimuli;
     valueStimuli = (int**) malloc(nCond * sizeof(int*));
     for (i = 0; i < nCond; i++) {
         valueStimuli[i] = (int*) malloc(nStimuli * sizeof(int));
@@ -182,13 +215,30 @@ SEXP simulatorTN (
         }
     }
 
+    /* no need to set the initial values for those variables*/
+    temp_store = (int**) malloc(nCond*nReacs * sizeof(int*));
+    for (i = 0; i < nCond*nReacs; i++) {
+        valueStimuli[i] = (int*) malloc(nStimuli * sizeof(int));
+    }
+    output_prev = (int**) malloc(nCond*sizeof(int*));
+    new_input = (int**) malloc(nCond*sizeof(int*));
+    first_iter = (int**) malloc(nCond*sizeof(int*));
+    output_cube = (int**) malloc(nCond*sizeof(int*));
+    for (i = 0; i < nCond; i++) {
+        output_prev[i] = (int*) malloc(nSpecies * sizeof(int*));
+        new_input[i] = (int*) malloc(nSpecies * sizeof(int*));
+        first_iter[i] = (int*) malloc(nSpecies * sizeof(int*));
+        output_cube[i] = (int*) malloc(nSpecies * sizeof(int*));
+    }
+
+
  
 
-    //============================================================================
+    /*============================================================================*/
 
-    // fill end_ix - how many reactions have each species as output
-    int end_ix[nSpecies];
-    int count_species=0;
+    /* fill end_ix - how many reactions have each species as output */
+    counter = 0;
+    end_ix = (int*) malloc(nSpecies * sizeof(int));
     for(i = 0; i < nSpecies; i++) {
         for(j = 0; j < nReacs; j++) {
             if(i == maxIx[j]) {
@@ -199,16 +249,6 @@ SEXP simulatorTN (
         count_species = 0;
     }
 
-    // see stop conditions
-    float test_val = 1e-3;
-
-
-    // First iteration before main loop. Different from T1 !
-    int output_prev[nCond][nSpecies];
-    int new_input[nCond][nSpecies];
-    int first_iter[nCond][nSpecies];
-    int temp_store[nCond * nReacs][nMaxInputs];
-    int output_cube[nCond][nReacs]; // declare output_cube
 
     /* get back previous results */
     for (i=0; i<nCond ;i++){
@@ -227,7 +267,7 @@ SEXP simulatorTN (
      }
 
 
-    // 1. need to compute tempStore
+    /* 1. need to compute tempStore */
 
     /* R code
       tempStore<-apply(simList$finalCube,2,function(x){return(outputPrev[,x])})
@@ -236,18 +276,16 @@ SEXP simulatorTN (
       tempStore[tempIgnore]<-NA
       tempStore[tempIxNeg]<-1-tempStore[tempIxNeg]
     */
-    int track_cond = 0; // track condition
-    int track_reac = 0; // track reaction
     for(i = 0; i < nCond * nReacs; i++) {
         for(j = 0; j < nMaxInputs; j++) {
-            // initial values of each input
+            /* initial values of each input */
             temp_store[i][j] = output_prev[track_cond][finalCube[track_reac][j]];
 
             if(ignoreCube[track_reac][j]) {
                 temp_store[i][j] = 2;
             }
             if(ixNeg[track_reac][j]) {
-                // flip the values of the neg inputs
+                /* flip the values of the neg inputs */
                 if(temp_store[i][j] == 0) {temp_store[i][j] = 1;}
                 else if(temp_store[i][j] == 1) {temp_store[i][j] = 0;}
             }
@@ -260,21 +298,18 @@ SEXP simulatorTN (
         }
     }
    
-    // 2. Need to compute OutputCube
-    /* R code :
+    /* 2. Need to compute OutputCube
+     R code :
        outputCube <- apply(tempStore, 1, minNA)
        outputCube<-matrix(outputCube, nrow=nCond,ncol=nReacs)
     */
 
-    int current_min;
-    int dial_reac = 0;
-    int dial_cond = 0;
     for(i = 0; i < nCond * nReacs; i++) {
         current_min = temp_store[i][0];
         for(j = 1; j < nMaxInputs; j++) {
 		
-			// if statement below is for AND gates with any NA (2) input
-			// in this case output should always be NA
+			/* if statement below is for AND gates with any NA (2) input
+			 in this case output should always be NA*/
 			if(temp_store[i][j] == 2 && ignoreCube[dial_reac][j] == 0) {
 				current_min = 2;
 				break;
@@ -288,7 +323,7 @@ SEXP simulatorTN (
     }
 
 
-    // 3. figure out the reacsTN
+    /* 3. figure out the reacsTN */
     counter = 0;
     for (i=0; i<nTimes; i++){
 
@@ -296,10 +331,8 @@ SEXP simulatorTN (
             counter++;
         }
     }
-    int nreacsTN = counter;
-    int *reacsTN;
+    nreacsTN = counter;
     reacsTN = (int*) malloc(nreacsTN * sizeof(int));
-
     counter = 0 ;
     for (i=0; i<nTimes; i++){
         if (timeIndex - 1 == times[i]){
@@ -309,18 +342,18 @@ SEXP simulatorTN (
     }
 
 
-    // scan the interMat looking for specific reactions (reacsTN) that have
-    // interMat positive (i.e, search for B in A=B)
+    /* scan the interMat looking for specific reactions (reacsTN) that have
+     interMat positive (i.e, search for B in A=B) */
     for (i=0; i<nreacsTN; i++){
         for (j=0; j<nSpecies; j++){
             if (interMat[j][reacsTN[i]]>0){
-                // outNode is the B in A=B
-                int outNode = j;
-                // now we scan again the interMAt looking for A (multiple
-                // solution possible)
-                for (int r=0; r<nReacs; r++){
+                /* outNode is the B in A=B */
+                outNode = j;
+                /* now we scan again the interMAt looking for A (multiple
+                 solution possible) */
+                for (r=0; r<nReacs; r++){
                     if (interMat[outNode][r]>0){
-                        for (int k=0; k<nCond; k++){
+                        for (k=0; k<nCond; k++){
                             output_cube[k][r] = output_cube[k][reacsTN[i]];
                          }
                      }
@@ -329,32 +362,32 @@ SEXP simulatorTN (
         }
     }
 
-    // 4. compute or gate
-    // Note that we populate the matrix by columns and then rows which is not optimal...
+    /* 4. compute or gate 
+     Note that we populate the matrix by columns and then rows which is not optimal... */
     selCounter = 0;
     for(s = 0; s < nSpecies; s++) {
 
         if(end_ix[s]) {
 
-            // find reactions with this species as output
-            // add equivalent output_cube data to new_input
-            for(int a = 0; a < nReacs; a++) {
+            /* find reactions with this species as output
+             add equivalent output_cube data to new_input*/
+            for(a = 0; a < nReacs; a++) {
                 if(s == maxIx[a]) {selection[selCounter] = a; selCounter++;}
             }
-            // if the species is an output for a single reaction
-            // it's a 1-1 mapping to new_input
+            /* if the species is an output for a single reaction
+             it's a 1-1 mapping to new_input */
             if(selCounter == 1) {
-                for(int b = 0; b < nCond; b++) {
+                for(b = 0; b < nCond; b++) {
                     new_input[b][s] = output_cube[b][selection[selCounter-1]];
                 }
                 selCounter = 0;
             }
-            // else if species is output for > 1
+            /* else if species is output for > 1 */
             if(selCounter > 1) {
                 for(i=0; i < nCond; i++) {
                     or_max = 2;
                     curr_max = 0;
-                    for(int p=0; p < selCounter; p++) {
+                    for(p=0; p < selCounter; p++) {
                         if(output_cube[i][selection[p]] >= curr_max && output_cube[i][selection[p]] < 2) {
                             or_max = output_cube[i][selection[p]];
                             curr_max = output_cube[i][selection[p]];
@@ -366,9 +399,9 @@ SEXP simulatorTN (
             }
         }
     }
-    // 5. compute and gate
+    /* 5. compute and gate */
 
-    // reset the stimuli
+    /* reset the stimuli */
     for(i = 0; i < nCond; i++) {
          for(j = 0; j < nStimuli; j++) {
              curr_max = valueStimuli[i][j];
@@ -379,7 +412,7 @@ SEXP simulatorTN (
          }
      }
 
-    //indexInhibitors = (int*) malloc(nInhibitors * sizeof(int));
+    /*indexInhibitors = (int*) malloc(nInhibitors * sizeof(int));*/
     for (i=0; i<nCond; i++){
         for (j=0; j<nInhibitors; j++){
                     valueInhibitors[i][j] = 1 - valueInhibitors[i][j] ;
@@ -404,10 +437,10 @@ SEXP simulatorTN (
          }
      }
 
-    //============================================================================
+    /*============================================================================*/
 
 
-    // reset output_cube
+    /* reset output_cube */
     for (i=0; i<nCond; i++){
         for (j=0; j<nReacs; j++){
         output_cube[nCond][nReacs] = 0.;
@@ -415,33 +448,30 @@ SEXP simulatorTN (
     }
 
 
-    int term_check_1 = 1;
-    float term_check_2 = 1;
-    int count = 1;
-    int diff;
 
 
-    // start simulation loop
+    /* start simulation loop*/
     while(term_check_1 && term_check_2) {
 
-        // copy to outputPrev
+        /* copy to outputPrev*/
         memcpy(output_prev, new_input, sizeof(output_prev));
 
-        // fill temp store
-        // this is different to R version, through a single loop
-        // with conditions
-        int track_cond = 0; // track condition
-        int track_reac = 0; // track reaction
+        /*
+         fill temp store
+         this is different to R version, through a single loop
+         with conditions*/
+        track_cond = 0; /* track condition*/
+        track_reac = 0; /* track reaction*/
         for(i = 0; i < nCond * nReacs; i++) {
             for(j = 0; j < nMaxInputs; j++) {
-                // initial values of each input
+                /* initial values of each input*/
                 temp_store[i][j] = output_prev[track_cond][finalCube[track_reac][j]];
 
                 if(ignoreCube[track_reac][j]) {
                     temp_store[i][j] = NA;
                 }
                 if(ixNeg[track_reac][j]) {
-                    // flip the values of the neg inputs
+                    /* flip the values of the neg inputs*/
                     if(temp_store[i][j] == 0) {temp_store[i][j] = 1;}
                     else if(temp_store[i][j] == 1) {temp_store[i][j] = 0;}
                 }
@@ -456,11 +486,10 @@ SEXP simulatorTN (
         }
 
 
-        // compute the AND gates (find the min 0/1 of each row)
+        /* compute the AND gates (find the min 0/1 of each row)*/
 
-        int current_min;
-        int dial_reac = 0;
-        int dial_cond = 0;
+        dial_reac = 0;
+        dial_cond = 0;
         for(i = 0; i < nCond * nReacs; i++) {
             current_min = temp_store[i][0];
             for(j = 1; j < nMaxInputs; j++) {
@@ -472,38 +501,38 @@ SEXP simulatorTN (
             if(dial_cond==nCond) {dial_cond = 0; dial_reac++;}
         }
 
-        // compute the OR gates and reinitialize new_input
+        /* compute the OR gates and reinitialize new_input*/
         for(i = 0; i < nCond; i++) {
             for(j = 0; j < nSpecies; j++) {
                 new_input[i][j] = NA;
             }
         }
 
-        // declare vector to store 'selection' (R)
+        /* declare vector to store 'selection' (R)*/
         selCounter = 0;
-        for(int s = 0; s < nSpecies; s++) {
-            // is the species an output for any reactions?
+        for(s = 0; s < nSpecies; s++) {
+            /* is the species an output for any reactions?*/
             if(end_ix[s]) {
 
-                // find reactions with this species as output
-                // add equivalent output_cube data to new_input
-                for(int a = 0; a < nReacs; a++) {
+                /* find reactions with this species as output
+                 add equivalent output_cube data to new_input */
+                for(a = 0; a < nReacs; a++) {
                     if(s == maxIx[a]) {selection[selCounter] = a; selCounter++;}
                 }
-                // if the species is an output for a single reaction
-                // it's a 1-1 mapping to new_input
+                /* if the species is an output for a single reaction
+                 it's a 1-1 mapping to new_input */
                 if(selCounter == 1) {
-                    for(int b = 0; b < nCond; b++) {
+                    for(b = 0; b < nCond; b++) {
                         new_input[b][s] = output_cube[b][selection[selCounter-1]];
                     }
                     selCounter = 0;
                 }
-                // else if species is output for > 1
+                /* else if species is output for > 1 */
                 if(selCounter > 1) {
                     for(i=0; i < nCond; i++) {
                         or_max = NA;
                         curr_max = 0;
-                        for(int p=0; p < selCounter; p++) {
+                        for(p=0; p < selCounter; p++) {
                             if(output_cube[i][selection[p]] >= curr_max && output_cube[i][selection[p]] < NA) {
                                 or_max = output_cube[i][selection[p]];
                                 curr_max = output_cube[i][selection[p]];
@@ -516,7 +545,7 @@ SEXP simulatorTN (
             }
         }
 
-        // reset the stimuli
+        /* reset the stimuli */
         for(i = 0; i < nCond; i++) {
             for(j = 0; j < nStimuli; j++) {
                 curr_max = valueStimuli[i][j];
@@ -527,7 +556,7 @@ SEXP simulatorTN (
             }
         }
 
-        // reset the inhibitors
+        /* reset the inhibitors */
         for(i = 0; i < nCond; i++) {
             for(j = 0; j < nInhibitors; j++) {
                 if(valueInhibitors[i][j] == 0) {
@@ -539,14 +568,14 @@ SEXP simulatorTN (
        for (i=0; i<nSpecies; i++){
            for (j=0; j<nreacsTN; j++){
               if (interMat[i][reacsTN[j]]>0){
-                for (int k=0; k<nCond; k++){
+                for (k=0; k<nCond; k++){
                   new_input[k][i] = first_iter[k][i];
                  }
               }
          }
       }
 
-        // set 'NAs' (2s) to 0
+        /* set 'NAs' (2s) to 0 */
         for(i = 0; i < nCond; i++) {
             for(j = 0; j < nSpecies; j++) {
                 if(new_input[i][j] == NA) {new_input[i][j] = 0;}
@@ -569,8 +598,8 @@ SEXP simulatorTN (
         term_check_2 = (count < (nSpecies * 1.2));
         count++;
 
-    } // end of main loop
-    // set non-resolved bits to 2 (NA)
+    } /* end of main loop/
+     set non-resolved bits to 2 (NA)*/
     for(i = 0; i < nCond; i++) {
         for(j = 0; j < nSpecies; j++) {
             if(new_input[i][j] != output_prev[i][j])
@@ -603,7 +632,7 @@ SEXP simulatorTN (
     free(indexStimuli);
     free(indexInhibitors);
     free(indexSignals);
-
+    free(end_ix);
     free(times);
 
     for (i = 0; i < nSpecies; i++) {
@@ -641,6 +670,21 @@ SEXP simulatorTN (
     }
     free(prevSimResults);
 
+    for (i=0; i<nCond*nReacs; i++){
+        free(temp_store[i]);
+    }
+    free(temp_store);
+
+    for (i=0; i<nCond; i++){
+        free(output_prev[i]);
+        free(new_input[i]);
+        free(first_iter[i]);
+        free(output_cube[i]);
+    }
+    free(output_prev);
+    free(new_input);
+    free(first_iter);
+    free(output_cube);
 
     UNPROTECT(1);
     return simResults;
