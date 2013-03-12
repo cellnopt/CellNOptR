@@ -18,6 +18,7 @@ CNOdata <- function(filename, verbose=FALSE, url=NULL){
 
     valid_filenames = c(
         "PKN-ToyMMB.sif", "PKN-ToyPB.sif", "PKN-ToyMSB2009.sif",
+        "PKN-ToyMMB_T2.sif", "MD-ToyMMB_T2.csv",
         "PKN-ExtLiverPCB.sif", "MD-ToyMMB.csv", "MD-ToyPB.csv", 
         "MD-ToyMSB2009.csv", "MD-ExtLiverPCB.csv", "PKN-ToyPCB.sif",
          "MD-ToyPCB.csv")
