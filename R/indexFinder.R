@@ -24,21 +24,12 @@ indexFinder<-function(CNOlist, model, verbose=FALSE){
 
     if(!is.list(model)) stop("This function expects as input a model as output by readSIF")
 
-    if(length(model) == 4) {
+    if( !all( c("reacID", "namesSpecies","interMat","notMat") %in% names(model))){
+        stop("This function expects as input a model as output by readSIF")
+    }
 
-        if(all(names(model) != c("reacID", "namesSpecies","interMat","notMat"))){
-            stop("This function expects as input a model as output by readSIF")
-            }
+        
 
-        }
-
-    if(length(model) == 5) {
-
-        if(all(names(model) != c("reacID", "namesSpecies","interMat","notMat","speciesCompressed"))){
-            stop("This function expects as input a Model as output by readSIF")
-            }
-
-        }
 
     #Find the indexes of the signals
     signals<-match(colnames(CNOlist@signals[[1]]),model$namesSpecies)
