@@ -1,10 +1,17 @@
 1.5
 ====
 
+1.5.21
+-------------
+
+    * make C code ansi compliants
+	* update the tutorial/vignette.
+
+
 1.5.19/1.5.20
 -------------------
 
-    o for developers: since the introduction of the cutting inside the C
+    * for developers: since the introduction of the cutting inside the C
       simulator the code is unstable at T2. The optimisation seems ok but
       cutAndPlot looks wrong. We decided to completely remove the cutting in
       simulatorT1 and TN and to do the cut inside the simulatorT1/TN R code again. 
@@ -14,56 +21,55 @@
 1.5.18
 ----------
 
-    o convert timepoints from string to numeric to make CNORode function working
+    * convert timepoints from string to numeric to make CNORode function working
       again.
 
 1.5.17
 -----------
 
-    o fix bug report201: cutAndPlotResult where messed up at time T2 and later
+    * fix bug report201: cutAndPlotResult where messed up at time T2 and later
 
 1.5.16
 -------------
 
-    o hack plotModel to fix a bug in Rgraphviz, which is known but wil be fix
+    * hack plotModel to fix a bug in Rgraphviz, which is known but wil be fix
       later on. layout is closer to SGBN standard.
 
 1.5.15
 -----------
 
-    o fixing bug in CNOlist (makeCNOlist)
+    * fixing bug in CNOlist (makeCNOlist)
 
 1.5.14
 --------
 
-    o fixing manual
-    o add compatCNOlist to convert CNOlist class to makeCNOlist for back
+    * fixing manual
+    * add compatCNOlist to convert CNOlist class to makeCNOlist for back
       compatibiltiy. This is a CNOlist class method
-    o add getter in CNOlist
+    * add getter in CNOlist
 
 1.5.13
 ---------
-    o add model2igraph function.
-    o add shuffle option in randomizeCNOlist
-	o add variancs in makeCNOlist and adapt CNOlist accordingly.
+    * add model2igraph function.
+    * add shuffle option in randomizeCNOlist
+	* add variancs in makeCNOlist and adapt CNOlist accordingly.
 
 
 1.5.12
 -----------
 
-    o add a randomizeCNOlist function to add gaussian noise into a CNOlist, or
+    * add a randomizeCNOlist function to add gaussian noise into a CNOlist, or
       replace data by uniform distribution
-	o add a new plotCNOlist function called plotCNOlist2 that uses ggplot2 and
+    * add a new plotCNOlist function called plotCNOlist2 that uses ggplot2 and
       can plot 2 cnolist at the same time for comparison.
-	o CNOlist class has 3 new methods: length, randomize and plot accepts either
-      one or 2 cnolist arguments.
-    o add verbose option in normaliseCNOlist
-    o readSIF can now read relation "A 1 B C D E" as excepted in SIF format.
+    * CNOlist class has 3 new methods: length, randomize and plot accepts either one or 2 cnolist arguments.
+    * add verbose option in normaliseCNOlist
+    * readSIF can now read relation "A 1 B C D E" as excepted in SIF format.
 
 1.5.11
 ---------
 
-    o changes in plotOptimResultsPan: NA value are now rendered as grey boxes
+    * changes in plotOptimResultsPan: NA value are now rendered as grey boxes
 	  instead of red boxes. The black line connecting measurements is printed.
 	  The ylim for the y axis can be set manually to overwrite the default
 	  behaviour.
@@ -71,40 +77,40 @@
 1.5.10
 -----------
 
-    o add cutCNOlist function that can remove signals and cues not found in a
+    * add cutCNOlist function that can remove signals and cues not found in a
 	  model
-	o make the CNOlist print method more verbose: print the cues and signals as
+    * make the CNOlist print method more verbose: print the cues and signals as
 	  in makeCNOlist
 
 
 1.5.9
 -------
 
-    o gaBinary family function now uses the hash package instead of home-made
+    * gaBinary family function now uses the hash package instead of home-made
       hash table(Task 185).
 
 1.5.8
 -------
 
-	o fixed bug in gtFit (C version) to handl NA and NaN properly. Bug report 138
+    * fixed bug in gtFit (C version) to handl NA and NaN properly. Bug report 138
 
 1.5.7
 ------
 
-    o fixing bug normaliseCNOlist introduced in 1.5.3 related to the new
+    * fixing bug normaliseCNOlist introduced in 1.5.3 related to the new
       mode="raw" option that interfered with time and control modes.
 1.5.6
 ------
 
-	o adding exhaustive function and its manual
-	o fixing bug in C version of getFit that provided wrong nInTot cancelling
+	* adding exhaustive function and its manual
+	* fixing bug in C version of getFit that provided wrong nInTot cancelling
 	  out effect of sizeFac.
 
 1.5.5
 ------
 
-	o gaBinaryT1 and T2: fixed issue when only one model within the tolerance	
-	  was returned (bug report 167)
+* gaBinaryT1 and T2: fixed issue when only one model within the tolerance	
+  was returned (bug report 167)
 
 1.5.4
 -------
