@@ -23,7 +23,7 @@ checkSignals<-function(CNOlist, model ){
     if(!is.list(model)){
         stop("This function expects as input a Model as output by readSIF")
     }
-    if(all(names(model) != c("reacID", "namesSpecies","interMat","notMat"))){
+    if( !all( c("reacID", "namesSpecies","interMat","notMat") %in% names(model)))  {
         stop("This function expects as input a Model as output by readSIF")
     }
 
