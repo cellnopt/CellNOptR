@@ -1,12 +1,12 @@
-//============================================================================
-// Name        : getFit.c
-// Author      : Thomas Cokelaer
-//============================================================================
+/* ============================================================================
+   Name        : getFit.c
+   Author      : Thomas Cokelaer
+   ============================================================================ */
 
 #include <R.h>
 #include <Rinternals.h>
 #include <stdio.h>
-
+#include <math.h>
 
 SEXP getFit (
 
@@ -41,7 +41,7 @@ SEXP getFit (
 	int selection[40];
 	int selCounter = 0;
 	double *rans;
-	int NAs = 0; //count NAs in simResults
+	int NAs = 0; /* count NAs in simResults */
 	int nCond = INTEGER(nCond_in)[0];
 	int nSignals = INTEGER(nSignals_in)[0];
 	int nReacs = INTEGER(nReacs_in)[0];
@@ -58,9 +58,13 @@ SEXP getFit (
 
     int NAPen = 0.;
     int nDataPts = 0;
-    int nDataP = 0; // count NAs in cnolist
+    int nDataP = 0; /* count NAs in cnolist*/
     float sizePen; 
     float score;
+
+    float **cnolist0, **cnolist1, **simResT0, **simResT1;
+    float r, deviationPen; 
+
     /*counter = 0;
     for (i=0; i<nReacs*nSpecies; i++){
         if (INTEGER(interMat_in)[counter++] == -1){
@@ -75,7 +79,6 @@ SEXP getFit (
     }
 
 	counter=0;
-	float **cnolist0;
     cnolist0 = (float**) malloc(nCond * sizeof(float*));
     for (i = 0; i < nCond; i++) {
 	    cnolist0[i] = (float*) malloc(nSignals * sizeof(float));
@@ -85,7 +88,6 @@ SEXP getFit (
 	}
 
 	counter=0;
-	float **cnolist1;
     cnolist1 = (float**) malloc(nCond * sizeof(float*));
     for (i = 0; i < nCond; i++) {
 	    cnolist1[i] = (float*) malloc(nSignals * sizeof(float));
@@ -95,7 +97,6 @@ SEXP getFit (
 	}
 
 	counter=0;
-	float **simResT0;
     simResT0 = (float**) malloc(nCond * sizeof(float*));
     for (i = 0; i < nCond; i++) {
 	    simResT0[i] = (float*) malloc(nSignals * sizeof(float));
@@ -105,7 +106,6 @@ SEXP getFit (
     }
 
 	counter=0;
-	float **simResT1;
     simResT1 = (float**) malloc(nCond * sizeof(float*));
     for (i = 0; i < nCond; i++) {
 	    simResT1[i] = (float*) malloc(nSignals * sizeof(float));
@@ -120,26 +120,26 @@ SEXP getFit (
     nDataPts = nCond * nSignals;
 
 
-    float deviationPen=0.;
+    deviationPen=0.;
 	counter=0;
-    float r;
 
-    // as of 12 Nov 2012 this code is equivalent to (1) calling R version of
-    // getFit followed by 
-    // >>> nDataP <- sum(!is.na(CNOlist@signals[[timeIndex]]))
-    // >>>  Score <- Score/nDataP
+    /* as of 12 Nov 2012 this code is equivalent to (1) calling R version of
+     getFit followed by 
+     >>> nDataP <- sum(!is.na(CNOlist@signals[[timeIndex]]))
+     >>>  Score <- Score/nDataP
+     */
     for (i = 0; i < nCond; i++) {
 	    for (j = 0; j < nSignals; j++) {
             if (time0 == 1){
 	            r =  simResT0[i][j] - cnolist0[i][j];
                 if (!ISNA(r) && !ISNAN(r)){
                     deviationPen += r*r;
-                    // TC, nov.2012 why are we not counting nDataP for time zero as well ? 
+           /* TC, nov.2012 why are we not counting nDataP for time zero as well ? */
                 }
             }
 
             if (!ISNAN(cnolist1[i][j])){
-                nDataP+=1;  // why is it that nDataP searches for NA in cnolist only and not in r?
+                nDataP+=1;  /* why is it that nDataP searches for NA in cnolist only and not in r?*/
             }
             r = (simResT1[i][j] - cnolist1[i][j]);
             if (!ISNA(r)  && !ISNAN(r)){
@@ -148,7 +148,7 @@ SEXP getFit (
         }
     }
 
-    if (time0==1){ // if 2 time points (time=0 and timeN then, we must divide by 2
+    if (time0==1){ /* if 2 time points (time=0 and timeN then, we must divide by 2 */
         deviationPen/=2.;
     }
 
@@ -157,7 +157,7 @@ SEXP getFit (
     score = deviationPen + NAPen + sizePen;
     score /= (float)nDataP;
 
-	//============================================================================
+	/*============================================================================*/
 
 
  	PROTECT(simResults = allocMatrix(REALSXP, 1, 1));
