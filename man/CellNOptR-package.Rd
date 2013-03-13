@@ -46,6 +46,6 @@ cutAndPlot(cnolist, model, list(results$bString))
 # Same as above and HTML report
 CNORwrap(name="Toy", 
     namesData=list(CNOlist="ToyData",model="ToyModel"),
-    data=cnolist, model=pknmodel)
+    data=CNOlistToy, model=pknmodel)
 }
 

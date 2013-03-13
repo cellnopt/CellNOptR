@@ -674,7 +674,7 @@ model = preprocessing(cnolist, pknmodel, verbose=FALSE)
 T1opt <- gaBinaryT1(cnolist, model, stallGenMax=10, maxTime=60, verbose=FALSE)
 @
 
-<<t2OptT1plot, eval=TRUE>>=
+<<t2OptT1plot, eval=TRUE, fig=F>>=
 cutAndPlot(model=model, bStrings=list(T1opt$bString),
     CNOlist=cnolist, plotPDF=TRUE)
 pdf("evolFitToy2T1.pdf")

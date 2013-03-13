@@ -2,7 +2,8 @@
 \name{CellNOptR NEWS}
 
 
-\section{Changes from 1.4.0 to 1.6.0}{
+\section{CHANGES IN VERSION 1.6.0: (2013-03-12)}{
+Changes since 1.4.0
 \itemize{
     \item{BUG FIX}
         \itemize{
@@ -43,7 +44,6 @@
 }
 
 
-%\section{Version 1.4.0 in BioConductor release Sept 2012}
 
 
 \section{CHANGES IN VERSION 1.3.33: (2012-09-20)}{
