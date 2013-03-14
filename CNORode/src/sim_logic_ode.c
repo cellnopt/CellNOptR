@@ -247,8 +247,7 @@ SEXP sim_logic_ode
 	  tempData.nStates = counter;
 	  
 	  simResults=(double***)malloc(nExperiments*sizeof(double**));
-	  for (i = 0; i <nExperiments; ++i)
-	  {
+	  for (i = 0; i <nExperiments; ++i){
 		  simResults[i]=(double**)malloc(nTimes*sizeof(double*));
 		  //  simResults=(double**)malloc(nTimes*sizeof(double*));
 		  for (j = 0; j <nTimes; ++j)
@@ -256,7 +255,6 @@ SEXP sim_logic_ode
 			  simResults[i][j]=(double*)malloc(tempData.nStates*sizeof(double));
 		  }
 	  }
-
 
 	  tempData.support_truth_tables=(int***)get_support_truth_tables(nRows,tempData.numInputs);
 
