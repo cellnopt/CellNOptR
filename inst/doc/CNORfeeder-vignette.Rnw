@@ -37,6 +37,10 @@ and above)}}
 
 \tableofcontents
 
+\section{Overview}
+
+\textcolor{red}{This vignette shows how to install and use CNORfeeder. CNORfeeder is an R package wich allows to integrate information derived from prior knowledge about signalling networks, with information derived strictly from data using reverse engineering methods. The aim is to overcome limitations due to links missing in the prior knowledge becuase of uncompleteness of databases or lack of biological knowledge about certain processes. In particular, CNORfeeder is developed to be combined with the Bioconductor package CellNOptR which allows to train a prior knowledge network to data in order to obtain the logic model with best fit the data. The integration of literature-constrained and data-driven inference of signalling networks allows also to overcome limitations of strictly data-driven reverse-engineering methods, which are generally of limited biological interpretability being restricted to measured and perturbed nodes, thus overlooking the rest of the network. The name CNORfeeder refers to the ability of the package to feed the prior knowledge network in a combined pipeline with CellNOptR (also called CNOR).}
+
 \section{Installation}
 
 This software is written in the R language, so in order to use it you will need
@@ -47,15 +51,7 @@ how to install R packages, please refer to
 This package relies on several Bioconductor packages (CellNOptR, RBGL, graph, minet) and CRAN packages (igraph catnet). The following code installs the \emph{CNORfeeder} dependencies and suggested packages that are on Bioconductor website, open an R session and type:
 <<installBio, eval=FALSE>>=
 source("http://bioconductor.org/biocLite.R")
-biocLite("RBGL")
-biocLite("graph")
-biocLite("minet")
-biocLite("CellNOptR")
-@
-The following code installs the \emph{CNORfeeder} dependencies that are available on CRAN website. Open a R session and type:
-<<installCRAN, eval=FALSE>>=
-install.packages("igraph")
-install.packages("catnet")
+biocLite(c("RBGL","graph","minet","CellNOptR","igraph","catnet"))
 @
 
 Before starting this tutorial you also need to install the package
@@ -102,6 +98,8 @@ in \cite{julio2009} (see \url{http://www.cellnopt.org} for further details on th
 
 \section{Example}
 We will illustrate the use of package \emph{CNORfeeder} showing, step by step, the analysis described in \cite{CNORfeeder}. It is performed on a real data set, which is a part of the network analysed in \cite{julio2009} and comprises 40 species and 58 interactions in the PKN. This network was also used for the signaling challenge in DREAM 4 (see \url{http://www.the-dream-project.org/}).  The associated data was collected in hepatocellular carcinoma cell line HepG2 (see \cite{alexopoulos_networks_2010}).
+\textcolor{red}{Phosphorylation of seven proteins (akt, erk12, ikb, jnk12, p38, hsp27, mek12) is measured 30 min after combinatorial stimulation with four ligands (tnfa, il1a, igf1, tgfa) and four inhibitors (pi3k, ikk, p38, mek12). The level of phosphorylation of proteins is measured using the Luminex xMAP assay and provides a value of the phosphorylation in arbitrary units, that can be used to compare values at two conditions. In our case we compare the values between 0 and 30, and this change is a proxy of the induced activation of the corresponding protein. The normalization of this data to a value between 0 and 1 is achieved using a method based on a set of thresholds as described in \cite{julio2009}.}
+
 
 First of all we load the library
 
@@ -122,7 +120,10 @@ For additional information about how to read the data see \emph{CellNOptR} docum
 
 
 \subsection{A. Inference - CNORfeeder}
-Different methods can be used to reverse-engineer a network purely from data:
+Different methods can be used to reverse-engineer a network purely from data. \textcolor{red}{CNORfeeder includes a native method, FEED, developed specifically to infer signalling network from perturbation experiments (that is an improved version of the method described in \cite{FEED}). Since we believe that different inference methods can provide complementary insights into the same problem, other three approaches have been imported from other packages: two methods based on mutual information (i.e. CLR and ARACNE from the R package \emph{minet}) and one based on Bayesian networks (from the R package \emph{catnet}).}
+
+\textcolor{red}{The three functions provided to infer a network strictly from data are the following:}
+
 \begin{enumerate}
 \item \emph{makeBTables} can be used to infer a cause-effect network interpreted as Boolean tables using the method FEED \cite{FEED};
 \item \emph{MIinference} allows to use the R package \emph{minet} (\cite{minet}) to infer networks based on mutual information, i.e. ARACNE and CLR methods;
@@ -135,6 +136,7 @@ In this example, the FEED method (descirbed in \cite{FEED}) is applied. The infe
 BTable <- makeBTables(CNOlist=CNOlistDREAM, k=2, measErr=c(0.1, 0))
 @
 
+\textcolor{red}{Please note that \emph{makeBTables} can handle multiple time-point data and links are added if their effect is significant in at least one time point. As for \emph{MIinference} and \emph{Binference} only one steady state data shoud be provided for each experimental condition}.
 The resulting network is shown in Figure~\ref{fig:networks}, upper panel. FEED method also allows to rank links according to the upper limit value of parameter \emph{k} allowing the presence of the link.
 
 <<linkRank, eval=TRUE>>=
@@ -150,7 +152,7 @@ model<-preprocessing(data=CNOlistDREAM, model=DreamModel)
 
 \subsection{C. Integration - CNORfeeder}
 
-The inferred DDN is integrated with the prior knowledge, taking into account that networks inferred directly from data (DDNs) are limited only to measured, inhibited and stimulated nodes, thus a link in the DDN can correspond to multiple links in th PKN.
+\textcolor{red}{The inferred DDN is used to integrate the PKN in order to include links that are missining in the prior knowledge but seems to be supported by data. We have to take into account that networks inferred directly from data (DDNs) are limited only to measured, inhibited and stimulated nodes, thus a link in the DDN can correspond to multiple links in th PKN.}
 
 <<integration, eval=TRUE, results=hide>>=
 modelIntegr <- mapBTables2model(BTable=BTable,model=model,allInter=TRUE)
@@ -189,7 +191,7 @@ modelIntegrWeight <- weighting(modelIntegr=modelIntegr, PKNmodel=DreamModel,
 
 This function return the same model with an additional field that is the weight assigned to each link, thus preparing it for the optimization (see next section).
 
-Information derived from protein-protein networks (PIN) can also be used to differently prioritize integrated links, with the basic idea that a shorter path in the PIN corresponds to a more reliable link in the PKN. If \emph{PPI} attribute is set to TRUE, the function \emph{weighting} uses a PIN provided with the package to weight links (note that Uniprot IDs must be provided, see \emph{UniprotIDdream} as an example of the list structure to be used).
+Information derived from protein-protein networks (PIN) can also be used to differently prioritize integrated links, with the basic idea that a shorter path in the PIN corresponds to a more reliable link in the PKN. \textcolor{red}{A PIN (PPINigraph) is provided with the package and can be passed to the \emph{PPI} attribute, as shown in the example, in order to differently weight links (note that Uniprot IDs must be provided, see \emph{UniprotIDdream} as an example of the list structure to be used).}
 
 <<weightPPI, eval=FALSE>>=
 data(PPINigraph,package="CNORfeeder")
@@ -198,6 +200,8 @@ modelIntegrWeight <- weighting(modelIntegr=modelIntegr, PKNmodel=DreamModel,
                                CNOlist=CNOlistDREAM, integrFac=10,
                                UniprotID=UniprotIDdream, PPI=PPINigraph)
 @
+
+\textcolor{red}{Users can include their own interaction network passing it as argument \emph{PPI} to the function \emph{weighting}. The interaction network should be passes as an igraph where proteins are nodes and edges represent the interactions (see \emph{weighting} manual for further details).}
 
 \subsection{E. Training - CellNOptR}
 
@@ -219,6 +223,10 @@ plotModel(model=modelIntegrWeight, CNOlist=CNOlistDREAM, bString=DreamT1opt$bStr
 cutAndPlotResultsT1(model=modelIntegrWeight, CNOlist=CNOlistDREAM,
                     bString=DreamT1opt$bString)
 @
+
+\textcolor{red}{When the integrated network is trained to the data, the model which best describes the data with the minimum number of links is selected. Integrated links which improves the fit to the data with respect to the PKN alone are plausible links that where missing in the PKN. The functionality of this connections could be further experimentally tested, for example, using methods as RNA interference to knock out the gene corresponding to the upstream protein and looking at the effect on the downstream protein.}
+
+
 
 \begin{figure*}[!htbp]
 \begin{center}
