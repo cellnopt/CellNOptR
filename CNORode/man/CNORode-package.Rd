@@ -16,8 +16,8 @@
 	\tabular{ll}{
 		Package: \tab CNORode\cr
 		Type: \tab Package\cr
-		Version: \tab 1.1.1\cr
-		Date: \tab 2012-01-20\cr
+		Version: \tab 1.2.0\cr
+		Date: \tab 2012-03-14\cr
 		License: \tab GPL-3\cr
 		LazyLoad: \tab yes\cr
 	}
