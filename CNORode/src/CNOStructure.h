@@ -13,7 +13,7 @@ typedef struct
 	int* indexInhibitors;
 	double* timeSignals;
 	int* isState;
-	int* isInput;
+	/*int* isInput;*/
 	int** adjacencyMatrix;
 	int** truthTables;
 	int* numInputs;
