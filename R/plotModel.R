@@ -224,6 +224,7 @@ plotModel <- function(model, CNOlist=NULL, bString=NULL, indexIntegr=NULL,
         inhibitors <- colnames(cnolist@inhibitors)
     }
 
+
     # check that the signal and stimuli are indeed in the list of vertices
     # otherwise they will be failures later.
     if (all(signals %in% vertices)==FALSE){
@@ -560,15 +561,22 @@ compressed, graphvizParams){
     # The inhibitor node, that may also belong to the signal category.
     for (s in inhibitors){
         if (length(grep(s, signals))>=1){
-            fillcolor[s] <- "SkyBlue2"
-            style[s] <- "filled,bold,diagonals"
+            #fillcolor[s] <- "SkyBlue2"
+            shape[s]="ellipse"
+            style[s] <- "filled,bold"
             color[s] <-"orangered"
-        color[s] <- "black";
-        }
-        else{
-            fillcolor[s] <- "orangered";
-            color[s] <-"orangered";
-        color[s] <- "black";
+        } else {
+            if (length(grep(s, stimuli))>=1){
+                #fillcolor[s] <- "SkyBlue2"
+                shape[s]="ellipse"
+                style[s] <- "filled,bold"
+                color[s] <-"orangered"
+            }
+            else{
+                fillcolor[s] <- "orangered";
+                color[s] <-"orangered";
+                color[s] <- "black";
+            }
         }
     }
     # The compressed nodes
