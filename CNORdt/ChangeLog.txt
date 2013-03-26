@@ -23,11 +23,12 @@ version 0.99.2
 * arguments' name now following convention from CellNOpt. All manual and code changed accordingly.
 
 TODO:
+* Spikes in simulation again - come back to
 * Check color gradient when plotting (comparably too much red?)
+* slow-down caused by class conversion
 * Add t=0 changes - DONE
 * Check spikes in time course caused by NAs - DONE
 * Spike has moved to nfkb in example - DONE
-* slow-down caused by class conversion
 
 Topics to expand:
 * Asynchronous updating with training?
