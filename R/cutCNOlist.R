@@ -69,13 +69,13 @@ cutCNOlist <- function(cnolist, model, verbose=FALSE){
 
    # now perform the cut on the cues
    if (length(indices_cues)>0){
-       cutCNOlist@cues = cnolist@cues[,-indices_cues]
+       cutCNOlist@cues = t(as.matrix(cnolist@cues[,-indices_cues]))
    }
 
    # and the signal matrices
    if (length(indices_signals)>0){
        for (time in 1:length(cnolist@signals)){
-           cutCNOlist@signals[[time]] = cnolist@signals[[time]][,-indices_signals]
+           cutCNOlist@signals[[time]] = t(as.matrix(cnolist@signals[[time]][,-indices_signals]))
        }
     }
 

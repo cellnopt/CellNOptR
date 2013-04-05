@@ -79,25 +79,25 @@ readMIDAS<-function(MIDASfile, verbose=TRUE){
     }
 
     # Check that the right number of columns are present            
-    if(length(DAcol) != length(DVcol)){
 
-        if(length(grep("DA:ALL",colnames(data))) != 0 && length(DAcol) == 1){
 
-            if (verbose){
-                print("Your data comprises only a DA:ALL column;  all readouts are assumed to have been acquired at the same time.")
-            }
-
-            # Make the additional columns
-            newDA<-matrix(rep(data[,DAcol],length(DVcol)),byrow=FALSE,ncol=length(DVcol))
-            newDAnames<-colnames(data)[DVcol]
-            colnames(newDA)<-sub(pattern="DV:",x=newDAnames,replacement="DA:",ignore.case=FALSE)
-            data<-cbind(data,newDA)
-            data<-data[,-DAcol]
-
-            }else{
-                warning("DA columns and DV columns do not match.")
-                }
+    # The MIDAS may contain the DA:ALL special time 
+    if(length(grep("DA:ALL",colnames(data))) != 0 && length(DAcol) == 1){
+        if (verbose){
+            print("Your data comprises only a DA:ALL column;  all readouts are assumed to have been acquired at the same time.")
         }
+
+        # Make the additional columns
+        newDA<-matrix(rep(data[,DAcol],length(DVcol)),byrow=FALSE,ncol=length(DVcol))
+        newDAnames<-colnames(data)[DVcol]
+        colnames(newDA)<-sub(pattern="DV:",x=newDAnames,replacement="DA:",ignore.case=FALSE)
+        data<-cbind(data,newDA)
+        data<-data[,-DAcol]
+    } else {
+        if(length(DAcol) != length(DVcol)){
+            warning("DA columns and DV columns do not match.")
+        }
+    }
 
     if (verbose){
         print(paste("Your data set comprises measurements on ", length(DVcol)," different species"))

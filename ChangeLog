@@ -1,6 +1,12 @@
 1.5
 ====
 
+1.5.22
+----------
+
+    * plotModel: species that belongs to inhibitor and another class are now
+      rounded and have a red contour.
+
 1.5.21
 -------------
 
