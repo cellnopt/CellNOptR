@@ -52,9 +52,8 @@ cmap_scale=1, cex=1.6, ymin=NULL)) {
     if ("ymin" %in% names(plotParams) == FALSE){
         plotParams$ymin = NULL
     }
-   
-print("1")
-    # aliases
+    
+# aliases
     margin = plotParams$margin
     cex = plotParams$cex
 
@@ -75,7 +74,6 @@ print("1")
         pdf(file=pdfFileName, width=plotParams$width, height=plotParams$height)
     }
 
-print("2")
     Ncols = dim(CNOlist@signals[[1]])[2]
     Nrows = dim(CNOlist@signals[[1]])[1]
 
@@ -102,14 +100,12 @@ print("2")
     yMax=1
     # minimum across all data points
 
-print("3")
     if (is.null(plotParams$ymin)==FALSE){
         yMin = plotParams$ymin
     } else {
         yMin <- min(unlist(lapply(CNOlist@signals, function(x) min(x,na.rm=TRUE))))
     }
 
-print("4")
 
     # time labels
     xVal <- CNOlist@timepoints[valueSignalsI]
@@ -136,27 +132,21 @@ print("4")
     # latest time point
     xValMax = max(xVal)
 
-print("5")
     # make simResults array if not already
+
     if(!is.array(simResults)) {
         simResults = list2Array(simResults, dim=c(dim(simResults[[1]]),length(simResults)))
     }
-print("5a")
 
     # make valueSignals an array
     valueSignalsArr = list2Array(CNOlist@signals,
         dim=c(dim(CNOlist@signals[[1]]),length(CNOlist@signals)))
-print("5b")
 
     # calculate the MSE
     allDiff = matrix(NA, nrow=dim(simResults)[1], ncol=dim(simResults)[2])
-print(allDiff)
-print("5c")
+
     if(formalism != "dt") {
-print("5d")
         # ss1, ss2, ssN
-print(dim(simResults)[[1]])
-print(dim(simResults)[[2]])
         for(a in 1:dim(simResults)[1]) {
             for(b in 1:dim(simResults)[2]) {
                 allDiff[a,b] = sum((simResults[a,b,]-valueSignalsArr[a,b,valueSignalsI])^2)/norm
@@ -171,7 +161,6 @@ print(dim(simResults)[[2]])
         }
     }
 
-print("6")
     # max difference between sim and exper
     #diffMax = max(unlist(!is.na(allDiff)))
 
@@ -195,7 +184,6 @@ print("6")
     }
 
     # stim + inhib
-print("7")
     screen(count1)
     par(fg="blue",mar=c(margin, margin, margin, 0))
     plot(

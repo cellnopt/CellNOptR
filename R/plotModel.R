@@ -193,7 +193,7 @@ print("preprocessing")
             Integr[CountReac]<-optIntegr[i]
             CountReac<-CountReac+1
           }else{
-            for (j in 1:length(inputs)){
+            for (j in seq_along(inputs)){
               v1[CountReac]<-inputs[j]
               edges[CountReac] = 1
               v2[CountReac]<-paste("and",CountAnds,sep="")

@@ -79,8 +79,10 @@ writeMIDAS <- function(CNOlist, filename, timeIndices=NULL, overwrite=FALSE)
             j1 = 2; j2 = j1 + nStimuli - 1
             data[i1:i2, j1:j2] = cnolist@stimuli
 
-            j1 = j2 + 1; j2 = j1 + nInhibitors - 1
-            data[i1:i2, j1:j2] = cnolist@inhibitors
+            if (nInhibitors>0){
+                j1 = j2 + 1; j2 = j1 + nInhibitors - 1
+                data[i1:i2, j1:j2] = cnolist@inhibitors
+            } 
 
             j1 = j2 + 1; j2 = j1 + nSignals - 1
             data[i1:i2, j1:j2] = rep(timeSignals[timeIndices[time]], nSignals)

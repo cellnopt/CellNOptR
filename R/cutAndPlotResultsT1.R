@@ -36,20 +36,17 @@ cutAndPlotResultsT1 <- function(model, bString, simList=NULL, CNOlist, indexList
     # keep simList and indxList for back compatibility ?
     modelCut <- cutModel(model, bString)
     simListCut <- cutSimList(simList, bString)
-print("A")
     # t0
     Sim0 <- simulatorT0(CNOlist=CNOlist, model=modelCut, simList=simListCut, indexList=indexList)
-    simRes0 <- as.matrix(Sim0[,indexList$signals])
+    simRes0 <- as.matrix(Sim0[,indexList$signals,drop=F])
     #simRes0 = Sim0
     # t1
-print("B")
     Sim <- simulatorT1(CNOlist=CNOlist, model=modelCut, simList=simListCut, indexList=indexList)
-    simRes <- as.matrix(Sim[,indexList$signals])
+    simRes <- as.matrix(Sim[,indexList$signals,drop=F])
     #simRes = Sim
 
     simResults <- list(t0=simRes0, t1=simRes)
 
-print("C")
     # if there is a lot of data, split up cnolist
     # make the max dimensions 10 x 10
 
@@ -59,7 +56,6 @@ print("C")
     CNOlistSet = list()
     simResultsSet = list()
 
-print("D")
     if(dim1 > plotParams$maxrow) { #|| dim2 > 10) {
 
         par1 = ceiling(dim1/plotParams$maxrow)
@@ -91,7 +87,6 @@ print("D")
         CNOlistSet = list(CNOlist)
         simResultsSet = list(simResults)
     }
-print("E")
 
     outputFilenames = list()
     for(f in 1:length(CNOlistSet)) {
