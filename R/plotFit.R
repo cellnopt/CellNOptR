@@ -16,6 +16,7 @@
 plotFit<-function(optRes, filename=NULL){
 
    oldPar = par(no.readonly = TRUE)
+   on.exit(par(oldPar))
 
    if (is.null(filename)!=TRUE){
         pdf(filename)
@@ -41,7 +42,7 @@ plotFit<-function(optRes, filename=NULL){
         dev.off()
     }
 
-    par(oldPar)
+   # par(oldPar)
 
 } 
 
