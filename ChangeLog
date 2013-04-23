@@ -1,6 +1,21 @@
+
+
+
+
+
+
+
+
+1.7
+=========
+1.7.1
+-------
+    * writeMIDAS: manage absence of inhbitors
+	* cutAndPlotResultsTX: handle single experiment
+
+
 1.5
 ====
-
 1.5.22
 ----------
 
