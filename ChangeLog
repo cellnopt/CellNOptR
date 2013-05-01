@@ -8,6 +8,12 @@
 
 1.7
 =========
+1.7.2
+-------
+
+    * cutCNOlist: can cut time points
+
+
 1.7.1
 -------
     * writeMIDAS: manage absence of inhbitors
