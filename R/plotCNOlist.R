@@ -31,6 +31,9 @@ plotCNOlist<-function(CNOlist){
     )
 
     yMax<-max(unlist(lapply(CNOlist@signals,function(x) max(x, na.rm=TRUE))))
+    if (yMax<=1){
+        yMax = 1
+    }
     yMin<-min(unlist(lapply(CNOlist@signals,function(x) min(x, na.rm=TRUE))))
     xVal<-CNOlist@timepoints
 

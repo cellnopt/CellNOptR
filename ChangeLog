@@ -12,7 +12,7 @@
 -------
 
     * cutCNOlist: can cut time points
-
+    * plotCNOlist: yMax set to 1 if max value is below 1
 
 1.7.1
 -------
