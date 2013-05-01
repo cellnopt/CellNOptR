@@ -99,9 +99,6 @@ of time indices to remove data at different time  points.")
        }
     }
 
-
-
-
    return(cutCNOlist)
 }
         
@@ -111,12 +108,12 @@ of time indices to remove data at different time  points.")
 
     cutCNOlist = cnolist
     indices = unlist(cutTimeIndices)
-    if (max(indices)>length(m@signals)){
+    if (max(indices)>length(cnolist@signals)){
         warning("one or more indices provided are larger than number of time
         points. These indices are going to be ignored.")
     }
    cutCNOlist@signals = cnolist@signals[-indices]
-   cutCNOlist@timepoints = cnolist@signals[-indices]
+   cutCNOlist@timepoints = cnolist@timepoints[-indices]
 
    return(cutCNOlist)
 }
