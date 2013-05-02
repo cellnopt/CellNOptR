@@ -18,7 +18,7 @@
 # Remove the signals or cues in cnolist that are not found in model
 cutCNOlist <- function(cnolist, model=NULL, cutTimeIndices=list(), verbose=FALSE){
 
-    if (is.null(model)==TRUE & length(cutTimeIndices)==0){
+    if (is.null(model)==TRUE && length(cutTimeIndices)==0){
         stop("Neither model nor time indices were provided. You must provide a 
 model (to remove species in your cnolist that are not in the model) and/or a list 
 of time indices to remove data at different time  points.")
@@ -26,10 +26,13 @@ of time indices to remove data at different time  points.")
 
     if (is.null(model)==FALSE){
         cutCNOlist = .cutCNOlistModel(cnolist, model, verbose)
-    }
-
-    if (length(cutTimeIndices)>0){
-        cutCNOlist = .cutCNOlistTimeIndices(cnolist, cutTimeIndices)
+        if (length(cutTimeIndices)>0){
+            cutCNOlist = .cutCNOlistTimeIndices(cutCNOlist, cutTimeIndices)
+        }
+    } else{ 
+        if (length(cutTimeIndices)>0){
+            cutCNOlist = .cutCNOlistTimeIndices(cnolist, cutTimeIndices)
+        }
     }
 
     return(cutCNOlist)

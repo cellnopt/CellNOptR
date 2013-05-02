@@ -13,6 +13,8 @@
 
     * cutCNOlist: can cut time points
     * plotCNOlist: yMax set to 1 if max value is below 1
+	* readSIF: can read AND gates coded in big caps 
+	* normaliseCNOlist: fixed the negative rescaling bug
 
 1.7.1
 -------

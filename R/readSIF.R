@@ -70,6 +70,9 @@ readSIF<-function(sifFile){
     if (any(substring(reacID, 1,4)=="!and")==TRUE){
         stop("Found an and gate with not edge. This is not possible check your SIF file. Must be 'and 1 specy', not 'and -1 specy' !!")
     }
+    if (any(substring(reacID, 1,4)=="!AND")==TRUE){
+        stop("Found an and gate with not edge. This is not possible check your SIF file. Must be 'and 1 specy', not 'and -1 specy' !!")
+    }
 #Create empty interMat and notMat
     interMat<-matrix(data=0,nrow=length(namesSpecies), ncol=dim(sif)[1])
     rownames(interMat)<-namesSpecies
@@ -94,9 +97,12 @@ readSIF<-function(sifFile){
 
 #1.detect them
     AndNodes<-grep(
-        pattern="(and\\d+$)",namesSpecies,perl=TRUE,ignore.case=FALSE)
+        pattern="([a,A][n,N][d,D]\\d+$)",namesSpecies,perl=TRUE,ignore.case=FALSE)
     AndNodesV<-grep(
-        pattern="(and\\d+$)",namesSpecies,perl=TRUE,ignore.case=FALSE,value=TRUE)
+        pattern="([a,A][n,N][d,D]\\d+$)",namesSpecies,perl=TRUE,ignore.case=FALSE,value=TRUE)
+
+
+
     if(length(AndNodes) != 0){
 
 #2.go through them

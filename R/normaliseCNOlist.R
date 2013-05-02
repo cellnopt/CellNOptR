@@ -246,9 +246,9 @@ normaliseCNOlist <- function(
     }
 
     # rescale the columns that have negative values. T0 is untouched.
-    if (options$rescale_negative == T){
+    if (options$rescale_negative == T && 1==0){ # this loop does not work. added 1==0 temporary so that we do not enter in the loop
         for (x in colnames(NormData[[1]])){
-            for (i in 2:length(NormData)){
+            for (i in 2:length(NormData)){ #there is always a Time 0 so were are guarantee to have at least 2 time points
                 m = min(NormData[[i]][,x], na.rm=T)
                 M = max(NormData[[i]][,x], na.rm=T)
                 if (m<0 && m!=M ){
@@ -258,6 +258,39 @@ normaliseCNOlist <- function(
         }
     }
 
+    # The following code is ONE way of dealing with negative values
+    # !!! each experiment/specy is treated separately.
+    # 0,-0.5,-1 will be rescaled in 1,0.5,0
+    # !!! 0,-0.01,0.5 is also rescaled because there is 1 negative value
+    if (options$rescale_negative == T){
+        # prepare a more convenient data set to manipulate
+
+        # rescale each column independently
+        for (x in colnames(NormData[[1]])){
+            # extract only data related to the specy x
+            c = NormData[[1]][,x]
+            for (i in 2:length(NormData)){
+                c = rbind(c, NormData[[i]][,x])
+            }
+            # get the min and max over time (apply) for each experiment
+            min_vector = apply(c, 2, min, na.rm=T)
+            max_vector = apply(c, 2, max, na.rm=T)
+
+            # rescale negative values if needed for each experiment
+            for (i in seq_along(min_vector)){
+                m = min_vector[i]
+                M = max_vector[i]
+                if (m<0 && m!=M){
+                    c[,i] = (c[,i]-m)/(M-m)
+                    # Finally, save the new values in NormData
+                    for (itime in 1:length(NormData)){
+                        NormData[[itime]][i,x] = c[itime,i]
+                    }
+                }
+            }
+
+        }
+    }
 
     CNOlist@signals <- NormData
     return(CNOlist)
