@@ -22,7 +22,6 @@ plotModel <- function(model, CNOlist=NULL, bString=NULL, indexIntegr=NULL,
 #   g = plotModel(model, cnolist=cnolist)
 #   # g$graph contains the model transformed into a graph object
 
-print("preprocessing")
   # user parameters to refine the layout, color, ...
   if (is.null(graphvizParams$arrowsize)==TRUE) {
     graphvizParams$arrowsize=2
@@ -352,7 +351,6 @@ print("preprocessing")
         edgeAttrs$color = savedEdgeAttrs
     }
 
-print("plottnig")
     if (is.null(clusters)==TRUE){
         # finally, the layout for a R plot
         if (show==TRUE){
