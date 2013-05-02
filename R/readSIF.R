@@ -81,6 +81,8 @@ readSIF<-function(sifFile){
     rownames(notMat)<-namesSpecies
     colnames(notMat)<-reacID
 
+print(notMat)
+
 #Fill in interMat and notMat
     for(r in 1:length(reacID)){
 
@@ -101,7 +103,7 @@ readSIF<-function(sifFile){
     AndNodesV<-grep(
         pattern="([a,A][n,N][d,D]\\d+$)",namesSpecies,perl=TRUE,ignore.case=FALSE,value=TRUE)
 
-
+print(AndNodes)
 
     if(length(AndNodes) != 0){
 
@@ -195,10 +197,12 @@ readSIF<-function(sifFile){
             notMat<-notMat[,-AndsReacs]
             interMat<-cbind(interMat,newReac)
             notMat<-cbind(notMat,newReacNot)
-            reacID<-c(reacID,newReacID)
-            interMat<-interMat[-which(rownames(interMat) == AndNodesV[i]),]
-            notMat<-notMat[-which(rownames(notMat) == AndNodesV[i]),]
 
+            reacID<-c(reacID,newReacID)
+            interMat<- as.matrix(interMat[-which(rownames(interMat) == AndNodesV[i]),], drop=F)
+            notMat <- as.matrix(notMat[-which(rownames(notMat) == AndNodesV[i]),], drop=F)
+
+            
             if(length(output) == 1){
 
                 colnames(interMat)[dim(interMat)[2]]<-newReacID
@@ -209,7 +213,7 @@ readSIF<-function(sifFile){
                     colnames(interMat)[(dim(interMat)[2]-length(newReacID)+1):dim(interMat)[2]]<-newReacID
                     colnames(notMat)[(dim(notMat)[2]-length(newReacID)+1):dim(notMat)[2]]<-newReacID
 
-                    }
+                }
             }
         }
 
