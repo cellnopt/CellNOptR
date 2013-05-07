@@ -217,7 +217,13 @@ gaBinaryT1<-function(
         names(resThisGen)<-c("Generation","Best_score","Best_bitString","Stall_Generation",
             "Avg_Score_Gen","Best_score_Gen","Best_bit_Gen","Iter_time")
 
-        if(verbose) print(resThisGen)
+        if(verbose) {
+            this = resThisGen
+            this[[3]] = substring(this[[3]], 1, 80)
+            this[[7]] = substring(this[[7]], 1, 80)
+            print(this)
+        }
+
 
         res<-rbind(res,resThisGen)
 
