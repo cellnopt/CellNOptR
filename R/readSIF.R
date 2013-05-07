@@ -81,7 +81,6 @@ readSIF<-function(sifFile){
     rownames(notMat)<-namesSpecies
     colnames(notMat)<-reacID
 
-print(notMat)
 
 #Fill in interMat and notMat
     for(r in 1:length(reacID)){
@@ -103,7 +102,6 @@ print(notMat)
     AndNodesV<-grep(
         pattern="([a,A][n,N][d,D]\\d+$)",namesSpecies,perl=TRUE,ignore.case=FALSE,value=TRUE)
 
-print(AndNodes)
 
     if(length(AndNodes) != 0){
 
