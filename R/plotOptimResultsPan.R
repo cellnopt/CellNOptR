@@ -380,7 +380,6 @@ cmap_scale=1, cex=1.6, ymin=NULL)) {
     Ncolors = 100
     colbar = heat.colors(Ncolors)
 
-
     # scale the colorbar in the same way as the colors used in the boxes
     # according to diff.
     colbar = colbar[as.integer((seq(0, Ncolors,length.out=100)/Ncolors)**plotParams$cmap_scale*Ncolors)]
@@ -392,12 +391,19 @@ cmap_scale=1, cex=1.6, ymin=NULL)) {
     at <- c(0, 0.5, 1)
 
     par(mai=c(0,0.1,0,0))
-    plot.new()
-    yyy <- seq(0,1,length=len+1)
-    rect(0, yyy[1:len], rep(rhs, len), yyy[-1], col = colbar, border = colbar)
-    rect(0, 0, rhs, 1, border="black")
-    segments(rhs, at, rhs2, at)
-    text(x=rhs2, y=at, labels=labels, pos=4, offset=0.2)
+
+    tryCatch({
+        plotNew()
+        yyy <- seq(0,1,length=len+1)
+        rect(0, yyy[1:len], rep(rhs, len), yyy[-1], col = colbar, border = colbar)
+        rect(0, 0, rhs, 1, border="black")
+        segments(rhs, at, rhs2, at)
+        text(x=rhs2, y=at, labels=labels, pos=4, offset=0.2)
+
+        },
+        error=function(e){print("could not add colorbar. Skipped")}
+    )
+
 
     close.screen(all.screens=TRUE)
 #    par(oldPar)
