@@ -8,6 +8,15 @@
 
 1.7
 =========
+
+1.7.3
+-----------
+
+    * cutAndplot: functions returns the mse matrix
+	* gaBinaryT1: printing simpified for large networks
+	* normaliseCNOlist: EC50Noise default value set to 1
+	* plotOptimResultsPan: fix special cases of no or one inhibitors/stimuli
+
 1.7.2
 -------
 
@@ -16,6 +25,7 @@
 	* readSIF: (i) can read AND gates coded in big caps (ii) fix bug 206 for
       simple network with only 1 AND gate and no other reactions
 	* normaliseCNOlist: fixed the negative rescaling bug
+	
 
 
 1.7.1
