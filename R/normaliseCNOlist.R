@@ -17,7 +17,7 @@ normaliseCNOlist <- function(
     CNOlist,
     EC50Data=0.5,
     HillCoef=2,
-    EC50Noise=0.1,
+    EC50Noise=0.,
     detection=0,
     saturation=Inf,
     changeTh=0,
@@ -290,7 +290,8 @@ normaliseCNOlist <- function(
             }
 
         }
-    }
+    } 
+
 
     CNOlist@signals <- NormData
     return(CNOlist)
