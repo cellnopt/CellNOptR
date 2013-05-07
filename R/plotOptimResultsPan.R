@@ -160,7 +160,6 @@ cmap_scale=1, cex=1.6, ymin=NULL)) {
             }
         }
     }
-
     # max difference between sim and exper
     #diffMax = max(unlist(!is.na(allDiff)))
 
@@ -270,53 +269,93 @@ cmap_scale=1, cex=1.6, ymin=NULL)) {
 
     sStim = countRow+1
 
-
     for(c1 in 1:dim(CNOlist@signals[[1]])[1]) {
         screen(sStim)
+        #par(mar=c(0.5,0.5,0.5,0.5))
         par(mar=c(margin, margin,0,0))
 
-        if(all(CNOlist@stimuli[c1,]==0)) {
+        # f no stimuli, we still keep the column but put notinh in it
+        if (length(CNOlist@stimuli) == 0){
             image(
-                t(matrix(1-CNOlist@stimuli[c1,],nrow=1)),
-                col=c("white"),xaxt="n",yaxt="n"
+                t(matrix(0,nrow=1)),
+                col=c("grey"),xaxt="n",yaxt="n"
             )
-        } else {
-            image(
-                t(matrix(1-CNOlist@stimuli[c1,],nrow=1)),
-                col=c("black","white"),xaxt="n",yaxt="n"
-            )
+            if(c1 == dim(CNOlist@signals[[1]])[1]) {
+                axis(
+                    side=1,
+                    at=seq(from=0, to=1,length.out=1),
+                    labels=c("NONE"),las=3,cex.axis=1.2
+                )
+            }
         }
-        if(c1 == dim(CNOlist@signals[[1]])[1]) {
-            axis(
-                side=1,
-                at=seq(from=0, to=1,length.out=length(colnames(CNOlist@stimuli))),
-                labels=colnames(CNOlist@stimuli),las=3,cex.axis=1.2
-            )
+
+        else {
+            if(all(CNOlist@stimuli[c1,]==0)) {
+                image(
+                    t(matrix(1-CNOlist@stimuli[c1,],nrow=1)),
+                    col=c("white"),xaxt="n",yaxt="n"
+                )
+            } else {
+                image(
+                    t(matrix(1-CNOlist@stimuli[c1,],nrow=1)),
+                    col=c("black","white"),xaxt="n",yaxt="n"
+                )
+            }
+            if(c1 == dim(CNOlist@signals[[1]])[1]) {
+                axis(
+                    side=1,
+                    at=seq(from=0, to=1,length.out=length(colnames(CNOlist@stimuli))),
+                    labels=colnames(CNOlist@stimuli),las=3,cex.axis=1.2
+                )
+            }
         }
         sStim = sStim+1
     }
 
     sInhib = sStim+1
-       for(i1 in 1:dim(CNOlist@signals[[1]])[1]) {
+    for(c1 in 1:dim(CNOlist@signals[[1]])[1]) {
         screen(sInhib)
-        par(mar=c(0.5,0.5,0,0))
+        #par(mar=c(0.5,0.5,0.5,0.5))
+        par(mar=c(margin, margin,0,0))
 
-        if (length(colnames(CNOlist@inhibitors)) >1){
+        # if no inhibitors, we still keep the column but put notinh in it
+        if (length(CNOlist@inhibitors) == 0){
             image(
-                t(matrix(CNOlist@inhibitors[i1,],nrow=1)),
-                col=c("white","black"),xaxt="n",yaxt="n"
+                t(matrix(0,nrow=1)),
+                col=c("grey"),xaxt="n",yaxt="n"
             )
-            if(i1 == dim(CNOlist@signals[[1]])[1]) {
+            if(c1 == dim(CNOlist@signals[[1]])[1]) {
+                axis(
+                    side=1,
+                    at=seq(from=0, to=1,length.out=1),
+                    labels=c("NONE"),las=3,cex.axis=1.2
+                )
+            }
+        }
+
+        else {
+            if(all(CNOlist@inhibitors[c1,]==0)) {
+                image(
+                    t(matrix(1-CNOlist@inhibitors[c1,],nrow=1)),
+                    col=c("white"),xaxt="n",yaxt="n"
+                )
+            } else {
+                image(
+                    t(matrix(1-CNOlist@inhibitors[c1,],nrow=1)),
+                    col=c("black","white"),xaxt="n",yaxt="n"
+                )
+            }
+            if(c1 == dim(CNOlist@signals[[1]])[1]) {
                 axis(
                     side=1,
                     at=seq(from=0, to=1,length.out=length(colnames(CNOlist@inhibitors))),
-                    labels=paste(colnames(CNOlist@inhibitors),"i",sep=""),
-                    las=3,cex.axis=1.2
+                    labels=colnames(CNOlist@inhibitors),las=3,cex.axis=1.2
                 )
             }
         }
         sInhib = sInhib+1
     }
+
     screen(dim(CNOlist@signals[[1]])[2]+3)
     splitProp = 1/(dim(CNOlist@signals[[1]])[1]+1)
     sSplit = matrix(c(0,1,(1-splitProp),1,0,1,0,(1-splitProp)),ncol=4, byrow=T)
@@ -366,4 +405,5 @@ cmap_scale=1, cex=1.6, ymin=NULL)) {
         dev.off()
     }
 
+    return(allDiff)
 }
