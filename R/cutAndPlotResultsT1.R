@@ -91,7 +91,7 @@ cutAndPlotResultsT1 <- function(model, bString, simList=NULL, CNOlist, indexList
     outputFilenames = list()
     for(f in 1:length(CNOlistSet)) {
 
-        plotOptimResultsPan(
+        mse = plotOptimResultsPan(
             simResults=simResultsSet[[f]],
             CNOlist=CNOlistSet[[f]],
             formalism="ss1",
@@ -105,7 +105,7 @@ cutAndPlotResultsT1 <- function(model, bString, simList=NULL, CNOlist, indexList
             } else {
                 filename <- paste(tag,"SimResultsT1",f,".pdf",sep="_")
             }
-            plotOptimResultsPan(
+            mse = plotOptimResultsPan(
                 simResults=simResultsSet[[f]],
                 CNOlist=CNOlistSet[[f]],
                 pdf=TRUE,
@@ -117,6 +117,6 @@ cutAndPlotResultsT1 <- function(model, bString, simList=NULL, CNOlist, indexList
             outputFilenames[[f]] = filename
         }
     }
-    return(outputFilenames)
+    return(list(filenames=outputFilenames, mse=mse))
 }
 

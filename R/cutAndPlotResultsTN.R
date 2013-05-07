@@ -55,7 +55,7 @@ cutAndPlotResultsTN <-function(CNOlist, model,bStrings, plotPDF=FALSE,
     }
 
 
-    plotOptimResultsPan(
+    mse = plotOptimResultsPan(
       simResults=simResults,
       CNOlist=CNOlist,
       formalism="ssN",
@@ -72,7 +72,7 @@ cutAndPlotResultsTN <-function(CNOlist, model,bStrings, plotPDF=FALSE,
       filename<-paste(tag, "SimResultsTN.pdf", sep="_")
     }
 
-    plotOptimResultsPan(
+    mse = plotOptimResultsPan(
       simResults=simResults,
       CNOlist=CNOlist,
       formalism="ssN",
@@ -83,4 +83,8 @@ cutAndPlotResultsTN <-function(CNOlist, model,bStrings, plotPDF=FALSE,
       #TimePoints=length(tPt)
     )
   }
+
+  return(list(filenames=outputFilenames, mse=mse))
+
+
 }
