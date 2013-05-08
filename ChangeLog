@@ -16,6 +16,8 @@
 	* gaBinaryT1: printing simpified for large networks
 	* normaliseCNOlist: EC50Noise default value set to 1
 	* plotOptimResultsPan: fix special cases of no or one inhibitors/stimuli
+	* plotCNOlist: shows the errors bar if needed
+	* plotOptimResultsPan: shows the errors bar if needed
 
 1.7.2
 -------

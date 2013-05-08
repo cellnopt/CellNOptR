@@ -223,6 +223,8 @@ cmap_scale=1, cex=1.6, ymin=NULL)) {
             screen(countRow)
             par(fg="black",mar=c(margin, margin,0,0))
             yVal <- lapply(CNOlist@signals[valueSignalsI], function(x) {x[r,c]})
+            ystd = unlist(lapply(CNOlist@variances[valueSignalsI],function(x) {x[r,c]}))
+
             yValS <- simResults[r,c,]
             if(!is.na(allDiff[r,c])) {
                 #diff = (1 - (allDiff[r,c] / diffMax)) * 1000
@@ -242,6 +244,11 @@ cmap_scale=1, cex=1.6, ymin=NULL)) {
             }
             plot(x=xVal,y=yVal,ylim=c(yMin,yMax),xlab=NA,ylab=NA,xaxt="n",yaxt="n",)
             rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4], col=bgcolor)
+
+            .error.bar(unlist(xVal), unlist(yVal), ystd)
+
+
+
 
             # the measurements
             lines(xVal, yVal, ylim=c(yMin, yMax), xlab=NA, ylab=NA, xaxt="n", yaxt="n", col="black", lty=1, lwd=1)
@@ -391,9 +398,10 @@ cmap_scale=1, cex=1.6, ymin=NULL)) {
     at <- c(0, 0.5, 1)
 
     par(mai=c(0,0.1,0,0))
+    #plot.new()
 
     tryCatch({
-        plotNew()
+        plot.new()
         yyy <- seq(0,1,length=len+1)
         rect(0, yyy[1:len], rep(rhs, len), yyy[-1], col = colbar, border = colbar)
         rect(0, 0, rhs, 1, border="black")
@@ -413,3 +421,18 @@ cmap_scale=1, cex=1.6, ymin=NULL)) {
 
     return(allDiff)
 }
+
+
+.error.bar <- function(x, y, upper, lower=upper, length=0.1,...){
+     if(length(x) != length(y) | length(y) !=length(lower) | length(lower) !=
+length(upper))
+         stop("vectors must be same length")
+
+     positives = upper > 0 
+     x = x[positives]
+     y = y[positives]
+     upper = upper[positives]
+     lower = lower[positives]
+     arrows(x,y+upper, x, y-lower, angle=90, code=3, length=length, ...)
+     }   
+
