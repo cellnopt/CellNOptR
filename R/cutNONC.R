@@ -79,6 +79,7 @@ cutNONC <- function(model, NONCindexes) {
 
             LHS = paste(andInput,collapse="+", sep="")
             colnames(newInterMat)[a] = paste(LHS, "=", rownames(newInterMat)[which(newInterMat[,a] == 1)], sep="")
+            colnames(newNotMat)[a] = paste(LHS, "=", rownames(newNotMat)[which(newNotMat[,a] == 1)], sep="")
         }
 
         reac2remove <- apply(newInterMat,2,emptyInOut)
