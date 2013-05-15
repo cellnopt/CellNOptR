@@ -9,6 +9,10 @@
 1.7
 =========
 
+1.7.4
+---------
+    * add readSBMLQual.Rd
+
 1.7.3
 -----------
 
@@ -18,6 +22,7 @@
 	* plotOptimResultsPan: fix special cases of no or one inhibitors/stimuli
 	* plotCNOlist: shows the errors bar if needed
 	* plotOptimResultsPan: shows the errors bar if needed
+	* fix bug in cutNONC (notMat colnames was not populated)
 
 1.7.2
 -------
