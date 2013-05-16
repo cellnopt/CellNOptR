@@ -117,6 +117,9 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
     if(sum("NO-LIG" %in% namesCues) != 0){
         stop("Found a column with NO-LIG tag. MIDAS files do not accept NO-LIG. use NOINHIB or NOCYTO instead. Fix your MIDAS file please")
     }
+    if(sum("NOLIG" %in% namesCues) != 0){
+        stop("Found a column with NO-LIG tag. MIDAS files do not accept NO-LIG. use NOINHIB or NOCYTO instead. Fix your MIDAS file please")
+    }
     if(sum("NO-CYTO" %in% namesCues) != 0){
         stop("Found a column with NO-CYTO tag. MIDAS file must use NOCYTO instead. Fix your MIDAS file please")
     }
