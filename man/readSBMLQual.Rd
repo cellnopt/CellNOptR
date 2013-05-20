@@ -10,7 +10,7 @@ scanned and saved in SIF format in a temporary file. This file is read by
 readSIF. The returned object is therefore the output of readSIF.
 }
 \usage{
-readSBMLQual(sifFile)
+readSBMLQual(filename)
 }
 \arguments{
   \item{filename}{
