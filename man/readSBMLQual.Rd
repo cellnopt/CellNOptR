@@ -1,5 +1,5 @@
 \name{readSBMLQual}
-\alias{readSif}
+\alias{readSBMLQual}
 \alias{readSBMLQual}
 \title{
 Read a SBMLQual document and returns a SIF object (as returned by readSIG

@@ -223,7 +223,6 @@ cmap_scale=1, cex=1.6, ymin=NULL)) {
             screen(countRow)
             par(fg="black",mar=c(margin, margin,0,0))
             yVal <- lapply(CNOlist@signals[valueSignalsI], function(x) {x[r,c]})
-            ystd = unlist(lapply(CNOlist@variances[valueSignalsI],function(x) {x[r,c]}))
 
             yValS <- simResults[r,c,]
             if(!is.na(allDiff[r,c])) {
@@ -245,7 +244,12 @@ cmap_scale=1, cex=1.6, ymin=NULL)) {
             plot(x=xVal,y=yVal,ylim=c(yMin,yMax),xlab=NA,ylab=NA,xaxt="n",yaxt="n",)
             rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4], col=bgcolor)
 
-            .error.bar(unlist(xVal), unlist(yVal), ystd)
+            
+            tryCatch(
+                {ystd = unlist(lapply(CNOlist@variances[valueSignalsI],function(x) {x[r,c]}))
+                .error.bar(unlist(xVal), unlist(yVal), ystd)
+                }, error=function(e){}
+            )
 
 
 

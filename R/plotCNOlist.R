@@ -64,10 +64,13 @@ plotCNOlist<-function(CNOlist){
 
         for(c in 1:dim(CNOlist@signals[[1]])[2]){
             yVal<-lapply(CNOlist@signals,function(x) {x[r,c]})
-            ystd = unlist(lapply(CNOlist@variances,function(x) {x[r,c]}))
             plot(x=xVal,y=yVal,ylim=c(yMin, yMax),xlab=NA,ylab=NA,xaxt="n",yaxt="n")
             lines(x=xVal,y=yVal,ylim=c(yMin, yMax),xlab=NA,ylab=NA,xaxt="n",yaxt="n")
-            .error.bar(unlist(xVal), unlist(yVal), ystd)
+            tryCatch(
+                {ystd = unlist(lapply(CNOlist@variances,function(x) {x[r,c]}))
+                .error.bar(unlist(xVal), unlist(yVal), ystd)},
+                error=function(e){}
+            )
 
             #add the annotation of the axis: if we're on the last row we need an x-axis
             if(r == dim(CNOlist@signals[[1]])[1]){
