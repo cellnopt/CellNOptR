@@ -12,6 +12,7 @@
 1.7.4
 ---------
     * add readSBMLQual.Rd
+	* makecnolist catches "NOLIG" tag in the signals/cues names.
 
 1.7.3
 -----------
