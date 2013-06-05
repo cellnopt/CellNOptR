@@ -9,10 +9,16 @@
 1.7
 =========
 
+1.7.5
+---------
+
+    * cutAndPlotResultsTN: fix a typo
+	* normaliseCNOlist: if called, the returned CNOlist obejct has a variance set to zero.
+
 1.7.4
 ---------
-    * add readSBMLQual.Rd
-	* makecnolist catches "NOLIG" tag in the signals/cues names.
+    * readSBMLQual.Rd: added missing doc.
+	* makecnolist: catches "NOLIG" tag in the signals/cues names.
 
 1.7.3
 -----------
