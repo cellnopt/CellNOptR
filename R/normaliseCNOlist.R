@@ -294,6 +294,12 @@ normaliseCNOlist <- function(
 
 
     CNOlist@signals <- NormData
+
+    # Variance should be zero
+    for (i in seq_along(CNOlist@timepoints)){
+        CNOlist@variances[[i]] = CNOlist@variances[[i]] * 0
+    }
+
     return(CNOlist)
 }
 
