@@ -23,7 +23,7 @@
 readSBMLQual <- function(filename){
 
     library(XML)
-    doc = xmlTreeParse("test.xml")
+    doc = xmlTreeParse(filename)
     r = xmlRoot(doc)
 
     sif = data.frame(matrix(0, ncol=3))
