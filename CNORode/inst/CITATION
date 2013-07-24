@@ -1,0 +1,26 @@
+citHeader("To cite the package CNORode in publications please use:")
+
+
+# paper reference
+citEntry(
+    entry="Article",
+    title = "CellNOptR: a flexible toolkit to train protein signaling networks to data using multiple logic formalisms.",
+    author =  "Camille Terfve, Thomas Cokelaer, Aidan MacNamara, David Henriques, Emanuel Goncalves, Melody K Morris, Martin van Iersel, Douglas A Lauffenburger, Julio Saez-Rodriguez",
+    year = "2012",
+    journal="BMC Systems Biology",
+    volume=1,
+    number=133,
+    textVersion= "C Terfve, T Cokelaer, A MacNamara, D Henriques, E Goncalves, MK Morris, M van Iersel, DA Lauffenburger, J Saez-Rodriguez. CellNOptR: a flexible toolkit to train protein signaling networks to data using multiple logic formalisms. BMC Systems Biology, 2012, 6:133"
+    )
+
+# Manual reference
+year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date, perl = TRUE)
+authors = "David Henriques and Thomas Cokelaer"
+citEntry(
+    entry="Manual",
+    title = meta$Title,
+    author = authors,
+    year = year,
+    version=meta$Version,
+    textVersion=paste(authors, ". ", meta$Title, " (", year, ")", "R package version ", meta$Version, sep="")
+)
