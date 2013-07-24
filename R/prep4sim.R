@@ -47,12 +47,12 @@ prep4sim<-function(model){
             # if a reaction is of type A=A then lhs == rhs. If so, we can
             # proceed to fill the matrices, otherwise we keep the default values
             # (e.g., NA for finalCube)
-           lhs = unlist(strsplit(pknmodel$reacID[r], "="))[[1]] 
-           rhs = unlist(strsplit(pknmodel$reacID[r], "="))[[2]] 
+           lhs = unlist(strsplit(model$reacID[r], "="))[[1]] 
+           rhs = unlist(strsplit(model$reacID[r], "="))[[2]] 
             if (lhs == rhs){
                # if lhs equals rhs, this is a self loop and we should not
                # expect any ! sign. No need to deal with neg and ixNeg
-                input = which(pknmodel$interMat[,r] == 1)
+                input = which(model$interMat[,r] == 1)
                 ignoreCube[r,1:length(input)] <- FALSE
                 finalCube[r, 1:length(input)] <- input
                 maxIx[r] <- input
