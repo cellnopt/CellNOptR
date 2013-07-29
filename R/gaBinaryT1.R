@@ -64,7 +64,6 @@ gaBinaryT1<-function(
     bestbit<-Pop[1,]
     bestobj<-Inf
     stop<-FALSE
-    obj<-rep(0,popSize)
     g<-0
     stallGen<-0
     res<-rbind(
