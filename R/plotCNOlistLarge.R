@@ -14,26 +14,29 @@
 ##############################################################################
 # $Id$
 #This function is a variant of plotCNOlist that works for bigger datasets and allows one
-#to split the plots into n=nsplit plots (across the conditions dimension)
+#to split the plots into n=nsplit plots (across the conditions dimension only)
 
 plotCNOlistLarge<-function(CNOlist,nsplit=4, newDevice=FALSE){
+
 
     if ((class(CNOlist)=="CNOlist")==FALSE){
          CNOlist = CellNOptR::CNOlist(CNOlist)
      }
 
+
     opar = par(no.readonly = TRUE)
     on.exit(par(opar))
 
 
-    L = dim(CNOlist@cues)[1] # number of signals/Cues
+    L = dim(CNOlist@cues)[[1]] # number of signals/Cues
     if (nsplit<=0 | nsplit>=L){
         stop("nsplit must be strictly positive and smaller than the number of signals")
     }
 
 
-    splits<-dim(CNOlist@cues)[1]/nsplit
+    splits<-dim(CNOlist@cues)[[1]]/nsplit
     splits<-floor(splits)
+
     CNOlistOriginal<-CNOlist
 
     for(i in 1:nsplit){
@@ -45,14 +48,15 @@ plotCNOlistLarge<-function(CNOlist,nsplit=4, newDevice=FALSE){
         CNOlist<-CNOlistOriginal
 
         if(i == nsplit){
-            indices<-(indices[length(indices)]+1):dim(CNOlistOriginal@cues)[1]
+            indices<-(indices[length(indices)]+1):dim(CNOlistOriginal@cues)[[1]]
             }
 
         indices<-((1:splits)+((i-1)*splits))
         CNOlist@cues<-CNOlist@cues[indices,]
         CNOlist@stimuli<-CNOlist@stimuli[indices,]
         CNOlist@inhibitors<-CNOlist@inhibitors[indices,]
-        CNOlist@signals[[1]]<-CNOlist@signals[[1]][indices,]
+        CNOlist@signals[[1]]<-CNOlist@signals[[1]][indices,signalIndices]
+
 
         for(n in 2:length(CNOlist@signals)){
             CNOlist@signals[[n]]<-CNOlist@signals[[n]][indices,]
@@ -70,6 +74,7 @@ plotCNOlistLarge<-function(CNOlist,nsplit=4, newDevice=FALSE){
 
         for(c in 1:dim(CNOlist@signals[[1]])[2]){
             par(fg="blue",mar=c(0.5,0.5,0.7,0))
+
 
 
             tryCatch(
