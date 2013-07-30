@@ -9,11 +9,20 @@
 1.7
 =========
 
+1.7.6
+----------
+    * CNOlist: no need for subfield parameter. CNOlist figures out whether it
+	  should be set to True or False automatically.
+    * expandAndGates: can used any number of inputs (it was limited to 4). code
+      provided by Martin-Franz-Xaver Pirkl and added/checked by TC.
+
+
 1.7.5
 ---------
 
     * cutAndPlotResultsTN: fix a typo
 	* normaliseCNOlist: if called, the returned CNOlist obejct has a variance set to zero.
+	* prep4sim: can read SIF files that have self loops A-->A
 
 1.7.4
 ---------
