@@ -11,6 +11,7 @@
 
 1.7.6
 ----------
+    * readSBMLQual: fixing reading AND gates properly.
     * CNOlist: no need for subfield parameter. CNOlist figures out whether it
 	  should be set to True or False automatically.
     * expandAndGates: can used any number of inputs (it was limited to 4). code

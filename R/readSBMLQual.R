@@ -21,7 +21,7 @@
 # so this is an isolated node.
 
 readSBMLQual <- function(filename){
-
+    warning("experimental SBML reader. use with care July 2013.")
     library(XML)
     doc = xmlTreeParse(filename)
     r = xmlRoot(doc)
@@ -33,6 +33,7 @@ readSBMLQual <- function(filename){
 
     transitions = xmlChildren(xmlChildren(r)[[1]])['listOfTransitions']
 
+    andCounter = 1
     for (i in seq_along((transitions[[1]]))){
         # somehow we can not loop over the transitions so we use
         # seq_along(length(transitions))
@@ -42,26 +43,51 @@ readSBMLQual <- function(filename){
         signs = as.vector(unlist(sapply(xmlChildren(inputs), function(x) xmlGetAttr(x,"sign"))))
         LHS = as.vector(unlist(sapply(xmlChildren(inputs), function(x) xmlGetAttr(x,"qualitativeSpecies"))))
         RHS = as.vector(unlist(sapply(xmlChildren(outputs), function(x) xmlGetAttr(x,"qualitativeSpecies"))))
+        functions = xmlChildren(transition)$listOfFunctionTerms
 
-        for (j in seq_along(LHS)){
+        # from function, figure out if we have a OR or AND gate
+        logics = xmlChildren(xmlChildren(xmlChildren(xmlChildren(functions)$functionTerm)$math)$apply)
+        logics = names(logics)
 
-            if (signs[[j]] == "positive"){
-                sif = rbind(c(LHS[[j]],1,RHS), sif)
-            } else if (signs[[j]] == "negative") {
-                sif = rbind(c(LHS[[j]],-1,RHS), sif)
-            } else {
-                stop("signs must be negative or positive")
+
+        # all links other than AND should be here
+        if (("and" %in% logics)==FALSE){
+            for (j in seq_along(LHS)){
+                if (signs[[j]] == "positive"){
+                    sif = rbind(c(LHS[[j]],1,RHS), sif)
+                } else if (signs[[j]] == "negative") {
+                    sif = rbind(c(LHS[[j]],-1,RHS), sif)
+                } else {
+                    stop("signs must be negative or positive")
+                }
             }
-        }
+        } 
 
+        # the AND case only
+        if ("and" %in% logics){
+            andName = paste("and", andCounter, sep="")
+            print("----------------")
+            print(andName)
+            for (j in seq_along(LHS)){
+                if (signs[[j]] == "positive"){
+                    sif = rbind(c(LHS[[j]],1,andName), sif)
+                } else if (signs[[j]] == "negative") {
+                    sif = rbind(c(LHS[[j]],-1,andName), sif)
+                } else {
+                    stop("signs must be negative or positive")
+                }
+            }
+            sif = rbind(c(andName, 1, RHS), sif)
+            andCounter = andCounter + 1
+        }
     }
 
     # remove last row (0,0,0) set at the beginning to define the data frame.
-   sif = sif[-dim(sif)[[1]],]
+    sif = sif[-dim(sif)[[1]],]
 
-   fh = tempfile()
-   print(fh)
-   write.table(sif,file=fh,
+    fh = tempfile()
+    print(fh)
+    write.table(sif,file=fh,
             row.names=FALSE,col.names=FALSE,quote=FALSE,sep="\t")
 
     sif = readSIF(fh)
