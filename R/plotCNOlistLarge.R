@@ -55,7 +55,7 @@ plotCNOlistLarge<-function(CNOlist,nsplit=4, newDevice=FALSE){
         CNOlist@cues<-CNOlist@cues[indices,]
         CNOlist@stimuli<-CNOlist@stimuli[indices,]
         CNOlist@inhibitors<-CNOlist@inhibitors[indices,]
-        CNOlist@signals[[1]]<-CNOlist@signals[[1]][indices,signalIndices]
+        #CNOlist@signals[[1]]<-CNOlist@signals[[1]][indices,signalIndices]
 
 
         for(n in 2:length(CNOlist@signals)){
