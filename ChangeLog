@@ -1,128 +1,94 @@
+.. keep this layout because it is used in CNODocs
 
 
 
 
+Release 1.7
+==============
 
-
-
-
-1.7
-=========
-
-1.7.6
-----------
+* 1.7.6
     * readSBMLQual: fixing reading AND gates properly.
-    * CNOlist: no need for subfield parameter. CNOlist figures out whether it
-	  should be set to True or False automatically.
-    * expandAndGates: can used any number of inputs (it was limited to 4). code
-      provided by Martin-Franz-Xaver Pirkl and added/checked by TC.
+    * CNOlist: no need for subfield parameter. CNOlist figures out whether it should be set to True or False automatically.
+    * expandAndGates: can used any number of inputs (it was limited to 4). code  provided by Martin-Franz-Xaver Pirkl and added/checked by TC.
 
-
-1.7.5
----------
-
+* 1.7.5
     * cutAndPlotResultsTN: fix a typo
-	* normaliseCNOlist: if called, the returned CNOlist obejct has a variance set to zero.
-	* prep4sim: can read SIF files that have self loops A-->A
+    * normaliseCNOlist: if called, the returned CNOlist obejct has a variance set to zero.
+    * prep4sim: can read SIF files that have self loops A-->A
 
-1.7.4
----------
+* 1.7.4
     * readSBMLQual.Rd: added missing doc.
-	* makecnolist: catches "NOLIG" tag in the signals/cues names.
+    * makecnolist: catches "NOLIG" tag in the signals/cues names.
 
-1.7.3
------------
-
+* 1.7.3
     * cutAndplot: functions returns the mse matrix
-	* gaBinaryT1: printing simpified for large networks
-	* normaliseCNOlist: EC50Noise default value set to 1
-	* plotOptimResultsPan: fix special cases of no or one inhibitors/stimuli
-	* plotCNOlist: shows the errors bar if needed
-	* plotOptimResultsPan: shows the errors bar if needed
-	* fix bug in cutNONC (notMat colnames was not populated)
+    * gaBinaryT1: printing simpified for large networks
+    * normaliseCNOlist: EC50Noise default value set to 1
+    * plotOptimResultsPan: fix special cases of no or one inhibitors/stimuli
+    * plotCNOlist: shows the errors bar if needed
+    * plotOptimResultsPan: shows the errors bar if needed
+    * fix bug in cutNONC (notMat colnames was not populated)
 
-1.7.2
--------
-
+* 1.7.2
     * cutCNOlist: can cut time points
     * plotCNOlist: yMax set to 1 if max value is below 1
-	* readSIF: (i) can read AND gates coded in big caps (ii) fix bug 206 for
+    * readSIF: (i) can read AND gates coded in big caps (ii) fix bug 206 for
       simple network with only 1 AND gate and no other reactions
-	* normaliseCNOlist: fixed the negative rescaling bug
-	
+    * normaliseCNOlist: fixed the negative rescaling bug
 
-
-1.7.1
--------
+* 1.7.1
     * writeMIDAS: manage absence of inhbitors
-	* cutAndPlotResultsTX: handle single experiment
+    * cutAndPlotResultsTX: handle single experiment
 
+Release 1.6.0
+===================
+Bioconductor release 
 
-1.5
-====
-1.5.22
-----------
+Release 1.5
+=============
 
+* 1.5.22
     * plotModel: species that belongs to inhibitor and another class are now
       rounded and have a red contour.
 
-1.5.21
--------------
-
+* 1.5.21
     * make C code ansi compliants
-	* update the tutorial/vignette.
+    * update the tutorial/vignette.
 
 
-1.5.19/1.5.20
--------------------
-
+* 1.5.19/1.5.20
     * for developers: since the introduction of the cutting inside the C
       simulator the code is unstable at T2. The optimisation seems ok but
       cutAndPlot looks wrong. We decided to completely remove the cutting in
       simulatorT1 and TN and to do the cut inside the simulatorT1/TN R code again. 
       This is a bit slower but at least the code is then as in 1.4.0
 
-
-1.5.18
-----------
-
+* 1.5.18
     * convert timepoints from string to numeric to make CNORode function working
       again.
 
-1.5.17
------------
-
+* 1.5.17
     * fix bug report201: cutAndPlotResult where messed up at time T2 and later
 
-1.5.16
--------------
-
+* 1.5.16
     * hack plotModel to fix a bug in Rgraphviz, which is known but wil be fix
       later on. layout is closer to SGBN standard.
 
-1.5.15
------------
-
+* 1.5.15
     * fixing bug in CNOlist (makeCNOlist)
 
-1.5.14
---------
-
+* 1.5.14
     * fixing manual
     * add compatCNOlist to convert CNOlist class to makeCNOlist for back
       compatibiltiy. This is a CNOlist class method
     * add getter in CNOlist
 
-1.5.13
----------
+* 1.5.13
     * add model2igraph function.
     * add shuffle option in randomizeCNOlist
-	* add variancs in makeCNOlist and adapt CNOlist accordingly.
+    * add variancs in makeCNOlist and adapt CNOlist accordingly.
 
-
-1.5.12
------------
-
+* 1.5.12
     * add a randomizeCNOlist function to add gaussian noise into a CNOlist, or
       replace data by uniform distribution
     * add a new plotCNOlist function called plotCNOlist2 that uses ggplot2 and
@@ -131,474 +97,369 @@
     * add verbose option in normaliseCNOlist
     * readSIF can now read relation "A 1 B C D E" as excepted in SIF format.
 
-1.5.11
----------
-
+* 1.5.11
     * changes in plotOptimResultsPan: NA value are now rendered as grey boxes
-	  instead of red boxes. The black line connecting measurements is printed.
-	  The ylim for the y axis can be set manually to overwrite the default
-	  behaviour.
+      instead of red boxes. The black line connecting measurements is printed.
+      The ylim for the y axis can be set manually to overwrite the default
+      behaviour.
 
-1.5.10
------------
-
+* 1.5.10
     * add cutCNOlist function that can remove signals and cues not found in a
-	  model
+      model
     * make the CNOlist print method more verbose: print the cues and signals as
-	  in makeCNOlist
+      in makeCNOlist
 
-
-1.5.9
--------
-
+* 1.5.9
     * gaBinary family function now uses the hash package instead of home-made
       hash table(Task 185).
 
-1.5.8
--------
-
+* 1.5.8
     * fixed bug in gtFit (C version) to handl NA and NaN properly. Bug report 138
 
-1.5.7
-------
-
+* 1.5.7
     * fixing bug normaliseCNOlist introduced in 1.5.3 related to the new
       mode="raw" option that interfered with time and control modes.
-1.5.6
-------
 
-	* adding exhaustive function and its manual
-	* fixing bug in C version of getFit that provided wrong nInTot cancelling
-	  out effect of sizeFac.
+* 1.5.6
+    * adding exhaustive function and its manual
+    * fixing bug in C version of getFit that provided wrong nInTot cancelling
+      out effect of sizeFac.
 
-1.5.5
-------
+* 1.5.5
+    * gaBinaryT1 and T2: fixed issue when only one model within the tolerance    
+      was returned (bug report 167)
 
-* gaBinaryT1 and T2: fixed issue when only one model within the tolerance	
-  was returned (bug report 167)
+* 1.5.4
+    * remove cutAndPlotResultsT2 function (use TN version instead)
+    * speed up code by factor 2 in the T1 boolean case by sending matrices instead
+      of vectors in the call to the C function. Got some trouble here. Further
+      cleaning will be done later on.
+    * plotmodel can switch on/off the empty edges.
 
-1.5.4
--------
+* 1.5.3
+    * add CNOdata
+    * add overwrite argument in writeSIF
+    * fixing manuals.
+    * fixing bug in makeCNOlist for MIDAS file with only one experiment.
+    * normaliseCNOlist can now handle relative data input
 
-* remove cutAndPlotResultsT2 function (use TN version instead)
-* speed up code by factor 2 in the T1 boolean case by sending matrices instead
-  of vectors in the call to the C function. Got some trouble here. Further
-  cleaning will be done later on.
-* plotmodel can switch on/off the empty edges.
+* 1.5.2
+    * computeScoreT1 and gaBinaryT1: an arbitrary time point can now be optimised.
 
-
-1.5.3
-----------
-
-* add CNOdata
-* add overwrite argument in writeSIF
-* fixing manuals.
-* fixing bug in makeCNOlist for MIDAS file with only one experiment.
-* normaliseCNOlist can now handle relative data input
-
-1.5.2
-------------
-
-* computeScoreT1 and gaBinaryT1: an arbitrary time point can now be optimised.
-
-1.5.1
---------
-* readMIDAS. bug fixed for the case of species that contains the DA, TR or DV
-  string inside their name.
+* 1.5.1
+    * readMIDAS. bug fixed for the case of species that contains the DA, TR or DV
+      string inside their name.
 
 
-1.4.0
-======
-
+Release 1.4.0
+===================
 Bioconductor release 
 
+Relase 1.3
+============
+* 1.3.33
+    * writeMIDAS: fix buggy case when user provide the CNOlist as the old data.frame
+      instead of new CNOlist class.
+    * prep4sim returns an extra field in the list (maxinput)
+    * gaBinaryT1 convert the iput CNOlist to an instance of CNOlist right at the top
+      so that it is not done N times within the GA algorithm itself. Speeds up things
+      by 3 times.
+
+* 1.3.32
+    * simulatorT1 and TN have additional check for AND gates with any NA inputs (see
+      comments line 261 i nTN and 234 in 234)
+
+* 1.3.31 
+    * Updating NEW.Rd
+    * typo in checkSignals in warning message.
+    * indexFinder.R return list specifically
+    * fixing bug (typo) in cutAndPlotResultsT1
+    * writeMIDAS: nCues not used so commented
+    * CNOlist plot method prottotype simplified.
+    * buildBitString has now internal documentation.
+
+* 1.3.30 30Aug2012
+    * use CNOlist class everywhere in CellNOptR
+    * plot method in CNOlist class calls plotCNOlist
+    * makeCNOlist is still there, old CNOlist object can be converted: newversion = CNOlist(oldversion)
+    * improve plotModel to have more graphviz options
+
+* 1.3.29 29Aug2012
+    * resE is now optional in writeReport
+    * show options removed from cutAndPlot function family
+    * update entire documentation and isnt/CellNOptR-example.R makeing sure 
+      everything works.
+    * add plotParams parameter in cutAndPlot family.
+    * fix small issues in plotOptimResultsPan(  colorbar slightly shifted to the
+      right, colormap can be scaled towards low values, ...)
+
+* 1.3.28
+    * add a TODO file
+    * add a .Rinstignore file.
+    * add a test suite in tests directory
+    * add class CNOlist (to fulfill bioconductor request)
+    * gaBinary default initBstring set to ones so no need to provide it anymore
+    * MAJOR refactoring to merge T1, T2, TN functions (cutAnPlot, gaBinary,
+      simulator).
+    * computeScoreT1, cutSimList had an argument called bitString. it is now called
+      bString and this convention is used throughout the code (e.g., bStringT1 not
+      bitStringT1) simlist and indexlist are now optional are after the bString
+      argument.
+    * indexList and simList are removed from the arguments and recomputede within
+      all functions. It may be slower but this is negligeable compared to the
+      simplification provided to the users. However, for back compatibilty these 2
+      arguments are usually kept and set to NULL.
+    * computeScoreT2 is now deprecated and computeScoreTN should be use instead.
+    * cutSimList argument called bitString renamed bString
+    * simulateTN  combines simulateT1 and simulateTN so only one function is
+      required.
+    * add new function to make the code modular: buildBitString
+    * MapBack function renamed in mapBack to follow CNOdocs convention.
+    * fix bug in gaBinaryTN when computing score.
+    * gaBinaryT2 is deprecated. USe TN version instead.
+    * gaBinaryT1 and TN do no need the indexList and simList parameters anymore
+    * add missing documenation
+    * preprocessing now returns only the model. indices are not required anymore.
+    * add a cutAnPlot dispatcher that calls the proper cutandPlotResultsTX function.
+    * R CMD build check has no warnings or errors. All tests successful.
+
+* 13/Aug/2012 1.3.27
+    * add cutAndPlot that will replace all cutAndPlot families for the user interface.
+
+* 10/aug/2012 1.3.26
+    * preprocessing can now handle model without cnolist provided (e.g. for expansion only)
+
+* 27/july/2012 1.3.25
+    * cSimulator for T2 (and TN)
+    * rev1873 add simulatorTN (T2->TN that uses c Simulator)
+    * cleanup computeScoreT1,T2, TN to make same similar (future release will merge T2 and TN)
+
+* 26/july/2012 1.3.24
+    * rev1870,1844,1842,1841,1839,1838,1831 cSimulator implemented
+    * T3 data added
+
+* 17/july/2012 1.3.23
+    * TN files updated and fixed
+
+* 12/july/2012 1.3.22
+    * add proerties in the TN files
+    * Fix in cutAndPlotResultsT1
+
+* 9/july/2012 1.3.21
+    * fixed bug in writeDot when only 1 stimuli present.
+
+* 5/july/2012 1.3.20
+    * rev1659. add simulateT1 into gaBinaryT2, simplified CNORwrap code. fix manual, vignettes
+    * hash table in gaBinaryT1. option sizeFac and NAFac in gaBinaryT1 was missing.
+      Add maxSizeHashTable as optional argument to gaBinaryT1 and T2.
+    * make residualError generic for any time points.
+
+* 26/June/2012 1.3.19
+    * add writeMIDAS function
+    * major update that changes API to uniformise the code
+    * computeScoreT1 and T2 are not used inside gaBinaryT1 and gaBinaryT2
 
-1.3
-=======
-1.3.33
----------
-
-* writeMIDAS: fix buggy case when user provide the CNOlist as the old data.frame
-  instead of new CNOlist class.
-* prep4sim returns an extra field in the list (maxinput)
-* gaBinaryT1 convert the iput CNOlist to an instance of CNOlist right at the top
-  so that it is not done N times within the GA algorithm itself. Speeds up things
-  by 3 times.
-
-1.3.32
-----------
-
-* simulatorT1 and TN have additional check for AND gates with any NA inputs (see
-  comments line 261 i nTN and 234 in 234)
-
-
-1.3.31 
---------------
-* Updating NEW.Rd
-* typo in checkSignals in warning message.
-* indexFinder.R return list specifically
-* fixing bug (typo) in cutAndPlotResultsT1
-* writeMIDAS: nCues not used so commented
-* CNOlist plot method prottotype simplified.
-* buildBitString has now internal documentation.
-
-
-1.3.30 30Aug2012
--------------------
-* use CNOlist class everywhere in CellNOptR
-* plot method in CNOlist class calls plotCNOlist
-* makeCNOlist is still there, old CNOlist object can be converted: newversion = CNOlist(oldversion)
-* improve plotModel to have more graphviz options
-
-
-1.3.29 29Aug2012
------------------
-
-* resE is now optional in writeReport
-* show options removed from cutAndPlot function family
-* update entire documentation and isnt/CellNOptR-example.R makeing sure 
-  everything works.
-* add plotParams parameter in cutAndPlot family.
-* fix small issues in plotOptimResultsPan(  colorbar slightly shifted to the
-  right, colormap can be scaled towards low values, ...)
-
-1.3.28
------------
-
-* add a TODO file
-* add a .Rinstignore file.
-* add a test suite in tests directory
-* add class CNOlist (to fulfill bioconductor request)
-* gaBinary default initBstring set to ones so no need to provide it anymore
-* MAJOR refactoring to merge T1, T2, TN functions (cutAnPlot, gaBinary,
-  simulator).
-* computeScoreT1, cutSimList had an argument called bitString. it is now called
-  bString and this convention is used throughout the code (e.g., bStringT1 not
-  bitStringT1) simlist and indexlist are now optional are after the bString
-  argument.
-* indexList and simList are removed from the arguments and recomputede within
-  all functions. It may be slower but this is negligeable compared to the
-  simplification provided to the users. However, for back compatibilty these 2
-  arguments are usually kept and set to NULL.
-* computeScoreT2 is now deprecated and computeScoreTN should be use instead.
-* cutSimList argument called bitString renamed bString
-* simulateTN  combines simulateT1 and simulateTN so only one function is
-  required.
-* add new function to make the code modular: buildBitString
-* MapBack function renamed in mapBack to follow CNOdocs convention.
-* fix bug in gaBinaryTN when computing score.
-* gaBinaryT2 is deprecated. USe TN version instead.
-* gaBinaryT1 and TN do no need the indexList and simList parameters anymore
-* add missing documenation
-* preprocessing now returns only the model. indices are not required anymore.
-* add a cutAnPlot dispatcher that calls the proper cutandPlotResultsTX function.
-* R CMD build check has no warnings or errors. All tests successful.
-
-13/Aug/2012 1.3.27
-----------------------
-* add cutAndPlot that will replace all cutAndPlot families for the user interface.
-
-10/aug/2012 1.3.26
-----------------------
-* preprocessing can now handle model without cnolist provided (e.g. for expansion only)
-
-
-
-27/july/2012 1.3.25
----------------------
-* cSimulator for T2 (and TN)
-* rev1873 add simulatorTN (T2->TN that uses c Simulator)
-* cleanup computeScoreT1,T2, TN to make same similar (future release will merge T2 and TN)
-
-26/july/2012 1.3.24
----------------------
-* rev1870,1844,1842,1841,1839,1838,1831 cSimulator implemented
-* T3 data added
+* 20/June/2012 1.3.16
+    * rev1530: add cutModel
 
+* 19/June/2012: 1.3.14
+    * rev1487. change readSif into readSIF and prep4Sim into prep4sim
 
-17/july/2012 1.3.23
--------------------------
-* TN files updated and fixed
+* 12/June/2012: 1.3.13
+    * rev1465. gaBinaryT1 uses a has table to compute scores.
 
+* 6/June/2012 1.3.11
+    * rev1398: faster simulatorT1 (3 times)
+    * rev1407: add prior knowledge bitstring in the GA algorithm (T1 and T2) (bug
+      report 107)
+
+* 29/May/2010 1.3.10
+    * add mapBack function
+    * cutNONC function recompte reacID on its own so that if compresion and
+      expansion are not performed, reacID are correct
 
-12/july/2012 1.3.22
--------------------------
-* add proerties in the TN files
-* Fix in cutAndPlotResultsT1
+* 3/May/2010 1.3.9
+    * add computeScore.R
 
-9/july/2012 1.3.21
---------------------
-* fixed bug in writeDot when only 1 stimuli present.
+* 1.3.8
+    * new version of cutAndPlot
 
+* 26/April/2010 1.3.7
+    * move sif2graph, model2sif, graph2sif
 
-5/july/2012 1.3.20
---------------------
-* rev1659. add simulateT1 into gaBinaryT2, simplified CNORwrap code. fix manual, vignettes
-* hash table in gaBinaryT1. option sizeFac and NAFac in gaBinaryT1 was missing.
-  Add maxSizeHashTable as optional argument to gaBinaryT1 and T2.
-* make residualError generic for any time points.
+* 16/April/2010 1.3.3
+    * rev1025: CNORwrap NAmesData and paramsList are now optional
+    * rev997: fix bug 89 to allows only CellLine pattern in the MIDAS header but
+      also CellType.
+    * rev996: fix bug report 78 to use [[1]] instead of t0 to acces valueSignals in
+      the makecnolist objects.
+    * rev994: fix bug report 97 to have red links even when bstring is provided. Add
+      trivial sanity check in readSif to prevent "and -1 specy" reaction to be
+      accepted by error in a SIF file.
+    * rev993: fix bug report 88. NO-INHIB and NO-CYTO are not accepted following
+      agreement that used must use NOINHIB and NOCYTO instead. This cancels rev896
+      fix.
 
-26/June/2012 1.3.19
-----------------------
+* 3/April/2010 1.3.2
+    * rev896: makeCNOlist removes NO-INHIB and NO-LIG columns
 
-* add writeMIDAS function
-* major update that changes API to uniformise the code
-* computeScoreT1 and T2 are not used inside gaBinaryT1 and gaBinaryT2
+* 2nd/April/2010 1.3.1
+    * CNOR released on devel of bioconductor with revision 1.3.0, so change the
+      version to 1.3.1
 
-20/June/2012 1.3.16
---------------------
+Release 1.2
+============
 
-* rev1530: add cutModel
+* 29/March/2012 1.2.0
+    * rev865: Increase the version to be in agreement with bioconductor
 
 
-19/June/2012: 1.3.14
-* rev1487. change readSif into readSIF and prep4Sim into prep4sim
+Release 1.0
+=============
 
-12/June/2012: 1.3.13
-------------------------
-* rev1465. gaBinaryT1 uses a has table to compute scores.
+* 27/March/2012 0.99.30
+    * rev859: change color of edges in plotModel; minor update in simCutList
 
-6/June/2012 1.3.11
--------------------
-* rev1398: faster simulatorT1 (3 times)
-* rev1407: add prior knowledge bitstring in the GA algorithm (T1 and T2) (bug
-  report 107)
 
-29/May/2010 1.3.10
----------------------
-* add mapBack function
-* cutNONC function recompte reacID on its own so that if compresion and
-  expansion are not performed, reacID are correct
+* 26/March/2012 0.99.29
+    * rev828: small fix in plotModel
 
-3/May/2010 1.3.9
-----------------
+* 22/March/2012 0.99.28
+    * rev 800-804: implement time0
 
-* add computeScore.R
+* 20/March/2012 0.99.27
+    * rev782: cleanup in expandGates
 
-1.3.8
-------
-* new version of cutAndPlot
+* 15/March/2012 0.99.26
+    * rev739: update preprocessing to use the maxInputsPerGates option.
+    * rev738: fix plotModel layout
+    * rev737: fix major bug in expandGates and increased possible inputs combinations
 
-26/April/2010 1.3.7
---------------------
-* move sif2graph, model2sif, graph2sif
 
-16/April/2010 1.3.3
---------------------
-* rev1025: CNORwrap NAmesData and paramsList are now optional
-* rev997: fix bug 89 to allows only CellLine pattern in the MIDAS header but
-  also CellType.
-* rev996: fix bug report 78 to use [[1]] instead of t0 to acces valueSignals in
-  the makecnolist objects.
-* rev994: fix bug report 97 to have red links even when bstring is provided. Add
-  trivial sanity check in readSif to prevent "and -1 specy" reaction to be
-  accepted by error in a SIF file.
-* rev993: fix bug report 88. NO-INHIB and NO-CYTO are not accepted following
-  agreement that used must use NOINHIB and NOCYTO instead. This cancels rev896
-  fix.
+* 12/March/2012 0.99.25
+    * rev691: and gates properly handled in the case of 3 inputs amongst which 2
+      links have the same input (differening only ny the lnk being inhbitor or
+      not). See bug report 79.
 
-3e/April/2010 1.3.2
-----------------------
-* rev896: makeCNOlist removes NO-INHIB and NO-LIG columns
+* 9/March/2012 0.99.24
+    * rev681: add preprocessing function
+    * rev680: update all documentatin, fixing errors, completing missing fields or
+      manual entries
 
+* 1/March/2012 0.99.23
+    * rev652: add defaultParameter function.
+    * rev651: cutAndPlotResultsT family fixed to handle special case of a  single
+      measurement.
 
-2nd/April/2010 1.3.1
-------------------------
+* 22/Feb/2012 0.99.22
+    * rev589 Fix AND issue in compressModel and expandGates (bug report 61 and 62)
 
-* CNOR released on devel of bioconductor with revision 1.3.0, so change the
-  version to 1.3.1
+* 21/Feb/2012 0.99.21
+    * rev559 when looking at cues, makeCNOlist uses a logic that is now more
+    generalised and can therefore be used by fuuzy logic (cues different from 0 or
+    1).
 
-1.2
-=======
+* 25/Jan/012 to 17/Feb/2012 0.99.20
+    * rev550 writeScaffold (bug 39) if no and gates, this function was failing.
+    * rev548 writeScaffold (bug 39) reaction with not specy were wrongly
+      interpreted as edge 1 in the sif file (instead of -1).
+    * rev546 writeDot (bug 53) The output dot file is not in append mode anymore.
 
-29/March/2012 1.2.0
-----------------------
-* rev865: Increase the version to be in agreement with bioconductor
+* 25/Jan/012 to 17/Feb/2012 0.99.18
+    * rev546 writeDot (bug 53) The output dot file is not in append mode anymore.
+    * rev525 plotCNOLargeList uses different device under Linux platform (not
+      changed for other platform)
+    * rev523 add feature height and width in plotCNOLargeListPDF
+    * rev519 make plotModel more robust
+    * rev500 improve plotModel to check rgraphviz version
+    * rev492 add headers in all files
+    * rev491 add properties in all files
+    * rev486 fix bug in makeCNOlist for the special cases (only one time at t=0)
 
 
-1.0
-=======
-
-27/March/2012 0.99.30
----------------------
-* rev859: change color of edges in plotModel; minor update in simCutList
-
-
-26/March/2012 0.99.29
----------------------
-
-* rev828: small fix in plotModel
-
-22/March/2012 0.99.28
------------------------
-
-* rev 800-804: implement time0
-
-20/March/2012 0.99.27
-------------------------
-
-* rev782: cleanup in expandGates
-
-15/March/2012 0.99.26
-------------------------
-
-* rev739: update preprocessing to use the maxInputsPerGates option.
-* rev738: fix plotModel layout
-* rev737: fix major bug in expandGates and increased possible inputs combinations
-
-
-12/March/2012 0.99.25
--------------------------
-
-* rev691: and gates properly handled in the case of 3 inputs amongst which 2
-  links have the same input (differening only ny the lnk being inhbitor or
-  not). See bug report 79.
-
-9/March/2012 0.99.24
------------------------
-
-* rev681: add preprocessing function
-* rev680: update all documentatin, fixing errors, completing missing fields or
-  manual entries
-
-1/March/2012 0.99.23
--------------------------
-
-* rev652: add defaultParameter function.
-* rev651: cutAndPlotResultsT family fixed to handle special case of a  single
-  measurement.
-
-22/Feb/2012 0.99.22
----------------------------
-
-* rev589 Fix AND issue in compressModel and expandGates (bug report 61 and 62)
-
-21/Feb/2012 0.99.21
------------------------
-
-* rev559 when looking at cues, makeCNOlist uses a logic that is now more
-  generalised and can therefore be used by fuuzy logic (cues different from 0 or
-  1).
-
-25/Jan/012 to 17/Feb/2012 0.99.20
-------------------------------------------------
-
-* rev550 writeScaffold (bug 39) if no and gates, this function was failing.
-* rev548 writeScaffold (bug 39) reaction with not specy were wrongly
-  interpreted as edge 1 in the sif file (instead of -1).
-* rev546 writeDot (bug 53) The output dot file is not in append mode anymore.
-
-25/Jan/012 to 17/Feb/2012 0.99.18
------------------------------------
-* rev546 writeDot (bug 53) The output dot file is not in append mode anymore.
-* rev525 plotCNOLargeList uses different device under Linux platform (not
-  changed for other platform)
-* rev523 add feature height and width in plotCNOLargeListPDF
-* rev519 make plotModel more robust
-* rev500 improve plotModel to check rgraphviz version
-* rev492 add headers in all files
-* rev491 add properties in all files
-* rev486 fix bug in makeCNOlist for the special cases (only one time at t=0)
-
-
-25/Jan/2012 0.99.16
----------------------
-
-add cutSimList function used now by several other functions (refactoring)
+* 25/Jan/2012 0.99.16
+    * add cutSimList function used now by several other functions (refactoring)
 
 9/Jan/2012 to 23/Jan/2012 0.99.15
------------------------------------
+    * rev412: Simplify gaBinaryT1/T2 cutAndPlotResultsT1/T2 and simularotT1/T2 to factorize
+      common code in sub-function
+    * rev413: Fix bug report 26 to make gaBinaryT1 working for special model cases
+      (small ones when only 1 cue or 1 inhibitor or 1 signal)
+    * rev414: Fix bug report 27 to make readMIDAS and makeCNOlist working with
+      special cases (e.g., no inhibitors)
+    * rev415: fix bug 27 (similar to rev413 and rev 412)
+    * rev416: add propset and Id in all source files.
+    * rev417: readMIDAS now ignores extra columns at the end of each rows and checks
+      for row length consistencies throughout the MIDAS file.
+    * rev419: fix bug report 31. Simple gaph such as A->B->C did not work in
+      makeCNOlist.
+    * rev422: fix bug report 32. makeCNOlist now handles cases with no inhibitors.
+      Fixed case of wrong colors in plotCNOlist when all cues are identical.
+    * rev423: fix bug report 33. plotCNOlist now handles cases where are cues equal
+      1 which was interpreted as being all zeros...
+    * rev436: fix bug report 36. makeCNOlist can now handle only 1 signal.
+    * rev438: fix bug reprort 37. expandGates now works with a simple case such as A->B
+    * rev440: fix bug report 38. readMIDAS allows to mix times
+    * rev452: Fix plotModel after a new release of Rgraphviz (1.33.1)
+      Note that this version of Rgraphviz is a devel for now.
 
-* rev412: Simplify gaBinaryT1/T2 cutAndPlotResultsT1/T2 and simularotT1/T2 to factorize
-  common code in sub-function
-* rev413: Fix bug report 26 to make gaBinaryT1 working for special model cases
-  (small ones when only 1 cue or 1 inhibitor or 1 signal)
-* rev414: Fix bug report 27 to make readMIDAS and makeCNOlist working with
-  special cases (e.g., no inhibitors)
-* rev415: fix bug 27 (similar to rev413 and rev 412)
-* rev416: add propset and Id in all source files.
-* rev417: readMIDAS now ignores extra columns at the end of each rows and checks
-  for row length consistencies throughout the MIDAS file.
-* rev419: fix bug report 31. Simple gaph such as A->B->C did not work in
-  makeCNOlist.
-* rev422: fix bug report 32. makeCNOlist now handles cases with no inhibitors.
-  Fixed case of wrong colors in plotCNOlist when all cues are identical.
-* rev423: fix bug report 33. plotCNOlist now handles cases where are cues equal
-  1 which was interpreted as being all zeros...
-* rev436: fix bug report 36. makeCNOlist can now handle only 1 signal.
-* rev438: fix bug reprort 37. expandGates now works with a simple case such as A->B
-* rev440: fix bug report 38. readMIDAS allows to mix times
-* rev452: Fix plotModel after a new release of Rgraphviz (1.33.1)
-  Note that this version of Rgraphviz is a devel for now.
+* 9/Jan/2012 0.99.14
+    * change in getFit and corresponding changes in gaBinaryT1 and gaBinaryT2:
+      the sizePen should be divided by the total number of inputs in the model
+      prior to cutting. This number is now passed to getFit as an additional parameter.
 
-9/Jan/2012 0.99.14
---------------------
-* change in getFit and corresponding changes in gaBinaryT1 and gaBinaryT2:
-  the sizePen should be divided by the total number of inputs in the model
-  prior to cutting. This number is now passed to getFit as an additional parameter.
+* 14/7/Dev/2011 0.99.13
+    * make plotModel to work on Toy model and Liver data dealinbg with cnolist,
+      having both dot output and/or image output (e.g., PNG). bitString can also be
+      provided.
 
-14/7/Dev/2011 0.99.13
------------------------
-* make plotModel to work on Toy model and Liver data dealinbg with cnolist,
-  having both dot output and/or image output (e.g., PNG). bitString can also be
-  provided.
+* 7/Dec/2011 0.99.12
+    * add plotModel utility
 
+* 1/Dec/2011  0.99.11
+    * fix bug report cno-21 in writeDot so that nodes that belongs to signal and
+      inhibited classes are colored with 2 colors as in matlab version.
 
-7/Dec/2011 0.99.12
---------------------
-* add plotModel utility
+* 28/Nov/2011 0.99.10
+    * fix a bug in writeDot so that it still works when there is only one sink node
 
-1/Dec/2011  0.99.11
-----------------------
-* fix bug report cno-21 in writeDot so that nodes that belongs to signal and
-  inhibited classes are colored with 2 colors as in matlab version.
+* 20/Nov/2011 0.99.9
+    * Fix bug http://www.ebi.ac.uk/panda/jira/browse/CNO-22 reported by Inna related
+      to 2 steady states. (typo in filename argument in cutAndPlotResultsT2). Similarly to
+      cutAndPlotResultsT1, an if statement was added to provide a tag for the filename
+      instead of the model name.
+    * Updated Rd files where needed
 
-28/Nov/2011 0.99.10
--------------------
-* fix a bug in writeDot so that it still works when there is only one sink node
+* 14/Nov/2011
+    *     Update version to 0.99.8
+    *     in the writeNetwork function: I made an escape solution for cases where the
+          path can't be mapped because it's too long, and this solution prints a warning
+          about this.  As many warnings as unmapped paths will be printed. This is what I
+          added::
+                       }else{
 
-20/Nov/2011 0.99.9
--------------------
+                            n<-n+1
+                            #this sets those variables to NA if the path couldn't be mapped
+                            rIn<-NA
+                            rOut<-NA
+    
+                            }
 
-* Fix bug http://www.ebi.ac.uk/panda/jira/browse/CNO-22 reported by Inna related
-  to 2 steady states. (typo in filename argument in cutAndPlotResultsT2). Similarly to
-  cutAndPlotResultsT1, an if statement was added to provide a tag for the filename
-  instead of the model name.
-* Updated Rd files where needed
+                    }
+                #if the path could be mapped, we record the mapping
+                if(!is.na(rIn) && !is.na(rOut)){
 
+                    OrigMap[rIn]<-max(OrigMap[rIn],adj[i,3])
+                    OrigMap[rOut]<-max(OrigMap[rOut],adj[i,3])
+                # if the path couldn't be mapped (path too long), we print a warning, nad OrigMap
+            # stays 0
+                }else{
 
-14/Nov/2011
-------------
-*     Update version to 0.99.8
-*     in the writeNetwork function: I made an escape solution for cases where the
-	  path can't be mapped because it's too long, and this solution prints a warning
-	  about this.  As many warnings as unmapped paths will be printed. This is what I
-	  added::
+        	if(verbose == TRUE){
+            		print("Please be aware that when mapping the scaffold network back to the PKN, compressed paths of length > 2 are ignored.")
+        	    }
 
-	                   }else{
-
-	                        n<-n+1
-	                        #this sets those variables to NA if the path couldn't be mapped
-	                        rIn<-NA
-	                        rOut<-NA
-	
-	                        }
-
-	                }
-	            #if the path could be mapped, we record the mapping
-	            if(!is.na(rIn) && !is.na(rOut)){
-
-	                OrigMap[rIn]<-max(OrigMap[rIn],adj[i,3])
-	                OrigMap[rOut]<-max(OrigMap[rOut],adj[i,3])
-	            # if the path couldn't be mapped (path too long), we print a warning, nad OrigMap
-	        # stays 0
-	            }else{
-
-			if(verbose == TRUE){
-	    			print("Please be aware that when mapping the scaffold network back to the PKN, compressed paths of length > 2 are ignored.")
-			    }
-
-	                }
+                    }
 
 * add the 3 t2 functions: cutAndPlotResultsT2, gaBinaryT2, simulatorT2
 * add the help for all the above
@@ -610,33 +471,22 @@ add cutSimList function used now by several other functions (refactoring)
 * change in the helps of some function which have parameters referring to t2: CNORwrap (parameter "Time"), writeNetwork (parameter "optimResT2"), writeReport (parameter "optimResT2"), writeScaffold (parameter "optimResT2").
 
 
-3d/Nov/2011
-------------
+* 3d/Nov/2011
+    * Update version to 0.99.7
+    * Update the vignette to reflect the small changes made in the code (tag/verbose option)
+    * multicore option added into gaBinaryT1 a revision 211 and removed...Will be incorporated after v1.0
 
-* Update version to 0.99.7
-* Update the vignette to reflect the small changes made in the code (tag/verbose option)
-* multicore option added into gaBinaryT1 a revision 211 and removed...Will be incorporated after v1.0
+* 31/Oct/2011
+    * add verbose options in all functions that do print
+    * change fileName into filename everywhere
+    * add tag option (prefix) when files are saved.
 
-31/Oct/2011
--------------
-
-* add verbose options in all functions that do print
-* change fileName into filename everywhere
-* add tag option (prefix) when files are saved.
-
-
+* 27/oct/2011
+    * Copy the CNORBiocond directory (release 0.99.6) to start an official trunk.
+      CellNOptR_0.99.4 is based on CellNOptR_0.1 but changes a few things as asked by
 
 
-27/oct/2011
---------------
-
-Copy the CNORBiocond directory (release 0.99.6) to start an official trunk.
-CellNOptR_0.99.4 is based on CellNOptR_0.1 but changes a few things as asked by
-Biocond review:
-
-
-Release 0.99.6 to BioConductor 25/Oct/2011
------------------------------------------------
+* Release 0.99.6 to BioConductor 25/Oct/2011
 
 - fix a bug in writeReport: when the files are copied to the results directory,
   it now doesn't try to copy NAs anymore (the NAs are the names of files relating
@@ -721,19 +571,19 @@ should be::
   still needs the same arguments (ModelComprExpanded, optimResT1, optimResT2,
   ModelOriginal=ToyModel, CNOlist), but it is divided into:
 
-	- a function writeScaffoldW that does the actual writing to files,
-	- a function that gets the info for the sif file,
-	- and a function that gets the additional info for the dot file.
+    - a function writeScaffoldW that does the actual writing to files,
+    - a function that gets the info for the sif file,
+    - and a function that gets the additional info for the dot file.
 
   .. warning::only the writeScaffold function is imported in the namespace-> it is the only
-		one with a help, the other function are hidden inside. if somebody wants
-	    to get the cytoscape info without writing it to a file they need to do::
+        one with a help, the other function are hidden inside. if somebody wants
+        to get the cytoscape info without writing it to a file they need to do::
 
-			sif<-getSifInfo(ModelComprExpanded=ModelComprExpanded,
-	          optimResT1=optimResT1,
-		      optimResT2=optimResT2,
-	          ModelOriginal=ModelOriginal,
-	          CNOlist=CNOlist)
+        	sif<-getSifInfo(ModelComprExpanded=ModelComprExpanded,
+              optimResT1=optimResT1,
+              optimResT2=optimResT2,
+              ModelOriginal=ModelOriginal,
+              CNOlist=CNOlist)
 
     where the arguments are the same as those originally used for the
     writeScaffold function then the sif file is actually sif$sifFile[,1:3], and
@@ -747,32 +597,32 @@ should be::
 
 
 -   function writeNetwork: the global function is still called writeNetwork and
-	still needs the same arguments (ModelComprExpanded, optimResT1, optimResT2,
-	ModelOriginal, CNOlist), but it is divided into:
+    still needs the same arguments (ModelComprExpanded, optimResT1, optimResT2,
+    ModelOriginal, CNOlist), but it is divided into:
 
-	- a function writeSNetworkW that does the actual writing to files,
-	- a function that gets the info for the sif and dot files
+    - a function writeSNetworkW that does the actual writing to files,
+    - a function that gets the info for the sif and dot files
 
-	.. warning:: only the writeNetwork function is imported in the namespace->
-		it is the only   one with a help, the other function are hidden inside. if
-		somebody wants to get the cytoscape info without writing it to a file They
-		need to do::
+    .. warning:: only the writeNetwork function is imported in the namespace->
+        it is the only   one with a help, the other function are hidden inside. if
+        somebody wants to get the cytoscape info without writing it to a file They
+        need to do::
 
-			nwInfo<-getNetworkInfo(
-				ModelOriginal=ModelOriginal,
-				ModelComprExpanded=ModelComprExpanded,
-				optimResT1=optimResT1,
-				optimResT2=optimResT2,
-				CNOlist=CNOlist)
+        	nwInfo<-getNetworkInfo(
+        		ModelOriginal=ModelOriginal,
+        		ModelComprExpanded=ModelComprExpanded,
+        		optimResT1=optimResT1,
+        		optimResT2=optimResT2,
+        		CNOlist=CNOlist)
 
 
-	where the arguments are the same as those originally used for the
-	writeScaffold function  then the sif file is actually nwInfo$sifFile[,1:3],
-	and the attributes are  nwInfo$EAweaights and nwInfo$nodesAttr
+    where the arguments are the same as those originally used for the
+    writeScaffold function  then the sif file is actually nwInfo$sifFile[,1:3],
+    and the attributes are  nwInfo$EAweaights and nwInfo$nodesAttr
 
 -   function writeNetwork: the nodes that were neither inh/stim/sig nor NCNO did
-	not end up in the cytoscape node attribute file so I added a couple of lines of
-	code that put them in.
+    not end up in the cytoscape node attribute file so I added a couple of lines of
+    code that put them in.
 
 - naming consistency:
 
@@ -787,7 +637,7 @@ should be::
     - change the scripts and the vignette
     - change in the functions that use those:CNORwrap, simulatorT1, gaBinaryT1
 
-	.. warning:: careful when adding the T2 back
+    .. warning:: careful when adding the T2 back
 
 - readMIDAS can now handle a DA:ALL column.  This has required quite some change
   in the code of the function, but that shouldn't change anything for the rest of
@@ -814,8 +664,8 @@ should be::
   they exist.  I added a note about that in the help.
 
 .. todo:: 
-	- 	make the "Large" equivalent to "plotOptimResults" (see plotCNOlistLarge)
-	- 	when replicates are available, add a section in the CNOlist that would hold
-		the	standard deviation of each summarised measurement (only when replicates are
-		available for all conditions and time points).
-	- 	make the function makeCNOlist more flexible and robust?
+    -     make the "Large" equivalent to "plotOptimResults" (see plotCNOlistLarge)
+    -     when replicates are available, add a section in the CNOlist that would hold
+        the	standard deviation of each summarised measurement (only when replicates are
+        available for all conditions and time points).
+    -     make the function makeCNOlist more flexible and robust?
