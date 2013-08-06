@@ -20,7 +20,7 @@ plotLBodeModelSim <-function
 		time=1,						verbose=0, 				    transfer_function=3,		
 		reltol=1e-4,				atol=1e-3,				    maxStepSize=Inf,
 		maxNumSteps=100000,			maxErrTestsFails=50,  		large=FALSE,          		
-		nsplit=4
+		nsplit=4, show=T
 )
 {
 
@@ -30,34 +30,23 @@ plotLBodeModelSim <-function
 	if(is.null(ode_parameters))ode_parameters=createLBodeContPars(model);
 	if(!is.null(timeSignals))cnolist$timeSignals=timeSignals;
 
-  	states_index=which(as.logical(getStates(adjMatrix)));
 
 	sim_data=getLBodeModelSim(cnolist,model,
 			ode_parameters,indices,timeSignals,time,verbose,transfer_function,
 			reltol,atol,maxStepSize,maxNumSteps,maxErrTestsFails);
 
-	sim_data=lapply(sim_data,function(x) x[,states_index]);
-	times=cnolist$timeSignals;
-	cnolist$valueSignals=sim_data;
-    cnolist$valueVariances = sim_data # variance should be set to NA but does not matter here 
-	cnolist$namesSignals=model$namesSpecies[states_index];
-	cnolist$namesCues=c(cnolist$namesStimuli,cnolist$namesInhibitors);
+    cnolist = simdata2cnolist(sim_data, cnolist, model)
 
-	cnolist$valueCues=cbind(cnolist$valueStimuli,cnolist$valueInhibitors);
-	cnolist$valueCues=as.matrix(cnolist$valueCues);
-	cnolist$valueCues[which(cnolist$valueCues>0)]=1;
-	names(cnolist$valueCues)=cnolist$namesCues;
-
-
-	if(large)
-	{
-		plotCNOlistLarge(CNOlist(cnolist),nsplit);
-	}
-	else
-	{
-		plotCNOlist(CNOlist(cnolist));
-	}
-
+    if (show==T){
+    	if(large)
+	    {
+		    plotCNOlistLarge(CNOlist(cnolist),nsplit);
+    	}
+	    else
+    	{   
+	    	plotCNOlist(CNOlist(cnolist));
+    	}
+    }
 
   return(sim_data);
 }
