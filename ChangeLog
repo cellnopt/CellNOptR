@@ -356,8 +356,8 @@ Release 1.0
 
 * 21/Feb/2012 0.99.21
     * rev559 when looking at cues, makeCNOlist uses a logic that is now more
-    generalised and can therefore be used by fuuzy logic (cues different from 0 or
-    1).
+      generalised and can therefore be used by fuuzy logic (cues different from 0 or
+      1).
 
 * 25/Jan/012 to 17/Feb/2012 0.99.20
     * rev550 writeScaffold (bug 39) if no and gates, this function was failing.
@@ -436,8 +436,8 @@ Release 1.0
           path can't be mapped because it's too long, and this solution prints a warning
           about this.  As many warnings as unmapped paths will be printed. This is what I
           added::
-                       }else{
 
+              }else{
                             n<-n+1
                             #this sets those variables to NA if the path couldn't be mapped
                             rIn<-NA
@@ -664,8 +664,8 @@ should be::
   they exist.  I added a note about that in the help.
 
 .. todo:: 
-    -     make the "Large" equivalent to "plotOptimResults" (see plotCNOlistLarge)
-    -     when replicates are available, add a section in the CNOlist that would hold
-        the	standard deviation of each summarised measurement (only when replicates are
-        available for all conditions and time points).
-    -     make the function makeCNOlist more flexible and robust?
+    - make the "Large" equivalent to "plotOptimResults" (see plotCNOlistLarge)
+    - when replicates are available, add a section in the CNOlist that would hold
+      the	standard deviation of each summarised measurement (only when replicates are
+      available for all conditions and time points).
+    - make the function makeCNOlist more flexible and robust?
