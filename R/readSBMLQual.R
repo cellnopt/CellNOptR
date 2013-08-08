@@ -49,7 +49,6 @@ readSBMLQual <- function(filename){
         logics = xmlChildren(xmlChildren(xmlChildren(xmlChildren(functions)$functionTerm)$math)$apply)
         logics = names(logics)
 
-
         # all links other than AND should be here
         if (("and" %in% logics)==FALSE){
             for (j in seq_along(LHS)){
@@ -66,8 +65,6 @@ readSBMLQual <- function(filename){
         # the AND case only
         if ("and" %in% logics){
             andName = paste("and", andCounter, sep="")
-            print("----------------")
-            print(andName)
             for (j in seq_along(LHS)){
                 if (signs[[j]] == "positive"){
                     sif = rbind(c(LHS[[j]],1,andName), sif)
@@ -86,11 +83,118 @@ readSBMLQual <- function(filename){
     sif = sif[-dim(sif)[[1]],]
 
     fh = tempfile()
-    print(fh)
     write.table(sif,file=fh,
             row.names=FALSE,col.names=FALSE,quote=FALSE,sep="\t")
 
     sif = readSIF(fh)
+
+    # hack/trick to replace self loop with a dummy node.
+    sif = .add_dummies(sif)
+
     return(sif)
 
+}
+
+
+
+
+
+# this function reads a model, find self loops.
+# If any self loops are found, there are replaced by A->dummy->A
+# Does handle simple direct self loops e.g. A->A but not A-|A
+.add_dummies <- function(model){
+
+    # identify self-loops 
+    indices = c()
+    for (ireac in seq_along(model$reacID)){
+        reac = model$reacID[ireac]
+        lhs = strsplit(reac, "=")[[1]][1]
+        rhs = strsplit(reac, "=")[[1]][2]
+        if (lhs == rhs){
+            indices = c(indices, ireac)
+        }
+    }
+
+    # don't do anything if no self loops are found
+    if (length(indices)==0){
+        return(model)
+    }
+
+    # remove self loops
+    warning("Self inhibited loop not handled yet in this version")
+    newmodel = model
+    newmodel$reacID = newmodel$reacID[-indices]
+    newmodel$interMat <- newmodel$interMat[,-indices]
+    newmodel$notMat <- newmodel$notMat[,-indices]
+
+    # add them back with the dummies
+    counter = 1
+    for (i in seq_along(indices)){
+        index = indices[i]
+        dummy = paste("dummy" , counter, sep="")
+        reac = model$reacID[index]
+        species = strsplit(reac, "=")[[1]][1]
+        reac1 = paste(species, "=", dummy, sep="")
+        reac2 = paste(dummy, "=", species, sep="")
+        counter = counter + 1
+
+        # add the 2 new reactions only in reacID for now
+        newmodel$reacID = c(newmodel$reacID, c(reac1, reac2))
+
+        # add the dummy species
+        newmodel$namesSpecies = c(newmodel$namesSpecies, dummy)
+
+        ########## INTERMAT ############
+        # now add first the new species row in interMat
+        rowvec = rep(0, length(newmodel$reacID)-2 )
+        newmodel$interMat = rbind(newmodel$interMat, rowvec)
+        names = rownames(newmodel$interMat)
+        names[length(names)] = dummy
+        rownames(newmodel$interMat) = names
+
+        # add species=dummy column in interMat
+        colvec = rep(0, length(newmodel$namesSpecies)) # !! the dummy node is there
+        colvec[newmodel$namesSpecies == species] = -1
+        colvec[newmodel$namesSpecies == dummy] = 1
+        colvec = colvec[1:length(colvec)]
+        newmodel$interMat = cbind(newmodel$interMat, colvec)
+        names = colnames(newmodel$interMat)
+        names[length(names)] = reac1
+        colnames(newmodel$interMat) = names
+
+        # add dummy=species column in interMat
+        colvec = rep(0, length(newmodel$namesSpecies))
+        colvec[newmodel$namesSpecies == species] = 1
+        colvec[newmodel$namesSpecies == dummy] = -1
+        newmodel$interMat = cbind(newmodel$interMat, colvec)
+        names = colnames(newmodel$interMat)
+        names[length(names)] = reac2
+        colnames(newmodel$interMat) = names
+
+
+        ########## NOTMAT ############
+        # now add the new species row in interMat
+        rowvec = rep(0, length(newmodel$reacID)-2)
+        newmodel$notMat = rbind(newmodel$notMat, rowvec)
+        names = rownames(newmodel$notMat)
+        names[length(names)] = dummy
+        rownames(newmodel$notMat) = names
+
+        # add species=dummy column in NotMat only zeros
+        colvec = rep(0, length(newmodel$namesSpecies))
+        newmodel$notMat = cbind(newmodel$notMat, colvec)
+        names = colnames(newmodel$notMat)
+        names[length(names)] = reac1
+        colnames(newmodel$notMat) = names
+
+        ## add dummy=species column in notMat only zeros
+        colvec = rep(0, length(newmodel$namesSpecies))
+        newmodel$notMat = cbind(newmodel$notMat, colvec)
+        names = colnames(newmodel$notMat)
+        names[length(names)] = reac2
+        colnames(newmodel$notMat) = names
+
+
+    }
+    return(newmodel)
 }
