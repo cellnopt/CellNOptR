@@ -43,12 +43,11 @@
 }
 
 \examples{
-library(CNORode)
 data('ToyCNOlist',package='CNORode');
 data('ToyModel',package='CNORode');
 data('ToyIndices',package='CNORode');
-simdata = getLBodeModelSim(cnolistCNORodeExample, model,indices=indices);
-cnolist = simdata2cnolist(simdata, model,);
+simdata = getLBodeModelSim(cnolistCNORodeExample, model,indices=indices)
+cnolist = simdata2cnolist(simdata, cnolistCNORodeExample, model)
 
 cnolist = simdata2cnolist(simdata, cnolistCNORodeExample, model)
 }
