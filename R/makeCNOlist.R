@@ -77,11 +77,17 @@ makeCNOlist<-function(dataset,subfield, verbose=TRUE){
 
     if(subfield == TRUE){
         namesCues<-sub(pattern="(TR:)",x=namesCues, replacement="",perl=TRUE)
-        tagInhib<-grep(pattern="i:Inhibitor", x=namesCues)
-        # tagInhibL must be set now before namesCues is changed. See JIRA bug 27
-        tagInhibL<-grepl(pattern="i:Inhibitor", x=namesCues)
+        tagInhib<-grep(pattern=":Inhibitor", x=namesCues)
+        # tagInhibL is a logical version of the previous statement. 
+        # must be set now before namesCues is changed. See JIRA bug 27
+        tagInhibL<-grepl(pattern=":Inhibitor", x=namesCues)
+
+        # remove the trailing :Inhibitors and :Stimuli
         namesCues<-sub(pattern="(:\\w*$)",x=namesCues, replacement="",perl=TRUE)
+
+        # remove trailing i
         namesCues[tagInhib]<-sub(pattern="(i$)", x=namesCues[tagInhib], replacement="", perl=TRUE)
+
         # if no inhibitors, grep returns integer(0), so we now need to use grepl
         # (logical version of grep)
         namesStimuli<-namesCues[tagInhibL==FALSE]
