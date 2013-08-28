@@ -6,11 +6,8 @@
 Release 1.7
 ==============
 
-* 1.7.8
+* 1.7.7 and 1.7.8
     * readSBMLQual: self loops are replaced by a-->dummy-->a
-	*
-
-* 1.7.7
 
 * 1.7.6
     * readSBMLQual: fixing reading AND gates properly.
