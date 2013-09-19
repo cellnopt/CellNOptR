@@ -19,7 +19,7 @@ simdata2cnolist <- function(sim_data, cnolist, model){
     adjMatrix=incidence2Adjacency(model);
     states_index=which(as.logical(getStates(adjMatrix)));
 
-    sim_data=lapply(sim_data,function(x) x[,states_index]);
+    sim_data=lapply(sim_data,function(x) x[,states_index, drop=F]);
 
     times=cnolist$timeSignals;
     cnolist$valueSignals=sim_data;
