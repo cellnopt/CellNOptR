@@ -33,7 +33,7 @@ getLBodeDataSim<-function
 			indices1=indices, odeParameters1=ode_parameters$parValues, time1=time,verbose1=verbose,
 			transfer_function1=transfer_function,reltol1=reltol,atol1=atol,maxStepSize1=maxStepSize,
 			maxNumSteps1=maxNumSteps,maxErrTestsFails1=maxErrTestsFails);
-	sim=sim_function(cnolist,model,ode_parameters$parValues);
+	sim=sim_function(cnolist,model, odeParameters=ode_parameters$parValues);
 	sim=lapply(sim,function(x) x[,indices$signals]);
 	sim=lapply(sim,function(x) as.matrix(x));
 	
