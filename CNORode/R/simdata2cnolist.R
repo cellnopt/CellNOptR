@@ -16,6 +16,7 @@
 
 simdata2cnolist <- function(sim_data, cnolist, model){ 
 
+    if (class(cnolist)=="CNOlist"){cnolist = compatCNOlist(cnolist)}
     adjMatrix=incidence2Adjacency(model);
     states_index=which(as.logical(getStates(adjMatrix)));
 
