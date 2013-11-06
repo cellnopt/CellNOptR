@@ -30,7 +30,7 @@ checkSignals<-function(CNOlist, model ){
     # check that all of the signals in colnames(CNOlist@signals) match to one species in model$namesSpecies
     signalsMatch<-match(colnames(CNOlist@signals[[1]]),model$namesSpecies,nomatch=0)
     if(any(signalsMatch == 0)){
-        warning(paste(
+        stop(paste(
             "The following signals from your CNOlist do not match any of the species in your model, and should be removed:",
             toString(colnames(CNOlist@signals[[1]])[which(signalsMatch == 0)])
             ))
@@ -39,7 +39,7 @@ checkSignals<-function(CNOlist, model ){
     # same for stimuli 
     signalsMatch<-match(colnames(CNOlist@stimuli),model$namesSpecies,nomatch=0)
     if(any(signalsMatch == 0)){
-        warning(paste(
+        stop(paste(
             "The following stimuli from your CNOlist do not match any of the species in your model, and should be removed:",
             toString(colnames(CNOlist@stimuli)[which(signalsMatch == 0)])
             ))
@@ -48,7 +48,7 @@ checkSignals<-function(CNOlist, model ){
     # same for inhibitors
     signalsMatch<-match(colnames(CNOlist@inhibitors),model$namesSpecies,nomatch=0)
     if(any(signalsMatch == 0)){
-        warning(paste(
+        stop(paste(
             "The following inhibitors from your CNOlist do not match any of the species in your model, and should be removed:",
             toString(colnames(CNOlist@inhibitors)[which(signalsMatch == 0)])
             ))

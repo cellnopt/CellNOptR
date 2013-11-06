@@ -40,6 +40,8 @@ gaBinaryT1<-function(
         CNOlist = CellNOptR::CNOlist(CNOlist)
     }
 
+    checkSignals(CNOlist, model)
+
     # should be after CNOlist conversion
     if (timeIndex<2){ stop("timeIndex must be >=2")}
     if (timeIndex>length(CNOlist@timepoints)){ 
