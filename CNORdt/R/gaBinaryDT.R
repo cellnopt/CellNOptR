@@ -13,10 +13,7 @@
 gaBinaryDT <- function(CNOlist, model, initBstring = NULL, sizeFac = 1e-04, NAFac = 1, popSize = 50, pMutation = 0.5, maxTime = 60, maxGens = 500, stallGenMax = 100, 
     selPress = 1.2, elitism = 5, relTol = 0.1, verbose = TRUE, priorBitString = NULL, maxSizeHashTable = 1000, method=c("dt", "delay"), boolUpdates, lowerB = lowerB, upperB = upperB) {
 
-print(popSize)
-print(maxGens)
-print(boolUpdates)
-    
+    checkSignals(CNOlist, model) 
     # by default initial bit string is made of ones
     
     if (is.null(initBstring) == TRUE) {

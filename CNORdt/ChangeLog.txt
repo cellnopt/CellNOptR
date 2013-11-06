@@ -1,6 +1,16 @@
 
+* 1.5.1: add checkSignals inside gaBinaryDT
+
+Release 1.4
+================
+
+bioconductor
+
 Release 1.2
 =================
+
+
+* 1.1
 
 * 1.1.1
     * gaDiscreteDT returns an additional field called bScore for the final best Score. The hash table is limited to 1000
