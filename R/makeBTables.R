@@ -23,12 +23,21 @@ function(CNOlist, k=2, measErr=c(0.1, 0), timePoint=NA){
 	CNOlist = CellNOptR::CNOlist(CNOlist)
   }	
 	
-  if (!is.na(timePoint)){
-    if (timePoint == "t1"){
-	  CNOlist@signals<-list(t0=CNOlist@signals[[1]], CNOlist@signals[[2]])
-    }
-    if (timePoint == "t2"){
-	  CNOlist@signals<-list(t0=CNOlist@signals[[1]], CNOlist@signals[[3]])
+  #if (!is.na(timePoint)){
+  #  if (timePoint == "t1"){
+	#  CNOlist@signals<-list(t0=CNOlist@signals[[1]], CNOlist@signals[[2]])
+  #  }
+  #  if (timePoint == "t2"){
+	#  CNOlist@signals<-list(t0=CNOlist@signals[[1]], CNOlist@signals[[3]])
+  #  }
+  #}
+  
+  if (is.numeric(timePoint)){
+    ix <- which(CNOlist@timepoints==timePoint)
+    if (length(ix)==0){
+      print("You do not have measures for the selected time point, please provide a different time point.")
+    }else{
+      CNOlist@signals<-list(t0=CNOlist@signals[[1]], CNOlist@signals[[ix]])
     }
   }
   
@@ -55,16 +64,19 @@ function(CNOlist, k=2, measErr=c(0.1, 0), timePoint=NA){
     
     #consider as reference the condition with no stimuli and no inhibitors
     ref1_index <- which(apply(CNOlist@cues,1,sum) == 0)
-    
-    # if the condition with no stimuli and no inhibitors is missing, I assume that the basal is = 0
-    if (length(ref1_index)==0){ref1=rep(0,length(CNOlist@signals))}
-    
+        
     ref1 <- c()
     for (t in 1:length(CNOlist@signals)){
       ref1 <- c(ref1, CNOlist@signals[[t]][ref1_index, p])
       # if the baseline is NA I consider it = 0
 	    ref1[is.na(ref1)] <- 0
     }
+    
+    # if the condition with no stimuli and no inhibitors is missing, I assume that the basal is = 0
+    if (length(ref1_index)==0){
+      ref1=rep(0,length(CNOlist@signals))
+    }
+    
     ref1_var <- err1^2+(err2*ref1)^2
     
     ref1 <- ref1[2:length(ref1)] - ref1[1] #subtract the basal because it differs in different experimental conditions
