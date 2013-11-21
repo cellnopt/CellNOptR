@@ -1,7 +1,7 @@
 Package: CNORode
 Type: Package
 Title: ODE add-on to CellNOptR 
-Version: 1.3.2
+Version: 1.3.3
 Date: 2012-09-19
 Author: David Henriques, Thomas Cokelaer
 Maintainer: David Henriques <davidpcnet@hotmail.com>

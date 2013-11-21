@@ -1,6 +1,9 @@
 Release 1.3.0
 ===============
 
+* 1.3.3
+    * add simulate function and add plotParams parameters in plotLBodeFitness
+	function.
 * 1.3.2
     * fix simdata2cnolist for the special case of 1 experiment
 * 1.3.1

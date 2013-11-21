@@ -19,7 +19,11 @@
  		adjMatrix = NULL, time = 1, verbose = 0, transfer_function = 3, reltol = 1e-04,
 		atol = 0.001, maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails = 50,
    		plot_index_signals = NULL, plot_index_experiments = NULL,
-plot_index_cues = NULL, colormap="heat")
+plot_index_cues = NULL, colormap="heat", plotParams=list(margin=0.1, width=15, height=12,
+                  cmap_scale=1, cex=1.6, ymin=NULL)
+  
+
+)
 }
 
 %- maybe also 'usage' for other objects documented here.
@@ -79,6 +83,11 @@ plot_index_cues = NULL, colormap="heat")
     \item{colormap}{
     Uses the same colormap as in CellNOptR by default. If set to "green", it uses the deprecated colormap.
     }
+
+    \item{plotParams}{
+    additional parameters to refine the ploggin. See plotOptimResultsPan
+function in CellNOptR for more details.
+}
 }
 
 \details{
