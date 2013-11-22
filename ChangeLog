@@ -2,7 +2,7 @@
 
 
 
-
+* 1.8.2: fix bug in cutCNOlist 
 * 1.8.1: changed warning into error in checksignals and readMIDAS (missing
 	cellline). and add checkSignals in gaBinaryTX
 
