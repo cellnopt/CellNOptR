@@ -1,7 +1,7 @@
 Package: CNORfeeder
 Type: Package
 Title: Integration of CellNOptR to add missing links
-Version: 1.1.0
+Version: 1.2.1
 Date: 2013-04-04
 Author: F.Eduati
 Maintainer: F.Eduati <eduati@ebi.ac.uk>

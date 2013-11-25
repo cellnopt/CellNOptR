@@ -10,7 +10,7 @@
 }
 
 \usage{
-mapBTables2model(BTable,model,optimRes=NA,allInter=TRUE)
+mapBTables2model(BTable,model,optimRes=NA,allInter=TRUE,compressed=TRUE)
 }
 
 
@@ -19,6 +19,7 @@ mapBTables2model(BTable,model,optimRes=NA,allInter=TRUE)
   \item{model}{a model list, as created by \link{readSif}}
   \item{optimRes}{a bit string with the reaction of the model to be considered, default considers all reactions}
   \item{allInter}{one new link in the network can correspond to more links in the model, set it to TRUE if you want to add all possible links, FALSE to add only one link, default is TRUE}
+  \item{compressed}{this argument is used to decede how to deal with unmeasured and unperturbed nodes (white nodes). As general guideline, it should be set to TRUE if the PKN has been compressed in the preprocessing step, FALSE otherwise. Default is TRUE.}
 }
 
 \details{

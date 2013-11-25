@@ -14,7 +14,7 @@
 ##############################################################################
 # $Id$
 mapBTables2model <-
-function(BTable,model=NULL,optimRes=NA,allInter=TRUE){
+function(BTable,model=NULL,optimRes=NA,allInter=TRUE, compressed=TRUE){
   # BTable are the Bolean Tables inferred from data using the function makeBTables
   # Model is the model optimised using CNO and than compressed
   
@@ -56,7 +56,9 @@ function(BTable,model=NULL,optimRes=NA,allInter=TRUE){
       # noNodes are the inhibitors that in the Btable of signal i, have a 1 in the column
       # corresponding to simulus j, meaning that the inhibitor has no effect
       noNodes <- rownames(as.matrix(which(BTable$tables[[i]][,j]==1)))
-      noNodes <- union(noNodes, namesOthers)
+      if (compressed==TRUE){
+        noNodes <- union(noNodes, namesOthers)
+      }
       noNodes <- setdiff(noNodes,BTable$namesSignals[i])
       
       ix <- as.vector(which(BTable$tables[[i]][,j]==2))
