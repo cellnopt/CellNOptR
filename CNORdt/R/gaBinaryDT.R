@@ -143,8 +143,6 @@ gaBinaryDT <- function(CNOlist, model, initBstring = NULL, sizeFac = 1e-04, NAFa
         
         names(resThisGen) <- c("Generation", "Best_score", "Best_bitString", "Stall_Generation", "Avg_Score_Gen", "Best_score_Gen", "Best_bit_Gen", "Iter_time")
         
-        if (verbose) 
-            print(resThisGen)
         
         res <- rbind(res, resThisGen)
         

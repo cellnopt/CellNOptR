@@ -10,7 +10,7 @@ The genetic algorithm used to optimize a model by fitting to data consisting of 
 gaBinaryDT(CNOlist, model, initBstring = NULL, sizeFac = 1e-04, NAFac = 1, popSize = 50,
 pMutation = 0.5, maxTime = 60, maxGens = 500, stallGenMax = 100, selPress = 1.2,
 elitism = 5, relTol = 0.1, verbose = TRUE, priorBitString = NULL, maxSizeHashTable = 1000,
-boolUpdates, lowerB = lowerB, upperB = upperB)
+method = c("dt", "delay"),boolUpdates, lowerB = lowerB, upperB = upperB)
 }
 \arguments{
 \item{CNOlist}{
@@ -72,6 +72,8 @@ A hash table is used to store bitstrings and related scores. This allows the GA 
 size of the hash table is 1000 by default, which may be too large for large
 models. 
 }
+\item{method}{delay (delay) or discrete time (dt) method to be used}
+
 \item{boolUpdates}{
 The number of synchronous updates performed by the boolean simulator.
 }

@@ -123,5 +123,5 @@ cutAndPlotResultsDT <- function(model, bString, simList=NULL, CNOlist, indexList
             outputFilenames[[f]] = filename
         }
     }
-    return(outputFilenames)
+    return(list(filename=outputFilenames, simResults=simResultsSet))
 }
