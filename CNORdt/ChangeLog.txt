@@ -1,14 +1,14 @@
 * 1.5.2: add simResults in the list of outputs in plotting function
-* 1.5.1: add checkSignals inside gaBinaryDT
+* 1.5.1
+    * add checkSignals inside gaBinaryDT
 
 Release 1.4
-================
+====================
 
 bioconductor
 
 Release 1.2
-=================
-
+====================
 
 * 1.1
 
@@ -33,7 +33,7 @@ Release 1.2
 
 
 TODO:
-=====
+====================
 * Spikes in simulation again - come back to
 * Check color gradient when plotting (comparably too much red?)
 * slow-down caused by class conversion
