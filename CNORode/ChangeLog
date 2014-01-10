@@ -1,6 +1,13 @@
 Release 1.3.0
 ===============
 
+
+* 1.5.0:
+    * fix typo im manual
+
+* 1.4.0:
+	* BioConductor version
+
 * 1.3.3
     * add simulate function and add plotParams parameters in plotLBodeFitness
 	function.
