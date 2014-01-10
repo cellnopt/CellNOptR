@@ -27,7 +27,7 @@
 		The logic model to be simulated.
 	}
 	\item{method}{
-		Only "ga" or "ssm" arguments are accepted.
+		Only "ga" or "essm" arguments are accepted.
 	}
  	\item{ode_parameters}{
 		A list with the ODEs parameter information. Obtained with \code{\link{createLBodeContPars}}.
