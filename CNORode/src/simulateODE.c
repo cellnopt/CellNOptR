@@ -26,7 +26,7 @@ int simulateODE
 (
 		CNOStructure* data,		int exp_num, 			int verbose,
 		double reltol,			double atol,			double maxStepSize,
-		int maxNumSteps,		int maxErrTestFails
+		int maxNumSteps,		int maxErrTestFails,     double initial_state
 )
 {
 	int i,j,neq,counter,flag;
@@ -49,7 +49,7 @@ int simulateODE
     /* Initialize y */
 	for(i=0; i<(*data).nRows; i++)
 	{
-		(*data).state_array[i] = 0.1;
+		(*data).state_array[i] = initial_state;
 		(*data).inhibitor_array[i]=0;
 	}
 

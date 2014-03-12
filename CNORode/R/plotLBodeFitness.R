@@ -22,7 +22,7 @@ plotLBodeFitness <-function
         maxErrTestsFails=50,        plot_index_signals=NULL,    plot_index_experiments=NULL,
         plot_index_cues=NULL,         colormap="heat",
         plotParams=list(margin=0.1, width=15, height=12,
-                  cmap_scale=1, cex=1.6, ymin=NULL)
+                  cmap_scale=1, cex=1.6, ymin=NULL), initial_state=0.1
   
 
 )
@@ -41,7 +41,7 @@ plotLBodeFitness <-function
     sim_data=getLBodeDataSim(cnolist,model,
             ode_parameters,indices,timeSignals,time,verbose,
             transfer_function,reltol,atol,maxStepSize,maxNumSteps,
-            maxErrTestsFails);
+            maxErrTestsFails, initial_state=initial_state);
 
     times=cnolist$timeSignals;
 

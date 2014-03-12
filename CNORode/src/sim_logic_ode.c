@@ -32,8 +32,8 @@ int *findStates(int **adjMatrix, int n);
 int** getTruthTables(int** adjMat,int** interMat,int** notMat,int* isState,int* nInputs,int *nBits,int nRows,int nCols);
 int *getStateIndex(int **adjMatrix, int n);
 int*** get_support_truth_tables(int n,int *nInputs);
-int simulateODE(CNOStructure* data,	int exp_num,int verbose,double reltol,double atol,double maxStepSize,
-int maxNumSteps,int maxErrTestFails);
+int simulateODE(CNOStructure* data,	int exp_num,int verbose,double reltol,double atol,double maxStepSize, 
+        int maxNumSteps,int maxErrTestFails, double initial_state);
 int** get_input_index(int** AdjMat,int n,int* numInputs);
 int* get_count_bits(int n,int** truth_tables, int* numBits);
 int** get_truth_tables_index(int n,int** truth_tables, int* numBits,int* count_bits);
@@ -49,7 +49,8 @@ SEXP sim_logic_ode
 		SEXP indexStimuli_in,		SEXP nInhibitors_in,		SEXP indexInhibitors_in,
 		SEXP odeParameters_in,		SEXP verbose_in,			SEXP transfer_function_in,
 		SEXP reltol_in,				SEXP atol_in,				SEXP maxStepSize_in,
-		SEXP maxNumSteps_in,		SEXP maxErrTestFails_in,	SEXP break_at_1st_fail_in
+		SEXP maxNumSteps_in,		SEXP maxErrTestFails_in,	SEXP break_at_1st_fail_in,
+        SEXP initial_state_in
 )
 {
 
@@ -90,7 +91,7 @@ SEXP sim_logic_ode
 	 int maxNumSteps=(INTEGER)(maxNumSteps_in)[0];
 	 int maxErrTestFails=(INTEGER)(maxErrTestFails_in)[0];
 	 int break_at_1st_fail=(INTEGER)(break_at_1st_fail_in)[0];
-
+     double initial_state=(REAL)(initial_state_in)[0];
 	 int experiment_succeed[nExperiments];
 	 counter=0;
 	 indexSig=(int*)malloc(nSignals*sizeof(int));
@@ -229,6 +230,10 @@ SEXP sim_logic_ode
 	  tempData.notMat,tempData.isState,tempData.numInputs,tempData.numBits,tempData.nRows,tempData.nCols);
 
 	  state_array= (double*)malloc(tempData.nRows*sizeof(double));
+	  /*initial_state_array= (double*)malloc(tempData.nRows*sizeof(double));
+      for (i=0; i<nRows; i++){
+        initial_state_array[i] = initial_state;
+      }*/
 	  inhibitor_array=(double*)malloc((tempData.nRows)*sizeof(double));
 
 	  tempData.state_index=(int*)getStateIndex(tempData.adjacencyMatrix,tempData.nRows);
@@ -277,7 +282,7 @@ SEXP sim_logic_ode
 	  for (i = 0; i <nExperiments; ++i)
 		{
 			experiment_succeed[i]=(int)simulateODE(data,i,verbose,reltol,atol,
-				  maxStepSize,maxNumSteps,maxErrTestFails);
+				  maxStepSize,maxNumSteps,maxErrTestFails, initial_state);
 				 if(break_at_1st_fail)
 					{
 						if(!experiment_succeed[i])break;
@@ -368,8 +373,10 @@ SEXP sim_logic_ode
 	  free(interMAT);
 
 	  free(state_array);
+	  /*free(initial_state_array);*/
 	  free(inhibitor_array);
 	  free(tempData.state_index);
+	  /*free(tempData.initial_state_index);*/
 	  free(tempData.numBits);
 	  free(tempData.numInputs);
 	  free(tempData.count_bits);
