@@ -1,7 +1,12 @@
 .. keep this layout because it is used in CNODocs
 
 
-* 1.8.3: fix variances not being properly set in CNOlist
+* 1.8.3: 
+    * because self loop are now handled properly, SBMLQaul Reader do not need
+	  the dummy self loop anymore. The code that introduced the dummy self loop
+	  has now been commented.
+	* fix variances not being properly set in CNOlist
+	* self loop are handled properly in prep4sim/cutnonc
 * 1.8.2: fix bug in cutCNOlist 
 * 1.8.1: changed warning into error in checksignals and readMIDAS (missing
 	cellline). and add checkSignals in gaBinaryTX
