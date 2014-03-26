@@ -16,7 +16,8 @@
 	parEstimationLBodeSSm(cnolist, model, ode_parameters = NULL, indices = NULL, 
 	maxeval = Inf, maxtime = 100, ndiverse = NULL, dim_refset = NULL, local_solver = NULL,
 	time = 1, verbose = 0, transfer_function = 3, reltol = 1e-04, atol = 0.001, 
-	maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails = 50, nan_fac = 1)
+	maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails = 50, nan_fac =1,
+    useVariances=F,initial_state=0.1)
 }
 %- maybe also 'usage' for other objects documented here.
 
@@ -79,6 +80,13 @@
 		A penalty for each data point the model is not able to simulate. We recommend higher than
 		0 and smaller that 1.
 	}
+    
+\item{useVariances}{Uses variance if any}
+
+\item{initial_state}{
+initial state of the dynamic nodes (non-measured) (Defaults to 0.1)
+}
+
 }
 
 \details{

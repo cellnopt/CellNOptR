@@ -13,7 +13,8 @@
 \usage{
 	getLBodeSimFunction(cnolist1, model1, adjMatrix1, indices1, odeParameters1,
 	time1 = 1, verbose1 = 0, transfer_function1 = 3, reltol1 = 1e-04, atol1 = 0.001,
-	maxStepSize1 = Inf, maxNumSteps1 = 1e+05, maxErrTestsFails1 = 50)
+	maxStepSize1 = Inf, maxNumSteps1 = 1e+05, maxErrTestsFails1 = 50,
+initial_state1=0.1)
 }
 
 %- maybe also 'usage' for other objects documented here.
@@ -60,6 +61,10 @@
 		Specifies the maximum number of error test failures permitted in attempting
 		one step.
 	}
+    \item{initial_state1}{
+initial state of the dynamic nodes (non-measured) (Defaults to 0.1)
+}
+
 }
 
 \value{

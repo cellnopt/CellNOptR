@@ -15,7 +15,8 @@
 \usage{
 	parEstimationLBodeGA(cnolist, model, ode_parameters = NULL, indices = NULL, mutationChance = NA, popSize = 200, iters = 100, 
 		elitism = NA, time = 1, monitor = TRUE, verbose = 0, transfer_function = 3, reltol = 1e-04, 
-		atol = 0.001, maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails = 50, nan_fac = 1)
+		atol = 0.001, maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails =
+50, nan_fac = 1, initial_state=0.1)
 }
 %- maybe also 'usage' for other objects documented here.
 
@@ -82,6 +83,10 @@
 		A penalty for each data point the model is not able to simulate. We recommend higher than
 		0 and smaller that 1.
 	}
+    \item{initial_state}{
+initial state of the dynamic nodes (non-measured) (Defaults to 0.1)
+}
+
 }
 
 \value{

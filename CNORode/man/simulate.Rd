@@ -11,10 +11,6 @@
 	returns a list with the same size of the cnolist$valueSignals. 
 }
 
-cnolist,model,ode_parameters=NULL,
-        indices=NULL, adjMatrix=NULL, time=1, verbose=0, transfer_function=3, 
-        reltol=1e-4, atol=1e-3, maxStepSize=Inf, maxNumSteps=100000,
-        maxErrTestsFails=50
 
 \usage{
 	simulate(cnolist, model, ode_parameters=NULL, indices=NULL,
@@ -36,9 +32,8 @@ cnolist,model,ode_parameters=NULL,
 	  \item{indices}{
 		Indices to map data in the model. Obtained with indexFinder function from CellNOptR. 
 	}
-	\item{timeSignals}{
-		An array containing a different timeSignals. If you use this argument, it will also
-		modify the dimensions from valueSignals.
+	\item{adjMatrix}{
+		The adjacency matrix. Recomputed if not provided
 	}
   	\item{time}{
 		An integer with the index of the time point to start the simulation. Default is 1.

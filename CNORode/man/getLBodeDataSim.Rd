@@ -16,7 +16,7 @@
 	getLBodeDataSim(cnolist, model, ode_parameters = NULL, indices = NULL,
 	timeSignals=NULL, time = 1, verbose = 0, transfer_function = 3, 
 	reltol = 1e-04, atol = 0.001, maxStepSize = Inf, maxNumSteps = 1e+05, 
-	maxErrTestsFails = 50)
+	maxErrTestsFails = 50, initial_state=0.1)
 }
 
 %- maybe also 'usage' for other objects documented here.
@@ -64,6 +64,10 @@
 		Specifies the maximum number of error test failures permitted in attempting
 		one step.
 	}
+    \item{initial_state}{
+initial state of the dynamic nodes (non-measured) (Defaults to 0.1)
+}
+
 }
 
 \details{
