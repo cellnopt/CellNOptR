@@ -21,7 +21,7 @@ parEstimationLBodeSSm <-function
 		time=1,					verbose=0, 				transfer_function=3,	
 		reltol=1e-4,			atol=1e-3,				maxStepSize=Inf,		
 		maxNumSteps=100000,		maxErrTestsFails=50,	nan_fac=1,
-        useVariances=T, initial_state=0.1
+        useVariances=F, initial_state=0.1
 )
 {
 
