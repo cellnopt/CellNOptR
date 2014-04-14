@@ -1,14 +1,12 @@
-* 1.5.2: add simResults in the list of outputs in plotting function
+* 1.5.2
+    * add simResults in the list of outputs in plotting function
+
 * 1.5.1
     * add checkSignals inside gaBinaryDT
 
-Release 1.4
-====================
+* Release 1.4
 
-bioconductor
-
-Release 1.2
-====================
+* Release 1.2
 
 * 1.1
 
@@ -17,20 +15,19 @@ Release 1.2
     * change init_values - set anything that is not stimulus/inhibitor to 'prevSim' status
     * this fixes issue with spike in time course caused by initial NAs
 
-* version 0.99.6
+* 0.99.6
     * corrected issues with vignette
 
-* version 0.99.5
+* 0.99.5
     * major restructuring for bioconductor submission
     * leaving out time-scales for the moment
     * they will be reintroduced for delay version
 
-* version 0.99.3
-     * refactoring of example/man due to modifications of the data filename.
+* 0.99.3
+    * refactoring of example/man due to modifications of the data filename.
 
-* version 0.99.2
+* 0.99.2
     * arguments' name now following convention from CellNOpt. All manual and code changed accordingly.
-
 
 TODO:
 ====================
