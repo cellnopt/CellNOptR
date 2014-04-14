@@ -36,7 +36,7 @@ cutAndPlotResultsDelay <- function(model, bString, simList=NULL, CNOlist, indexL
     modelCut <- cutModel(model, bString)
     simListCut <- cutSimList(simList, bString)
     
-    optimResults <- getFitPause(CNOlist = CNOlist, model = modelCut, indexList = indexList, simList=simListCut, sizeFac = sizeFac, 
+    optimResults <- getFitDelay(CNOlist = CNOlist, model = modelCut, indexList = indexList, simList=simListCut, sizeFac = sizeFac, 
     NAFac = NAFac, nInTot = length(which(model$interMat == -1)), boolUpdates)  
 
     simResults = optimResults$simResults	

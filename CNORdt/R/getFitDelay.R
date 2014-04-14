@@ -11,7 +11,7 @@
 # 
 # $Id$
 
-getFitPause <- function(CNOlist, model, simList, indexList, sizeFac = 1e-04, NAFac = 1, nInTot, boolUpdates) {
+getFitDelay <- function(CNOlist, model, simList, indexList, sizeFac = 1e-04, NAFac = 1, nInTot, boolUpdates) {
     	    
     if ((class(CNOlist) == "CNOlist") == FALSE) {
         CNOlist = CellNOptR::CNOlist(CNOlist)
@@ -71,7 +71,7 @@ getFitPause <- function(CNOlist, model, simList, indexList, sizeFac = 1e-04, NAF
 	#	strongWeak = c(0,0,0,0,1,0,0,0,0,0,0)
 		strongWeak[negEdges] = optimStringF[(length(model$reacID)+1):length(optimStringF)] # binary section of optimString
 		
-		simResults = simulatorPause(CNOlist, model, simList, indexList,
+		simResults = simulatorDelay(CNOlist, model, simList, indexList,
 		boolUpdates=boolUpdates, delayThresh=delayThresh, strongWeak=strongWeak)
 		simResults = convert2array(simResults, dim(CNOlist@signals[[1]])[1], length(model$namesSpecies), boolUpdates)
 		simResults = simResults[,indexList$signals,]
@@ -100,7 +100,7 @@ getFitPause <- function(CNOlist, model, simList, indexList, sizeFac = 1e-04, NAF
 	bestSW = est$xbest[(length(model$reacID)+1):length(est$xbest)]
 	strongWeak[negEdges] = bestSW
 
-	simBest = simulatorPause(CNOlist, model, simList, indexList,
+	simBest = simulatorDelay(CNOlist, model, simList, indexList,
 	boolUpdates=boolUpdates, delayThresh=bestDelay, strongWeak=strongWeak)
 	simBest = convert2array(simBest, dim(CNOlist@signals[[1]])[1], length(model$namesSpecies), boolUpdates)
 	simBest = simBest[,indexList$signals,]

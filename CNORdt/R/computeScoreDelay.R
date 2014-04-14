@@ -31,8 +31,8 @@ computeScoreDelay <- function(CNOlist, model, bString, simList = NULL, indexList
     simListCut <- cutSimList(simList, bString)
    
     # compute the score
-    optimResults <- getFitPause(CNOlist = CNOlist, model = modelCut, indexList = indexList, simList=simListCut, sizeFac = sizeFac, 
-        NAFac = NAFac, nInTot = length(which(model$interMat == -1)), boolUpdates)   
+    optimResults <- getFitDelay(CNOlist = CNOlist, model = modelCut, indexList = indexList, simList=simListCut, sizeFac = sizeFac, 
+    NAFac = NAFac, nInTot = length(which(model$interMat == -1)), boolUpdates)   
 	print(optimResults$score)
     nDataP <- sum(!is.na(unlist(CNOlist@signals)))
     optimResults$score <- optimResults$score/nDataP

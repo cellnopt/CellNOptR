@@ -14,7 +14,7 @@
 ##############################################################################
 # $Id$
 
-simulatorPause <- function(CNOlist, model, simList, indices, boolUpdates, prevSim=NULL, delayThresh, strongWeak) {
+simulatorDelay <- function(CNOlist, model, simList, indices, boolUpdates, prevSim=NULL, delayThresh, strongWeak) {
 	
 	if ((class(CNOlist) == "CNOlist") == FALSE) {
     	CNOlist = CellNOptR::CNOlist(CNOlist)

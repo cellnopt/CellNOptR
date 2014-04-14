@@ -394,7 +394,7 @@ SEXP simulatorDelay (
 					
 					for(a = k; a < boolUpdates; a++) {
 						// * 09/11/2012 a hack to deal with the issue of feedback into OR gate switching on a "dead" pathway
-						all_cubes[strong_weak_tot[i]][a] = 0; // TEST * always set strong feedback to 0 * output_cube[find_cond][find_reac];
+						// all_cubes[strong_weak_tot[i]][a] = 0; // TEST * always set strong feedback to 0 * output_cube[find_cond][find_reac];
 						if(selCounter > 0) {
 							for(b = 0; b < selCounter; b++) {
 								all_cubes[selection[b] * nCond + find_cond][a] = 0; // * output_cube[find_cond][find_reac];

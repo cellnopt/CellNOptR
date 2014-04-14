@@ -14,7 +14,7 @@
 ##############################################################################
 # $Id$
 
-simulatorPauseR <- function(CNOlist, model, simList, indexList, boolUpdates, delayThresh, strongWeak) {
+simulatorDelayR <- function(CNOlist, model, simList, indexList, boolUpdates, delayThresh, strongWeak) {
 
 	nSp <- dim(model$interMat)[1]
 	nReacs <- dim(model$interMat)[2]	
