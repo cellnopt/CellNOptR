@@ -20,27 +20,23 @@ dyn.load("simulatorDelay.so")
 
 # TEST SIMULATOR ----------------------------------------------------------
 
-boolUpdates = 30
+boolUpdates = 10
 delayThresh = rep(0,length(model$reacID))
 negEdges = rep(0,length(model$reacID))
-negEdges[5] = 1
-delayThresh[5] = 5
-delayThresh[9] = 3
+negEdges[3] = 1
+delayThresh[2] = 1
+delayThresh[3] = 2
 
 # simulate with delays, r version
 # TODO, some mistakes in this... (e.g. [10,6], [1,1:3])
-simD1 = simulatorDelayR(cnolist, model, simList, indexList,
-boolUpdates=boolUpdates, delayThresh=delayThresh, strongWeak=negEdges)
-simD1 = simD1[[1]][,indexList$signals,]
-plotCNOlist(plotData(cnolist, simD1))
+simD1 = simulatorDelayR(cnolist, model, simList, indexList, boolUpdates=boolUpdates, delayThresh=delayThresh, strongWeak=negEdges)
+plotCNOlist(plotData(cnolist, simD1[[1]][,indexList$signals,]))
 
 # c version
 simT0 = simulatorT0(cnolist, model, simList, indexList)
-simD2 = simulatorDelay(cnolist, model, simList, indexList,
-boolUpdates=boolUpdates, delayThresh=delayThresh, strongWeak=negEdges)
-simD2 = convert2array(simD2, 10, 12, boolUpdates)
-simD2 = simD2[,indexList$signals,]
-plotCNOlist(plotData(cnolist, simD2))
+simD2 = simulatorDelay(cnolist, model, simList, indexList, boolUpdates=boolUpdates, delayThresh=delayThresh, strongWeak=negEdges)
+simD2 = convert2array(simD2, 2, 3, boolUpdates)
+plotCNOlist(plotData(cnolist, simD2[,indexList$signals,]))
 
 # compare DT
 simDT = simulatorDT(cnolist, model, simList, indexList, boolUpdates=boolUpdates, prevSim=NULL)
@@ -71,33 +67,3 @@ cutAndPlotResultsDelay(
   plotPDF=FALSE,
   boolUpdates=30
 )
-
-
-
-
-
-
-# check the improvement in score over getFitDT
-boolUpdates = 30
-simResults <- simulatorDT(
-  CNOlist=CNOlistPB,
-  model=model,
-  simList=simList,
-  indices=indexList,
-  boolUpdates=boolUpdates
-)
-simResults = convert2array(simResults, dim(CNOlistPB$valueSignals[[1]])[1],
-length(model$namesSpecies), boolUpdates)
-
-fit2 <- getFitDT(
-  simResults=simResults,
-  CNOlist=CNOlistPB,
-  model=model,
-  indexList=indexList,
-  boolUpdates=boolUpdates,
-  lowerB=0.8,
-  upperB=10,
-  nInTot=length(which(modelPB$interMat == -1))
-)
-
-fit2$score/fit1$score

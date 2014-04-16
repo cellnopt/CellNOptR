@@ -16,26 +16,27 @@
 
 simulatorDelayR <- function(CNOlist, model, simList, indexList, boolUpdates, delayThresh, strongWeak) {
 
-	nSp <- dim(model$interMat)[1]
-	nReacs <- dim(model$interMat)[2]	
-	nCond <- dim(CNOlist$valueStimuli)[1]
+	nSp <- dim(model$interMat)[1] # number of species in model
+	nReacs <- dim(model$interMat)[2] # number of reactions
+	nCond <- dim(CNOlist$valueStimuli)[1] # number of conditions
 
-	yBool = array(dim=c(nCond, nSp, boolUpdates))
+	yBool = array(dim=c(nCond, nSp, boolUpdates)) # an array to store the model simulation
 	colnames(yBool) = model$namesSpecies
-	yBool[,,1] = 0
+	yBool[,,1] = 0 # initial conditions for simulation
 
+  # if the model has only 1 reaction
 	if(is.null(dim(model$interMat))) { 
 		nSp <- length(model$interMat)
 		nReacs <- 1
 	}
 		
-	endIx <- rep(NA,nSp)
+	# for each species, how many times is it an output
+  endIx <- rep(NA,nSp)
 	for(i in 1:nSp){
 		endIx[i] <- length(which(simList$maxIx == i))
 	}
 		
-	##############################	FUNCTIONS	##############################
-		
+  # functions 
 	compOR <- function(x){
 		if(all(is.na(x[which(simList$maxIx == s)]))){
 			res <- NA
@@ -63,8 +64,6 @@ simulatorDelayR <- function(CNOlist, model, simList, indexList, boolUpdates, del
 		return(cVector)
 	}
 	
-	##############################	/FUNCTIONS/	##############################
-
 	# create an initial values matrix	
 	initValues <- matrix(data=NA, nrow=nCond, ncol=nSp)
 	colnames(initValues) <- model$namesSpecies
@@ -75,7 +74,8 @@ simulatorDelayR <- function(CNOlist, model, simList, indexList, boolUpdates, del
 	# flip the inhibitors so that 0 = inhibited / 1 = noninhibited
 	valueInhibitors <- 1-CNOlist$valueInhibitors
 	valueInhibitors[which(valueInhibitors == 1)] <- NA
-	# set the initial values of the inhibited species: 0 if inhibited, untouched if not inhibited
+	
+  # set the initial values of the inhibited species: 0 if inhibited, untouched if not inhibited
 	initValues[,indexList$inhibited] <- valueInhibitors
 	
 	# set everything else = 0 (necessary for time-course data)
@@ -84,31 +84,27 @@ simulatorDelayR <- function(CNOlist, model, simList, indexList, boolUpdates, del
 	# initialise main loop
 	newInput <- initValues
 
-	############################## TIME DELAY ##############################
-	
-	delayThreshTot = rep(delayThresh, 1, each=nCond)
-	strongWeakTot = rep(strongWeak, 1, each=nCond)
+	# time delay
+	delayThreshTot = rep(delayThresh, 1, each=nCond) # expand the delay vector across all conditions
+	strongWeakTot = rep(strongWeak, 1, each=nCond) # expand the strongWeak vector across all conditions
 
-	delayCount = which(delayThreshTot > 0)
-	strongWeakCount = which(strongWeakTot==1)	
+	delayCount = which(delayThreshTot > 0) # index of above where delay is present
+	strongWeakCount = which(strongWeakTot==1)	# index of above where a strong edge is present
 	
 	# make a matrix to store outputCubes
 	allCubes = matrix(NA, nrow=nReacs*nCond, ncol=boolUpdates)
 	rownames(allCubes) = rep(model$reacID,1,each=nCond)
 	allCubes[,1]=0
-
-	############################## MAIN LOOP ##############################
-	
+    
 	# main loop
 	for(countBool in 2:boolUpdates) {
 		
-		outputPrev <- newInput
-		# this is now a 2 column matrix that has a column for each input (column in finalCube)
-		# and a set of rows for each reac (where a set contains as many rows as conditions)
-		# all concatenated into one long column
+		outputPrev <- newInput # values of species for each condition copied to t-1
 				
 		if(nReacs > 1) {
-			tempStore <- apply(simList$finalCube, 2, function(x){return(outputPrev[,x])})
+			# tempStore is a matrix of ncol = the maximum inputs across all reactions
+      # and nrow = reactions repeated by number of conditions
+      tempStore <- apply(simList$finalCube, 2, function(x){return(outputPrev[,x])})
 			tempIxNeg <- apply(simList$ixNeg, 2, filltempCube)
 			tempIgnore <- apply(simList$ignoreCube, 2, filltempCube)
 		} else {
@@ -117,96 +113,96 @@ simulatorDelayR <- function(CNOlist, model, simList, indexList, boolUpdates, del
 			tempIgnore <- matrix(simList$ignoreCube, nrow=nCond, ncol=length(simList$ignoreCube), byrow=TRUE)
 		}
 
-		# set to NA the values that are "dummies", so they won't influence the min
-		tempStore[tempIgnore] <- NA
+		tempStore[tempIgnore] <- NA # update tempStore by tempIgnore e.g. where max. inputs = 2 across all reactions
+    # and there is only 1 input in a particular reaction
 
 		# flip the values that enter with a negative sign
 		tempStore[tempIxNeg] <- 1-tempStore[tempIxNeg]
-	
+	    
 		# compute all the ands by taking, for each gate, the min value across the inputs of that gate
 		if(nReacs > 1) {
 			
-			outputCube <- apply(tempStore, 1, minNA)
+			outputCube <- apply(tempStore, 1, minNA) # find the minimum per row - this is the output of the AND gates
+      # if the reaction is not an AND gate, it will just take the single value
+      # as the other value(s) will be NA as a result of the 'tempStore[tempIgnore]' command above
+			      
+      # delays
+			outputOn = which(!is.na(outputCube)) # which reactions (across conditions) have produced an output
+			delayOn = intersect(outputOn, delayCount) # of these reactions, is there a delay?
+			strongWeakOn = intersect(outputOn, strongWeakCount) # or, is this a strong reaction?
 
-			########## DELAY ##########
-			
-			outputOn = which(!is.na(outputCube))
-		#	outputOn = which(outputCube==1)
-			delayOn = intersect(outputOn, delayCount)
-			strongWeakOn = intersect(outputOn, strongWeakCount)
-
-			if(length(delayOn)) {
-				for(a in delayOn) {
-					toAdd = countBool:(countBool+delayThreshTot[a])
+			if(length(delayOn)) { # if there is a delay on activated edges
+				for(a in delayOn) { # for each delay
+					toAdd = countBool:(countBool+delayThreshTot[a]) # the indices in allCubes to edit
 					if(toAdd[length(toAdd)] > boolUpdates) {
-						toAdd = countBool:boolUpdates
+						toAdd = countBool:boolUpdates # truncate this indices if it goes past boolUpdates
 					}				
-					futureData = c(rep(0.5,delayThreshTot[a]), outputCube[a])[1:length(toAdd)]
-					futureCheck = which(is.na(allCubes[a, toAdd]))
+					futureData = c(rep(0.5,delayThreshTot[a]), outputCube[a])[1:length(toAdd)] # add a delay 0.5 and then the output
+					futureCheck = which(is.na(allCubes[a, toAdd])) # make sure it doesn't overlap with past edits
 					if(length(futureCheck)) {
 						allCubes[a, toAdd][futureCheck] = futureData[futureCheck]
 					}
 				}
 			}
 			
+      # where allCubes has not been edited, add outputCube to current column
 			as.normal = which(is.na(allCubes[,countBool]))
 			allCubes[as.normal,countBool] = outputCube[as.normal]
-			
-			# need to overwrite other inputs as well
-			if(length(strongWeakOn)) {
-				for(b in strongWeakOn) {
-					if(!is.na(allCubes[b,countBool])) {
-				#	if(allCubes[b,countBool] == 0) {			
-				#	if(allCubes[b,countBool]==0 || allCubes[b,countBool]==1) {
-						
-						range1 = countBool:boolUpdates
-						toChange = which(is.na(allCubes[b,range1]))
-						allCubes[b,range1[toChange]] = outputCube[b]
-						
-						# also need to override other reacs with same output
-						whatReac = ceiling(b/nCond)
-						whatCond = b %% nCond
-						output1 = which(model$interMat[,whatReac] > 0)
-						reacsToFreeze = which(model$interMat[output1,] > 0)
-						bPlus = (reacsToFreeze-1)*nCond + whatCond
-						bPlus = setdiff(bPlus,b)
-						if(length(bPlus)) {
-							allCubes[bPlus,range1[toChange]] = outputCube[b]
-						}
-						strongWeakCount = setdiff(strongWeakCount, b)
+    
+			# check for strong edges
+			if(length(strongWeakOn)) { # if there are strong edges...
+				for(b in strongWeakOn) { # for each 'stronge edge' index
+					if(!is.na(allCubes[b,countBool])) { # if this entry for this time is not na
+					  
+            whatReac = ceiling(b/nCond) # what reactions are involved
+					  whatCond = (b %% nCond) + 1 # what conditions are involved
+					  output1 = which(model$interMat[,whatReac] > 0) # what are the output species
+					  reacsToFreeze = which(model$interMat[output1,] > 0) # what other reactions have these output species
+					  range1 = (countBool+1):boolUpdates # what is the (time) range to override?
+            bPlus = (reacsToFreeze-1)*nCond + whatCond # what other interactions are affected
+					  bPlus = setdiff(bPlus,b)
+            
+            print(paste("Round:",countBool))
+            print(paste("Reaction:",whatReac))
+					  print(paste("Condition:",whatCond))
+            
+            toChange = which(allCubes[b,range1]!=0.5) # don't overwrite the delay
+            allCubes[b,range1[toChange]] = outputCube[b]
+				    if(length(bPlus)) { # change the other interactions as well
+				      allCubes[bPlus,range1[toChange]] = outputCube[b]
+				    }  
+            
+						strongWeakCount = setdiff(strongWeakCount, b) # remove 'b' from list - stays 'strong' for whole simulation
 					}
 				}	
 			}
-			
-			
-			########## DELAY ##########
-			
-			# outputCube is now a vector of length (nCond*nReacs) that contains the input of each reaction in
-			# each condition, concatenated as such allcond4reac1,allcond4reac2,etc...
-			# this is transformed into a matrix with a column for each reac and a row for each cond
-			
-			outputCube <- matrix(allCubes[,countBool], nrow=nCond, ncol=nReacs)
-			# go through each species, and if it has inputs, then take the max across those input reactions
-			# i.e. compute the ORs
 		
-			for(s in 1:nSp) {
-				if(endIx[s] != 0) {	
-					newInput[,s] <- apply(outputCube, 1, compOR)
-					for(p in 1:length(newInput[,s])) {
-						if(!is.na(newInput[p,s])) {
-							if(newInput[p,s] == 0.5) {
-								newInput[p,s] = outputPrev[p,s]
+			# reform outputCube (the same as current (time) column of allCubes as a matrix
+			outputCube <- matrix(allCubes[,countBool], nrow=nCond, ncol=nReacs)
+		
+      # compute the OR gates and calculate 'newInput'
+			for(s in 1:nSp) { # for each species
+				if(endIx[s] != 0) {	# if it is an output
+					newInput[,s] <- apply(outputCube, 1, compOR) # find the maximum across reactions where the species is an output
+					for(p in 1:length(newInput[,s])) { # for all conditions for each species
+						if(!is.na(newInput[p,s])) { # if there is data
+							if(newInput[p,s] == 0.5) { # if there is a delay
+								newInput[p,s] = outputPrev[p,s] # set the species value to that of t-1
 							}	
 						}
 					}
 				}
 			}
-							
-		} else {
+			      
+		} else { # there is only 1 reaction TODO fix delay code here as well
 			outputCube <- ifelse(all(is.na(tempStore)), NA, min(tempStore,na.rm=TRUE))
 			newInput[,simList$maxIx] <- outputCube
 		}
 	
+    # NOTE the stimuli here have values, different from c version
+    # where 'new_input' is reinitialized so at this point (in c version) any
+    # species that is not an output (i.e. stimuli) is NA
+    
 		# reset the inhibitors and stimuli
 		for(stim in 1:length(indexList$stimulated)) {
 			stimM <- cbind(CNOlist$valueStimuli[,stim], newInput[,indexList$stimulated[stim]])
@@ -216,22 +212,13 @@ simulatorDelayR <- function(CNOlist, model, simList, indexList, boolUpdates, del
 		
 		valueInhibitors <- 1-CNOlist$valueInhibitors
 		newInput[,indexList$inhibited] <- valueInhibitors * newInput[,indexList$inhibited]
-		
+    
 		# replace NAs with zeros to avoid having the NA penalty applying to unconnected species
 		readout <- newInput
 		readout[is.na(readout)] <- 0
 		yBool[,,countBool] = readout
-		
-		###
-	#	allCubes
-	#	yBool[,,1:countBool]
-	#	countBool
-	#	countBool = countBool+1
-		###
 	}
 
-	############################## MAIN LOOP ##############################
-
 	return(list(yBool, allCubes))
-}
 
+}

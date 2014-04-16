@@ -160,8 +160,7 @@ SEXP simulatorDelay (
 		delayThresh[i] = INTEGER(delayThresh_in)[counter++];
 	}
 		
-	
-	//============================================================================
+	//========================================================================
 	
 	// fill end_ix - how many reactions have each species as output
 	int end_ix[nSpecies];
@@ -268,7 +267,7 @@ SEXP simulatorDelay (
 	int ac_row;
 	int update_end;
 	
-	//============================================================================
+	//========================================================================
 	
 	// start simulation loop
 	for(k = 1; k < boolUpdates; k++) {
@@ -294,12 +293,10 @@ SEXP simulatorDelay (
 					if(temp_store[i][j] == 0) {temp_store[i][j] = 1;}
 					else if(temp_store[i][j] == 1) {temp_store[i][j] = 0;}
 				}
-			//		Rprintf("%d\n", temp_store[i][j]);
-
 			}
 			
 			track_cond++;
-			if((track_cond == nCond)) {
+			if(track_cond == nCond) {
 				track_cond = 0;
 				track_reac++;
 			}
@@ -334,9 +331,8 @@ SEXP simulatorDelay (
 			dial_cond++;
 			if(dial_cond==nCond) {dial_cond = 0; dial_reac++;}
 		}
-
-		// Delay
-		
+          
+		// delay
 		// in the case where output is recorded (0/1)
 		// check if a delay should be added
 		for(i = 0; i < nCond; i++) {
@@ -381,41 +377,26 @@ SEXP simulatorDelay (
 				else find_cond = strong_weak_tot[i];
 				find_output = maxIx[find_reac];
 				
+				Rprintf("Round: %d\n", k);
+				Rprintf("Reaction: %d\n", find_reac);
+				Rprintf("Condition: %d\n", find_cond);
+				
 				selCounter = 0;
 				for(s = 0; s < nReacs; s++) {
 					if(s == find_reac) continue;
 					if(find_output == maxIx[s]) {selection[selCounter] = s; selCounter++;}
 				}
 				
-				// from here 2 possibilities:
-				// current cell is 0/1
-				// or current cell has delay
-				if(all_cubes[strong_weak_tot[i]][k] == 0 || all_cubes[strong_weak_tot[i]][k] == 1) {
-					
-					for(a = k; a < boolUpdates; a++) {
-						// * 09/11/2012 a hack to deal with the issue of feedback into OR gate switching on a "dead" pathway
-						// all_cubes[strong_weak_tot[i]][a] = 0; // TEST * always set strong feedback to 0 * output_cube[find_cond][find_reac];
+				for(a = k+1; a < boolUpdates; a++) {
+					if(all_cubes[strong_weak_tot[i]][a] != 3) {
+						all_cubes[strong_weak_tot[i]][a] = output_cube[find_cond][find_reac];
 						if(selCounter > 0) {
 							for(b = 0; b < selCounter; b++) {
-								all_cubes[selection[b] * nCond + find_cond][a] = 0; // * output_cube[find_cond][find_reac];
+								all_cubes[selection[b] * nCond + find_cond][a] = output_cube[find_cond][find_reac];
 							}
 						}
 					}
-					
-				} else { // must be equal 3 - there is a delay at least = 1
-					
-					for(a = k+1; a < boolUpdates; a++) {
-						if(all_cubes[strong_weak_tot[i]][a] != 3) {
-							all_cubes[strong_weak_tot[i]][a] = 0; // * AS ABOVE * output_cube[find_cond][find_reac];
-							if(selCounter > 0) {
-								for(b = 0; b < selCounter; b++) {
-									all_cubes[selection[b] * nCond + find_cond][a] = 0; // * output_cube[find_cond][find_reac];
-								}
-							}
-						}
-					}
-					
-				}
+				}	
 				
 				for(j = i; j < strong_weak_index; j++) {
 					strong_weak_tot[j] = strong_weak_tot[j+1];
@@ -513,6 +494,13 @@ SEXP simulatorDelay (
 	
 	}
 	
+	Rprintf("all_cubes\n");
+	for(i = 0; i < nCond * nReacs; i++) {
+	    for(j = 0; j < boolUpdates; j++) {
+            Rprintf("%d ", all_cubes[i][j]);
+		}
+		Rprintf("\n");
+	}
 	
 	PROTECT(simResults = allocMatrix(REALSXP, nCond * nSpecies, boolUpdates));
 	rans = REAL(simResults);

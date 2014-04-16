@@ -11,19 +11,18 @@
 # 
 # $Id$
     	
-    	
-    	convert2array <- function(x, nRow, nCol, nBool) {
-    v1 = c(x)
-    count = 1
-    out1 = array(NA, dim = c(nRow, nCol, nBool))
-    for (d in 1:nBool) {
-        for (a in 1:nRow) {
-            for (b in 1:nCol) {
-                out1[a, b, d] = v1[count]
-                count = count + 1
-            }
-        }
+convert2array <- function(x, nCond, nSpecies, nBool) {
+  v1 = c(x)
+  count = 1
+  out1 = array(NA, dim = c(nCond, nSpecies, nBool))
+  for (d in 1:nBool) {
+    for (a in 1:nCond) {
+      for (b in 1:nSpecies) {
+        out1[a, b, d] = v1[count]
+        count = count + 1
+      }
     }
-    
-    return(out1)
-	}
+  }
+  
+  return(out1)
+}
