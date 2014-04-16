@@ -155,10 +155,11 @@ simulatorDelayR <- function(CNOlist, model, simList, indexList, boolUpdates, del
 					if(!is.na(allCubes[b,countBool])) { # if this entry for this time is not na
 					  
             whatReac = ceiling(b/nCond) # what reactions are involved
-					  whatCond = (b %% nCond) + 1 # what conditions are involved
+					  whatCond = (b %% nCond) # what conditions are involved
+            if(!whatCond) whatCond = nCond
 					  output1 = which(model$interMat[,whatReac] > 0) # what are the output species
 					  reacsToFreeze = which(model$interMat[output1,] > 0) # what other reactions have these output species
-					  range1 = (countBool+1):boolUpdates # what is the (time) range to override?
+					  range1 = countBool:boolUpdates # what is the (time) range to override?
             bPlus = (reacsToFreeze-1)*nCond + whatCond # what other interactions are affected
 					  bPlus = setdiff(bPlus,b)
             
@@ -166,7 +167,7 @@ simulatorDelayR <- function(CNOlist, model, simList, indexList, boolUpdates, del
             print(paste("Reaction:",whatReac))
 					  print(paste("Condition:",whatCond))
             
-            toChange = which(allCubes[b,range1]!=0.5) # don't overwrite the delay
+            toChange = which(!allCubes[b,range1]==0.5 | is.na(allCubes[b,range1])) # don't overwrite the delay
             allCubes[b,range1[toChange]] = outputCube[b]
 				    if(length(bPlus)) { # change the other interactions as well
 				      allCubes[bPlus,range1[toChange]] = outputCube[b]

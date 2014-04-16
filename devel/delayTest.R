@@ -1,6 +1,4 @@
 load_all("../CNORdt")
-library(MEIGOR)
-
 
 # DATA AND MODEL ----------------------------------------------------------
 
@@ -9,8 +7,10 @@ data(modelPB, package="CNORdt")
 cnolist = CNOlistPB
 modelInit = preprocessing(cnolist, modelPB)
 # the dt optimized bit string
-bitString = c(1,0,0,0,1,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0)
+# bitString = c(1,0,0,0,1,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0)
+bitString = c(0,0,0,0,0,0,1,0,1,0,1,0,1,0,0,0,0,0,0,0)
 model = cutModel(modelInit, bitString)
+plotModel(model)
 simList = prep4sim(model)
 indexList = indexFinder(cnolist, model)
 
@@ -20,12 +20,11 @@ dyn.load("simulatorDelay.so")
 
 # TEST SIMULATOR ----------------------------------------------------------
 
-boolUpdates = 10
+boolUpdates = 20
 delayThresh = rep(0,length(model$reacID))
 negEdges = rep(0,length(model$reacID))
 negEdges[3] = 1
-delayThresh[2] = 1
-delayThresh[3] = 2
+delayThresh[1:4] = 2
 
 # simulate with delays, r version
 # TODO, some mistakes in this... (e.g. [10,6], [1,1:3])
@@ -35,7 +34,7 @@ plotCNOlist(plotData(cnolist, simD1[[1]][,indexList$signals,]))
 # c version
 simT0 = simulatorT0(cnolist, model, simList, indexList)
 simD2 = simulatorDelay(cnolist, model, simList, indexList, boolUpdates=boolUpdates, delayThresh=delayThresh, strongWeak=negEdges)
-simD2 = convert2array(simD2, 2, 3, boolUpdates)
+simD2 = convert2array(simD2, 10, 12, boolUpdates)
 plotCNOlist(plotData(cnolist, simD2[,indexList$signals,]))
 
 # compare DT
