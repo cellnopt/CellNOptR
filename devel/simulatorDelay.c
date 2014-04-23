@@ -377,9 +377,9 @@ SEXP simulatorDelay (
 				else find_cond = strong_weak_tot[i];
 				find_output = maxIx[find_reac];
 				
-				Rprintf("Round: %d\n", k);
-				Rprintf("Reaction: %d\n", find_reac);
-				Rprintf("Condition: %d\n", find_cond);
+			//	Rprintf("Round: %d\n", k);
+			//	Rprintf("Reaction: %d\n", find_reac);
+			//	Rprintf("Condition: %d\n", find_cond);
 				
 				selCounter = 0;
 				for(s = 0; s < nReacs; s++) {
@@ -494,13 +494,13 @@ SEXP simulatorDelay (
 	
 	}
 	
-	Rprintf("all_cubes\n");
-	for(i = 0; i < nCond * nReacs; i++) {
-	    for(j = 0; j < boolUpdates; j++) {
-            Rprintf("%d ", all_cubes[i][j]);
-		}
-		Rprintf("\n");
-	}
+//	Rprintf("all_cubes\n");
+//	for(i = 0; i < nCond * nReacs; i++) {
+//	    for(j = 0; j < boolUpdates; j++) {
+//          Rprintf("%d ", all_cubes[i][j]);
+//		}
+//		Rprintf("\n");
+//	}
 	
 	PROTECT(simResults = allocMatrix(REALSXP, nCond * nSpecies, boolUpdates));
 	rans = REAL(simResults);

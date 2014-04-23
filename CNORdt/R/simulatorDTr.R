@@ -14,7 +14,7 @@
 ##############################################################################
 # $Id$
 
-simulatorTimeScale <- function(CNOlist, model, simList, indexList, boolUpdates) {
+simulatorDTr <- function(CNOlist, model, simList, indexList, boolUpdates) {
 
 	nSp <- dim(model$interMat)[1]
 	nReacs <- dim(model$interMat)[2]	
