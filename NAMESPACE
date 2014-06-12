@@ -73,7 +73,8 @@ export(
 exportClasses(CNOlist)
 
 # CNOlist class methods:
-exportMethods("plot", "randomize", "length", "compatCNOlist")
+exportMethods("plot", "randomize", "length", "compatCNOlist",  "readErrors",
+"writeErrors")
 exportMethods("getCues", "getSignals", "getStimuli", "getInhibitors", "getVariances", "getTimepoints")
 exportMethods("setSignals<-")
 

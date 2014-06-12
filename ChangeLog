@@ -1,6 +1,15 @@
 .. keep this layout because it is used in CNODocs
 
 
+* 1.11.1:
+    * add readErrors and writeErrors in CNOlist
+
+
+Release 1.10.0
+=================
+Bioconductor release
+
+
 * 1.8.3: 
     * because self loop are now handled properly, SBMLQaul Reader do not need
 	  the dummy self loop anymore. The code that introduced the dummy self loop

@@ -159,6 +159,37 @@ if (isGeneric("randomize")==FALSE){
 #lockBinding("randomize", .GlobalEnv)
 
 
+setGeneric(name="readErrors",
+           def=function(object,filename){standardGeneric("readErrors")})
+setMethod("readErrors", "CNOlist", 
+          definition=function(object, filename){
+          # TODO check compatibility cnolist object and errors
+          # read Errors from a file and save into the cnolist@variance field
+          errors = CNOlist(filename)
+          for (i in seq_along(object@signals)){
+              object@variances[[i]] = errors@signals[[i]]
+          }
+          # looks like we cannot change on the fly but have to return the object
+          return(object)
+})
+
+setGeneric(name="writeErrors",
+           def=function(object,filename, overwrite=F){standardGeneric("writeErrors")})
+setMethod("writeErrors", "CNOlist", 
+          definition=function(object, filename,overwrite=F){
+          # let us make a copy
+          # TODO check compatibility cnolist object and errors
+          # copy variance from object Errors from a file and save into the cnolist@variance field
+          errors = object
+          for (i in seq_along(object@signals)){
+              errors@signals[[i]] = object@variances[[i]]
+          }
+          writeMIDAS(errors, filename,overwrite=overwrite)
+})
+
+
+
+
 setMethod("randomize", "CNOlist", 
     definition=function(object, sd=0.1, minValue=0, maxValue=1,mode="uniform"){
         res = randomizeCNOlist(object, sd=sd, mode=mode)
@@ -177,8 +208,6 @@ setMethod("compatCNOlist", "CNOlist",
 
 
 internal_compatCNOlist<-function(cnolist){
-
-
     if (class(cnolist)=="CNOlist"){
 
         # conversion
