@@ -1,5 +1,7 @@
 .. keep this layout because it is used in CNODocs
 
+* 1.11.2:
+    * fix gray boxes in plotOptimResultsPand
 
 * 1.11.1:
     * add readErrors and writeErrors in CNOlist

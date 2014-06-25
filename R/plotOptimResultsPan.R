@@ -145,18 +145,25 @@ cmap_scale=1, cex=1.6, ymin=NULL)) {
     # calculate the MSE
     allDiff = matrix(NA, nrow=dim(simResults)[1], ncol=dim(simResults)[2])
 
+
     if(formalism != "dt") {
         # ss1, ss2, ssN
         for(a in 1:dim(simResults)[1]) {
             for(b in 1:dim(simResults)[2]) {
-                allDiff[a,b] = sum((simResults[a,b,]-valueSignalsArr[a,b,valueSignalsI])^2)/norm
+                c1 = simResults[a,b,]
+                c2 = valueSignalsArr[a,b,valueSignalsI]
+                NAcount = max(sum(is.na(c1)), sum(is.na(c2)))
+                allDiff[a,b] = sum((c1 - c2)^2, na.rm=T)/(norm - NAcount)
             }
         }
     } else {
-        # dt and ode
+        # dt 
         for(a in 1:dim(simResults)[1]) {
             for(b in 1:dim(simResults)[2]) {
-                allDiff[a,b] = sum((simResults[a,b,]-yInterpol[a,b,])^2) / norm
+                c1 =  simResults[a,b,]
+                c2 = yInterpol[a,b,]
+                NAcount = max(sum(is.na(c1)), sum(is.na(c2)))
+                allDiff[a,b] = sum((c1 - c2)^2, na.rm=T)/(norm - NAcount)
             }
         }
     }
