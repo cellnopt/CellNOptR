@@ -6,4 +6,6 @@ export(
   "simulatorDT",  "getFitDT",  "gaBinaryDT",  "cutAndPlotResultsDT",
   "computeScoreDT",
   "convert2array"
+  "feedbackFinder",
+  "feedbackWrapper"
 )
