@@ -237,10 +237,13 @@ cmap_scale=1, cex=1.6, ymin=NULL, F=1)) {
             yValS <- simResults[r,c,]
             if(!is.na(allDiff[r,c])) {
                 #diff = (1 - (allDiff[r,c] / diffMax)) * 1000
+                print(paste(  allDiff[r,c], "  " ,plotParams$F, "  ",
+                            plotParams$cmap_scale, "  ", Ncolors, sep=""))
                 diff = (1 - (allDiff[r,c] /plotParams$F)**plotParams$cmap_scale) * Ncolors
             } else {
                 diff = -1
             }
+            if (diff <1){diff=1}
 
             if(diff>Ncolors) {
                 diff=Ncolors
@@ -249,7 +252,9 @@ cmap_scale=1, cex=1.6, ymin=NULL, F=1)) {
             if(diff==-1) {
                 bgcolor = "gray"
             } else{
+
                 bgcolor = heatCols[diff]
+                print(paste(diff, " ", bgcolor, sep=""))
             }
             plot(x=xVal,y=yVal,ylim=c(yMin,yMax),xlab=NA,ylab=NA,xaxt="n",yaxt="n",)
             rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4], col=bgcolor)
