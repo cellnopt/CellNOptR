@@ -1,5 +1,14 @@
 .. keep this layout because it is used in CNODocs
 
+* 1.11.3:
+    * fix gray boxes in plotOptimResultsPan
+    * fix bug in plotOptimResultsPan when errors were greater than 99.9% color
+	where white (instead of red)
+	* c simulator bug fix: at time 0, node that are inhibited and measured were
+      reset to 0 but inhibitors are off. Fix is simple: do not reset inhibitors
+      where time is zero
+
+
 * 1.11.2:
     * fix gray boxes in plotOptimResultsPand
 

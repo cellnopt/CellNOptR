@@ -275,6 +275,7 @@ SEXP simulatorT1 (
                 }
                 if(ixNeg[track_reac][j]) {
                     /* flip the values of the neg inputs */
+                    /* FIXME  could simply be 1-X ? */
                     if(temp_store[i][j] == 0) {temp_store[i][j] = 1;}
                     else if(temp_store[i][j] == 1) {temp_store[i][j] = 0;}
                 }
@@ -367,11 +368,23 @@ SEXP simulatorT1 (
         /* reset the inhibitors */
         for(i = 0; i < nCond; i++) {
             for(j = 0; j < nInhibitors; j++) {
-                if(valueInhibitors[i][j] == 0) {
-                    new_input[i][indexInhibitors[j]] = 0;
+                if (mode == 1){
+                    if(valueInhibitors[i][j] == 0) {
+                        new_input[i][indexInhibitors[j]] = 0;
+                    }
+                }
+                else{
+
+                    /* BUG FIX Sept 2014, TC*/
+                    /* at time0, inhibitors are all off by default. So, we do
+                     * not want to reset their content at each tick. There is
+                     * not need for the code above. This is especially important
+                     * if a node if both inhibted and a readout and/or there
+                     * are input links that are inhibitors*/
                 }
             }
         }
+        printf("\n\n");
 
         /* set 'NAs' (2s) to 0 */
         for(i = 0; i < nCond; i++) {
