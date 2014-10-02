@@ -384,7 +384,6 @@ SEXP simulatorT1 (
                 }
             }
         }
-        printf("\n\n");
 
         /* set 'NAs' (2s) to 0 */
         for(i = 0; i < nCond; i++) {
