@@ -4,7 +4,7 @@ Installation
 Before starting, make sure you have installed the latest version of R. For more information and download
 of R, please refer to `R project page <http://www.r-project.org/>`_ . For more information about how to 
 install R packages, please refer to `Installing package <http://cran.r-project.org/doc/manuals/R-admin.html#Installing-packages>`_
- These packages rely on several Bioconductor package (e.g., RBGL, graph, methods, etc.). As an example, you can
+These packages rely on several Bioconductor package (e.g., RBGL, graph, methods, etc.). As an example, you can
 install RGBL package by typing:
 ::
 
