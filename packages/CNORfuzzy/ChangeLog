@@ -1,0 +1,66 @@
+
+Release 1.3
+================
+
+* 1.3.2:
+    * plotting function returns now a list with a field called simResults
+
+* 1.3.1:
+    * cSimulator does not convert cues to integer anymore so that floats can be
+      used for stimuli and inhibitors
+	
+
+Release 1.2
+===============
+
+* 1.1.4:
+    * cleaning up for bioconductor release
+
+* 1.1.3:
+	* gaDiscreteT1.R: fix issue when only 1 model was returned within tolerance 
+	* reduceFuzzy.R fix bug that causes seg faut (model was not cut properly)
+	* defaultParametersFuzzy.R: added nTF to set number of TF to arbitrary value (not tested)
+	* cSimulator.R: added nSignals as input to the C function 
+	* CNORwrapFuzzy.R: fixed pMutation argument that was not populated
+	* src/simulatorT1.c: added nSginals that may be used in the future to return the simResults already cut
+
+* 1.1.2:
+	* gaDiscrete functions return best score as well in the dataframe.
+
+* 1.1.1:
+	* output names of the fields returned by gaDiscrete are now using camel
+	  lower case so that plotFit from CellNoptR can be used 
+	* add C simulator
+
+* 1.1.0: increment version to be in agreement with boiconductor policy.
+* 1.0.0: in bioconductor (oct 2012)
+
+
+* 0.99.8:
+	* add NEWS.Rd in inst
+	* move tests in inst/unitTests
+
+* 0.99.7: 
+    * use new CNOlist class, 
+    * add test
+    * fix CNORwapFuzzy (default values), 
+    * fix typos in writeNetwork. 
+    * defaultParameters were always used in CNORwrapfuzzy (fixed).
+    * finalised the vignette.
+
+* 0.99.6: 
+    * remove indexList and simList where possible. 
+	* use preprocessing inside CNORwrapFuzzy, 
+	* CNOList argument renamed in CNOlist, 
+	* add hashtable in  gaDiscrete.
+
+* 0.99.5: 
+    * uniformisation of the names/arguments to reflect changes made in CellNOptR. 
+	* Update vignettes
+
+* 0.99.4: 
+    * add computeScoreFuzzy
+
+
+
+

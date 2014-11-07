@@ -1,0 +1,12 @@
+Package: CNORfuzzy
+Type: Package
+Title: Addon to CellNOptR: Fuzzy Logic
+Version: 1.5.0
+Date: 2014-01-10
+Author: M. Morris, T. Cokelaer
+Maintainer: T. Cokelaer <cokelaer@ebi.ac.uk>
+Description: This package is an extension to CellNOptR.  It contains additional functionality needed to simulate and train a prior knowledge network to experimental data using constrained fuzzy logic (cFL, rather than Boolean logic as is the case in CellNOptR).  Additionally, this package will contain functions to use for the compilation of multiple optimization results (either Boolean or cFL).
+License: GPL-2
+Depends: R (>= 2.15.0), CellNOptR (>= 1.4.0), nloptr (>= 0.8.5) 
+Suggests: xtable, Rgraphviz, RUnit, BiocGenerics
+LazyLoad: yes

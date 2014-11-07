@@ -1,0 +1,15 @@
+useDynLib(CNORfuzzy)
+
+export(
+    "CNORwrapFuzzy",
+    "computeScoreFuzzy",
+    "compileMultiRes",
+    "defaultParametersFuzzy",
+    "gaDiscreteT1",
+    "getRefinedModel",
+    "interpretDiscreteGA",
+    "plotMeanFuzzyFit",
+    "prep4simFuzzy",
+    "reduceFuzzy",
+    "simFuzzyT1",
+    "writeFuzzyNetwork")

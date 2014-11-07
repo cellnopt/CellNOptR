@@ -1,0 +1,110 @@
+digraph G{
+size="8.5,11";
+{rank=source;13;24;31;36;}
+{rank=same;15;20;29;30;}
+{rank=same;8;11;19;22;25;27;}
+{rank=same;2;3;5;16;26;37;}
+{rank=same;4;9;10;12;14;23;28;33;35;}
+{rank=same;1;6;17;18;21;}
+{rank=same;7;32;}
+{rank=same;34;}
+{rank=sink;38;39;40;}
+1 [color="black" shape="ellipse" style="dashed" label="prak" fontname=Helvetica fontsize=22.0 ];
+2 [color="black" shape="ellipse" style="solid" label="map3k7" fontname=Helvetica fontsize=22.0 ];
+3 [color="black" shape="ellipse" style="dashed" label="pip3" fontname=Helvetica fontsize=22.0 ];
+4 [color="black" shape="ellipse" style="dashed" label="pak" fontname=Helvetica fontsize=22.0 ];
+5 [color="black" shape="ellipse" style="dashed" label="rac" fontname=Helvetica fontsize=22.0 ];
+6 [color="black" shape="ellipse" style="dashed" label="raf1" fontname=Helvetica fontsize=22.0 ];
+7 [fillcolor="lightblue" color="orangered" shape="ellipse" style="filled, bold, diagonals" label="mek12" fontname=Helvetica fontsize=22.0 ];
+8 [color="black" shape="ellipse" style="dashed" label="irs1" fontname=Helvetica fontsize=22.0 ];
+9 [color="black" shape="ellipse" style="dashed" label="nik" fontname=Helvetica fontsize=22.0 ];
+10 [color="black" shape="ellipse" style="solid" label="map3k1" fontname=Helvetica fontsize=22.0 ];
+11 [color="black" shape="ellipse" style="dashed" label="grb2" fontname=Helvetica fontsize=22.0 ];
+12 [color="black" shape="ellipse" style="solid" label="mkk4" fontname=Helvetica fontsize=22.0 ];
+13 [color="olivedrab3" shape="ellipse" style="filled" label="igf1" fontname=Helvetica fontsize=22.0 ];
+14 [color="black" shape="ellipse" style="dashed" label="mkk7" fontname=Helvetica fontsize=22.0 ];
+15 [color="black" shape="ellipse" style="dashed" label="igfr" fontname=Helvetica fontsize=22.0 ];
+16 [color="black" shape="ellipse" style="dashed" label="sos" fontname=Helvetica fontsize=22.0 ];
+17 [color="orangered" shape="ellipse" style="filled" label="ikk" fontname=Helvetica fontsize=22.0 ];
+18 [color="lightblue" shape="ellipse" style="filled" label="akt" fontname=Helvetica fontsize=22.0 ];
+19 [color="black" shape="ellipse" style="dashed" label="traf6" fontname=Helvetica fontsize=22.0 ];
+20 [color="black" shape="ellipse" style="dashed" label="il1r" fontname=Helvetica fontsize=22.0 ];
+21 [fillcolor="lightblue" color="orangered" shape="ellipse" style="filled, bold, diagonals" label="p38" fontname=Helvetica fontsize=22.0 ];
+22 [color="black" shape="ellipse" style="dashed" label="shc" fontname=Helvetica fontsize=22.0 ];
+23 [color="black" shape="ellipse" style="dashed" label="mkk6" fontname=Helvetica fontsize=22.0 ];
+24 [color="olivedrab3" shape="ellipse" style="filled" label="tgfa" fontname=Helvetica fontsize=22.0 ];
+25 [color="black" shape="ellipse" style="dashed" label="traf2" fontname=Helvetica fontsize=22.0 ];
+26 [color="black" shape="ellipse" style="dashed" label="sitpec" fontname=Helvetica fontsize=22.0 ];
+27 [color="orangered" shape="ellipse" style="filled" label="pi3k" fontname=Helvetica fontsize=22.0 ];
+28 [color="black" shape="ellipse" style="solid" label="ras" fontname=Helvetica fontsize=22.0 ];
+29 [color="black" shape="ellipse" style="dashed" label="egfr" fontname=Helvetica fontsize=22.0 ];
+30 [color="black" shape="ellipse" style="dashed" label="tnfr" fontname=Helvetica fontsize=22.0 ];
+31 [color="olivedrab3" shape="ellipse" style="filled" label="il1a" fontname=Helvetica fontsize=22.0 ];
+32 [color="black" shape="ellipse" style="dashed" label="cot" fontname=Helvetica fontsize=22.0 ];
+33 [color="black" shape="ellipse" style="dashed" label="mkk3" fontname=Helvetica fontsize=22.0 ];
+34 [color="lightblue" shape="ellipse" style="filled" label="erk12" fontname=Helvetica fontsize=22.0 ];
+35 [color="black" shape="ellipse" style="dashed" label="pdk1" fontname=Helvetica fontsize=22.0 ];
+36 [color="olivedrab3" shape="ellipse" style="filled" label="tnfa" fontname=Helvetica fontsize=22.0 ];
+37 [color="black" shape="ellipse" style="dashed" label="ask1" fontname=Helvetica fontsize=22.0 ];
+38 [color="lightblue" shape="ellipse" style="filled" label="hsp27" fontname=Helvetica fontsize=22.0 ];
+39 [color="lightblue" shape="ellipse" style="filled" label="jnk12" fontname=Helvetica fontsize=22.0 ];
+40 [color="lightblue" shape="ellipse" style="filled" label="ikb" fontname=Helvetica fontsize=22.0 ];
+1 -> 38[ color="forestgreen" label="" weight="1.000000" penwidth="4" arrowhead="normal" style="solid"];
+2 -> 14[ color="forestgreen" label="" weight="1.000000" penwidth="1.9" arrowhead="normal" style="solid"];
+2 -> 9[ color="forestgreen" label="" weight="1.000000" penwidth="4" arrowhead="normal" style="solid"];
+2 -> 33[ color="forestgreen" label="" weight="1.000000" penwidth="2.2" arrowhead="normal" style="solid"];
+2 -> 23[ color="grey90" label="" weight="1.000000" penwidth="1" arrowhead="normal" style="solid"];
+2 -> 12[ color="forestgreen" label="" weight="1.000000" penwidth="1.9" arrowhead="normal" style="solid"];
+3 -> 35[ color="grey90" label="" weight="1.000000" penwidth="1" arrowhead="normal" style="solid"];
+4 -> 6[ color="grey90" label="" weight="1.000000" penwidth="1" arrowhead="normal" style="solid"];
+5 -> 10[ color="forestgreen" label="" weight="1.000000" penwidth="1.6" arrowhead="normal" style="solid"];
+5 -> 4[ color="grey90" label="" weight="1.000000" penwidth="1" arrowhead="normal" style="solid"];
+6 -> 7[ color="forestgreen" label="" weight="1.000000" penwidth="4" arrowhead="normal" style="solid"];
+7 -> 34[ color="forestgreen" label="" weight="1.000000" penwidth="4" arrowhead="normal" style="solid"];
+8 -> 27[ color="grey90" label="" weight="1.000000" penwidth="1" arrowhead="normal" style="solid"];
+9 -> 17[ color="forestgreen" label="" weight="1.000000" penwidth="4" arrowhead="normal" style="solid"];
+10 -> 14[ color="forestgreen" label="" weight="1.000000" penwidth="2.8" arrowhead="normal" style="solid"];
+10 -> 17[ color="forestgreen" label="" weight="1.000000" penwidth="2.2" arrowhead="normal" style="solid"];
+10 -> 12[ color="forestgreen" label="" weight="1.000000" penwidth="2.8" arrowhead="normal" style="solid"];
+11 -> 16[ color="grey90" label="" weight="1.000000" penwidth="1" arrowhead="normal" style="solid"];
+12 -> 21[ color="forestgreen" label="" weight="1.000000" penwidth="3.4" arrowhead="normal" style="solid"];
+12 -> 39[ color="forestgreen" label="" weight="1.000000" penwidth="2.5" arrowhead="normal" style="solid"];
+13 -> 15[ color="grey90" label="" weight="1.000000" penwidth="1" arrowhead="normal" style="solid"];
+14 -> 39[ color="forestgreen" label="" weight="1.000000" penwidth="2.8" arrowhead="normal" style="solid"];
+15 -> 8[ color="grey90" label="" weight="1.000000" penwidth="1" arrowhead="normal" style="solid"];
+15 -> 22[ color="grey90" label="" weight="1.000000" penwidth="1" arrowhead="normal" style="solid"];
+16 -> 28[ color="grey90" label="" weight="1.000000" penwidth="1" arrowhead="normal" style="solid"];
+17 -> 40[ color="forestgreen" label="" weight="1.000000" penwidth="4" arrowhead="normal" style="solid"];
+18 -> 6[ color="grey90" label="" weight="1.000000" penwidth="1" arrowhead="tee" style="solid"];
+18 -> 32[ color="forestgreen" label="" weight="1.000000" penwidth="1.3" arrowhead="normal" style="solid"];
+18 -> 4[ color="grey90" label="" weight="1.000000" penwidth="1" arrowhead="tee" style="solid"];
+19 -> 26[ color="grey90" label="" weight="1.000000" penwidth="1" arrowhead="normal" style="solid"];
+19 -> 2[ color="grey90" label="" weight="1.000000" penwidth="1" arrowhead="normal" style="solid"];
+20 -> 19[ color="grey90" label="" weight="1.000000" penwidth="1" arrowhead="normal" style="solid"];
+21 -> 1[ color="forestgreen" label="" weight="1.000000" penwidth="3.4" arrowhead="normal" style="solid"];
+22 -> 11[ color="grey90" label="" weight="1.000000" penwidth="1" arrowhead="normal" style="solid"];
+23 -> 21[ color="grey90" label="" weight="1.000000" penwidth="1" arrowhead="normal" style="solid"];
+24 -> 29[ color="forestgreen" label="" weight="1.000000" penwidth="3.4" arrowhead="normal" style="solid"];
+25 -> 37[ color="grey90" label="" weight="1.000000" penwidth="1" arrowhead="normal" style="solid"];
+25 -> 2[ color="grey90" label="" weight="1.000000" penwidth="1" arrowhead="normal" style="solid"];
+26 -> 10[ color="grey90" label="" weight="1.000000" penwidth="1" arrowhead="normal" style="solid"];
+27 -> 5[ color="forestgreen" label="" weight="1.000000" penwidth="1.6" arrowhead="normal" style="solid"];
+27 -> 3[ color="grey90" label="" weight="1.000000" penwidth="1" arrowhead="normal" style="solid"];
+28 -> 27[ color="forestgreen" label="" weight="1.000000" penwidth="2.5" arrowhead="normal" style="solid"];
+28 -> 6[ color="forestgreen" label="" weight="1.000000" penwidth="4" arrowhead="normal" style="solid"];
+28 -> 10[ color="forestgreen" label="" weight="1.000000" penwidth="1.9" arrowhead="normal" style="solid"];
+29 -> 22[ color="grey90" label="" weight="1.000000" penwidth="1" arrowhead="normal" style="solid"];
+29 -> 11[ color="grey90" label="" weight="1.000000" penwidth="1" arrowhead="normal" style="solid"];
+29 -> 27[ color="forestgreen" label="" weight="1.000000" penwidth="3.4" arrowhead="normal" style="solid"];
+30 -> 25[ color="grey90" label="" weight="1.000000" penwidth="1" arrowhead="normal" style="solid"];
+30 -> 27[ color="forestgreen" label="" weight="1.000000" penwidth="3.4" arrowhead="normal" style="solid"];
+31 -> 20[ color="grey90" label="" weight="1.000000" penwidth="1" arrowhead="normal" style="solid"];
+32 -> 17[ color="forestgreen" label="" weight="1.000000" penwidth="1.3" arrowhead="normal" style="solid"];
+33 -> 21[ color="forestgreen" label="" weight="1.000000" penwidth="2.2" arrowhead="normal" style="solid"];
+33 -> 1[ color="grey90" label="" weight="1.000000" penwidth="1" arrowhead="normal" style="solid"];
+34 -> 1[ color="forestgreen" label="" weight="1.000000" penwidth="1.3" arrowhead="normal" style="solid"];
+35 -> 18[ color="grey90" label="" weight="1.000000" penwidth="1" arrowhead="normal" style="solid"];
+36 -> 30[ color="forestgreen" label="" weight="1.000000" penwidth="3.4" arrowhead="normal" style="solid"];
+37 -> 12[ color="grey90" label="" weight="1.000000" penwidth="1" arrowhead="normal" style="solid"];
+37 -> 14[ color="grey90" label="" weight="1.000000" penwidth="1" arrowhead="normal" style="solid"];
+}
