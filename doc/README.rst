@@ -22,3 +22,10 @@ or from a tar ball as follows:
 or, using the R GUI by clicking on "Packages & Data" then "Package installer", then choosing "local source"
 from the dropdown menu, clicking "install", choosing CellNOptR.1.0.0.tar.gz
 and finally clicking "open".
+
+Then, you can also install other CellNOptR related packages::
+
+   biocLite("CNORdt")
+   biocLite("CNORfeeder")
+   biocLite("CNORfuzzy")
+   biocLite("CNORode")
