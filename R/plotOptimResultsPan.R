@@ -17,7 +17,7 @@
 plotOptimResultsPan <- function(simResults, yInterpol=NULL, xCoords=NULL,
 CNOlist=CNOlist, formalism=c("ss1","ss2","ssN","dt","ode"), pdf=FALSE,
 pdfFileName="", tPt=NULL, plotParams=list(margin=0.1, width=15, height=12,
-cmap_scale=1, cex=1.6, ymin=NULL, F=1)) {
+cmap_scale=1, cex=1.6, ymin=NULL, F=1, rotation=0)) {
 
 
     if ((class(CNOlist)=="CNOlist")==FALSE){
@@ -55,6 +55,9 @@ cmap_scale=1, cex=1.6, ymin=NULL, F=1)) {
     if ("F" %in% names(plotParams) == FALSE){
         plotParams$F = 1
     }
+    if ("rotation" %in% names(plotParams) == FALSE){
+        plotParams$rotation = 0
+    }
     
 # aliases
     margin = plotParams$margin
@@ -89,6 +92,8 @@ cmap_scale=1, cex=1.6, ymin=NULL, F=1)) {
     # TODO - do i need all these with split.screen?
     par(
         pch=2,
+        # margin bottom of pcolor mesh: oma(X,Y,W,Z) where X is distance bottom
+        # to the colormesh
         oma=c(3,2,2,2),
         mgp=c(3,0.9,0),
         family="Times"
@@ -182,9 +187,9 @@ cmap_scale=1, cex=1.6, ymin=NULL, F=1)) {
         par(fg="blue",mar=c(margin, margin, margin, 0))
         plot(x=xVal, y=rep(-5,length(xVal)), ylim=c(yMin, yMax),
         xlab=NA,ylab=NA,xaxt="n",yaxt="n")
-
+		labels=colnames(CNOlist@signals[[1]])[c]
         text(
-            labels=colnames(CNOlist@signals[[1]])[c],
+            labels=labels,
             x=((xVal[length(xVal)]-xVal[1])/2),
             y=(yMin+((yMax-yMin)/2)),
             cex=cex
@@ -250,7 +255,6 @@ cmap_scale=1, cex=1.6, ymin=NULL, F=1)) {
             if(diff==-1) {
                 bgcolor = "gray"
             } else{
-
                 bgcolor = heatCols[diff]
             }
             plot(x=xVal,y=yVal,ylim=c(yMin,yMax),xlab=NA,ylab=NA,xaxt="n",yaxt="n",)
