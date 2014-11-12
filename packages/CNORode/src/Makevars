@@ -1,9 +1,0 @@
-PKG_CFLAGS = -I./include  -pedantic -Wall  -Wextra
-
-
-
-#-Wnonnull
-#-Wswitch-default
-#-Wswitch-enum
-#-Wstrict-overflow
-#-Warray-bounds
