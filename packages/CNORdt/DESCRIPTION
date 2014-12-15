@@ -1,7 +1,7 @@
 Package: CNORdt
 Type: Package
 Title: Add-on to CellNOptR: Discretized time treatments
-Version: 1.5.2
+Version: 1.9.1
 Date: 2013-11-29
 Author: A. MacNamara
 Maintainer: A. MacNamara <aidan.macnamara@ebi.ac.uk>
