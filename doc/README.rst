@@ -1,6 +1,18 @@
 Installation
 ==================
 
+Quick installation
+----------------------
+
+If you already have all R dependencies and work from the source, you could try::
+
+    git clone https://github.com/cellnopt/CellNOptR.git
+    cd CellNOptR
+    python setup.py install
+
+Standard installation
+-------------------------
+
 Before starting, make sure you have installed the latest version of R. For more information and download
 of R, please refer to `R project page <http://www.r-project.org/>`_ . For more information about how to 
 install R packages, please refer to `Installing package <http://cran.r-project.org/doc/manuals/R-admin.html#Installing-packages>`_
