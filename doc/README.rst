@@ -8,6 +8,11 @@ If you already have all R dependencies and work from the source, you could try::
 
     git clone https://github.com/cellnopt/CellNOptR.git
     cd CellNOptR
+    # To install all packages, use the pyhon script
+    python setup.py install
+    # or to install CellNOptR only:
+    cd packages
+    cd CellNOptR
     R CMD INSTALL .
 
 Standard installation
