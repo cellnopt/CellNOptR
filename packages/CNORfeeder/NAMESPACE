@@ -1,4 +1,4 @@
-import("CellNOptR")
+import("CellNOptR", "graph")
 
 export("Binference",
     "gaBinaryT1W",

@@ -16,7 +16,8 @@
 Binference <-
 function(CNOlist, mode="AIC", tempCheckOrders=10, maxIter=100, filename="BAYESIAN"){
   
-  library(catnet)	
+  # library(catnet)
+  requireNamespace("catnet")
 	
   if ((class(CNOlist)=="CNOlist")==FALSE){
 	CNOlist = CellNOptR::CNOlist(CNOlist)
@@ -69,7 +70,7 @@ function(CNOlist, mode="AIC", tempCheckOrders=10, maxIter=100, filename="BAYESIA
   parentSizes<-rep(3,dim(psamples)[1])
   parentSizes[1:length(colnames(CNOlist@stimuli))]<-0
 
-  nets <- cnSearchSA(data=psamples, perturbations=perturbations, maxParentSet=3,
+  nets <- catnet::cnSearchSA(data=psamples, perturbations=perturbations, maxParentSet=3,
                        parentSizes=parentSizes, maxComplexity=0,
                        parentsPool=NULL, fixedParents=NULL,
                        edgeProb=NULL, dirProb=NULL, selectMode = mode,
@@ -82,7 +83,7 @@ function(CNOlist, mode="AIC", tempCheckOrders=10, maxIter=100, filename="BAYESIA
   AllLinks<-matrix(nrow=0,ncol=2)
   for (i in 1:length(nets@nets)){
     netTMP<-nets@nets[[i]]
-    AllLinks<-rbind(AllLinks, cnMatEdges(netTMP))
+    AllLinks<-rbind(AllLinks, catnet::cnMatEdges(netTMP))
   }
   AllLinksUn<-unique(AllLinks)
 

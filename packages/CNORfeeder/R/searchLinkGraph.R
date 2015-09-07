@@ -20,8 +20,8 @@ function(node1,node2,graph,noNodes=vector()){
   
   #detete from the graph the nodes through which we cannot pass
   if (length(noNodes>0)){
-    noNodes<-intersect(noNodes,nodes(graph))
-    gg<-removeNode(noNodes,graph)
+    noNodes<-intersect(noNodes,graph::nodes(graph))
+    gg<-graph::removeNode(noNodes,graph)
   }else{
 	  gg<-graph
   }
@@ -31,7 +31,7 @@ function(node1,node2,graph,noNodes=vector()){
   
   if (any(which(nod==node1))){
     queue<-edg[[which(nod==node1)]]
-	gg<-removeNode(node1,gg)
+	gg<-graph::removeNode(node1,gg)
 	nod<-graph::nodes(gg)
 	edg<-graph::edges(gg)
   }else{
@@ -47,7 +47,7 @@ function(node1,node2,graph,noNodes=vector()){
       ck<-1
     }
 	if (any(which(nod==queue[1]))){
-	  gg<-removeNode(queue[1],gg)
+	  gg<-graph::removeNode(queue[1],gg)
 	  nod<-graph::nodes(gg)
 	  edg<-graph::edges(gg)
 	}

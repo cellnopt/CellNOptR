@@ -83,7 +83,7 @@ function(BTable,model=NULL,optimRes=NA,allInter=TRUE, compressed=TRUE){
             # all possible connections are added between nodes downstream the cue
             # (but upstream the following cue) and those upstream the signal
             # (but downstream the previous signal)
-            if (allInter == TRUE && length(nodes(g))>0){
+            if (allInter == TRUE && length(graph::nodes(g))>0){
               # 1. create a vector containing all nodes downstream the cue
               # (until reaching a cue or a noNode)
               AllCues <- union(namesStimuli,namesInhibitors)
@@ -124,7 +124,7 @@ function(BTable,model=NULL,optimRes=NA,allInter=TRUE, compressed=TRUE){
             # all possible connections are added between nodes downstream the cue
             # (but upstream the following cue) and those upstream the signal
             # (but downstream the previous signal)
-            if (allInter == TRUE && length(nodes(g))>0){
+            if (allInter == TRUE && length(graph::nodes(g))>0){
               # 1. create a vector containing all nodes downstream the cue
               # (until reaching a cue or a noNode)
               AllCues <- union(namesStimuli,namesInhibitors)
@@ -194,7 +194,7 @@ function(BTable,model=NULL,optimRes=NA,allInter=TRUE, compressed=TRUE){
           # all possible connections are added between nodes downstream the cue
           # (but upstream the following cue) and those upstream the signal
           # (but downstream the previous signal)
-          if (allInter == TRUE && length(nodes(g))>0){
+          if (allInter == TRUE && length(graph::nodes(g))>0){
             # 1. create a vector containing all nodes downstream the cue
             # (until reaching a cue or a noNode)
             AllCues <- union(namesStimuli,namesInhibitors)

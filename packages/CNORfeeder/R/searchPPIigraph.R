@@ -15,6 +15,7 @@
 # $Id$
 searchPPIigraph <- function(node1, node2, UniprotID, PPINigraph, noPKNnodes=TRUE){
 	
+  requireNamespace("igraph")
 	
   #node1 is the ending node and is always a 1 value vector
   node1ID<-UniprotID[[which(names(UniprotID)==node1)]]
@@ -31,10 +32,10 @@ searchPPIigraph <- function(node1, node2, UniprotID, PPINigraph, noPKNnodes=TRUE
     #..exept for the nodes we are interested in..
     noNodes<-setdiff(PKNnodes, c(node1ID,node2IDs))
     #..and we subtract them from the PIN graph (grate a new graph only with the other nodes)
-    okNodes<-setdiff(V(PPINigraph)$name,noNodes)
+    okNodes<-setdiff(igraph::V(PPINigraph)$name,noNodes)
 	# this gives the index of the nodes
-	ixOkNodes<-match(okNodes,V(PPINigraph)$name)
-    gg<-induced.subgraph(PPINigraph,ixOkNodes)
+	ixOkNodes<-match(okNodes,igraph::V(PPINigraph)$name)
+    gg<-igraph::induced.subgraph(PPINigraph,ixOkNodes)
   }else{
     gg<-PPINigraph
   }
@@ -48,8 +49,8 @@ searchPPIigraph <- function(node1, node2, UniprotID, PPINigraph, noPKNnodes=TRUE
     for (j in 1:length(node2)){
       node2ID<-UniprotID[[which(names(UniprotID)==node2[j])]]
       for (j1 in 1:length(node2ID)){
-        if ((node1ID[i] %in% V(gg)$name) && (node2ID[j1] %in% V(gg)$name)){
-          ix<-get.shortest.paths(graph=gg,from=node1ID[i],to=node2ID[j1])[[1]]
+        if ((node1ID[i] %in% igraph::V(gg)$name) && (node2ID[j1] %in% igraph::V(gg)$name)){
+          ix<-igraph::get.shortest.paths(graph=gg,from=node1ID[i],to=node2ID[j1])[[1]]
           ck<-length(ix)
           ck[ck==0]<-Inf
           ckmin[j]<-min(ckmin[j],ck)

@@ -46,11 +46,13 @@ a new Model with the integrated links and an additional field:
 data(CNOlistDREAM,package="CellNOptR")
 data(DreamModel,package="CellNOptR")
 model<-preprocessing(data=CNOlistDREAM, model=DreamModel)
-    
+
+\dontrun{
 DDN<-Binference(CNOlistDREAM, tempCheckOrders=10, maxIter=100,
                 filename="BAYESIAN")
 
 modelIntegr<-mapDDN2model(DDN=DDN,model=model,CNOlist=CNOlistDREAM)
- 
+}
+
 }
 

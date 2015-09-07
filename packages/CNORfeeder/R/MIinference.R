@@ -16,7 +16,8 @@
 MIinference <-
 function(CNOlist, method="ARACNE", PKNgraph=NULL, filename="ARACNE"){
   
-  library(minet)
+  # library(minet)
+  requireNamespace("minet")
 	
   if ((class(CNOlist)=="CNOlist")==FALSE){
 	  CNOlist = CellNOptR::CNOlist(CNOlist)
@@ -35,12 +36,12 @@ function(CNOlist, method="ARACNE", PKNgraph=NULL, filename="ARACNE"){
   
   dataset<-cbind(valueStimuli, valueInhibitors, valueSignals)
 
-  mim<-build.mim(dataset=dataset)
+  mim<-minet::build.mim(dataset=dataset)
 
   if (method=="ARACNE"){
-    net<-aracne(mim, eps=0)
+    net<-minet::aracne(mim, eps=0)
   }else if (method=="CLR"){
-    net<-clr(mim)
+    net<-minet::clr(mim)
   }
   
   graph<-as(net, "graphNEL")

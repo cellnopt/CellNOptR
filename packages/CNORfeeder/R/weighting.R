@@ -16,6 +16,7 @@
 weighting <-
   function(modelIntegr,PKNmodel,CNOlist,integrFac=10,UniprotID=NULL,PPI=NULL){
     
+    
 	  
 	if ((class(CNOlist)=="CNOlist")==FALSE){
 		CNOlist = CellNOptR::CNOlist(CNOlist)
@@ -28,11 +29,11 @@ weighting <-
 	# if PPI is set to FALSE we only add the field linksWeights (with additional penalty for integrated links) and stop here
 	# if PPI is set to TRUE we do the weighting based on information from protein-protein interaction network
 	if (!is.null(PPI)){
-			
-		library(igraph)
+	  
+	  requireNamespace("igraph")
 		
 		PPINigraph <- PPI
-		if(is.igraph(PPI)==FALSE){
+		if(igraph::is.igraph(PPI)==FALSE){
 			stop("The provider PPI is not an igraph")
         }
 		PPINigraph <- PPI
